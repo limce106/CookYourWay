@@ -57,5 +57,14 @@ UCLASS()
 class PASTAYOURWAY_API UTableManagerSystem : public UGameInstanceSubsystem
 {
 	GENERATED_BODY()
-	
+
+	UTableManagerSystem();
+
+public:
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Table")
+	class UDataTable* PlayerBistroTable;
+	class UDataTable* CustomerTable;
+
+	TArray<FPlayerBistroData*> PlayerBistroTableRows;
+	TArray<FCustomerData*> CustomerTableRows;
 };
