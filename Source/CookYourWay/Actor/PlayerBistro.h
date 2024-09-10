@@ -5,15 +5,15 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "Component/CustomerRateComponent.h"
-#include "Competitor.generated.h"
+#include "PlayerBistro.generated.h"
 
 UCLASS()
-class COOKYOURWAY_API ACompetitor : public AActor
+class COOKYOURWAY_API APlayerBistro : public AActor
 {
 	GENERATED_BODY()
 	
 public:	
-	ACompetitor();
+	APlayerBistro();
 
 protected:
 	virtual void BeginPlay() override;

@@ -11,10 +11,8 @@ void UCustomerAnimInstance::NativeInitializeAnimation()
 	Customer = Cast<ACustomer>(GetOwningActor());
 
 	if (Customer) {
-		FString CustomerName = GetClass()->GetName();
-		CustomerName.RemoveFromStart(TEXT("_AnimBP"));
-		FString WalkSeqPath = (TEXT("/Game/Assets/Art_3D/Animation/%s_Walk.%s_Walk"), CustomerName);
-		FString IdleSeqPath = (TEXT("/Game/Assets/Art_3D/Animation/%s_Idle.%s_Idle"), CustomerName);
+		FString WalkSeqPath = (TEXT("/Game/Assets/Art_3D/Animation/%s_Walk.%s_Walk"), Customer->CustName);
+		FString IdleSeqPath = (TEXT("/Game/Assets/Art_3D/Animation/%s_Idle.%s_Idle"), Customer->CustName);
 		WalkSeq = LoadObject<UAnimSequence>(NULL, *WalkSeqPath);
 		IdleSeq = LoadObject<UAnimSequence>(NULL, *IdleSeqPath);
 	}
