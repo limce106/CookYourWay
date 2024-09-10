@@ -13,8 +13,10 @@ void UCustomerAnimInstance::NativeInitializeAnimation()
 	if (Customer) {
 		FString WalkSeqPath = (TEXT("/Game/Assets/Art_3D/Animation/%s_Walk.%s_Walk"), Customer->CustName, Customer->CustName);
 		FString IdleSeqPath = (TEXT("/Game/Assets/Art_3D/Animation/%s_Idle.%s_Idle"), Customer->CustName, Customer->CustName);
-		const ConstructorHelpers::FObjectFinder<UAnimSequence> WalkSeq(*WalkSeqPath);
-		const ConstructorHelpers::FObjectFinder<UAnimSequence> IdleSeq(*IdleSeqPath);
+		const ConstructorHelpers::FObjectFinder<UAnimSequence> Anim_WalkSeq(*WalkSeqPath);
+		const ConstructorHelpers::FObjectFinder<UAnimSequence> Anim_IdleSeq(*IdleSeqPath);
+		WalkSeq = Anim_WalkSeq.Object;
+		IdleSeq = Anim_IdleSeq.Object;
 	}
 }
 

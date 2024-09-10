@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
-#include "PlayerBistro.h"
 #include "Customer.generated.h"
 
 UCLASS()
@@ -13,7 +12,9 @@ class COOKYOURWAY_API ACustomer : public APawn
 	GENERATED_BODY()
 
 	TArray<AActor*> AllCompetitorActorArr;
-	APlayerBistro* PlayerBistro;
+	class APlayerBistro* PlayerBistro;
+
+	TMap <FVector, float> BistroLocRankMap;	// 가게 도착 위치와 계산된 점수
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	class USkeletalMeshComponent* SkeletalMesh;
@@ -40,6 +41,9 @@ public:
 	FString CustName;	/*손님 스폰 시 이름 값 설정 필요*/
 	UPROPERTY(BlueprintReadWrite)
 	bool IsWalk = true;
+
+	UPROPERTY(BlueprintReadOnly)
+	FVector VisitDest;	// 방문할 가게
 
 	void Init();
 	void SetSkeletalMesh();
