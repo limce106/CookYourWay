@@ -15,6 +15,9 @@ class COOKYOURWAY_API ACustomer : public APawn
 	TArray<AActor*> AllCompetitorActorArr;
 	APlayerBistro* PlayerBistro;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	class USkeletalMeshComponent* SkeletalMesh;
+
 	float ManhattanDist(FVector Loc1, FVector Loc2);
 	float CalcVisitRank(AActor* Bistro);
 	void SelectBistroToVisit();
@@ -28,8 +31,6 @@ protected:
 public:	
 	virtual void Tick(float DeltaTime) override;
 
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<AActor> BP_Competitor;
 	UPROPERTY(EditDefaultsOnly)
@@ -40,6 +41,6 @@ public:
 	UPROPERTY(BlueprintReadWrite)
 	bool IsWalk = true;
 
-	UFUNCTION(BlueprintCallable)
 	void Init();
+	void SetSkeletalMesh();
 };

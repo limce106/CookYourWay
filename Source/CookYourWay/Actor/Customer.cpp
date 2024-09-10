@@ -5,6 +5,50 @@
 #include <Kismet/GameplayStatics.h>
 #include "Competitor.h"
 
+
+ACustomer::ACustomer()
+{
+	PrimaryActorTick.bCanEverTick = true;
+
+	SkeletalMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("SkeletalMesh"));
+	SkeletalMesh->SetupAttachment(RootComponent);
+}
+
+void ACustomer::Init()
+{
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), BP_Competitor, AllCompetitorActorArr);
+	PlayerBistro = Cast<APlayerBistro>(UGameplayStatics::GetActorOfClass(GetWorld(), BP_PlayerBistro));
+
+	SelectBistroToVisit();
+}
+
+void ACustomer::SetSkeletalMesh()
+{
+	// 스켈레탈 메시 적용
+	FString SkeletalMeshPath = (TEXT("/Game/Assets/Art_3D/Modelling/Npc/%s/%s.%s"), CustName, CustName, CustName);
+	const ConstructorHelpers::FObjectFinder<USkeletalMesh> CustSkeletalMesh(*SkeletalMeshPath);
+	SkeletalMesh->SetSkeletalMesh(CustSkeletalMesh.Object);
+
+	// 애니메이션 블루프린트 클래스 적용
+	// 에디터에서만 적용되고 빌드 시 안 될 수 있으니 꼭 확인!!
+	FString AnimBPPath = (TEXT("/Game/Blueprint/AnimBP/%s_AnimBP.%s_AnimBP"), CustName, CustName);
+	const ConstructorHelpers::FObjectFinder<UAnimBlueprint> AnimBP(*AnimBPPath);
+	SkeletalMesh->SetAnimInstanceClass(AnimBP.Object->GeneratedClass);
+}
+
+void ACustomer::BeginPlay()
+{
+	Super::BeginPlay();
+	
+	Init();
+}
+
+void ACustomer::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+
+}
+
 float ACustomer::ManhattanDist(FVector Loc1, FVector Loc2)
 {
 	float absX = abs(Loc1.X - Loc2.X);
@@ -37,37 +81,5 @@ void ACustomer::SelectBistroToVisit()
 	for (auto Competitor : AllCompetitorActorArr) {
 		BistroVisitRank.Add(CalcVisitRank(Competitor));
 	}
-}
-
-ACustomer::ACustomer()
-{
-	PrimaryActorTick.bCanEverTick = true;
-
-}
-
-void ACustomer::Init()
-{
-	UGameplayStatics::GetAllActorsOfClass(GetWorld(), BP_Competitor, AllCompetitorActorArr);
-	PlayerBistro = Cast<APlayerBistro>(UGameplayStatics::GetActorOfClass(GetWorld(), BP_PlayerBistro));
-
-	SelectBistroToVisit();
-}
-
-void ACustomer::BeginPlay()
-{
-	Super::BeginPlay();
-	
-}
-
-void ACustomer::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-
-}
-
-void ACustomer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
-{
-	Super::SetupPlayerInputComponent(PlayerInputComponent);
-
 }
 

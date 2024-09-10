@@ -41,4 +41,6 @@ void AStore::CreateCustomer()
 {
 	FVector CustomerLocation = FVector(GetActorLocation().X, GetActorLocation().Y + 200, GetActorLocation().Z);
 	ACustomer* Customer = GetWorld()->SpawnActor<ACustomer>(BP_Customer, CustomerLocation, GetActorRotation());
+	// Customer->CustName = 
+	// Customer->SetSkeletalMesh();
 }
