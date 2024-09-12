@@ -17,6 +17,8 @@ class COOKYOURWAY_API ACustomer : public APawn
 	TMap <FVector, float> BistroLocRankMap;	// 가게 도착 위치와 계산된 점수
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	class USceneComponent* Root;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	class USkeletalMeshComponent* SkeletalMesh;
 
 	float ManhattanDist(FVector Loc1, FVector Loc2);

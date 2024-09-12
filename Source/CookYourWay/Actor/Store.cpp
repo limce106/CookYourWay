@@ -27,20 +27,20 @@ void AStore::Tick(float DeltaTime)
 
 bool AStore::DelayWithDeltaTime(float DelayTime, float DeltaSeconds)
 {
-	if (TempTime > DelayTime) {
-		TempTime = 0;
+	if (TempDelayTime > DelayTime) {
+		TempDelayTime = 0;
 		return true;
 	}
 	else {
-		TempTime += DeltaSeconds;
+		TempDelayTime += DeltaSeconds;
 		return false;
 	}
 }
 
 void AStore::CreateCustomer()
 {
-	FVector CustomerLocation = FVector(GetActorLocation().X, GetActorLocation().Y + 200, GetActorLocation().Z);
+	FVector CustomerLocation = FVector(GetActorLocation().X, GetActorLocation().Y + 200.0, GetActorLocation().Z);
 	ACustomer* Customer = GetWorld()->SpawnActor<ACustomer>(BP_Customer, CustomerLocation, GetActorRotation());
-	// Customer->CustName = 
-	// Customer->SetSkeletalMesh();
+	Customer->CustName = "Amy"; // 임의로 테스트를 위해 설정
+	Customer->SetSkeletalMesh();
 }

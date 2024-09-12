@@ -6,10 +6,12 @@
 #include "Competitor.h"
 #include "PlayerBistro.h"
 
-
 ACustomer::ACustomer()
 {
 	PrimaryActorTick.bCanEverTick = true;
+
+	Root = CreateDefaultSubobject<USceneComponent>(TEXT("Root"));
+	RootComponent = Root;
 
 	SkeletalMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("SkeletalMesh"));
 	SkeletalMesh->SetupAttachment(RootComponent);
@@ -20,21 +22,21 @@ void ACustomer::Init()
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), BP_Competitor, AllCompetitorActorArr);
 	PlayerBistro = Cast<APlayerBistro>(UGameplayStatics::GetActorOfClass(GetWorld(), BP_PlayerBistro));
 
-	SelectBistroToVisit();
+	// SelectBistroToVisit();
 }
 
 void ACustomer::SetSkeletalMesh()
 {
 	// 스켈레탈 메시 적용
-	FString SkeletalMeshPath = (TEXT("/Game/Assets/Art_3D/Modelling/Npc/%s/%s.%s"), CustName, CustName, CustName);
-	const ConstructorHelpers::FObjectFinder<USkeletalMesh> CustSkeletalMesh(*SkeletalMeshPath);
-	SkeletalMesh->SetSkeletalMesh(CustSkeletalMesh.Object);
+	FString SkeletalMeshPath = FString("/Game/Assets/Art_3D/Modelling/Npc/").Append(CustName).Append("/").Append(CustName).Append(".").Append(CustName);
+	USkeletalMesh* CustSkeletalMesh = LoadObject<USkeletalMesh>(NULL, *SkeletalMeshPath, NULL, LOAD_None, NULL);
+	SkeletalMesh->SetSkeletalMesh(CustSkeletalMesh);
 
 	// 애니메이션 블루프린트 클래스 적용
 	// 에디터에서만 적용되고 빌드 시 안 될 수 있으니 꼭 확인!!
-	FString AnimBPPath = (TEXT("/Game/Blueprint/AnimBP/%s_AnimBP.%s_AnimBP"), CustName, CustName);
-	const ConstructorHelpers::FObjectFinder<UAnimBlueprint> AnimBP(*AnimBPPath);
-	SkeletalMesh->SetAnimInstanceClass(AnimBP.Object->GeneratedClass);
+	FString AnimBPPath = (FString("/Game/Blueprint/AnimBP/").Append(CustName).Append("_AnimBP.").Append(CustName).Append("_AnimBP"));
+	UAnimBlueprint* AnimBP = LoadObject<UAnimBlueprint>(NULL, *AnimBPPath, NULL, LOAD_None, NULL);
+	SkeletalMesh->SetAnimInstanceClass(AnimBP->GeneratedClass);
 }
 
 void ACustomer::BeginPlay()
@@ -60,7 +62,7 @@ float ACustomer::ManhattanDist(FVector Loc1, FVector Loc2)
 float ACustomer::CalcVisitRank(AActor* Bistro)
 {
 	FVector CustomerLoc = GetActorLocation();
-	FVector BistroLoc = Bistro->GetActorLocation() + FVector(200, 0, 0);
+	FVector BistroLoc = Bistro->GetActorLocation() + FVector(200.0f, 0.0f, 0.0f);
 
 	UCustomerRateComponent* CustomerRateComponent = Cast<UCustomerRateComponent>(Bistro->GetComponentByClass(UCustomerRateComponent::StaticClass()));
 	ECustType CurCustType = *CustomerRateComponent->CustStringToTypeMap.Find(CustName);
@@ -96,4 +98,3 @@ void ACustomer::SelectBistroToVisit()
 	BistroLocRankMap.GenerateKeyArray(BistroLocRankMapKeys);
 	VisitDest = BistroLocRankMapKeys[0];	// 가장 점수가 낮은 가게를 목적지로 설정
 }
-

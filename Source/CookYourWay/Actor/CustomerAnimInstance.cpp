@@ -11,12 +11,12 @@ void UCustomerAnimInstance::NativeInitializeAnimation()
 	Customer = Cast<ACustomer>(GetOwningActor());
 
 	if (Customer) {
-		FString WalkSeqPath = (TEXT("/Game/Assets/Art_3D/Animation/%s_Walk.%s_Walk"), Customer->CustName, Customer->CustName);
-		FString IdleSeqPath = (TEXT("/Game/Assets/Art_3D/Animation/%s_Idle.%s_Idle"), Customer->CustName, Customer->CustName);
-		const ConstructorHelpers::FObjectFinder<UAnimSequence> Anim_WalkSeq(*WalkSeqPath);
-		const ConstructorHelpers::FObjectFinder<UAnimSequence> Anim_IdleSeq(*IdleSeqPath);
-		WalkSeq = Anim_WalkSeq.Object;
-		IdleSeq = Anim_IdleSeq.Object;
+		FString WalkSeqPath = FString("/Game/Assets/Art_3D/Animation/").Append(Customer->CustName).Append("_Walk.").Append(Customer->CustName).Append("_Walk");
+		FString IdleSeqPath = FString("/Game/Assets/Art_3D/Animation/").Append(Customer->CustName).Append("_Idle.").Append(Customer->CustName).Append("_Idle");
+		UAnimSequence* Anim_WalkSeq = LoadObject<UAnimSequence>(NULL, *WalkSeqPath, NULL, LOAD_None, NULL);
+		UAnimSequence* Anim_IdleSeq = LoadObject<UAnimSequence>(NULL, *IdleSeqPath, NULL, LOAD_None, NULL);
+		WalkSeq = Anim_WalkSeq;
+		IdleSeq = Anim_IdleSeq;
 	}
 }
 

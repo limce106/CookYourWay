@@ -10,7 +10,7 @@ class COOKYOURWAY_API AStore : public AActor
 {
 	GENERATED_BODY()
 	
-	int32 TempTime;
+	float TempDelayTime;
 
 public:
 	AStore();
