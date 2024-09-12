@@ -1,7 +1,12 @@
 
 
 #include "Actor/Competitor.h"
+#include "Customer.h"
 
+void ACompetitor::SetCustRate(ACustomer* Customer)
+{
+	Customer->Destroy();
+}
 
 ACompetitor::ACompetitor()
 {

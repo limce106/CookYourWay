@@ -18,6 +18,9 @@ public:
 protected:
 	virtual void BeginPlay() override;
 
+	UFUNCTION(BlueprintCallable)
+	void SetCustWaitLoc(ACustomer* Customer);	// 손님 대기 위치 지정
+
 public:	
 	virtual void Tick(float DeltaTime) override;
 

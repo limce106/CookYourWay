@@ -18,6 +18,9 @@ public:
 protected:
 	virtual void BeginPlay() override;
 
+	UFUNCTION(BlueprintCallable)
+	void SetCustRate(ACustomer* Customer);
+
 public:	
 	virtual void Tick(float DeltaTime) override;
 
