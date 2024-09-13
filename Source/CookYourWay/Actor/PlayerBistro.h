@@ -15,6 +15,9 @@ class COOKYOURWAY_API APlayerBistro : public AActor
 public:	
 	APlayerBistro();
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Rate)
+	class UCustomerRateComponent* CustRateComponent;
+
 protected:
 	virtual void BeginPlay() override;
 

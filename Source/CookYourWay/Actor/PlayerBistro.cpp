@@ -7,6 +7,7 @@ APlayerBistro::APlayerBistro()
 {
 	PrimaryActorTick.bCanEverTick = true;
 
+	CustRateComponent = CreateDefaultSubobject<UCustomerRateComponent>(TEXT("CustRateComponent"));
 }
 
 void APlayerBistro::BeginPlay()

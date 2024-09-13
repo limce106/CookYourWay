@@ -41,7 +41,7 @@ void AVillageManager::BeginPlay()
 {
 	Super::BeginPlay();
 
-	//Init();
+	Init();
 }
 
 void AVillageManager::Tick(float DeltaTime)

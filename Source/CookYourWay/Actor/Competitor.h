@@ -15,6 +15,9 @@ class COOKYOURWAY_API ACompetitor : public AActor
 public:	
 	ACompetitor();
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Rate)
+	class UCustomerRateComponent* CustRateComponent; 
+
 protected:
 	virtual void BeginPlay() override;
 

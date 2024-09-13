@@ -7,6 +7,7 @@ ACompetitor::ACompetitor()
 {
 	PrimaryActorTick.bCanEverTick = true;
 
+	CustRateComponent = CreateDefaultSubobject<UCustomerRateComponent>(TEXT("CustRateComponent"));
 }
 
 void ACompetitor::BeginPlay()

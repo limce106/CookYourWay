@@ -19,10 +19,9 @@ ACustomer::ACustomer()
 
 void ACustomer::Init()
 {
-	UGameplayStatics::GetAllActorsOfClass(GetWorld(), BP_Competitor, AllCompetitorActorArr);
-	PlayerBistro = Cast<APlayerBistro>(UGameplayStatics::GetActorOfClass(GetWorld(), BP_PlayerBistro));
-
-	// SelectBistroToVisit();
+	CustName = "Amy"; // 임의로 테스트를 위해 설정
+	SetSkeletalMesh();
+	SelectBistroToVisit();
 }
 
 void ACustomer::SetSkeletalMesh()
@@ -43,6 +42,8 @@ void ACustomer::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), BP_Competitor, AllCompetitorActorArr);
+	PlayerBistro = Cast<APlayerBistro>(UGameplayStatics::GetActorOfClass(GetWorld(), BP_PlayerBistro));
 	Init();
 }
 
