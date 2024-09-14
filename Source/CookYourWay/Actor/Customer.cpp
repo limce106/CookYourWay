@@ -5,23 +5,28 @@
 #include <Kismet/GameplayStatics.h>
 #include "Competitor.h"
 #include "PlayerBistro.h"
+#include"Components/CapsuleComponent.h"
 
 ACustomer::ACustomer()
 {
 	PrimaryActorTick.bCanEverTick = true;
 
-	Root = CreateDefaultSubobject<USceneComponent>(TEXT("Root"));
-	RootComponent = Root;
+	CapsuleCollision = CreateDefaultSubobject<UCapsuleComponent>(TEXT("CapsuleCollision"));
+	//RootComponent = CapsuleCollision;
+	CapsuleCollision->SetupAttachment(RootComponent);
 
 	SkeletalMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("SkeletalMesh"));
-	SkeletalMesh->SetupAttachment(RootComponent);
+	SkeletalMesh->SetupAttachment(CapsuleCollision);
 }
 
 void ACustomer::Init()
 {
-	CustName = "Amy"; // 임의로 테스트를 위해 설정
+	CustName = "Amy"; // 임의로 테스트를 위해 설정, 
 	SetSkeletalMesh();
 	SelectBistroToVisit();
+
+	AAIController* AINpcController = Cast<AAIController>(GetController());
+	AINpcController->MoveToLocation(VisitDest);
 }
 
 void ACustomer::SetSkeletalMesh()
@@ -33,9 +38,9 @@ void ACustomer::SetSkeletalMesh()
 
 	// 애니메이션 블루프린트 클래스 적용
 	// 에디터에서만 적용되고 빌드 시 안 될 수 있으니 꼭 확인!!
-	FString AnimBPPath = (FString("/Game/Blueprint/AnimBP/").Append(CustName).Append("_AnimBP.").Append(CustName).Append("_AnimBP"));
+	/*FString AnimBPPath = (FString("/Game/Blueprint/AnimBP/").Append(CustName).Append("_AnimBP.").Append(CustName).Append("_AnimBP"));
 	UAnimBlueprint* AnimBP = LoadObject<UAnimBlueprint>(NULL, *AnimBPPath, NULL, LOAD_None, NULL);
-	SkeletalMesh->SetAnimInstanceClass(AnimBP->GeneratedClass);
+	SkeletalMesh->SetAnimInstanceClass(AnimBP->GeneratedClass);*/
 }
 
 void ACustomer::BeginPlay()

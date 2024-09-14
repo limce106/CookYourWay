@@ -20,7 +20,7 @@ void AStore::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	if (DelayWithDeltaTime(5, DeltaTime)) {
+	if (DelayWithDeltaTime(2, DeltaTime)) {
 		CreateCustomer();
 	}
 }
@@ -39,6 +39,6 @@ bool AStore::DelayWithDeltaTime(float DelayTime, float DeltaSeconds)
 
 void AStore::CreateCustomer()
 {
-	FVector CustomerLocation = FVector(GetActorLocation().X, GetActorLocation().Y + 200.0, GetActorLocation().Z);
+	FVector CustomerLocation = FVector(GetActorLocation().X, GetActorLocation().Y + 220.0, 5.0f);
 	ACustomer* Customer = GetWorld()->SpawnActor<ACustomer>(BP_Customer, CustomerLocation, GetActorRotation());
 }
