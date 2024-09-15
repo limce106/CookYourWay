@@ -11,12 +11,6 @@ ACustomer::ACustomer()
 {
 	PrimaryActorTick.bCanEverTick = true;
 
-	CapsuleCollision = CreateDefaultSubobject<UCapsuleComponent>(TEXT("CapsuleCollision"));
-	//RootComponent = CapsuleCollision;
-	CapsuleCollision->SetupAttachment(RootComponent);
-
-	SkeletalMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("SkeletalMesh"));
-	SkeletalMesh->SetupAttachment(CapsuleCollision);
 }
 
 void ACustomer::Init()
@@ -26,6 +20,7 @@ void ACustomer::Init()
 	SelectBistroToVisit();
 
 	AAIController* AINpcController = Cast<AAIController>(GetController());
+	// AIMoveTo();
 	AINpcController->MoveToLocation(VisitDest);
 }
 
@@ -34,13 +29,13 @@ void ACustomer::SetSkeletalMesh()
 	// 스켈레탈 메시 적용
 	FString SkeletalMeshPath = FString("/Game/Assets/Art_3D/Modelling/Npc/").Append(CustName).Append("/").Append(CustName).Append(".").Append(CustName);
 	USkeletalMesh* CustSkeletalMesh = LoadObject<USkeletalMesh>(NULL, *SkeletalMeshPath, NULL, LOAD_None, NULL);
-	SkeletalMesh->SetSkeletalMesh(CustSkeletalMesh);
+	GetMesh()->SetSkeletalMesh(CustSkeletalMesh);
 
 	// 애니메이션 블루프린트 클래스 적용
 	// 에디터에서만 적용되고 빌드 시 안 될 수 있으니 꼭 확인!!
-	/*FString AnimBPPath = (FString("/Game/Blueprint/AnimBP/").Append(CustName).Append("_AnimBP.").Append(CustName).Append("_AnimBP"));
+	FString AnimBPPath = (FString("/Game/Blueprint/AnimBP/").Append(CustName).Append("_AnimBP.").Append(CustName).Append("_AnimBP"));
 	UAnimBlueprint* AnimBP = LoadObject<UAnimBlueprint>(NULL, *AnimBPPath, NULL, LOAD_None, NULL);
-	SkeletalMesh->SetAnimInstanceClass(AnimBP->GeneratedClass);*/
+	GetMesh()->SetAnimInstanceClass(AnimBP->GeneratedClass);
 }
 
 void ACustomer::BeginPlay()
@@ -103,4 +98,6 @@ void ACustomer::SelectBistroToVisit()
 	TArray<FVector> BistroLocRankMapKeys;
 	BistroLocRankMap.GenerateKeyArray(BistroLocRankMapKeys);
 	VisitDest = BistroLocRankMapKeys[0];	// 가장 점수가 낮은 가게를 목적지로 설정
+	VisitDest.Y += 220.0f;
+	VisitDest.Z = 85.0f;
 }

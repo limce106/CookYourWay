@@ -3,12 +3,12 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/Pawn.h"
+#include "GameFramework/Character.h"
 #include "AIController.h"
 #include "Customer.generated.h"
 
 UCLASS()
-class COOKYOURWAY_API ACustomer : public APawn
+class COOKYOURWAY_API ACustomer : public ACharacter
 {
 	GENERATED_BODY()
 
@@ -16,11 +16,6 @@ class COOKYOURWAY_API ACustomer : public APawn
 	class APlayerBistro* PlayerBistro;
 
 	TMap <FVector, float> BistroLocRankMap;	// 가게 도착 위치와 계산된 점수
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
-	class UCapsuleComponent* CapsuleCollision;
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
-	class USkeletalMeshComponent* SkeletalMesh;
 
 	float ManhattanDist(FVector Loc1, FVector Loc2);
 	float CalcVisitRank(AActor* Bistro);

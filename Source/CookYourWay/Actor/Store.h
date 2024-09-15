@@ -3,6 +3,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "Customer.h"
 #include "Store.generated.h"
 
 UCLASS()
@@ -20,7 +21,7 @@ protected:
 
 public:
 	UPROPERTY(EditDefaultsOnly)
-	TSubclassOf<APawn> BP_Customer;
+	TSubclassOf<ACustomer> BP_Customer;
 
 	virtual void Tick(float DeltaTime) override;
 
