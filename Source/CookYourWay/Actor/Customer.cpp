@@ -6,11 +6,16 @@
 #include "Competitor.h"
 #include "PlayerBistro.h"
 #include"Components/CapsuleComponent.h"
+#include "GameFramework/CharacterMovementComponent.h"
 
 ACustomer::ACustomer()
 {
 	PrimaryActorTick.bCanEverTick = true;
 
+	// 컨트롤러 회전 사용 안 함
+	bUseControllerRotationYaw = false;
+	// 이동할 때 이동 방향으로 회전
+	GetCharacterMovement()->bOrientRotationToMovement = true;
 }
 
 void ACustomer::Init()
@@ -20,8 +25,7 @@ void ACustomer::Init()
 	SelectBistroToVisit();
 
 	AAIController* AINpcController = Cast<AAIController>(GetController());
-	// AIMoveTo();
-	AINpcController->MoveToLocation(VisitDest);
+	AINpcController->MoveToLocation(VisitDest, 1.0f);
 }
 
 void ACustomer::SetSkeletalMesh()
@@ -51,6 +55,7 @@ void ACustomer::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	
 }
 
 float ACustomer::ManhattanDist(FVector Loc1, FVector Loc2)
@@ -63,7 +68,7 @@ float ACustomer::ManhattanDist(FVector Loc1, FVector Loc2)
 float ACustomer::CalcVisitRank(AActor* Bistro)
 {
 	FVector CustomerLoc = GetActorLocation();
-	FVector BistroLoc = Bistro->GetActorLocation() + FVector(200.0f, 0.0f, 0.0f);
+	FVector BistroLoc = Bistro->GetActorLocation();
 
 	UCustomerRateComponent* CustomerRateComponent = Cast<UCustomerRateComponent>(Bistro->GetComponentByClass(UCustomerRateComponent::StaticClass()));
 	ECustType CurCustType = *CustomerRateComponent->CustStringToTypeMap.Find(CustName);
@@ -98,6 +103,7 @@ void ACustomer::SelectBistroToVisit()
 	TArray<FVector> BistroLocRankMapKeys;
 	BistroLocRankMap.GenerateKeyArray(BistroLocRankMapKeys);
 	VisitDest = BistroLocRankMapKeys[0];	// 가장 점수가 낮은 가게를 목적지로 설정
-	VisitDest.Y += 220.0f;
-	VisitDest.Z = 85.0f;
+	VisitDest.Y += 100.0f;
+	VisitDest.Z = 95.0f;
 }
+

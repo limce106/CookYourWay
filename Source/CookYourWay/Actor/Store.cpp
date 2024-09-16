@@ -40,5 +40,4 @@ void AStore::CreateCustomer()
 {
 	FVector CustomerLocation = FVector(GetActorLocation().X, GetActorLocation().Y + 250.0, 95.0f);
 	ACustomer* Customer = GetWorld()->SpawnActor<ACustomer>(BP_Customer, CustomerLocation, GetActorRotation());
-	
 }

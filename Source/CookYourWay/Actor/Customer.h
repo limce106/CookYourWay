@@ -21,6 +21,8 @@ class COOKYOURWAY_API ACustomer : public ACharacter
 	float CalcVisitRank(AActor* Bistro);
 	void SelectBistroToVisit();
 
+	EPathFollowingRequestResult::Type Result;
+
 public:
 	ACustomer();
 
