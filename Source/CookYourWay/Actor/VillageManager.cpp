@@ -13,8 +13,8 @@ AVillageManager::AVillageManager()
 	int AreaNum = 0;
 	for (int i = 1; i <= 4; i++) {
 		for (int j = 1; j <= 6; j++) {
-			float LocX = 2400.0f - 800.0f * (j - 1);
-			float LocY = -300.0f - 600.0f * (i - 1);
+			float LocX = -1700 + 600.0f * (j - 1);
+			float LocY = -2100.0f + 600.0f * (i - 1);
 			FVector Loc = FVector(LocX, LocY, 0.0f);
 			AreaLocMap.Add(++AreaNum, Loc);
 		}
