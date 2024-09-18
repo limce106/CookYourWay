@@ -39,5 +39,5 @@ bool AStore::DelayWithDeltaTime(float DelayTime, float DeltaSeconds)
 void AStore::CreateCustomer()
 {
 	FVector CustomerLocation = FVector(GetActorLocation().X, GetActorLocation().Y + 250.0, 95.0f);
-	ACustomer* Customer = GetWorld()->SpawnActor<ACustomer>(BP_Customer, CustomerLocation, GetActorRotation());
+	ACustomer* Customer = GetWorld()->SpawnActor<ACustomer>(BP_Customer, CustomerLocation, FRotator(0.0f, 90.0f, 0.0f));
 }
