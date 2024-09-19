@@ -9,7 +9,7 @@
 UENUM(BlueprintType)
 enum class ECustType : uint8 {
 	Amy		UMETA(DisplayName = "Amy"),
-	Timmy	UMETA(DisplayName = "Timmy")
+	Michelle	UMETA(DisplayName = "Michelle")
 };
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
@@ -31,11 +31,11 @@ public:
 	UPROPERTY(BlueprintReadWrite)
 	TMap<ECustType, float> CustTypeRateMap = {	// <¼Õ´ÔÅ¸ÀÔ, Æò±ÕÆòÁ¡>, 
 		{ECustType::Amy, 0.0 },
-		{ECustType::Timmy, 0.0 }
+		{ECustType::Michelle, 0.0 }
 	};
 
 	const TMap<FString, ECustType> CustStringToTypeMap = {
 		{"Amy", ECustType::Amy},
-		{"Timmy", ECustType::Timmy}
+		{"Michelle", ECustType::Michelle}
 	};
 };

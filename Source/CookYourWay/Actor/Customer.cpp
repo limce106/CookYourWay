@@ -20,7 +20,7 @@ ACustomer::ACustomer()
 
 void ACustomer::Init()
 {
-	CustName = "Timmy"; // 임의로 테스트를 위해 설정, 
+	CustName = "Michelle"; // 임의로 테스트를 위해 설정, 
 	SetSkeletalMesh();
 	SelectBistroToVisit();
 
