@@ -30,5 +30,12 @@ UCLASS()
 class COOKYOURWAY_API UIngredientManagerSystem : public USubsystem
 {
 	GENERATED_BODY()
+
+	UIngredientManagerSystem();
 	
+public:
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Table")
+	class UDataTable* IngredientTable;
+
+	TArray<FIngrData*> IngredientTableRows;
 };
