@@ -10,4 +10,5 @@ UIngredientManagerSystem::UIngredientManagerSystem()
 	IngredientTable = DT_INGREDIENTTABLE.Object;
 
 	IngredientTable->GetAllRows<FIngrData>("Get All Rows Of IngrData", IngredientTableRows);
+	IngredientTableRowName = IngredientTable->GetRowNames();
 }

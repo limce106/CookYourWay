@@ -2,6 +2,8 @@
 
 
 #include "Actor/Ingredient.h"
+#include <Kismet/GameplayStatics.h>
+#include <GameInstance/IngredientManagerSystem.h>
 
 AIngredient::AIngredient()
 {
@@ -12,6 +14,17 @@ AIngredient::AIngredient()
 
 	StaticMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("StaticMesh"));
 	StaticMesh->SetupAttachment(MeshPivot);
+}
+
+void AIngredient::Init(FString IngrName)
+{
+	for (int i = 0; i < IngredientManagerSystem->IngredientTableRowName.Num(); i++) {
+		FString IngredientTableRowName = IngredientManagerSystem->IngredientTableRowName[i].ToString();
+		if (IngrName == IngredientTableRowName) {
+			CurIngrData = IngredientManagerSystem->IngredientTableRows[i];
+			break;
+		}
+	}
 }
 
 void AIngredient::SetPivotCenter()
@@ -37,11 +50,30 @@ void AIngredient::BeginPlay()
 {
 	Super::BeginPlay();
 	
-
+	IngredientManagerSystem = UGameplayStatics::GetGameInstance(GetWorld())->GetSubsystem<UIngredientManagerSystem>();
 }
 
 void AIngredient::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+}
+
+bool AIngredient::IsCooked()
+{
+	if (CurIngrData->IngrType == "Vegetable") {
+		if (IsChopped)
+			return true;
+		else
+			return false;
+	}
+	else if (CurIngrData->IngrType == "Meat") {
+		if (IsRoasted)
+			return true;
+		else
+			return false;
+	}
+	else {
+		return true;
+	}
 }

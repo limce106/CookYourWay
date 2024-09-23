@@ -38,4 +38,5 @@ public:
 	class UDataTable* IngredientTable;
 
 	TArray<FIngrData*> IngredientTableRows;
+	TArray<FName> IngredientTableRowName;
 };
