@@ -59,16 +59,3 @@ void AReuben::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	PlayerInputComponent->BindAxis("Move Forward / Backward", this, &AReuben::MoveForward);
 	PlayerInputComponent->BindAxis("Move Right / Left", this, &AReuben::MoveRight);
 }
-
-void AReuben::AttachToCarrySocket()
-{
-	//if (PlateMesh)  // PlateMesh는 접시의 Static Mesh
-	//{
-	//	// PlateSocket이라는 이름의 소켓에 접시 부착
-	//	PlateMesh->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, FName("PlateSocket"));
-
-	//	// 소켓에서 상대적인 위치와 회전을 설정하여 조정
-	//	PlateMesh->SetRelativeLocation(FVector(0.f, 0.f, 0.f));  // 필요에 따라 위치 조정
-	//	PlateMesh->SetRelativeRotation(FRotator(0.f, 0.f, 0.f));  // 필요에 따라 회전 조정
-	//}
-}

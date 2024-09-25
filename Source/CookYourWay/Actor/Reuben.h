@@ -23,10 +23,14 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	UPROPERTY(BlueprintReadWrite)
-	bool IsCarry = false;
+	AActor* OverlappedActor;
+
+	UPROPERTY(BlueprintReadWrite)
+	bool IsHold = false;
+	UPROPERTY(BlueprintReadWrite)
+	AActor* FirstHoldingActor;
 
 	void MoveForward(float Value);
 	void MoveRight(float Value);
 
-	void AttachToCarrySocket();
 };
