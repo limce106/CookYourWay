@@ -60,19 +60,8 @@ void AIngredient::Tick(float DeltaTime)
 
 bool AIngredient::IsCooked()
 {
-	if (CurIngrData->IngrType == "Filling") {
-		if (IsChopped)
-			return true;
-		else
-			return false;
-	}
-	else if (CurIngrData->IngrType == "Meat") {
-		if (IsRoasted)
-			return true;
-		else
-			return false;
-	}
-	else {
+	if (CookedRate == MaxCookedRate)
 		return true;
-	}
+	else
+		return false;
 }

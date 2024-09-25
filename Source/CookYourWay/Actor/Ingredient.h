@@ -7,13 +7,6 @@
 #include <GameInstance/IngredientManagerSystem.h>
 #include "Ingredient.generated.h"
 
-//UENUM(BlueprintType)
-//enum class EIngredientState : uint8 {
-//	Raw			UMETA(DisplayName = "Raw"),
-//	Roasted		UMETA(DisplayName = "Roasted"),
-//	Chopped		UMETA(DisplayName = "Chopped")
-//};
-
 UCLASS()
 class COOKYOURWAY_API AIngredient : public AActor
 {
@@ -40,10 +33,8 @@ public:
 	USceneComponent* MeshPivot;
 	UStaticMeshComponent* StaticMesh;
 
-	// 재료 별로 필요한 조리 사항을 완수했는지 (썰기, 익히기)
-	bool IsRoasted = false;
-	bool IsChopped = false;
+	float CookedRate = 0.0f;
+	const float MaxCookedRate = 1.0f;
 
-	UFUNCTION(BlueprintCallable)
 	bool IsCooked();
 };
