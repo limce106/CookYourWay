@@ -3,7 +3,6 @@
 
 #include "Actor/Ingredient.h"
 #include <Kismet/GameplayStatics.h>
-#include <GameInstance/IngredientManagerSystem.h>
 
 AIngredient::AIngredient()
 {
@@ -61,7 +60,7 @@ void AIngredient::Tick(float DeltaTime)
 
 bool AIngredient::IsCooked()
 {
-	if (CurIngrData->IngrType == "Vegetable") {
+	if (CurIngrData->IngrType == "Filling") {
 		if (IsChopped)
 			return true;
 		else
