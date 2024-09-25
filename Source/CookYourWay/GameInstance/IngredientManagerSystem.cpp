@@ -11,4 +11,17 @@ UIngredientManagerSystem::UIngredientManagerSystem()
 
 	IngredientTable->GetAllRows<FIngrData>("Get All Rows Of IngrData", IngredientTableRows);
 	IngredientTableRowName = IngredientTable->GetRowNames();
+
+	// 재료 타입별 배열 추가
+	for (auto Row : IngredientTableRows) {
+		if (Row->IngrType == "Filling") {
+			FillingRows.Add(Row);
+		}
+		else if (Row->IngrType == "Meat") {
+			MeatRows.Add(Row);
+		}
+		else {
+			SauceRows.Add(Row);
+		}
+	}
 }

@@ -27,7 +27,7 @@ public:
 };
 
 UCLASS()
-class COOKYOURWAY_API UIngredientManagerSystem : public USubsystem
+class COOKYOURWAY_API UIngredientManagerSystem : public UGameInstanceSubsystem
 {
 	GENERATED_BODY()
 
@@ -39,4 +39,8 @@ public:
 
 	TArray<FIngrData*> IngredientTableRows;
 	TArray<FName> IngredientTableRowName;
+
+	TArray<FIngrData*> FillingRows;
+	TArray<FIngrData*> MeatRows;
+	TArray<FIngrData*> SauceRows;
 };
