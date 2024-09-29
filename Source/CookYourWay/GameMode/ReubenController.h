@@ -8,6 +8,7 @@
 #include "Actor/CookingUtensil.h"
 #include "Actor/Ingredient.h"
 #include "Actor/Plate.h"
+#include <Actor/Table.h>
 #include "ReubenController.generated.h"
 
 /**
@@ -31,13 +32,17 @@ public:
 	TSubclassOf<ACookingUtensil> BP_CookingUtensil;
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<APlate> BP_Plate;
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<ATable> BP_Table;
 
 	void Interaction();
 	void Chop();
 	UFUNCTION(BlueprintImplementableEvent)
-	void BP_Interaction();
-	UFUNCTION(BlueprintImplementableEvent)
 	void BP_Chop();
 
-	void PickUp();
+	// void PickUp();
+	void EmptyOnSocketInteraction(AActor* InteractActor);
+	void PlateOnSocketInteraction(AActor* InteractActor);
+	void CookingUtensilOnSocketInteraction(AActor* InteractActor);
+	void IngrOnSocketInteraction(AActor* InteractActor);
 };
