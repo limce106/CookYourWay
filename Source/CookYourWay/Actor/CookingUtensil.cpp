@@ -22,3 +22,10 @@ void ACookingUtensil::Tick(float DeltaTime)
 
 }
 
+float ACookingUtensil::GetOneCookIncreasement()
+{
+	UE_LOG(LogTemp, Error, TEXT("Override the (GetOneCookIncreasement) function!"));
+
+	return 0.0f;
+}
+
