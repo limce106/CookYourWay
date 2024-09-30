@@ -60,7 +60,7 @@ void AIngredient::Tick(float DeltaTime)
 
 bool AIngredient::IsCooked()
 {
-	if (CookedRate == MaxCookedRate)
+	if (CookedRate >= MaxCookedRate && !IsBurn)
 		return true;
 	else
 		return false;

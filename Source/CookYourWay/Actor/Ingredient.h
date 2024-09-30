@@ -33,6 +33,10 @@ public:
 	USceneComponent* MeshPivot;
 	UStaticMeshComponent* StaticMesh;
 
+	// 고기 재료 탔는지
+	bool IsBurn = false;
+
+	// 조리 정도
 	float CookedRate = 0.0f;
 	const float MaxCookedRate = 1.0f;
 
