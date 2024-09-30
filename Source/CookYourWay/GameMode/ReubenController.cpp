@@ -13,32 +13,27 @@ void AReubenController::SetupInputComponent()
 	Super::SetupInputComponent();
 
 	InputComponent->BindAction("Interaction", EInputEvent::IE_Pressed, this, &AReubenController::Interaction);
-	InputComponent->BindAction("Chop", EInputEvent::IE_Pressed, this, &AReubenController::Chop);
+	InputComponent->BindAction("Chop", EInputEvent::IE_Pressed, Reuben, &AReuben::Chop);
 }
 
 void AReubenController::Interaction()
 {
 	AActor* OverlappedActor = Reuben->OverlappedActor;
 	if (Reuben->IsHold == false) {
-		EmptyOnSocketInteraction(OverlappedActor);
+		Reuben->EmptyOnSocketInteraction(OverlappedActor);
 	}
 	else {
 		TArray<USceneComponent*> HoldScoketComponents = Reuben->GetMesh()->GetAttachChildren();
-		if (HoldScoketComponents[0]->GetClass() == BP_Plate) {
-			PlateOnSocketInteraction(OverlappedActor);
+		if (HoldScoketComponents[0]->GetClass() == Reuben->BP_Plate) {
+			Reuben->PlateOnSocketInteraction(OverlappedActor);
 		}
-		else if (HoldScoketComponents[0]->GetClass() == BP_CookingUtensil) {
-			CookingUtensilOnSocketInteraction(OverlappedActor);
+		else if (HoldScoketComponents[0]->GetClass() == Reuben->BP_CookingUtensil) {
+			Reuben->CookingUtensilOnSocketInteraction(OverlappedActor);
 		}
-		else if (HoldScoketComponents[0]->GetClass() == BP_Ingredient) {
-			IngrOnSocketInteraction(OverlappedActor);
+		else if (HoldScoketComponents[0]->GetClass() == Reuben->BP_Ingredient) {
+			Reuben->IngrOnSocketInteraction(OverlappedActor);
 		}
 	}
-}
-
-void AReubenController::Chop()
-{
-	BP_Chop();
 }
 
 //void AReubenController::PickUp()
@@ -80,63 +75,4 @@ void AReubenController::Chop()
 //	}
 //}
 
-void AReubenController::EmptyOnSocketInteraction(AActor* InteractActor)
-{
-	// 접시나 조리도구라면 든다.
-	if (InteractActor->GetClass() == BP_Plate ||  InteractActor->GetClass() == BP_CookingUtensil) {
 
-		InteractActor->AttachToComponent(Reuben->GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, FName("HoldSocket"));
-	}
-	// 조리된 재료라면 든다.
-	else if (InteractActor->GetClass() == BP_Ingredient) {
-
-	}
-}
-
-void AReubenController::PlateOnSocketInteraction(AActor* InteractActor)
-{
-	// 조리된 재료라면 접시 위로 올린다.
-	if (InteractActor->GetClass() == BP_Ingredient) {
-
-	}
-	// 조리된 재료가 조리도구 위에 있다면 접시 위로 올린다.
-	else if (InteractActor->GetClass() == BP_CookingUtensil) {
-
-	}
-	// 테이블 위에 아무것도 없다면 접시를 테이블 위로 올린다.
-	else if (InteractActor->GetClass() == BP_Table) {
-
-	}
-}
-
-void AReubenController::CookingUtensilOnSocketInteraction(AActor* InteractActor)
-{
-	// 조리도구 위에 재료가 없다면 재료를 조리도구 위로 올린다.
-	if (InteractActor->GetClass() == BP_Ingredient) {
-
-	}
-	// 조리도구 위에 조리된 재료가 있다면 재료를 접시 위로 올린다.
-	else if (InteractActor->GetClass() == BP_Plate) {
-
-	}
-	// 테이블 위에 아무것도 없다면 조리도구를 테이블 위로 올린다.
-	else if (InteractActor->GetClass() == BP_Table) {
-
-	}
-}
-
-void AReubenController::IngrOnSocketInteraction(AActor* InteractActor)
-{
-	// 조리된 재료라면 접시 위로 올린다.
-	if (InteractActor->GetClass() == BP_Plate) {
-
-	}
-	// 재료를 조리도구 위로 올린다.
-	else if (InteractActor->GetClass() == BP_CookingUtensil) {
-
-	}
-	// 테이블 위에 아무것도 없다면 재료를 테이블 위로 올린다.
-	else if(InteractActor->GetClass() == BP_Table) {
-
-	}
-}

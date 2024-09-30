@@ -4,6 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "CookingUtensil.h"
+#include "Ingredient.h"
+#include "Plate.h"
+#include "Table.h"
+#include "CuttingBoard.h"
 #include "Reuben.generated.h"
 
 UCLASS()
@@ -22,6 +27,19 @@ public:
 
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<AIngredient> BP_Ingredient;
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<ACookingUtensil> BP_CookingUtensil;
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<ACookingUtensil> BP_CuttingBoard;
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<ACookingUtensil> BP_FryPan;
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<APlate> BP_Plate;
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<ATable> BP_Table;
+
 	UPROPERTY(BlueprintReadWrite)
 	AActor* OverlappedActor;
 
@@ -33,4 +51,10 @@ public:
 	void MoveForward(float Value);
 	void MoveRight(float Value);
 
+	void EmptyOnSocketInteraction(AActor* InteractActor);
+	void PlateOnSocketInteraction(AActor* InteractActor);
+	void CookingUtensilOnSocketInteraction(AActor* InteractActor);
+	void IngrOnSocketInteraction(AActor* InteractActor);
+
+	void Chop();
 };

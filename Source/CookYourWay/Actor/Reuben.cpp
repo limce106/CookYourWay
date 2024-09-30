@@ -59,3 +59,72 @@ void AReuben::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	PlayerInputComponent->BindAxis("Move Forward / Backward", this, &AReuben::MoveForward);
 	PlayerInputComponent->BindAxis("Move Right / Left", this, &AReuben::MoveRight);
 }
+
+void AReuben::EmptyOnSocketInteraction(AActor* InteractActor)
+{
+	// 접시나 조리도구라면 든다.
+	if (InteractActor->GetClass() == BP_Plate || InteractActor->GetClass() == BP_CookingUtensil) {
+
+		InteractActor->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, FName("HoldSocket"));
+	}
+	// 조리된 재료라면 든다.
+	else if (InteractActor->GetClass() == BP_Ingredient) {
+
+	}
+}
+
+void AReuben::PlateOnSocketInteraction(AActor* InteractActor)
+{
+	// 타지 않은, 조리된 재료라면 접시 위로 올린다.
+	if (InteractActor->GetClass() == BP_Ingredient) {
+
+	}
+	// 타지 않은, 조리된 재료가 조리도구 위에 있다면 접시 위로 올린다.
+	else if (InteractActor->GetClass() == BP_CookingUtensil) {
+
+	}
+	// 테이블 위에 아무것도 없다면 접시를 테이블 위로 올린다.
+	else if (InteractActor->GetClass() == BP_Table) {
+
+	}
+}
+
+void AReuben::CookingUtensilOnSocketInteraction(AActor* InteractActor)
+{
+	// 조리도구 위에 재료가 없다면 재료를 조리도구 위로 올린다.
+	if (InteractActor->GetClass() == BP_Ingredient) {
+
+	}
+	// 조리도구 위에 조리된 재료가 있고 타지 않았다면 재료를 접시 위로 올린다.
+	else if (InteractActor->GetClass() == BP_Plate) {
+
+	}
+	// 테이블 위에 아무것도 없다면 조리도구를 테이블 위로 올린다.
+	else if (InteractActor->GetClass() == BP_Table) {
+
+	}
+}
+
+void AReuben::IngrOnSocketInteraction(AActor* InteractActor)
+{
+	// 타지 않은, 조리된 재료라면 접시 위로 올린다.
+	if (InteractActor->GetClass() == BP_Plate) {
+
+	}
+	// 재료를 조리도구 위로 올린다.
+	else if (InteractActor->GetClass() == BP_CookingUtensil) {
+
+	}
+	// 테이블 위에 아무것도 없다면 재료를 테이블 위로 올린다.
+	else if (InteractActor->GetClass() == BP_Table) {
+
+	}
+}
+
+void AReuben::Chop()
+{
+	if (OverlappedActor->GetClass() == BP_CuttingBoard) {
+		ACuttingBoard* CuttingBoard = Cast<ACuttingBoard>(OverlappedActor);
+		CuttingBoard->Chop();
+	}
+}
