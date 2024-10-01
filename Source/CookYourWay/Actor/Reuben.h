@@ -36,6 +36,8 @@ public:
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<ACookingUtensil> BP_FryPan;
 	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<AActor> BP_Plates;
+	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<APlate> BP_Plate;
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<ATable> BP_Table;

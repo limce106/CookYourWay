@@ -67,12 +67,19 @@ void AReuben::EmptyOnSocketInteraction(AActor* InteractActor)
 {
 	// 접시나 조리도구라면 든다.
 	if (InteractActor->GetClass() == BP_Plate || InteractActor->GetClass() == BP_CookingUtensil) {
-
 		InteractActor->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, FName("HoldSocket"));
 	}
-	// 조리된 재료라면 든다.
+	// 타지 않은 조리된 재료라면 든다.
 	else if (InteractActor->GetClass() == BP_Ingredient) {
 
+	}
+	else if (InteractActor->GetClass() == BP_Plates) {
+		// 접시를 스폰하여 플레이어가 들게 한다.
+		TArray<USceneComponent*> HoldScoketComponents = GetMesh()->GetAttachChildren();
+		if (HoldScoketComponents[0]) {
+			APlate* Plate = GetWorld()->SpawnActor<APlate>(BP_Plate, HoldScoketComponents[0]->GetComponentLocation(), HoldScoketComponents[0]->GetComponentRotation());
+			Plate->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, FName("HoldSocket"));
+		}
 	}
 }
 
