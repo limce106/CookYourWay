@@ -55,6 +55,7 @@ public:
 	void PlateOnSocketInteraction(AActor* InteractActor);
 	void CookingUtensilOnSocketInteraction(AActor* InteractActor);
 	void IngrOnSocketInteraction(AActor* InteractActor);
+	void Interaction();
 
 	void Chop();
 };

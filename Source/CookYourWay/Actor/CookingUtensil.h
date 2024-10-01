@@ -28,9 +28,5 @@ public:
 	UPROPERTY(BlueprintReadWrite)
 	AIngredient* PlacedIngredient;
 
-	// 조리 정도
-	float CurCookRate = 0.0f;
-	const float MaxCookRate = 1.0f;
-
 	virtual float GetOneCookIncreasement();
 };

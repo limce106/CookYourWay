@@ -12,28 +12,6 @@ void AReubenController::SetupInputComponent()
 {
 	Super::SetupInputComponent();
 
-	InputComponent->BindAction("Interaction", EInputEvent::IE_Pressed, this, &AReubenController::Interaction);
-	InputComponent->BindAction("Chop", EInputEvent::IE_Pressed, Reuben, &AReuben::Chop);
-}
-
-void AReubenController::Interaction()
-{
-	AActor* OverlappedActor = Reuben->OverlappedActor;
-	if (Reuben->IsHold == false) {
-		Reuben->EmptyOnSocketInteraction(OverlappedActor);
-	}
-	else {
-		TArray<USceneComponent*> HoldScoketComponents = Reuben->GetMesh()->GetAttachChildren();
-		if (HoldScoketComponents[0]->GetClass() == Reuben->BP_Plate) {
-			Reuben->PlateOnSocketInteraction(OverlappedActor);
-		}
-		else if (HoldScoketComponents[0]->GetClass() == Reuben->BP_CookingUtensil) {
-			Reuben->CookingUtensilOnSocketInteraction(OverlappedActor);
-		}
-		else if (HoldScoketComponents[0]->GetClass() == Reuben->BP_Ingredient) {
-			Reuben->IngrOnSocketInteraction(OverlappedActor);
-		}
-	}
 }
 
 //void AReubenController::PickUp()

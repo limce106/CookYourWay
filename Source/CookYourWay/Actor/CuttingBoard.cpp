@@ -10,7 +10,7 @@ float ACuttingBoard::GetOneCookIncreasement()
 
 void ACuttingBoard::Chop()
 {
-	if (CurCookRate < MaxCookRate) {
-		CurCookRate += GetOneCookIncreasement();
+	if (IsIngredientOn && PlacedIngredient->CurCookRate < PlacedIngredient->MaxCookRate) {
+		PlacedIngredient->CurCookRate += GetOneCookIncreasement();
 	}
 }

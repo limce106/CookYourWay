@@ -37,8 +37,9 @@ public:
 	bool IsBurn = false;
 
 	// 조리 정도
-	float CookedRate = 0.0f;
-	const float MaxCookedRate = 1.0f;
+	UPROPERTY(BlueprintReadOnly)
+	float CurCookRate = 0.0f;
+	const float MaxCookRate = 1.0f;
 
 	bool IsCooked();
 };

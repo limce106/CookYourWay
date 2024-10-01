@@ -58,6 +58,9 @@ void AReuben::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 	PlayerInputComponent->BindAxis("Move Forward / Backward", this, &AReuben::MoveForward);
 	PlayerInputComponent->BindAxis("Move Right / Left", this, &AReuben::MoveRight);
+
+	InputComponent->BindAction("Interaction", EInputEvent::IE_Pressed, this, &AReuben::Interaction);
+	InputComponent->BindAction("Chop", EInputEvent::IE_Pressed, this, &AReuben::Chop);
 }
 
 void AReuben::EmptyOnSocketInteraction(AActor* InteractActor)
@@ -118,6 +121,25 @@ void AReuben::IngrOnSocketInteraction(AActor* InteractActor)
 	// 테이블 위에 아무것도 없다면 재료를 테이블 위로 올린다.
 	else if (InteractActor->GetClass() == BP_Table) {
 
+	}
+}
+
+void AReuben::Interaction()
+{
+	if (IsHold == false) {
+		EmptyOnSocketInteraction(OverlappedActor);
+	}
+	else {
+		TArray<USceneComponent*> HoldScoketComponents = GetMesh()->GetAttachChildren();
+		if (HoldScoketComponents[0]->GetClass() == BP_Plate) {
+			PlateOnSocketInteraction(OverlappedActor);
+		}
+		else if (HoldScoketComponents[0]->GetClass() == BP_CookingUtensil) {
+			CookingUtensilOnSocketInteraction(OverlappedActor);
+		}
+		else if (HoldScoketComponents[0]->GetClass() == BP_Ingredient) {
+			IngrOnSocketInteraction(OverlappedActor);
+		}
 	}
 }
 

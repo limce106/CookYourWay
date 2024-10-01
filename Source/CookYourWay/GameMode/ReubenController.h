@@ -23,8 +23,6 @@ protected:
 
 public:
 
-	void Interaction();
-
 	// void PickUp();
 	
 };
