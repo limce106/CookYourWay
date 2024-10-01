@@ -3,9 +3,19 @@
 
 #include "Actor/CuttingBoard.h"
 
+void ACuttingBoard::BeginPlay()
+{
+	Super::BeginPlay();
+}
+
 float ACuttingBoard::GetOneCookIncreasement()
 {
 	return (1.0f / 15.0f);
+}
+
+void ACuttingBoard::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
 }
 
 void ACuttingBoard::Chop()

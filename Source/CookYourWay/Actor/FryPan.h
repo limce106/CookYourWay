@@ -15,6 +15,8 @@ class COOKYOURWAY_API AFryPan : public ACookingUtensil
 	GENERATED_BODY()
 	
 protected:
+	virtual void BeginPlay() override;
+
 	float GetOneCookIncreasement() override;
 
 public:

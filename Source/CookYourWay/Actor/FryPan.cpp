@@ -3,6 +3,11 @@
 
 #include "Actor/FryPan.h"
 
+void AFryPan::BeginPlay()
+{
+	Super::BeginPlay();
+}
+
 float AFryPan::GetOneCookIncreasement()
 {
 	return (1.0f / 20.0f);
@@ -10,6 +15,8 @@ float AFryPan::GetOneCookIncreasement()
 
 void AFryPan::Tick(float DeltaTime)
 {
+	Super::Tick(DeltaTime);
+
 	if (IsIngredientOn && IsFrying) {
 		Fry();
 	}

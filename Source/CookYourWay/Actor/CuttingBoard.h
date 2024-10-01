@@ -15,8 +15,12 @@ class COOKYOURWAY_API ACuttingBoard : public ACookingUtensil
 	GENERATED_BODY()
 	
 protected:
+	virtual void BeginPlay() override;
+
 	float GetOneCookIncreasement() override;
 
 public:
+	virtual void Tick(float DeltaTime) override;
+
 	void Chop();
 };
