@@ -6,7 +6,7 @@
 #include "GameFramework/Character.h"
 #include "CookingUtensil.h"
 #include "Ingredient.h"
-#include "Plate.h"
+#include "Sandwich.h"
 #include "Table.h"
 #include "CuttingBoard.h"
 #include "Reuben.generated.h"
@@ -38,9 +38,11 @@ public:
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<AActor> BP_Plates;
 	UPROPERTY(EditDefaultsOnly)
-	TSubclassOf<APlate> BP_Plate;
+	TSubclassOf<ASandwich> BP_Sandwich;
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<ATable> BP_Table;
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<AActor> BP_TrashBin;
 
 	UPROPERTY(BlueprintReadWrite)
 	AActor* OverlappedActor;
@@ -54,7 +56,7 @@ public:
 	void MoveRight(float Value);
 
 	void EmptyOnSocketInteraction(AActor* InteractActor);
-	void PlateOnSocketInteraction(AActor* InteractActor);
+	void SandwichOnSocketInteraction(AActor* InteractActor);
 	void CookingUtensilOnSocketInteraction(AActor* InteractActor);
 	void IngrOnSocketInteraction(AActor* InteractActor);
 	void Interaction();

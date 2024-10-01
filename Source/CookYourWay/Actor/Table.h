@@ -12,15 +12,21 @@ class COOKYOURWAY_API ATable : public AActor
 	GENERATED_BODY()
 	
 public:	
-	// Sets default values for this actor's properties
 	ATable();
 
 protected:
-	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
 public:	
-	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	// 테이블 위에 액터가 있는지
+	UPROPERTY(BlueprintReadWrite)
+	bool IsActorOn = false;
+	// 테이블 위에 올라간 액터
+	UPROPERTY(BlueprintReadWrite)
+	AActor* PlacedActor;
+
+	void PutActorOn(AActor* Actor);
+	void PickUpActor();
 };

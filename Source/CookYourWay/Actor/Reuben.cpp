@@ -66,7 +66,7 @@ void AReuben::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 void AReuben::EmptyOnSocketInteraction(AActor* InteractActor)
 {
 	// 접시나 조리도구라면 든다.
-	if (InteractActor->GetClass() == BP_Plate || InteractActor->GetClass() == BP_CookingUtensil) {
+	if (InteractActor->GetClass() == BP_Sandwich || InteractActor->GetClass() == BP_CookingUtensil) {
 		InteractActor->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, FName("HoldSocket"));
 	}
 	// 타지 않은 조리된 재료라면 든다.
@@ -75,25 +75,29 @@ void AReuben::EmptyOnSocketInteraction(AActor* InteractActor)
 	}
 	else if (InteractActor->GetClass() == BP_Plates) {
 		// 접시를 스폰하여 플레이어가 들게 한다.
-		TArray<USceneComponent*> HoldScoketComponents = GetMesh()->GetAttachChildren();
-		if (HoldScoketComponents[0]) {
-			APlate* Plate = GetWorld()->SpawnActor<APlate>(BP_Plate, HoldScoketComponents[0]->GetComponentLocation(), HoldScoketComponents[0]->GetComponentRotation());
-			Plate->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, FName("HoldSocket"));
+		ASandwich* Sandwich = GetWorld()->SpawnActor<ASandwich>(BP_Sandwich, GetMesh()->GetSocketLocation("HoldSocket"), GetMesh()->GetSocketRotation("HoldSocket"));
+		Sandwich->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, FName("HoldSocket"));
+	}
+	else if (InteractActor->GetClass() == BP_TrashBin) {
+		TArray<AActor*> AttachedActors;
+		GetAttachedActors(AttachedActors);
+		if (AttachedActors[0]) {
+			AttachedActors[0]->Destroy();
 		}
 	}
 }
 
-void AReuben::PlateOnSocketInteraction(AActor* InteractActor)
+void AReuben::SandwichOnSocketInteraction(AActor* InteractActor)
 {
-	// 타지 않은, 조리된 재료라면 접시 위로 올린다.
+	// 타지 않은, 조리된 재료라면 접시/샌드위치 위로 올린다.
 	if (InteractActor->GetClass() == BP_Ingredient) {
 
 	}
-	// 타지 않은, 조리된 재료가 조리도구 위에 있다면 접시 위로 올린다.
+	// 타지 않은, 조리된 재료가 조리도구 위에 있다면 접시/샌드위치 위로 올린다.
 	else if (InteractActor->GetClass() == BP_CookingUtensil) {
 
 	}
-	// 테이블 위에 아무것도 없다면 접시를 테이블 위로 올린다.
+	// 테이블 위에 아무것도 없다면 접시/샌드위치를 테이블 위로 올린다.
 	else if (InteractActor->GetClass() == BP_Table) {
 
 	}
@@ -105,8 +109,8 @@ void AReuben::CookingUtensilOnSocketInteraction(AActor* InteractActor)
 	if (InteractActor->GetClass() == BP_Ingredient) {
 
 	}
-	// 조리도구 위에 조리된 재료가 있고 타지 않았다면 재료를 접시 위로 올린다.
-	else if (InteractActor->GetClass() == BP_Plate) {
+	// 조리도구 위에 조리된 재료가 있고 타지 않았다면 재료를 접시/샌드위치 위로 올린다.
+	else if (InteractActor->GetClass() == BP_Sandwich) {
 
 	}
 	// 테이블 위에 아무것도 없다면 조리도구를 테이블 위로 올린다.
@@ -117,8 +121,8 @@ void AReuben::CookingUtensilOnSocketInteraction(AActor* InteractActor)
 
 void AReuben::IngrOnSocketInteraction(AActor* InteractActor)
 {
-	// 타지 않은, 조리된 재료라면 접시 위로 올린다.
-	if (InteractActor->GetClass() == BP_Plate) {
+	// 타지 않은, 조리된 재료라면 접시/샌드위치 위로 올린다.
+	if (InteractActor->GetClass() == BP_Sandwich) {
 
 	}
 	// 재료를 조리도구 위로 올린다.
@@ -127,7 +131,12 @@ void AReuben::IngrOnSocketInteraction(AActor* InteractActor)
 	}
 	// 테이블 위에 아무것도 없다면 재료를 테이블 위로 올린다.
 	else if (InteractActor->GetClass() == BP_Table) {
-
+		ATable* Table = Cast<ATable>(InteractActor);
+		if (!Table->IsActorOn) {
+			TArray<AActor*> AttachedActors;
+			GetAttachedActors(AttachedActors);
+			Table->PutActorOn(AttachedActors[0]);
+		}
 	}
 }
 
@@ -138,8 +147,8 @@ void AReuben::Interaction()
 	}
 	else {
 		TArray<USceneComponent*> HoldScoketComponents = GetMesh()->GetAttachChildren();
-		if (HoldScoketComponents[0]->GetClass() == BP_Plate) {
-			PlateOnSocketInteraction(OverlappedActor);
+		if (HoldScoketComponents[0]->GetClass() == BP_Sandwich) {
+			SandwichOnSocketInteraction(OverlappedActor);
 		}
 		else if (HoldScoketComponents[0]->GetClass() == BP_CookingUtensil) {
 			CookingUtensilOnSocketInteraction(OverlappedActor);
