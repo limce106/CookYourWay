@@ -11,6 +11,9 @@ UCLASS()
 class COOKYOURWAY_API ASandwich : public AActor
 {
 	GENERATED_BODY()
+
+	// 현재 제일 위에 있는 재료의 위치
+	FVector CurIngrLoc = GetActorLocation();
 	
 public:	
 	ASandwich();
@@ -23,4 +26,7 @@ public:
 	
 	UPROPERTY(BlueprintReadOnly)
 	TArray<AIngredient*> Ingredients;
+
+	void AddIngredient(AIngredient* Ingr);
+	//void DetachOneIngr(AIngredient* Ingr);
 };

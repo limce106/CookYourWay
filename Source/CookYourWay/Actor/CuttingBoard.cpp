@@ -2,6 +2,7 @@
 
 
 #include "Actor/CuttingBoard.h"
+#include "Ingredient.h"
 
 void ACuttingBoard::BeginPlay()
 {

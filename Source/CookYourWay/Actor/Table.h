@@ -10,6 +10,8 @@ UCLASS()
 class COOKYOURWAY_API ATable : public AActor
 {
 	GENERATED_BODY()
+
+	class AReuben* Reuben;
 	
 public:	
 	ATable();

@@ -2,6 +2,8 @@
 
 
 #include "Actor/Table.h"
+#include <Kismet/GameplayStatics.h>
+#include "Reuben.h"
 
 ATable::ATable()
 {
@@ -12,7 +14,8 @@ ATable::ATable()
 void ATable::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
+	Reuben = Cast<AReuben>(UGameplayStatics::GetPlayerPawn(this, 0));
 }
 
 void ATable::Tick(float DeltaTime)
@@ -23,12 +26,21 @@ void ATable::Tick(float DeltaTime)
 
 void ATable::PutActorOn(AActor* Actor)
 {
+	Reuben->DetachActorFromSocket();
+
+	FVector ActorLocation = GetActorLocation();
+	ActorLocation.Z += 5.0f;
+	Actor->SetActorLocation(ActorLocation);
+	Actor->SetActorRotation(GetActorRotation());
+
 	IsActorOn = true;
 	PlacedActor = Actor;
 }
 
 void ATable::PickUpActor()
 {
+	Reuben->AttachToSocket(PlacedActor);
+
 	IsActorOn = false;
 	PlacedActor = NULL;
 }

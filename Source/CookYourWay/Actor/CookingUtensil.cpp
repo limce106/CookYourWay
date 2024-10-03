@@ -2,18 +2,22 @@
 
 
 #include "Actor/CookingUtensil.h"
+#include <Kismet/GameplayStatics.h>
+#include "Ingredient.h"
+#include "Reuben.h"
 
-// Sets default values
 ACookingUtensil::ACookingUtensil()
 {
 	PrimaryActorTick.bCanEverTick = true;
 
+	
 }
 
 void ACookingUtensil::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	Reuben = Cast<AReuben>(UGameplayStatics::GetPlayerPawn(this, 0));
 }
 
 void ACookingUtensil::Tick(float DeltaTime)
@@ -29,3 +33,23 @@ float ACookingUtensil::GetOneCookIncreasement()
 	return 0.0f;
 }
 
+void ACookingUtensil::PutIngrOn(AIngredient* Ingr)
+{
+	Reuben->DetachActorFromSocket();
+
+	FVector IngrLocation = GetActorLocation();
+	IngrLocation.Z += 5.0f;
+	Ingr->SetActorLocation(IngrLocation);
+	Ingr->SetActorRotation(GetActorRotation());
+
+	IsIngredientOn = true;
+	PlacedIngredient = Ingr;
+}
+
+void ACookingUtensil::PickUpIngr()
+{
+	Reuben->AttachToSocket(PlacedIngredient);
+
+	IsIngredientOn = false;
+	PlacedIngredient = NULL;
+}

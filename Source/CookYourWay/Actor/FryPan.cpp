@@ -2,6 +2,7 @@
 
 
 #include "Actor/FryPan.h"
+#include "Ingredient.h"
 
 void AFryPan::BeginPlay()
 {

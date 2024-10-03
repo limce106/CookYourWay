@@ -55,6 +55,10 @@ public:
 	void MoveForward(float Value);
 	void MoveRight(float Value);
 
+	void AttachToSocket(AActor* Actor);
+	void DetachActorFromSocket();
+
+	// 현재 들고 있는 것에 따라 상호작용
 	void EmptyOnSocketInteraction(AActor* InteractActor);
 	void SandwichOnSocketInteraction(AActor* InteractActor);
 	void CookingUtensilOnSocketInteraction(AActor* InteractActor);

@@ -4,13 +4,14 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "Ingredient.h"
 #include "CookingUtensil.generated.h"
 
 UCLASS()
 class COOKYOURWAY_API ACookingUtensil : public AActor
 {
 	GENERATED_BODY()
+
+	class AReuben* Reuben;
 	
 public:	
 	ACookingUtensil();
@@ -26,7 +27,10 @@ public:
 	bool IsIngredientOn = false;
 	// 조리도구 위에 올라간 재료 액터
 	UPROPERTY(BlueprintReadWrite)
-	AIngredient* PlacedIngredient;
+	class AIngredient* PlacedIngredient;
 
 	virtual float GetOneCookIncreasement();
+
+	void PutIngrOn(AIngredient* Ingr);
+	void PickUpIngr();
 };

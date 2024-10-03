@@ -3,25 +3,43 @@
 
 #include "Actor/Sandwich.h"
 
-// Sets default values
 ASandwich::ASandwich()
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
 }
 
-// Called when the game starts or when spawned
 void ASandwich::BeginPlay()
 {
 	Super::BeginPlay();
 	
 }
 
-// Called every frame
 void ASandwich::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
 }
+
+void ASandwich::AddIngredient(AIngredient* Ingr)
+{
+	// 재료 높이 계산
+	FVector IngrBounds = Ingr->GetComponentsBoundingBox().GetExtent();
+	float IngrHeight = IngrBounds.Z * 2;
+
+	CurIngrLoc.Z += IngrHeight;
+	Ingr->SetActorLocation(CurIngrLoc);
+
+	// 재료 부착
+	Ingr->AttachToComponent(GetRootComponent(), FAttachmentTransformRules::KeepWorldTransform);
+	Ingredients.Add(Ingr);
+}
+
+//void ASandwich::DetachOneIngr(AIngredient* Ingr)
+//{
+//	if (Ingredients.Num() == 1) {
+//		Ingr->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
+//		Ingredients.RemoveAt(0);
+//	}
+//}
 
