@@ -30,8 +30,6 @@ public:
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<AIngredient> BP_Ingredient;
 	UPROPERTY(EditDefaultsOnly)
-	TSubclassOf<ACookingUtensil> BP_CookingUtensil;
-	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<ACookingUtensil> BP_CuttingBoard;
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<ACookingUtensil> BP_FryPan;
@@ -49,12 +47,12 @@ public:
 
 	UPROPERTY(BlueprintReadWrite)
 	bool IsHold = false;
-	UPROPERTY(BlueprintReadWrite)
-	AActor* FirstHoldingActor;
 
+	// 플레이어 움직이기
 	void MoveForward(float Value);
 	void MoveRight(float Value);
 
+	// 소켓에 액터 부착/떼기
 	void AttachToSocket(AActor* Actor);
 	void DetachActorFromSocket();
 

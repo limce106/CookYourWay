@@ -29,7 +29,7 @@ void ATable::PutActorOn(AActor* Actor)
 	Reuben->DetachActorFromSocket();
 
 	FVector ActorLocation = GetActorLocation();
-	ActorLocation.Z += 5.0f;
+	ActorLocation.Z += 65.0f;
 	Actor->SetActorLocation(ActorLocation);
 	Actor->SetActorRotation(GetActorRotation());
 

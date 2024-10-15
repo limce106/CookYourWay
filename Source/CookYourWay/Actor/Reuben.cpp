@@ -54,7 +54,14 @@ void AReuben::MoveRight(float Value)
 
 void AReuben::AttachToSocket(AActor* Actor)
 {
-	Actor->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, FName("HoldSocket"));
+	UPrimitiveComponent* ActorCollision = Cast<UPrimitiveComponent>(Actor->GetComponentByClass(UPrimitiveComponent::StaticClass()));
+	ActorCollision->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	ActorCollision->SetCollisionProfileName(TEXT("OverlapAll"));
+
+	Actor->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, FName("HoldSocket"));
+	Actor->SetActorRelativeLocation(FVector(-30.0f, -30.0f, 0.0f));
+
+	IsHold = true;
 }
 
 void AReuben::DetachActorFromSocket()
@@ -62,7 +69,12 @@ void AReuben::DetachActorFromSocket()
 	TArray<AActor*> AttachedActors;
 	GetAttachedActors(AttachedActors);
 
+	UPrimitiveComponent* ActorCollision = Cast<UPrimitiveComponent>(AttachedActors[0]->GetComponentByClass(UPrimitiveComponent::StaticClass()));
+	ActorCollision->SetCollisionProfileName(TEXT("BlockAll"));
+
 	AttachedActors[0]->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
+
+	IsHold = false;
 }
 
 void AReuben::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -82,7 +94,7 @@ void AReuben::EmptyOnSocketInteraction(AActor* InteractActor)
 	GetAttachedActors(AttachedActors);
 
 	// 접시나 조리도구라면 든다.
-	if (InteractActor->GetClass() == BP_Sandwich || InteractActor->GetClass() == BP_CookingUtensil) {
+	if (InteractActor->GetClass() == BP_Sandwich || InteractActor->GetClass()->IsChildOf(ACookingUtensil::StaticClass())) {
 		AttachToSocket(InteractActor);
 	}
 
@@ -96,7 +108,7 @@ void AReuben::EmptyOnSocketInteraction(AActor* InteractActor)
 
 	// 접시를 스폰하여 플레이어가 들게 한다.
 	else if (InteractActor->GetClass() == BP_Plates) {
-		ASandwich* Sandwich = GetWorld()->SpawnActor<ASandwich>(BP_Sandwich, GetMesh()->GetSocketLocation("HoldSocket"), GetMesh()->GetSocketRotation("HoldSocket"));
+		ASandwich* Sandwich = GetWorld()->SpawnActor<ASandwich>(BP_Sandwich, GetActorLocation(), GetActorRotation());
 		AttachToSocket(Sandwich);
 	}
 
@@ -125,7 +137,7 @@ void AReuben::SandwichOnSocketInteraction(AActor* InteractActor)
 	}
 
 	// 타지 않은, 조리된 재료가 조리도구 위에 있다면 접시/샌드위치 위로 올린다.
-	else if (InteractActor->GetClass() == BP_CookingUtensil) {
+	else if (InteractActor->GetClass()->IsChildOf(ACookingUtensil::StaticClass())) {
 		ACookingUtensil* CookingUtensil = Cast<ACookingUtensil>(InteractActor);
 		if (CookingUtensil->PlacedIngredient->IsCooked() && !CookingUtensil->PlacedIngredient->IsBurn) {
 			HoldingSandwich->AddIngredient(CookingUtensil->PlacedIngredient);
@@ -189,7 +201,7 @@ void AReuben::IngrOnSocketInteraction(AActor* InteractActor)
 	}
 
 	// 조리도구 위에 재료가 없다면 재료를 조리도구 위로 올린다.
-	else if (InteractActor->GetClass() == BP_CookingUtensil) {
+	else if (InteractActor->GetClass()->IsChildOf(ACookingUtensil::StaticClass())) {
 		ACookingUtensil* CookingUtensil = Cast<ACookingUtensil>(InteractActor);
 		if (!CookingUtensil->IsIngredientOn) {
 			CookingUtensil->PutIngrOn(HoldingIngr);
@@ -207,6 +219,10 @@ void AReuben::IngrOnSocketInteraction(AActor* InteractActor)
 
 void AReuben::Interaction()
 {
+	if (!OverlappedActor || !IsOverlappingActor(OverlappedActor)) {
+		return;
+	}
+
 	if (IsHold == false) {
 		EmptyOnSocketInteraction(OverlappedActor);
 	}
@@ -217,13 +233,14 @@ void AReuben::Interaction()
 		// 들고 있던 것을 버린다.
 		if (OverlappedActor->GetClass() == BP_TrashBin) {
 			AttachedActors[0]->Destroy();
+			IsHold = false;
 			return;
 		}
 
 		if (AttachedActors[0]->GetClass() == BP_Sandwich) {
 			SandwichOnSocketInteraction(OverlappedActor);
 		}
-		else if (AttachedActors[0]->GetClass() == BP_CookingUtensil) {
+		else if (AttachedActors[0]->GetClass()->IsChildOf(ACookingUtensil::StaticClass())) {
 			CookingUtensilOnSocketInteraction(OverlappedActor);
 		}
 		else if (AttachedActors[0]->GetClass() == BP_Ingredient) {
