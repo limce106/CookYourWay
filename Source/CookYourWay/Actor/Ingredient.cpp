@@ -17,8 +17,8 @@ AIngredient::AIngredient()
 
 void AIngredient::Init(FString IngrName)
 {
-	for (int i = 0; i < IngredientManagerSystem->IngredientTableRowName.Num(); i++) {
-		FString IngredientTableRowName = IngredientManagerSystem->IngredientTableRowName[i].ToString();
+	for (int i = 0; i < IngredientManagerSystem->IngredientTableRowNames.Num(); i++) {
+		FString IngredientTableRowName = IngredientManagerSystem->IngredientTableRowNames[i].ToString();
 		if (IngrName == IngredientTableRowName) {
 			CurIngrData = IngredientManagerSystem->IngredientTableRows[i];
 			break;

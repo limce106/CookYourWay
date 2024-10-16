@@ -38,9 +38,12 @@ public:
 	class UDataTable* IngredientTable;
 
 	TArray<FIngrData*> IngredientTableRows;
-	TArray<FName> IngredientTableRowName;
+	TArray<FName> IngredientTableRowNames;
 
+	TArray<FIngrData*> IngredientRows;
 	TArray<FIngrData*> FillingRows;
 	TArray<FIngrData*> MeatRows;
 	TArray<FIngrData*> SauceRows;
+
+	UStaticMesh* GetIngrModel(FString Ingr);
 };
