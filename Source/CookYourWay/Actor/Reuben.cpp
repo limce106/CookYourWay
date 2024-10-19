@@ -3,6 +3,8 @@
 
 #include "Actor/Reuben.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include <Subsystems/PanelExtensionSubsystem.h>
+#include <Widget/IngredientBoardWidget.h>
 
 AReuben::AReuben()
 {
@@ -223,26 +225,40 @@ void AReuben::Interaction()
 		return;
 	}
 
+	// 냉장고
+	if (OverlappedActor->GetClass() == BP_Fridge) {
+		UIngredientBoardWidget* BP_IngredientBoard = CreateWidget<UIngredientBoardWidget>(GetWorld(), BP_IngredientBoardClass);
+		if (BP_IngredientBoard) {
+			BP_IngredientBoard->AddToViewport();
+		}
+		return;
+	}
+
+	// 손에 아무것도 안 들고 있을 때
 	if (IsHold == false) {
 		EmptyOnSocketInteraction(OverlappedActor);
 	}
+	// 손에 무언가 들고 있을 때
 	else {
 		TArray<AActor*> AttachedActors;
 		GetAttachedActors(AttachedActors);
 
-		// 들고 있던 것을 버린다.
+		// 손에 들고 있던 것을 버린다.
 		if (OverlappedActor->GetClass() == BP_TrashBin) {
 			AttachedActors[0]->Destroy();
 			IsHold = false;
 			return;
 		}
 
+		// 손에 들고 있는 것이 샌드위치
 		if (AttachedActors[0]->GetClass() == BP_Sandwich) {
 			SandwichOnSocketInteraction(OverlappedActor);
 		}
+		// 손에 들고 있는 것이 조리도구
 		else if (AttachedActors[0]->GetClass()->IsChildOf(ACookingUtensil::StaticClass())) {
 			CookingUtensilOnSocketInteraction(OverlappedActor);
 		}
+		// 손에 들고 있는 것이 재료
 		else if (AttachedActors[0]->GetClass() == BP_Ingredient) {
 			IngrOnSocketInteraction(OverlappedActor);
 		}

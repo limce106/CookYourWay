@@ -16,6 +16,19 @@ class COOKYOURWAY_API AReuben : public ACharacter
 {
 	GENERATED_BODY()
 
+	// 플레이어 움직이기
+	void MoveForward(float Value);
+	void MoveRight(float Value);
+
+	// 현재 들고 있는 것에 따라 상호작용
+	void EmptyOnSocketInteraction(AActor* InteractActor);
+	void SandwichOnSocketInteraction(AActor* InteractActor);
+	void CookingUtensilOnSocketInteraction(AActor* InteractActor);
+	void IngrOnSocketInteraction(AActor* InteractActor);
+	void Interaction();
+
+	void Chop();
+
 public:
 	AReuben();
 
@@ -41,6 +54,11 @@ public:
 	TSubclassOf<ATable> BP_Table;
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<AActor> BP_TrashBin;
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<AActor> BP_Fridge;
+
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<UUserWidget> BP_IngredientBoardClass;
 
 	UPROPERTY(BlueprintReadWrite)
 	AActor* OverlappedActor;
@@ -48,20 +66,7 @@ public:
 	UPROPERTY(BlueprintReadWrite)
 	bool IsHold = false;
 
-	// 플레이어 움직이기
-	void MoveForward(float Value);
-	void MoveRight(float Value);
-
 	// 소켓에 액터 부착/떼기
 	void AttachToSocket(AActor* Actor);
 	void DetachActorFromSocket();
-
-	// 현재 들고 있는 것에 따라 상호작용
-	void EmptyOnSocketInteraction(AActor* InteractActor);
-	void SandwichOnSocketInteraction(AActor* InteractActor);
-	void CookingUtensilOnSocketInteraction(AActor* InteractActor);
-	void IngrOnSocketInteraction(AActor* InteractActor);
-	void Interaction();
-
-	void Chop();
 };

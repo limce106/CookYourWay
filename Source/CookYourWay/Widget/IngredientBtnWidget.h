@@ -28,9 +28,9 @@ public:
 	class UTextBlock* TextBlock_IngrName;
 
 	UPROPERTY(EditDefaultsOnly)
-	TSubclassOf<AIngredient> BP_Ingredient;
+	TSubclassOf<UUserWidget> BP_IngredientClass;
 	UPROPERTY(EditDefaultsOnly)
-	TSubclassOf<UUserWidget> BP_IngredientBoard;
+	TSubclassOf<UUserWidget> BP_IngredientBoardClass;
 
 	void OnClick_ButtonIngredient();
 };

@@ -40,12 +40,12 @@ void UIngredientBtnWidget::OnClick_ButtonIngredient()
 	}
 
 	if (!Reuben->IsHold) {
-		AIngredient* Ingredient = GetWorld()->SpawnActor<AIngredient>(BP_Ingredient, Reuben->GetActorLocation(), Reuben->GetActorRotation());
+		AIngredient* Ingredient = GetWorld()->SpawnActor<AIngredient>(BP_IngredientClass, Reuben->GetActorLocation(), Reuben->GetActorRotation());
 		Ingredient->StaticMesh->SetStaticMesh(IngredientManagerSystem->GetIngrModel(IngrEngName));
 		Reuben->AttachToSocket(Ingredient);
 
 		TArray<UUserWidget*> AllIngredientBoardWidgetArr;
-		UWidgetBlueprintLibrary::GetAllWidgetsOfClass(this, AllIngredientBoardWidgetArr, BP_IngredientBoard);
+		UWidgetBlueprintLibrary::GetAllWidgetsOfClass(this, AllIngredientBoardWidgetArr, BP_IngredientBoardClass);
 		AllIngredientBoardWidgetArr[0]->RemoveFromParent();
 	}
 }

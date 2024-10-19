@@ -33,5 +33,9 @@ UStaticMesh* UIngredientManagerSystem::GetIngrModel(FString Ingr)
 	FString ModelPath = FString("/Game/Assets/Art_3D/Modelling/Sandwich/Ingredient/").Append(Ingr).Append(".").Append(Ingr);
 	UStaticMesh* StaticMesh = LoadObject<UStaticMesh>(NULL, *ModelPath, NULL, LOAD_None, NULL);
 
+	if (!StaticMesh) {
+		UE_LOG(LogTemp, Error, TEXT("Can't Find Ingr Model!"));
+	}
+
 	return StaticMesh;
 }
