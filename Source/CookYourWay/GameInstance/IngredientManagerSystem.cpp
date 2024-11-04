@@ -12,9 +12,11 @@ UIngredientManagerSystem::UIngredientManagerSystem()
 	IngredientTable->GetAllRows<FIngrData>("Get All Rows Of IngrData", IngredientTableRows);
 	IngredientTableRowNames = IngredientTable->GetRowNames();
 
+	int index = 0;
 	// 재료 타입별 배열 추가
 	for (auto Row : IngredientTableRows) {
 		IngredientRows.Add(Row);
+		IngrNameIndexMap.Add(Row->IngrName, index);
 
 		if (Row->IngrType == "Filling") {
 			FillingRows.Add(Row);
@@ -25,6 +27,8 @@ UIngredientManagerSystem::UIngredientManagerSystem()
 		else {
 			SauceRows.Add(Row);
 		}
+
+		index++;
 	}
 }
 

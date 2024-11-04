@@ -2,6 +2,8 @@
 
 
 #include "Actor/Sandwich.h"
+#include <Kismet/GameplayStatics.h>
+#include "GameInstance/IngredientManagerSystem.h"
 
 ASandwich::ASandwich()
 {
@@ -13,6 +15,7 @@ void ASandwich::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	IngredientManagerSystem = UGameplayStatics::GetGameInstance(GetWorld())->GetSubsystem<UIngredientManagerSystem>();
 }
 
 void ASandwich::Tick(float DeltaTime)
@@ -32,7 +35,9 @@ void ASandwich::AddIngredient(AIngredient* Ingr)
 
 	// Àç·á ºÎÂø
 	Ingr->AttachToComponent(GetRootComponent(), FAttachmentTransformRules::KeepWorldTransform);
-	Ingredients.Add(Ingr);
+
+	int IngrIndex = *IngredientManagerSystem->IngrNameIndexMap.Find(Ingr->CurIngrData->IngrName);
+	Ingredients.Add(IngrIndex);
 }
 
 //void ASandwich::DetachOneIngr(AIngredient* Ingr)

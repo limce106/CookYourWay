@@ -7,6 +7,7 @@
 #include "PlayerBistro.h"
 #include"Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include <Kismet/KismetMathLibrary.h>
 
 ACustomer::ACustomer()
 {
@@ -22,10 +23,12 @@ void ACustomer::Init()
 {
 	CustName = "Michelle"; // 임의로 테스트를 위해 설정, 
 	SetSkeletalMesh();
-	SelectBistroToVisit();
+	SetVisitDest();
 
 	AAIController* AINpcController = Cast<AAIController>(GetController());
 	AINpcController->MoveToLocation(VisitDest, 1.0f);
+
+	SetTaste();
 }
 
 void ACustomer::SetSkeletalMesh()
@@ -46,8 +49,11 @@ void ACustomer::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	IngredientManagerSystem = UGameplayStatics::GetGameInstance(GetWorld())->GetSubsystem<UIngredientManagerSystem>();
+
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), BP_Competitor, AllCompetitorActorArr);
 	PlayerBistro = Cast<APlayerBistro>(UGameplayStatics::GetActorOfClass(GetWorld(), BP_PlayerBistro));
+
 	Init();
 }
 
@@ -83,11 +89,11 @@ float ACustomer::CalcVisitRank(AActor* Bistro)
 	return VisitRank;
 }
 
-void ACustomer::SelectBistroToVisit()
+void ACustomer::SetVisitDest()
 {
 	FVector CustomerLoc = GetActorLocation();
 
-	BistroLocRankMap.Empty();
+	// BistroLocRankMap.Empty();
 	CalcVisitRank(PlayerBistro);
 
 	for (auto Competitor : AllCompetitorActorArr) {
@@ -105,5 +111,20 @@ void ACustomer::SelectBistroToVisit()
 	VisitDest = BistroLocRankMapKeys[0];	// 가장 점수가 낮은 가게를 목적지로 설정
 	VisitDest.Y += 100.0f;
 	VisitDest.Z = 95.0f;
+}
+
+void ACustomer::SetTaste()
+{
+	// 임의로 "레벨 상관없이" 속재료는 항상 3개를 선택하도록 함
+	for (int i = 0; i < 3; i++) {
+		int FillingIndex = UKismetMathLibrary::RandomIntegerInRange(0, IngredientManagerSystem->FillingRows.Num() - 1);
+		Taste.Add(FillingIndex);
+	}
+
+	int MeatIndex = UKismetMathLibrary::RandomIntegerInRange(0, IngredientManagerSystem->MeatRows.Num() - 1);
+	Taste.Add(MeatIndex);
+
+	int SauceIndex = UKismetMathLibrary::RandomIntegerInRange(0, IngredientManagerSystem->SauceRows.Num() - 1);
+	Taste.Add(SauceIndex);
 }
 

@@ -12,6 +12,8 @@ class COOKYOURWAY_API ASandwich : public AActor
 {
 	GENERATED_BODY()
 
+	class UIngredientManagerSystem* IngredientManagerSystem;
+
 	// 현재 제일 위에 있는 재료의 위치
 	FVector CurIngrLoc = GetActorLocation();
 	
@@ -25,7 +27,7 @@ public:
 	virtual void Tick(float DeltaTime) override;
 	
 	UPROPERTY(BlueprintReadOnly)
-	TArray<AIngredient*> Ingredients;
+	TArray<int32> Ingredients;
 
 	void AddIngredient(AIngredient* Ingr);
 	//void DetachOneIngr(AIngredient* Ingr);

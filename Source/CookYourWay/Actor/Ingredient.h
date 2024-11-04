@@ -13,7 +13,6 @@ class COOKYOURWAY_API AIngredient : public AActor
 	GENERATED_BODY()
 
 	class UIngredientManagerSystem* IngredientManagerSystem;
-	FIngrData* CurIngrData;
 
 	void Init(FString IngrName);
 
@@ -29,6 +28,9 @@ protected:
 
 public:	
 	virtual void Tick(float DeltaTime) override;
+
+	UPROPERTY(BlueprintReadOnly)
+	FIngrData* CurIngrData;
 
 	USceneComponent* MeshPivot;
 	UStaticMeshComponent* StaticMesh;

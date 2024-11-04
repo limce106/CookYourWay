@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "AIController.h"
+#include "Ingredient.h"
 #include "Customer.generated.h"
 
 UCLASS()
@@ -12,16 +13,22 @@ class COOKYOURWAY_API ACustomer : public ACharacter
 {
 	GENERATED_BODY()
 
+	class UIngredientManagerSystem* IngredientManagerSystem;
+
 	TArray<AActor*> AllCompetitorActorArr;
 	class APlayerBistro* PlayerBistro;
 
 	TMap <FVector, float> BistroLocRankMap;	// 가게 도착 위치와 계산된 점수
 
+	// 멘해튼 거리 구하기
 	float ManhattanDist(FVector Loc1, FVector Loc2);
+	// 방문 우선순위 구하기
 	float CalcVisitRank(AActor* Bistro);
-	void SelectBistroToVisit();
+	// 방문할 목적지(가게) 설정
+	void SetVisitDest();
 
-	EPathFollowingRequestResult::Type Result;
+	// 취향 설정
+	void SetTaste();
 
 public:
 	ACustomer();
@@ -42,8 +49,13 @@ public:
 	UPROPERTY(BlueprintReadWrite)
 	bool IsWalk = true;
 
+	// 방문할 가게
 	UPROPERTY(BlueprintReadOnly)
-	FVector VisitDest;	// 방문할 가게
+	FVector VisitDest;
+
+	// 손님의 음식 취향
+	UPROPERTY(BlueprintReadOnly)
+	TArray<int32> Taste;
 
 	void Init();
 	void SetSkeletalMesh();

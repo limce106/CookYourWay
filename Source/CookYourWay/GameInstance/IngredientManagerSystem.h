@@ -34,6 +34,9 @@ class COOKYOURWAY_API UIngredientManagerSystem : public UGameInstanceSubsystem
 	UIngredientManagerSystem();
 	
 public:
+	// ¿Á∑·∏Ì, ¿Œµ¶Ω∫ ∏ 
+	TMap<FString, int32> IngrNameIndexMap;
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Table")
 	class UDataTable* IngredientTable;
 
