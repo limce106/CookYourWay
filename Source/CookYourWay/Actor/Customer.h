@@ -6,6 +6,7 @@
 #include "GameFramework/Character.h"
 #include "AIController.h"
 #include "Ingredient.h"
+#include "Sandwich.h"
 #include "Customer.generated.h"
 
 UCLASS()
@@ -59,4 +60,9 @@ public:
 
 	void Init();
 	void SetSkeletalMesh();
+
+	// 손님의 취향이 아닌 재료 개수 세기
+	int32 CountNotTasteNum(ASandwich* Sandwich);
+	// 손님의 평점 계산하기
+	int32 GetReview(ASandwich* Sandwich);
 };

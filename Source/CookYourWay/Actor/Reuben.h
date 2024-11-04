@@ -9,12 +9,15 @@
 #include "Sandwich.h"
 #include "Table.h"
 #include "CuttingBoard.h"
+#include "Customer.h"
 #include "Reuben.generated.h"
 
 UCLASS()
 class COOKYOURWAY_API AReuben : public ACharacter
 {
 	GENERATED_BODY()
+
+	class APlayerBistro* PlayerBistro;
 
 	// 플레이어 움직이기
 	void MoveForward(float Value);
@@ -40,6 +43,8 @@ public:
 
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<AActor> BP_PlayerBistro;
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<AIngredient> BP_Ingredient;
 	UPROPERTY(EditDefaultsOnly)
@@ -69,4 +74,7 @@ public:
 	// 소켓에 액터 부착/떼기
 	void AttachToSocket(AActor* Actor);
 	void DetachActorFromSocket();
+
+	// 손님에게 샌드위치 주기
+	void GiveSandwich(ACustomer* Customer);
 };

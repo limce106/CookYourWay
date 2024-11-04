@@ -26,5 +26,16 @@ void APlayerBistro::SetCustWaitLoc(ACustomer* Customer)
 {
 	Customer->IsWalk = false;
 	Customer->SetActorLocation(FVector(-2630.0f, -7510.0f, 0.0));	// 손님이 가게에 들어왔을 때의 위치
+}
 
+void APlayerBistro::CustomerVisited(ACustomer* Customer)
+{
+	VisitedCustNum++;
+
+	SetCustWaitLoc(Customer);
+}
+
+void APlayerBistro::UpdateCustomerReviewAvg(int32 ReveiwRate)
+{
+	CustomerReviewAvg = (CustomerReviewAvg * (VisitedCustNum - 1) + ReveiwRate) / VisitedCustNum;
 }

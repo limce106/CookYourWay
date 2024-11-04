@@ -29,7 +29,6 @@ protected:
 public:	
 	virtual void Tick(float DeltaTime) override;
 
-	UPROPERTY(BlueprintReadOnly)
 	FIngrData* CurIngrData;
 
 	USceneComponent* MeshPivot;

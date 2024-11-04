@@ -5,6 +5,8 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include <Subsystems/PanelExtensionSubsystem.h>
 #include <Widget/IngredientBoardWidget.h>
+#include <Kismet/GameplayStatics.h>
+#include "PlayerBistro.h"
 
 AReuben::AReuben()
 {
@@ -20,6 +22,7 @@ void AReuben::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	PlayerBistro = Cast<APlayerBistro>(UGameplayStatics::GetActorOfClass(GetWorld(), BP_PlayerBistro));
 }
 
 void AReuben::Tick(float DeltaTime)
@@ -271,4 +274,42 @@ void AReuben::Chop()
 		ACuttingBoard* CuttingBoard = Cast<ACuttingBoard>(OverlappedActor);
 		CuttingBoard->Chop();
 	}
+}
+
+void AReuben::GiveSandwich(ACustomer* Customer)
+{
+	TArray<AActor*> AttachedActors;
+	GetAttachedActors(AttachedActors);
+
+	// 손에 아무것도 들고 있지 않으면
+	if (AttachedActors.Num() == 0) {
+		return;
+	}
+
+	ASandwich* Sandwich;
+	if (AttachedActors[0]->GetClass() == BP_Sandwich) {
+		Sandwich = Cast<ASandwich>(AttachedActors[0]);
+
+		// 샌드위치가 없는 빈 접시라면 
+		if (Sandwich->Ingredients.Num() == 0) {
+			return;
+		}
+	}
+	// 손에 들고 있는 것이 샌드위치가 아니라면
+	else {
+		return;
+	}
+
+	// 들고 있던 샌드위치 제거
+	Sandwich->Destroy();
+
+	PlayerBistro->UpdateCustomerReviewAvg(Customer->GetReview(Sandwich));
+
+
+	// 손님대사 출력 필요
+
+
+	// 모든 과정이 다 끝나면 손님 제거
+	/*디저트를 위해 5~10초 후 제거되도록 수정 필요*/
+	Customer->Destroy();
 }

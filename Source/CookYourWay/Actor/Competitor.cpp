@@ -1,7 +1,6 @@
 
 
 #include "Actor/Competitor.h"
-#include "Customer.h"
 #include <Kismet/GameplayStatics.h>
 #include <Kismet/KismetMathLibrary.h>
 
@@ -59,10 +58,16 @@ int ACompetitor::GetCustomerReview()
 	return ReviewRate;
 }
 
+void ACompetitor::UpdateCustomerReviewAvg(int32 ReveiwRate)
+{
+	CustomerReviewAvg = (CustomerReviewAvg * (VisitedCustNum - 1) + ReveiwRate) / VisitedCustNum;
+}
+
+
 void ACompetitor::CustomerVisited(ACustomer* Customer)
 {
 	Customer->Destroy();
 	VisitedCustNum++;
 
-	CustomerReviewAvg = (CustomerReviewAvg * (VisitedCustNum - 1) + GetCustomerReview()) / VisitedCustNum;
+	UpdateCustomerReviewAvg(GetCustomerReview());
 }

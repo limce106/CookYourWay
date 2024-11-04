@@ -37,6 +37,9 @@ public:
 	// 재료명, 인덱스 맵
 	TMap<FString, int32> IngrNameIndexMap;
 
+	// 빵 인덱스, *데이터 테이블 행 순서가 바뀔 것을 고려하여 - 수정 필요*
+	const int BreadIndex = 4;
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Table")
 	class UDataTable* IngredientTable;
 

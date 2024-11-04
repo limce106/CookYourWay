@@ -18,13 +18,25 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Rate)
 	class UCustomerRateComponent* CustRateComponent;
 
+	// 손님 대기 위치 지정
+	UFUNCTION(BlueprintCallable)
+	void SetCustWaitLoc(ACustomer* Customer);
+
 protected:
 	virtual void BeginPlay() override;
-
-	UFUNCTION(BlueprintCallable)
-	void SetCustWaitLoc(ACustomer* Customer);	// 손님 대기 위치 지정
 
 public:	
 	virtual void Tick(float DeltaTime) override;
 
+	// 오늘 방문한 손님 수
+	int32 VisitedCustNum = 0;
+	// 오늘 손님의 평점 평균
+	float CustomerReviewAvg = 0;
+
+	// 손님이 방문했을 때
+	UFUNCTION(BlueprintCallable)
+	void CustomerVisited(ACustomer* Customer);
+
+	// 전체 평점 평균 갱신
+	void UpdateCustomerReviewAvg(int32 ReveiwRate);
 };

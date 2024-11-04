@@ -101,7 +101,7 @@ void ACustomer::SetVisitDest()
 	}
 
 	// 방문 점수들을 오름차순으로 정렬
-	BistroLocRankMap.ValueSort([](float A, float B)
+	BistroLocRankMap.ValueSort([](const float A, const float B)
 	{
 		return A < B;
 	});
@@ -128,3 +128,84 @@ void ACustomer::SetTaste()
 	Taste.Add(SauceIndex);
 }
 
+int32 ACustomer::CountNotTasteNum(ASandwich* Sandwich)
+{
+	// 취향이 아닌 재료 개수
+	int32 NotTasteNum = 0;
+
+	Taste.Sort([](const int32 A, const int32 B)
+		{
+			return A < B;
+		});
+
+	Sandwich->Ingredients.Sort([](const int32 A, const int32 B)
+		{
+			return A < B;
+		});
+
+	// 첫 번째 재료가 빵일 때
+	if (Sandwich->Ingredients[0] == IngredientManagerSystem->BreadIndex) {
+		Sandwich->Ingredients.Remove(0);
+	}
+	else {
+		NotTasteNum++;
+	}
+
+	const int IngrNum = Sandwich->Ingredients.Num();
+	// 마지막 재료가 빵일 때
+	if (Sandwich->Ingredients[IngrNum - 1] == IngredientManagerSystem->BreadIndex) {
+		Sandwich->Ingredients.Remove(IngrNum - 1);
+	}
+	else {
+		NotTasteNum++;
+	}
+
+	for (int i = 0; i < IngrNum; i++) {
+		int* Find = Taste.FindByPredicate(Sandwich->Ingredients[i]);
+
+		// 샌드위치 재료가 손님의 취향이 아니라면
+		if (Find == nullptr) {
+			NotTasteNum++;
+		}
+		// 샌드위치 재료가 손님의 취향이라면
+		else {
+			// 중복 방지를 위해 찾은 취향은 제거
+			Taste.Remove(*Find);
+		}
+	}
+
+	// 포함되지 않은 취향 개수만큼 더한다.
+	NotTasteNum += Taste.Num();
+
+	return NotTasteNum;
+}
+
+int32 ACustomer::GetReview(ASandwich* Sandwich)
+{
+	int Review = 0;
+	int NotTasteNum = CountNotTasteNum(Sandwich);
+	
+	if (NotTasteNum == 0) {
+		Review = 100;
+	}
+	else if (NotTasteNum == 1) {
+		Review = 90;
+	}
+	else if (NotTasteNum == 2) {
+		Review = 70;
+	}
+	else if (NotTasteNum == 3) {
+		Review = 50;
+	}
+	else if (NotTasteNum == 4) {
+		Review = 30;
+	}
+	else if (NotTasteNum == 5) {
+		Review = 10;
+	}
+	else {
+		Review = 0;
+	}
+
+	return Review;
+}
