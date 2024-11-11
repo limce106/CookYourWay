@@ -13,6 +13,8 @@ AIngredient::AIngredient()
 
 	StaticMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("StaticMesh"));
 	StaticMesh->SetupAttachment(MeshPivot);
+
+	StaticMesh->SetCollisionProfileName(TEXT("NoCollision"));
 }
 
 void AIngredient::Init(FString IngrName)

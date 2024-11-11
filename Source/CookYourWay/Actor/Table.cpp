@@ -26,7 +26,7 @@ void ATable::Tick(float DeltaTime)
 
 void ATable::PutActorOn(AActor* Actor)
 {
-	Reuben->DetachActorFromSocket();
+	Reuben->PutDownActor();
 
 	FVector ActorLocation = GetActorLocation();
 	ActorLocation.Z += 65.0f;
@@ -39,7 +39,7 @@ void ATable::PutActorOn(AActor* Actor)
 
 void ATable::PickUpActor()
 {
-	Reuben->AttachToSocket(PlacedActor);
+	Reuben->HoldActor(PlacedActor);
 
 	IsActorOn = false;
 	PlacedActor = NULL;

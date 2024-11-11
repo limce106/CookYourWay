@@ -42,7 +42,7 @@ void UIngredientBtnWidget::OnClick_ButtonIngredient()
 	if (!Reuben->IsHold) {
 		AIngredient* Ingredient = GetWorld()->SpawnActor<AIngredient>(BP_IngredientClass, Reuben->GetActorLocation(), Reuben->GetActorRotation());
 		Ingredient->StaticMesh->SetStaticMesh(IngredientManagerSystem->GetIngrModel(IngrEngName));
-		Reuben->AttachToSocket(Ingredient);
+		Reuben->HoldActor(Ingredient);
 
 		TArray<UUserWidget*> AllIngredientBoardWidgetArr;
 		UWidgetBlueprintLibrary::GetAllWidgetsOfClass(this, AllIngredientBoardWidgetArr, BP_IngredientBoardClass);

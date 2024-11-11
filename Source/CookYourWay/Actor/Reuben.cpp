@@ -7,6 +7,7 @@
 #include <Widget/IngredientBoardWidget.h>
 #include <Kismet/GameplayStatics.h>
 #include "PlayerBistro.h"
+#include <Components/ShapeComponent.h>
 
 AReuben::AReuben()
 {
@@ -29,6 +30,7 @@ void AReuben::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	SetHeldActorLoc();
 }
 
 void AReuben::MoveForward(float Value)
@@ -57,29 +59,35 @@ void AReuben::MoveRight(float Value)
 	}
 }
 
-void AReuben::AttachToSocket(AActor* Actor)
+void AReuben::HoldActor(AActor* Actor)
 {
-	UPrimitiveComponent* ActorCollision = Cast<UPrimitiveComponent>(Actor->GetComponentByClass(UPrimitiveComponent::StaticClass()));
-	ActorCollision->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-	ActorCollision->SetCollisionProfileName(TEXT("OverlapAll"));
+	UShapeComponent* ActorCollision = Cast<UShapeComponent>(Actor->GetComponentByClass(UShapeComponent::StaticClass()));
+	ActorCollision->SetCollisionProfileName(TEXT("NoCollision"));
 
-	Actor->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, FName("HoldSocket"));
-	Actor->SetActorRelativeLocation(FVector(-30.0f, -30.0f, 0.0f));
-
+	HeldActor = Actor;
 	IsHold = true;
 }
 
-void AReuben::DetachActorFromSocket()
+void AReuben::PutDownActor()
 {
-	TArray<AActor*> AttachedActors;
-	GetAttachedActors(AttachedActors);
-
-	UPrimitiveComponent* ActorCollision = Cast<UPrimitiveComponent>(AttachedActors[0]->GetComponentByClass(UPrimitiveComponent::StaticClass()));
+	UPrimitiveComponent* ActorCollision = Cast<UPrimitiveComponent>(HeldActor->GetComponentByClass(UPrimitiveComponent::StaticClass()));
 	ActorCollision->SetCollisionProfileName(TEXT("BlockAll"));
 
-	AttachedActors[0]->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
-
+	HeldActor = nullptr;
 	IsHold = false;
+}
+
+void AReuben::SetHeldActorLoc()
+{
+	if (HeldActor) {
+		FVector LeftHandLoc = GetMesh()->GetSocketLocation(FName("LeftHandSocket"));
+		FVector RightHandLoc = GetMesh()->GetSocketLocation(FName("RightHandSocket"));
+
+		FVector MidHandLoc = (LeftHandLoc + RightHandLoc) / 2;
+		MidHandLoc.Z += 15.0f;
+
+		HeldActor->SetActorLocation(MidHandLoc);
+	}
 }
 
 void AReuben::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -95,26 +103,23 @@ void AReuben::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 void AReuben::EmptyOnSocketInteraction(AActor* InteractActor)
 {
-	TArray<AActor*> AttachedActors;
-	GetAttachedActors(AttachedActors);
-
 	// 접시나 조리도구라면 든다.
 	if (InteractActor->GetClass() == BP_Sandwich || InteractActor->GetClass()->IsChildOf(ACookingUtensil::StaticClass())) {
-		AttachToSocket(InteractActor);
+		HoldActor(InteractActor);
 	}
 
 	// 타지 않은 조리된 재료라면 든다.
 	else if (InteractActor->GetClass() == BP_Ingredient) {
 		AIngredient* Ingredient = Cast<AIngredient>(InteractActor);
 		if (Ingredient->IsCooked() && !Ingredient->IsBurn) {
-			AttachToSocket(Ingredient);
+			HoldActor(Ingredient);
 		}
 	}
 
 	// 접시를 스폰하여 플레이어가 들게 한다.
 	else if (InteractActor->GetClass() == BP_Plates) {
 		ASandwich* Sandwich = GetWorld()->SpawnActor<ASandwich>(BP_Sandwich, GetActorLocation(), GetActorRotation());
-		AttachToSocket(Sandwich);
+		HoldActor(Sandwich);
 	}
 
 	// 테이블이 비어있다면 위에 둔다.
@@ -128,10 +133,7 @@ void AReuben::EmptyOnSocketInteraction(AActor* InteractActor)
 
 void AReuben::SandwichOnSocketInteraction(AActor* InteractActor)
 {
-	TArray<AActor*> AttachedActors;
-	GetAttachedActors(AttachedActors);
-
-	ASandwich* HoldingSandwich = Cast<ASandwich>(AttachedActors[0]);
+	ASandwich* HoldingSandwich = Cast<ASandwich>(HeldActor);
 
 	// 타지 않은, 조리된 재료라면 접시/샌드위치 위로 올린다.
 	if (InteractActor->GetClass() == BP_Ingredient) {
@@ -153,17 +155,14 @@ void AReuben::SandwichOnSocketInteraction(AActor* InteractActor)
 	else if (InteractActor->GetClass() == BP_Table) {
 		ATable* Table = Cast<ATable>(InteractActor);
 		if (!Table->IsActorOn) {
-			Table->PutActorOn(AttachedActors[0]);
+			Table->PutActorOn(HeldActor);
 		}
 	}
 }
 
 void AReuben::CookingUtensilOnSocketInteraction(AActor* InteractActor)
 {
-	TArray<AActor*> AttachedActors;
-	GetAttachedActors(AttachedActors);
-
-	ACookingUtensil* HoldingCookingUtensil = Cast<ACookingUtensil>(AttachedActors[0]);
+	ACookingUtensil* HoldingCookingUtensil = Cast<ACookingUtensil>(HeldActor);
 
 	// 조리도구 위에 재료가 없다면 재료를 조리도구 위로 올린다.
 	if (InteractActor->GetClass() == BP_Ingredient) {
@@ -192,10 +191,7 @@ void AReuben::CookingUtensilOnSocketInteraction(AActor* InteractActor)
 
 void AReuben::IngrOnSocketInteraction(AActor* InteractActor)
 {
-	TArray<AActor*> AttachedActors;
-	GetAttachedActors(AttachedActors);
-
-	AIngredient* HoldingIngr = Cast<AIngredient>(AttachedActors[0]);
+	AIngredient* HoldingIngr = Cast<AIngredient>(HeldActor);
 
 	// 타지 않은, 조리된 재료라면 접시/샌드위치 위로 올린다.
 	if (InteractActor->GetClass() == BP_Sandwich) {
@@ -243,26 +239,23 @@ void AReuben::Interaction()
 	}
 	// 손에 무언가 들고 있을 때
 	else {
-		TArray<AActor*> AttachedActors;
-		GetAttachedActors(AttachedActors);
-
 		// 손에 들고 있던 것을 버린다.
 		if (OverlappedActor->GetClass() == BP_TrashBin) {
-			AttachedActors[0]->Destroy();
+			HeldActor->Destroy();
 			IsHold = false;
 			return;
 		}
 
 		// 손에 들고 있는 것이 샌드위치
-		if (AttachedActors[0]->GetClass() == BP_Sandwich) {
+		if (HeldActor->GetClass() == BP_Sandwich) {
 			SandwichOnSocketInteraction(OverlappedActor);
 		}
 		// 손에 들고 있는 것이 조리도구
-		else if (AttachedActors[0]->GetClass()->IsChildOf(ACookingUtensil::StaticClass())) {
+		else if (HeldActor->GetClass()->IsChildOf(ACookingUtensil::StaticClass())) {
 			CookingUtensilOnSocketInteraction(OverlappedActor);
 		}
 		// 손에 들고 있는 것이 재료
-		else if (AttachedActors[0]->GetClass() == BP_Ingredient) {
+		else if (HeldActor->GetClass() == BP_Ingredient) {
 			IngrOnSocketInteraction(OverlappedActor);
 		}
 	}
@@ -278,17 +271,14 @@ void AReuben::Chop()
 
 void AReuben::GiveSandwich(ACustomer* Customer)
 {
-	TArray<AActor*> AttachedActors;
-	GetAttachedActors(AttachedActors);
-
 	// 손에 아무것도 들고 있지 않으면
-	if (AttachedActors.Num() == 0) {
+	if (IsHold == false) {
 		return;
 	}
 
 	ASandwich* Sandwich;
-	if (AttachedActors[0]->GetClass() == BP_Sandwich) {
-		Sandwich = Cast<ASandwich>(AttachedActors[0]);
+	if (HeldActor->GetClass() == BP_Sandwich) {
+		Sandwich = Cast<ASandwich>(HeldActor);
 
 		// 샌드위치가 없는 빈 접시라면 
 		if (Sandwich->Ingredients.Num() == 0) {

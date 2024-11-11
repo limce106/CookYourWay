@@ -35,7 +35,7 @@ float ACookingUtensil::GetOneCookIncreasement()
 
 void ACookingUtensil::PutIngrOn(AIngredient* Ingr)
 {
-	Reuben->DetachActorFromSocket();
+	Reuben->PutDownActor();
 
 	FVector IngrLocation = GetActorLocation();
 	IngrLocation.Z += 5.0f;
@@ -48,7 +48,7 @@ void ACookingUtensil::PutIngrOn(AIngredient* Ingr)
 
 void ACookingUtensil::PickUpIngr()
 {
-	Reuben->AttachToSocket(PlacedIngredient);
+	Reuben->HoldActor(PlacedIngredient);
 
 	IsIngredientOn = false;
 	PlacedIngredient = NULL;

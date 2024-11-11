@@ -70,10 +70,14 @@ public:
 
 	UPROPERTY(BlueprintReadWrite)
 	bool IsHold = false;
+	UPROPERTY(BlueprintReadWrite)
+	AActor* HeldActor;
 
 	// 소켓에 액터 부착/떼기
-	void AttachToSocket(AActor* Actor);
-	void DetachActorFromSocket();
+	void HoldActor(AActor* Actor);
+	void PutDownActor();
+
+	void SetHeldActorLoc();
 
 	// 손님에게 샌드위치 주기
 	void GiveSandwich(ACustomer* Customer);
