@@ -161,16 +161,17 @@ int32 ACustomer::CountNotTasteNum(ASandwich* Sandwich)
 	}
 
 	for (int i = 0; i < IngrNum; i++) {
-		int* Find = Taste.FindByPredicate(Sandwich->Ingredients[i]);
 
 		// 샌드위치 재료가 손님의 취향이 아니라면
-		if (Find == nullptr) {
+		if ((Taste.Contains(Sandwich->Ingredients[i])) == false) {
 			NotTasteNum++;
 		}
 		// 샌드위치 재료가 손님의 취향이라면
 		else {
 			// 중복 방지를 위해 찾은 취향은 제거
-			Taste.Remove(*Find);
+			int32 Ingr = Sandwich->Ingredients[i];
+			// 손님이 한 종류의 재료를 두 개 이상 선택했을 가능성을 고려하여, 같은 재료가 여러 개 있어도 하나만 삭제
+			Taste.RemoveSingle(Ingr);
 		}
 	}
 
