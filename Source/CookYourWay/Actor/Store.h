@@ -10,8 +10,7 @@ UCLASS()
 class COOKYOURWAY_API AStore : public AActor
 {
 	GENERATED_BODY()
-	
-	float TempDelayTime;
+	class UVillageManagerSystem* VillageManagerSystem;
 
 public:
 	AStore();
@@ -25,7 +24,6 @@ public:
 
 	virtual void Tick(float DeltaTime) override;
 
-	bool DelayWithDeltaTime(float DelayTime, float DeltaSeconds);
 	void CreateCustomer();
 
 };

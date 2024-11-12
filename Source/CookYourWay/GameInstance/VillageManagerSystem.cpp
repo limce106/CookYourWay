@@ -31,3 +31,15 @@ TArray<FCompetitorReviewData> UVillageManagerSystem::GetCompetitorReviewDataOnTa
 	}
 	return CompetitorReviewData;
 }
+
+bool UVillageManagerSystem::DelayWithDeltaTime(float DelayTime, float DeltaSeconds)
+{
+	if (TempDelayTime > DelayTime) {
+		TempDelayTime = 0;
+		return true;
+	}
+	else {
+		TempDelayTime += DeltaSeconds;
+		return false;
+	}
+}

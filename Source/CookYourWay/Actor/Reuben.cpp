@@ -23,7 +23,6 @@ void AReuben::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	PlayerBistro = Cast<APlayerBistro>(UGameplayStatics::GetActorOfClass(GetWorld(), BP_PlayerBistro));
 }
 
 void AReuben::Tick(float DeltaTime)
@@ -224,8 +223,13 @@ void AReuben::Interaction()
 		return;
 	}
 
+	// 손님
+	if (OverlappedActor->GetClass() == BP_Customer) {
+		ACustomer* Customer = Cast<ACustomer>(OverlappedActor);
+		TryGiveSomething(Customer);
+	}
 	// 냉장고
-	if (OverlappedActor->GetClass() == BP_Fridge) {
+	else if (OverlappedActor->GetClass() == BP_Fridge) {
 		UIngredientBoardWidget* BP_IngredientBoard = CreateWidget<UIngredientBoardWidget>(GetWorld(), BP_IngredientBoardClass);
 		if (BP_IngredientBoard) {
 			BP_IngredientBoard->AddToViewport();
@@ -269,37 +273,47 @@ void AReuben::Chop()
 	}
 }
 
-void AReuben::GiveSandwich(ACustomer* Customer)
+void AReuben::TryGiveSomething(ACustomer* Customer)
 {
 	// 손에 아무것도 들고 있지 않으면
 	if (IsHold == false) {
 		return;
 	}
 
-	ASandwich* Sandwich;
 	if (HeldActor->GetClass() == BP_Sandwich) {
-		Sandwich = Cast<ASandwich>(HeldActor);
-
-		// 샌드위치가 없는 빈 접시라면 
-		if (Sandwich->Ingredients.Num() == 0) {
-			return;
-		}
+		GiveSandwich(Customer);
 	}
-	// 손에 들고 있는 것이 샌드위치가 아니라면
+	else if (HeldActor->GetClass() == BP_Dessert) {
+		GiveDessert(Customer);
+	}
 	else {
 		return;
 	}
+}
 
-	// 들고 있던 샌드위치 제거
+void AReuben::GiveSandwich(ACustomer* Customer)
+{
+
+	ASandwich* Sandwich = Cast<ASandwich>(HeldActor);
+	// 샌드위치가 없는 빈 접시라면 
+	if (Sandwich->Ingredients.Num() == 0) {
+		return;
+	}
+
+	Customer->AddSandwichReview(Sandwich);
 	Sandwich->Destroy();
+	IsHold = false;
 
-	PlayerBistro->UpdateCustomerReviewAvg(Customer->GetReview(Sandwich));
+	// 손님 제거 타이머 시작
+	Customer->StartDestroyTimer();
+}
 
-
-	// 손님대사 출력 필요
-
-
-	// 모든 과정이 다 끝나면 손님 제거
-	/*디저트를 위해 5~10초 후 제거되도록 수정 필요*/
-	Customer->Destroy();
+void AReuben::GiveDessert(ACustomer* Customer)
+{
+	// 손님이 디저트를 받을 수 있다면 (일정 식사시간이 지났다면)
+	if (Customer->CanGetDessert()) {
+		HeldActor->Destroy();
+		IsHold = false;
+		Customer->AddDessertReview();
+	}
 }

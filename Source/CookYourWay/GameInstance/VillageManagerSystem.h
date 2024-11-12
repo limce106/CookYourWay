@@ -28,6 +28,8 @@ class COOKYOURWAY_API UVillageManagerSystem : public UGameInstanceSubsystem
 	GENERATED_BODY()
 	UVillageManagerSystem();
 
+	float TempDelayTime;
+
 public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Table")
 	class UDataTable* CompetitorReviewTable;
@@ -36,4 +38,6 @@ public:
 	TArray<FName> CompetitorReviewTableRowNames;
 
 	TArray<FCompetitorReviewData> GetCompetitorReviewDataOnTable(FString DataType);
+
+	bool DelayWithDeltaTime(float DelayTime, float DeltaSeconds);
 };

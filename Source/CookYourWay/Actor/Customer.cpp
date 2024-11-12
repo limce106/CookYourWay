@@ -49,6 +49,7 @@ void ACustomer::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	VillageManagerSystem = UGameplayStatics::GetGameInstance(GetWorld())->GetSubsystem<UVillageManagerSystem>();
 	IngredientManagerSystem = UGameplayStatics::GetGameInstance(GetWorld())->GetSubsystem<UIngredientManagerSystem>();
 
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), BP_Competitor, AllCompetitorActorArr);
@@ -61,7 +62,7 @@ void ACustomer::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	
+	DestroyCustomerAfterDelay(DeltaTime);
 }
 
 float ACustomer::ManhattanDist(FVector Loc1, FVector Loc2)
@@ -181,32 +182,76 @@ int32 ACustomer::CountNotTasteNum(ASandwich* Sandwich)
 	return NotTasteNum;
 }
 
-int32 ACustomer::GetReview(ASandwich* Sandwich)
+void ACustomer::AddSandwichReview(ASandwich* Sandwich)
 {
-	int Review = 0;
+	int Score = 0;
 	int NotTasteNum = CountNotTasteNum(Sandwich);
 	
 	if (NotTasteNum == 0) {
-		Review = 100;
+		Score = 100;
 	}
 	else if (NotTasteNum == 1) {
-		Review = 90;
+		Score = 90;
 	}
 	else if (NotTasteNum == 2) {
-		Review = 70;
+		Score = 70;
 	}
 	else if (NotTasteNum == 3) {
-		Review = 50;
+		Score = 50;
 	}
 	else if (NotTasteNum == 4) {
-		Review = 30;
+		Score = 30;
 	}
 	else if (NotTasteNum == 5) {
-		Review = 10;
+		Score = 10;
 	}
 	else {
-		Review = 0;
+		Score = 0;
 	}
 
-	return Review;
+	ReviewRate += Score;
+}
+
+void ACustomer::AddDessertReview()
+{
+	const int32 DessertBonus = 10;
+	ReviewRate += DessertBonus;
+}
+
+void ACustomer::StartDestroyTimer()
+{
+	DestroyTimer = true;
+}
+
+void ACustomer::ClearDestroyTimer()
+{
+	DestroyTimer = false;
+	EatTime = 0.0f;
+}
+
+void ACustomer::DestroyCustomerAfterDelay(float DeltaTime)
+{
+	const float DestroyDelayTime = 15.0f;
+
+	if (DestroyTimer && VillageManagerSystem->DelayWithDeltaTime(DestroyDelayTime, DeltaTime)) {
+		Destroy();
+		ClearDestroyTimer();
+
+		/*손님대사 출력 필요*/
+
+		PlayerBistro->UpdateCustomerReviewAvg(ReviewRate);
+	}
+}
+
+bool ACustomer::CanGetDessert()
+{
+	const float CanGetDessertTime = 10.0f;
+
+	// 손님의 식사 시간이 10초가 지난 시점부터 디저트를 줄 수 있다.
+	if (EatTime >= CanGetDessertTime) {
+		return true;
+	}
+	else {
+		return false;
+	}
 }

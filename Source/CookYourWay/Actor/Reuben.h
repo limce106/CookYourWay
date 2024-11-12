@@ -17,8 +17,6 @@ class COOKYOURWAY_API AReuben : public ACharacter
 {
 	GENERATED_BODY()
 
-	class APlayerBistro* PlayerBistro;
-
 	// 플레이어 움직이기
 	void MoveForward(float Value);
 	void MoveRight(float Value);
@@ -61,6 +59,10 @@ public:
 	TSubclassOf<AActor> BP_TrashBin;
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<AActor> BP_Fridge;
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<AActor> BP_Dessert;
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<ACustomer> BP_Customer;
 
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<UUserWidget> BP_IngredientBoardClass;
@@ -79,6 +81,10 @@ public:
 
 	void SetHeldActorLoc();
 
+	// 손님에게 무언가 주기
+	void TryGiveSomething(ACustomer* Customer);
 	// 손님에게 샌드위치 주기
 	void GiveSandwich(ACustomer* Customer);
+	// 손님에게 디저트 주기
+	void GiveDessert(ACustomer* Customer);
 };

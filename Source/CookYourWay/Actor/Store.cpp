@@ -2,6 +2,8 @@
 
 
 #include "Actor/Store.h"
+#include <Kismet/GameplayStatics.h>
+#include "GameInstance/VillageManagerSystem.h"
 
 AStore::AStore()
 {
@@ -13,26 +15,15 @@ void AStore::BeginPlay()
 {
 	Super::BeginPlay();
 
+	VillageManagerSystem = UGameplayStatics::GetGameInstance(GetWorld())->GetSubsystem<UVillageManagerSystem>();
 }
 
 void AStore::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	if (DelayWithDeltaTime(2, DeltaTime)) {
+	if (VillageManagerSystem->DelayWithDeltaTime(2, DeltaTime)) {
 		CreateCustomer();
-	}
-}
-
-bool AStore::DelayWithDeltaTime(float DelayTime, float DeltaSeconds)
-{
-	if (TempDelayTime > DelayTime) {
-		TempDelayTime = 0;
-		return true;
-	}
-	else {
-		TempDelayTime += DeltaSeconds;
-		return false;
 	}
 }
 

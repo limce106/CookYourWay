@@ -14,12 +14,20 @@ class COOKYOURWAY_API ACustomer : public ACharacter
 {
 	GENERATED_BODY()
 
+	class UVillageManagerSystem* VillageManagerSystem;
 	class UIngredientManagerSystem* IngredientManagerSystem;
 
 	TArray<AActor*> AllCompetitorActorArr;
 	class APlayerBistro* PlayerBistro;
 
 	TMap <FVector, float> BistroLocRankMap;	// 가게 도착 위치와 계산된 점수
+
+	// 손님 제거 타이머
+	bool DestroyTimer = false;
+	// 먹기 시작한 시간
+	float EatTime = 0.0f;
+	// 손님의 평점
+	int32 ReviewRate = 0;
 
 	// 멘해튼 거리 구하기
 	float ManhattanDist(FVector Loc1, FVector Loc2);
@@ -63,6 +71,14 @@ public:
 
 	// 손님의 취향이 아닌 재료 개수 세기
 	int32 CountNotTasteNum(ASandwich* Sandwich);
-	// 손님의 평점 계산하기
-	int32 GetReview(ASandwich* Sandwich);
+	// 손님의 샌드위치 평점 계산하기
+	void AddSandwichReview(ASandwich* Sandwich);
+	// 손님의 디저트 평점 더하기
+	void AddDessertReview();
+
+	void StartDestroyTimer();
+	void ClearDestroyTimer();
+	void DestroyCustomerAfterDelay(float DeltaTime);
+
+	bool CanGetDessert();
 };
