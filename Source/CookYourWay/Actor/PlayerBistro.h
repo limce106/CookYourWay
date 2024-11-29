@@ -11,16 +11,39 @@ UCLASS()
 class COOKYOURWAY_API APlayerBistro : public AActor
 {
 	GENERATED_BODY()
+
+	class UVillageManagerSystem* VillageManagerSystem;
+
+	// 손님 위치
+	TArray<FVector> CustSeatLocArr = {
+		/*추후 지정 필요*/
+		FVector(0.0f, 0.0f, 0.0f),
+		FVector(0.0f, 0.0f, 0.0f),
+		FVector(0.0f, 0.0f, 0.0f),
+		FVector(0.0f, 0.0f, 0.0f),
+		FVector(0.0f, 0.0f, 0.0f)
+	};
+
+	// 자리에 손님이 앉았는지
+	TArray<bool> IsSeated;
+	// 대기 손님
+	TQueue<AActor*> WaitingCustQueue;
+	// 다음 손님이 앉기까지의 시간
+	const float NextCustDelay = 1.5f;
+
+
+	// 손님 앉히기
+	void SitCust(ACustomer* Customer, int32 SeatIdx);
+	// 손님을 앉히거나 대기시킴
+	void SitOrWaitCust(ACustomer* Customer);
+	// 빈자리 찾기
+	int32 FindEmptySeatIdx();
 	
 public:	
 	APlayerBistro();
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Rate)
 	class UCustomerRateComponent* CustRateComponent;
-
-	// 손님 대기 위치 지정
-	UFUNCTION(BlueprintCallable)
-	void SetCustWaitLoc(ACustomer* Customer);
 
 protected:
 	virtual void BeginPlay() override;
@@ -39,4 +62,8 @@ public:
 
 	// 전체 평점 평균 갱신
 	void UpdateCustomerReviewAvg(int32 ReveiwRate);
+
+	void LeaveAndSitNextCust(ACustomer* LeftCustomer);
+
+	void SitNextCust(int32 SeatIdx);
 };

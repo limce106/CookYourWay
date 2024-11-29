@@ -17,6 +17,9 @@ class COOKYOURWAY_API AReuben : public ACharacter
 {
 	GENERATED_BODY()
 
+	class APlayerBistro* PlayerBistro;
+	FTimerHandle CustSandwichTimerHandler;
+
 	// 플레이어 움직이기
 	void MoveForward(float Value);
 	void MoveRight(float Value);

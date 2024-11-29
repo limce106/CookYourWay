@@ -62,7 +62,9 @@ void ACustomer::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	DestroyCustomerAfterDelay(DeltaTime);
+	if (IsEat) {
+		StartEatTime += DeltaTime;
+	}
 }
 
 float ACustomer::ManhattanDist(FVector Loc1, FVector Loc2)
@@ -218,40 +220,42 @@ void ACustomer::AddDessertReview()
 	ReviewRate += DessertBonus;
 }
 
-void ACustomer::StartDestroyTimer()
+void ACustomer::EatSandwich()
 {
-	DestroyTimer = true;
+	Eat(10.0f);
+	
+	/*손님대사 출력 필요*/
+
+	PlayerBistro->UpdateCustomerReviewAvg(ReviewRate);
 }
 
 void ACustomer::ClearDestroyTimer()
 {
 	DestroyTimer = false;
-	EatTime = 0.0f;
-}
-
-void ACustomer::DestroyCustomerAfterDelay(float DeltaTime)
-{
-	const float DestroyDelayTime = 15.0f;
-
-	if (DestroyTimer && VillageManagerSystem->DelayWithDeltaTime(DestroyDelayTime, DeltaTime)) {
-		Destroy();
-		ClearDestroyTimer();
-
-		/*손님대사 출력 필요*/
-
-		PlayerBistro->UpdateCustomerReviewAvg(ReviewRate);
-	}
+	StartEatTime = 0.0f;
 }
 
 bool ACustomer::CanGetDessert()
 {
-	const float CanGetDessertTime = 10.0f;
-
-	// 손님의 식사 시간이 10초가 지난 시점부터 디저트를 줄 수 있다.
-	if (EatTime >= CanGetDessertTime) {
+	if (StartEatTime >= CanGetDessertTime) {
 		return true;
 	}
 	else {
 		return false;
 	}
+}
+
+void ACustomer::EatDessert()
+{
+	ClearDestroyTimer();
+	Eat(2.0f);
+}
+
+void ACustomer::Eat(float EatingTime)
+{
+	/*필요시 음식을 먹는 애니메이션 추가*/
+
+	IsEat = true;
+	DestroyTimer = true;
+	LeaveDelayTime = EatingTime;
 }

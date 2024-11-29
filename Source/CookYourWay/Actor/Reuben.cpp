@@ -23,6 +23,7 @@ void AReuben::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	PlayerBistro = Cast<APlayerBistro>(UGameplayStatics::GetActorOfClass(GetWorld(), BP_PlayerBistro));
 }
 
 void AReuben::Tick(float DeltaTime)
@@ -304,16 +305,28 @@ void AReuben::GiveSandwich(ACustomer* Customer)
 	Sandwich->Destroy();
 	IsHold = false;
 
-	// 손님 제거 타이머 시작
-	Customer->StartDestroyTimer();
+	Customer->EatSandwich();
+
+	GetWorld()->GetTimerManager().SetTimer(CustSandwichTimerHandler, FTimerDelegate::CreateLambda([&]()
+		{
+			PlayerBistro->LeaveAndSitNextCust(Customer);
+		}), Customer->LeaveDelayTime, false);
 }
 
 void AReuben::GiveDessert(ACustomer* Customer)
 {
-	// 손님이 디저트를 받을 수 있다면 (일정 식사시간이 지났다면)
 	if (Customer->CanGetDessert()) {
+		GetWorld()->GetTimerManager().ClearTimer(CustSandwichTimerHandler);
 		HeldActor->Destroy();
 		IsHold = false;
+
+		Customer->EatDessert();
 		Customer->AddDessertReview();
+
+		FTimerHandle CustDessertTimerHandler;
+		GetWorld()->GetTimerManager().SetTimer(CustDessertTimerHandler, FTimerDelegate::CreateLambda([&]()
+			{
+				PlayerBistro->LeaveAndSitNextCust(Customer);
+			}), Customer->LeaveDelayTime, false);
 	}
 }

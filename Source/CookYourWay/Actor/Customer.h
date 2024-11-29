@@ -24,10 +24,17 @@ class COOKYOURWAY_API ACustomer : public ACharacter
 
 	// 손님 제거 타이머
 	bool DestroyTimer = false;
+
+	// 먹는 중인지
+	bool IsEat = false;
 	// 먹기 시작한 시간
-	float EatTime = 0.0f;
+	float StartEatTime = 0.0f;
 	// 손님의 평점
 	int32 ReviewRate = 0;
+
+	// 식사 시간이 6초가 지난 시점부터 디저트를 받을 수 있다.
+	const float CanGetDessertTime = 6.0f;
+
 
 	// 멘해튼 거리 구하기
 	float ManhattanDist(FVector Loc1, FVector Loc2);
@@ -66,6 +73,12 @@ public:
 	UPROPERTY(BlueprintReadOnly)
 	TArray<int32> Taste;
 
+	// 손님이 앉은 좌석 번호
+	UPROPERTY(BlueprintReadOnly)
+	int32 CurSeatNum = -1;
+
+	float LeaveDelayTime;
+
 	void Init();
 	void SetSkeletalMesh();
 
@@ -76,9 +89,11 @@ public:
 	// 손님의 디저트 평점 더하기
 	void AddDessertReview();
 
-	void StartDestroyTimer();
+	void EatSandwich();
 	void ClearDestroyTimer();
-	void DestroyCustomerAfterDelay(float DeltaTime);
 
 	bool CanGetDessert();
+	void EatDessert();
+
+	void Eat(float EatingTime);
 };
