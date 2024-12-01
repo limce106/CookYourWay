@@ -6,6 +6,7 @@
 #include "Competitor.h"
 #include "Store.h"
 #include <Kismet/KismetMathLibrary.h>
+#include <Kismet/GameplayStatics.h>
 
 AVillageManager::AVillageManager()
 {
@@ -36,12 +37,15 @@ void AVillageManager::Init()
 	AStore* Store1 = GetWorld()->SpawnActor<AStore>(BP_Store, *AreaLocMap.Find(2), FRotator::ZeroRotator);
 	AStore* Store2 = GetWorld()->SpawnActor<AStore>(BP_Store, *AreaLocMap.Find(10), FRotator::ZeroRotator);
 	AStore* Store3 = GetWorld()->SpawnActor<AStore>(BP_Store, *AreaLocMap.Find(23), FRotator::ZeroRotator);
+
+	SetAllCustTastes();
 }
 
 void AVillageManager::BeginPlay()
 {
 	Super::BeginPlay();
 
+	IngredientManagerSystem = UGameplayStatics::GetGameInstance(GetWorld())->GetSubsystem<UIngredientManagerSystem>();
 	Init();
 }
 
@@ -56,4 +60,36 @@ FString AVillageManager::GetRandomCustName()
 	int32 RandomIdx = UKismetMathLibrary::RandomIntegerInRange(0, CustomerNames.Num() - 1);
 	FString RandomCustName = CustomerNames[RandomIdx];
 	return RandomCustName;
+}
+
+TArray<int32> AVillageManager::GetRandomTaste()
+{
+	TArray<int32> Taste;
+
+	// 임의로 "레벨 상관없이" 속재료는 항상 3개를 선택하도록 함
+	for (int i = 0; i < 3; i++) {
+		int FillingIndex = UKismetMathLibrary::RandomIntegerInRange(0, IngredientManagerSystem->FillingRows.Num() - 1);
+		Taste.Add(FillingIndex);
+	}
+
+	int MeatIndex = UKismetMathLibrary::RandomIntegerInRange(0, IngredientManagerSystem->MeatRows.Num() - 1);
+	Taste.Add(MeatIndex);
+
+	int SauceIndex = UKismetMathLibrary::RandomIntegerInRange(0, IngredientManagerSystem->SauceRows.Num() - 1);
+	Taste.Add(SauceIndex);
+
+	return Taste;
+}
+
+void AVillageManager::SetAllCustTastes()
+{
+	for (int i = 0; i < CustomerNames.Num(); i++) {
+		CustNameToTasteMap.Add(CustomerNames[i], GetRandomTaste());
+	}
+}
+
+TArray<int32> AVillageManager::GetCustTaste(FString CustName)
+{
+	TArray<int32> Taste = *CustNameToTasteMap.Find(CustName);
+	return Taste;
 }

@@ -43,9 +43,6 @@ class COOKYOURWAY_API ACustomer : public ACharacter
 	// 방문할 목적지(가게) 설정
 	void SetVisitDest();
 
-	// 취향 설정
-	void SetTaste();
-
 public:
 	ACustomer();
 
@@ -68,10 +65,6 @@ public:
 	// 방문할 가게
 	UPROPERTY(BlueprintReadOnly)
 	FVector VisitDest;
-
-	// 손님의 음식 취향
-	UPROPERTY(BlueprintReadOnly)
-	TArray<int32> Taste;
 
 	// 손님이 앉은 좌석 번호
 	UPROPERTY(BlueprintReadOnly)

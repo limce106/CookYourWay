@@ -25,7 +25,6 @@ void ACustomer::BeginPlay()
 	Super::BeginPlay();
 
 	VillageManager = Cast<AVillageManager>(UGameplayStatics::GetActorOfClass(GetWorld(), AVillageManager::StaticClass()));
-	IngredientManagerSystem = UGameplayStatics::GetGameInstance(GetWorld())->GetSubsystem<UIngredientManagerSystem>();
 
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), BP_Competitor, AllCompetitorActorArr);
 	PlayerBistro = Cast<APlayerBistro>(UGameplayStatics::GetActorOfClass(GetWorld(), BP_PlayerBistro));
@@ -41,8 +40,6 @@ void ACustomer::Init()
 
 	AAIController* AINpcController = Cast<AAIController>(GetController());
 	AINpcController->MoveToLocation(VisitDest, 1.0f);
-
-	SetTaste();
 }
 
 void ACustomer::SetSkeletalMesh()
@@ -116,23 +113,9 @@ void ACustomer::SetVisitDest()
 	VisitDest.Z = 95.0f;
 }
 
-void ACustomer::SetTaste()
-{
-	// 임의로 "레벨 상관없이" 속재료는 항상 3개를 선택하도록 함
-	for (int i = 0; i < 3; i++) {
-		int FillingIndex = UKismetMathLibrary::RandomIntegerInRange(0, IngredientManagerSystem->FillingRows.Num() - 1);
-		Taste.Add(FillingIndex);
-	}
-
-	int MeatIndex = UKismetMathLibrary::RandomIntegerInRange(0, IngredientManagerSystem->MeatRows.Num() - 1);
-	Taste.Add(MeatIndex);
-
-	int SauceIndex = UKismetMathLibrary::RandomIntegerInRange(0, IngredientManagerSystem->SauceRows.Num() - 1);
-	Taste.Add(SauceIndex);
-}
-
 int32 ACustomer::CountNotTasteNum(ASandwich* Sandwich)
 {
+	TArray<int32> Taste = VillageManager->GetCustTaste(CustName);
 	// 취향이 아닌 재료 개수
 	int32 NotTasteNum = 0;
 
