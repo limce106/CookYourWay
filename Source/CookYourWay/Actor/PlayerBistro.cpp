@@ -33,19 +33,25 @@ void APlayerBistro::SitCust(ACustomer* Customer, int32 SeatIdx)
 	Customer->SetActorLocation(CustSeatLocArr[SeatIdx]);
 }
 
+void APlayerBistro::WaitCust(ACustomer* Customer)
+{
+	WaitingCustQueue.Enqueue(Customer);
+	Customer->SetHidden(true);
+	Customer->SetActorEnableCollision(false);
+	Customer->IsWaiting = true;
+}
+
 void APlayerBistro::SitOrWaitCust(ACustomer* Customer)
 {
 	// 대기 손님이 있다면
 	if (!WaitingCustQueue.IsEmpty()) {
-		WaitingCustQueue.Enqueue(Customer);
+		WaitCust(Customer);
 	}
 	else {
 		int32 SeatIdx = FindEmptySeatIdx();
 		// 자리가 꽉 찼다면 대기 손님으로 추가
 		if (SeatIdx == -1) {
-			WaitingCustQueue.Enqueue(Customer);
-			Customer->SetHidden(true);
-			Customer->SetActorEnableCollision(false);
+			WaitCust(Customer);
 		}
 		else {
 			SitCust(Customer, SeatIdx);
@@ -81,10 +87,11 @@ void APlayerBistro::SitNextCust(int32 SeatIdx)
 	AActor* WaitingCust;
 	WaitingCustQueue.Dequeue(WaitingCust);
 
-	WaitingCust->SetHidden(false);
-	WaitingCust->SetActorEnableCollision(true);
-
 	ACustomer* NextCustomer = Cast<ACustomer>(WaitingCust);
+	NextCustomer->SetHidden(false);
+	NextCustomer->SetActorEnableCollision(true);
+	NextCustomer->IsWaiting = false;
+
 	SitCust(NextCustomer, SeatIdx);
 }
 
@@ -99,4 +106,11 @@ void APlayerBistro::LeaveAndSitNextCust(ACustomer* LeftCustomer)
 		{
 			SitNextCust(LeftCustSeatIdx);
 		}), NextCustDelayTime, false);
+}
+
+void APlayerBistro::LeaveWaitingCust(ACustomer* Customer)
+{
+	// 대기열에 있는 모든 손님들 중 인내심이 0이 된 손님은 맨 앞에 있는 손님이므로
+	WaitingCustQueue.Pop();
+	Customer->Destroy();
 }

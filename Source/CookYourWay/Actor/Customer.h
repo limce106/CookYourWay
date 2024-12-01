@@ -15,6 +15,7 @@ class COOKYOURWAY_API ACustomer : public ACharacter
 	GENERATED_BODY()
 
 	class AVillageManager* VillageManager;
+	class UVillageManagerSystem* VillageManagerSystem;
 	class UIngredientManagerSystem* IngredientManagerSystem;
 
 	TArray<AActor*> AllCompetitorActorArr;
@@ -24,6 +25,9 @@ class COOKYOURWAY_API ACustomer : public ACharacter
 
 	// 손님 제거 타이머
 	bool DestroyTimer = false;
+
+	// 인내심
+	float Patience = 100;
 
 	// 먹는 중인지
 	bool IsEat = false;
@@ -69,6 +73,9 @@ public:
 	// 손님이 앉은 좌석 번호
 	UPROPERTY(BlueprintReadOnly)
 	int32 CurSeatNum = -1;
+
+	// 대기 중인지
+	bool IsWaiting = false;
 
 	float LeaveDelayTime;
 

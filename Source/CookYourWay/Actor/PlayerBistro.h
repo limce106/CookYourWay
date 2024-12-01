@@ -34,6 +34,8 @@ class COOKYOURWAY_API APlayerBistro : public AActor
 
 	// 손님 앉히기
 	void SitCust(ACustomer* Customer, int32 SeatIdx);
+	// 손님 대기시키기
+	void WaitCust(ACustomer* Customer);
 	// 손님을 앉히거나 대기시킴
 	void SitOrWaitCust(ACustomer* Customer);
 	// 빈자리 찾기
@@ -66,4 +68,6 @@ public:
 	void LeaveAndSitNextCust(ACustomer* LeftCustomer);
 
 	void SitNextCust(int32 SeatIdx);
+
+	void LeaveWaitingCust(ACustomer* Customer);
 };
