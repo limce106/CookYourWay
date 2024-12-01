@@ -1,6 +1,8 @@
 
 
 #include "Component/CustomerRateComponent.h"
+#include <Kismet/GameplayStatics.h>
+#include "Actor/VillageManager.h"
 
 UCustomerRateComponent::UCustomerRateComponent()
 {
@@ -13,7 +15,12 @@ void UCustomerRateComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
-	
+	VillageManager = Cast<AVillageManager>(UGameplayStatics::GetActorOfClass(GetWorld(), AVillageManager::StaticClass()));
+
+	// º’¥‘¿« ∆Ú±’∆Ú¡° √ ±‚»≠
+	for (int i = 0; i < VillageManager->CustomerNames.Num(); i++) {
+		CustStringToRateMap.Add(VillageManager->CustomerNames[i], 0.0f);
+	}
 }
 
 

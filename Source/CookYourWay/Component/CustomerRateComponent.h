@@ -6,16 +6,12 @@
 #include "Components/ActorComponent.h"
 #include "CustomerRateComponent.generated.h"
 
-UENUM(BlueprintType)
-enum class ECustType : uint8 {
-	Amy		UMETA(DisplayName = "Amy"),
-	Michelle	UMETA(DisplayName = "Michelle")
-};
-
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class COOKYOURWAY_API UCustomerRateComponent : public UActorComponent
 {
 	GENERATED_BODY()
+
+	class AVillageManager* VillageManager;
 
 public:	
 	UCustomerRateComponent();
@@ -28,14 +24,7 @@ public:
 
 	const float MaxRate = 5.0;	// √÷¥Î ∆Ú¡°
 
+	// <º’¥‘≈∏¿‘, ∆Ú±’∆Ú¡°>
 	UPROPERTY(BlueprintReadWrite)
-	TMap<ECustType, float> CustTypeRateMap = {	// <º’¥‘≈∏¿‘, ∆Ú±’∆Ú¡°>, 
-		{ECustType::Amy, 0.0 },
-		{ECustType::Michelle, 0.0 }
-	};
-
-	const TMap<FString, ECustType> CustStringToTypeMap = {
-		{"Amy", ECustType::Amy},
-		{"Michelle", ECustType::Michelle}
-	};
+	TMap<FString, float> CustStringToRateMap;
 };

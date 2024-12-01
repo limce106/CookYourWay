@@ -5,6 +5,7 @@
 #include "PlayerBistro.h"
 #include "Competitor.h"
 #include "Store.h"
+#include <Kismet/KismetMathLibrary.h>
 
 AVillageManager::AVillageManager()
 {
@@ -48,4 +49,11 @@ void AVillageManager::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+}
+
+FString AVillageManager::GetRandomCustName()
+{
+	int32 RandomIdx = UKismetMathLibrary::RandomIntegerInRange(0, CustomerNames.Num() - 1);
+	FString RandomCustName = CustomerNames[RandomIdx];
+	return RandomCustName;
 }

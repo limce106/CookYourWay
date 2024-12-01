@@ -14,7 +14,7 @@ class COOKYOURWAY_API ACustomer : public ACharacter
 {
 	GENERATED_BODY()
 
-	class UVillageManagerSystem* VillageManagerSystem;
+	class AVillageManager* VillageManager;
 	class UIngredientManagerSystem* IngredientManagerSystem;
 
 	TArray<AActor*> AllCompetitorActorArr;

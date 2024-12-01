@@ -8,6 +8,7 @@
 #include"Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include <Kismet/KismetMathLibrary.h>
+#include "VillageManager.h"
 
 ACustomer::ACustomer()
 {
@@ -19,9 +20,22 @@ ACustomer::ACustomer()
 	GetCharacterMovement()->bOrientRotationToMovement = true;
 }
 
+void ACustomer::BeginPlay()
+{
+	Super::BeginPlay();
+
+	VillageManager = Cast<AVillageManager>(UGameplayStatics::GetActorOfClass(GetWorld(), AVillageManager::StaticClass()));
+	IngredientManagerSystem = UGameplayStatics::GetGameInstance(GetWorld())->GetSubsystem<UIngredientManagerSystem>();
+
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), BP_Competitor, AllCompetitorActorArr);
+	PlayerBistro = Cast<APlayerBistro>(UGameplayStatics::GetActorOfClass(GetWorld(), BP_PlayerBistro));
+
+	Init();
+}
+
 void ACustomer::Init()
 {
-	CustName = "Michelle"; // 임의로 테스트를 위해 설정, 
+	CustName = VillageManager->GetRandomCustName();
 	SetSkeletalMesh();
 	SetVisitDest();
 
@@ -43,19 +57,6 @@ void ACustomer::SetSkeletalMesh()
 	FString AnimBPPath = (FString("/Game/Blueprint/AnimBP/").Append(CustName).Append("_AnimBP.").Append(CustName).Append("_AnimBP"));
 	UAnimBlueprint* AnimBP = LoadObject<UAnimBlueprint>(NULL, *AnimBPPath, NULL, LOAD_None, NULL);
 	GetMesh()->SetAnimInstanceClass(AnimBP->GeneratedClass);
-}
-
-void ACustomer::BeginPlay()
-{
-	Super::BeginPlay();
-	
-	VillageManagerSystem = UGameplayStatics::GetGameInstance(GetWorld())->GetSubsystem<UVillageManagerSystem>();
-	IngredientManagerSystem = UGameplayStatics::GetGameInstance(GetWorld())->GetSubsystem<UIngredientManagerSystem>();
-
-	UGameplayStatics::GetAllActorsOfClass(GetWorld(), BP_Competitor, AllCompetitorActorArr);
-	PlayerBistro = Cast<APlayerBistro>(UGameplayStatics::GetActorOfClass(GetWorld(), BP_PlayerBistro));
-
-	Init();
 }
 
 void ACustomer::Tick(float DeltaTime)
@@ -80,11 +81,10 @@ float ACustomer::CalcVisitRank(AActor* Bistro)
 	FVector BistroLoc = Bistro->GetActorLocation();
 
 	UCustomerRateComponent* CustomerRateComponent = Cast<UCustomerRateComponent>(Bistro->GetComponentByClass(UCustomerRateComponent::StaticClass()));
-	ECustType CurCustType = *CustomerRateComponent->CustStringToTypeMap.Find(CustName);
 
 	// '평점평균 * 맨해튼거리' 값이 가장 작은 가게를 방문해야 하므로 (최대 평점평균 - 실제 평점평균) 값을 곱하도록 한다.
-	// '최대 평점평균 == 실제 평점평균'이어서 수식을 계산했을 때 0이 되는 것을 방지하기 위해 0.1을 더해주었다.
-	float BistroRateAvg = (CustomerRateComponent->MaxRate + 0.1) - (*CustomerRateComponent->CustTypeRateMap.Find(CurCustType));
+	// '최대 평점평균 == 실제 평점평균'일 때 BistroRateAvg 값이 0이 되어 ManhattanDist 함수 값에 상관없이 VisitRank이 0이 되는 것을 방지하기 위해 0.1을 더해주었다.
+	float BistroRateAvg = (CustomerRateComponent->MaxRate + 0.1) - (*CustomerRateComponent->CustStringToRateMap.Find(CustName));
 	float VisitRank = BistroRateAvg * (ManhattanDist(CustomerLoc, BistroLoc));
 
 	BistroLocRankMap.Add(BistroLoc, VisitRank);

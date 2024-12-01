@@ -31,6 +31,7 @@ class COOKYOURWAY_API UVillageManagerSystem : public UGameInstanceSubsystem
 	float TempDelayTime;
 
 public:
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Table")
 	class UDataTable* CompetitorReviewTable;
 

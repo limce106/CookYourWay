@@ -33,4 +33,10 @@ protected:
 public:
 	virtual void Tick(float DeltaTime) override;
 
+	TArray<FString> CustomerNames = {
+		"Amy",
+		"Michelle"
+	};
+
+	FString GetRandomCustName();
 };
