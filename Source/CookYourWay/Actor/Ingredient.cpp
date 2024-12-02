@@ -38,10 +38,9 @@ void AIngredient::SetPivotCenter()
 	StaticMesh->SetRelativeLocation(-MeshCenter);
 }
 
-void AIngredient::SetStaticMesh(FString IngredientName)
+void AIngredient::SetStaticMeshAndPivot(FString IngrName, bool IsSliced)
 {
-	FString StaticMeshPath = FString("/Game/Assets/Art_3D/Modelling/Sandwich/").Append(IngredientName).Append("_Slice").Append(".").Append(IngredientName).Append("_Slice");
-	UStaticMesh* IngredientMesh = LoadObject<UStaticMesh>(NULL, *StaticMeshPath, NULL, LOAD_None, NULL);
+	UStaticMesh* IngredientMesh = IngredientManagerSystem->GetIngrModel(IngrName, IsSliced);
 	StaticMesh->SetStaticMesh(IngredientMesh);
 
 	SetPivotCenter();

@@ -18,7 +18,6 @@ class COOKYOURWAY_API AIngredient : public AActor
 
 	// 제각각인 재료들의 피봇을 맞추기 위한 함수
 	void SetPivotCenter();
-	void SetStaticMesh(FString IngredientName);
 	
 public:	
 	AIngredient();
@@ -43,4 +42,6 @@ public:
 	const float MaxCookRate = 1.0f;
 
 	bool IsCooked();
+
+	void SetStaticMeshAndPivot(FString IngrName, bool IsSliced);
 };

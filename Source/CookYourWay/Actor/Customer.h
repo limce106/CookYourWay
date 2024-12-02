@@ -39,6 +39,7 @@ class COOKYOURWAY_API ACustomer : public ACharacter
 	// 식사 시간이 6초가 지난 시점부터 디저트를 받을 수 있다.
 	const float CanGetDessertTime = 6.0f;
 
+	void Init();
 
 	// 멘해튼 거리 구하기
 	float ManhattanDist(FVector Loc1, FVector Loc2);
@@ -79,7 +80,6 @@ public:
 
 	float LeaveDelayTime;
 
-	void Init();
 	void SetSkeletalMesh();
 
 	// 손님의 취향이 아닌 재료 개수 세기

@@ -51,5 +51,5 @@ public:
 	TArray<FIngrData*> MeatRows;
 	TArray<FIngrData*> SauceRows;
 
-	UStaticMesh* GetIngrModel(FString Ingr);
+	UStaticMesh* GetIngrModel(FString Ingr, bool IsSliced);
 };

@@ -21,12 +21,10 @@ TArray<FCompetitorReviewData> UVillageManagerSystem::GetCompetitorReviewDataOnTa
 		if (CompetitorReviewTableRowNames[i].ToString().Contains(DataType)) {
 			CompetitorReviewData.Add(*CompetitorReviewTableRows[i]);
 		}
-		else
-			break;
 	}
 
 	if (CompetitorReviewData.Num() == 0) {
-		UE_LOG(LogTemp, Error, TEXT("Load fail"));
+		UE_LOG(LogTemp, Error, TEXT("Load Fail %s CompetitorReviewData"), *DataType);
 		CompetitorReviewData.Add(FCompetitorReviewData::FCompetitorReviewData());
 	}
 	return CompetitorReviewData;

@@ -21,8 +21,11 @@ class COOKYOURWAY_API UIngredientBoardWidget : public UUserWidget
 	void NativeConstruct();
 
 protected:
+	UFUNCTION()
 	void CreateFillingButtons();
+	UFUNCTION()
 	void CreateMeatButtons();
+	UFUNCTION()
 	void CreateSauceButtons();
 
 public:

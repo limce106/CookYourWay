@@ -32,9 +32,16 @@ UIngredientManagerSystem::UIngredientManagerSystem()
 	}
 }
 
-UStaticMesh* UIngredientManagerSystem::GetIngrModel(FString Ingr)
+UStaticMesh* UIngredientManagerSystem::GetIngrModel(FString Ingr, bool IsSliced)
 {
-	FString ModelPath = FString("/Game/Assets/Art_3D/Modelling/Sandwich/Ingredient/").Append(Ingr).Append(".").Append(Ingr);
+	FString ModelPath;
+	if (IsSliced) {
+		ModelPath = FString("/Game/Assets/Art_3D/Modelling/Sandwich/").Append(Ingr).Append("_Slice").Append(".").Append(Ingr).Append("_Slice");
+	}
+	else {
+		ModelPath = FString("/Game/Assets/Art_3D/Modelling/Sandwich/OriginalIngredient/").Append(Ingr).Append(".").Append(Ingr);
+	}
+
 	UStaticMesh* StaticMesh = LoadObject<UStaticMesh>(NULL, *ModelPath, NULL, LOAD_None, NULL);
 
 	if (!StaticMesh) {
