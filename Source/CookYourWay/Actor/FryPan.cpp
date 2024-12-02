@@ -3,24 +3,34 @@
 
 #include "Actor/FryPan.h"
 #include "Ingredient.h"
+#include <Kismet/GameplayStatics.h>
+#include "GameInstance/VillageManagerSystem.h"
 
 void AFryPan::BeginPlay()
 {
 	Super::BeginPlay();
+
+	VillageManagerSystem = UGameplayStatics::GetGameInstance(GetWorld())->GetSubsystem<UVillageManagerSystem>();
 }
 
 float AFryPan::GetOneCookIncreasement()
 {
-	return (1.0f / 20.0f);
+	return (1.0f / 10.0f);
 }
 
 void AFryPan::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	if (IsIngredientOn && IsFrying) {
+	if (IsIngredientOn && IsFrying && VillageManagerSystem->DelayWithDeltaTime(2.0f, DeltaTime)) {
 		Fry();
 	}
+}
+
+void AFryPan::PutIngrOn(AIngredient* Ingr)
+{
+	Super::PutIngrOn(Ingr);
+	IsFrying = true;
 }
 
 void AFryPan::Fry()

@@ -8,6 +8,7 @@
 #include <Kismet/GameplayStatics.h>
 #include "PlayerBistro.h"
 #include <Components/ShapeComponent.h>
+#include "FryPan.h"
 
 AReuben::AReuben()
 {
@@ -203,9 +204,19 @@ void AReuben::IngrOnSocketInteraction(AActor* InteractActor)
 
 	// 조리도구 위에 재료가 없다면 재료를 조리도구 위로 올린다.
 	else if (InteractActor->GetClass()->IsChildOf(ACookingUtensil::StaticClass())) {
-		ACookingUtensil* CookingUtensil = Cast<ACookingUtensil>(InteractActor);
-		if (!CookingUtensil->IsIngredientOn) {
-			CookingUtensil->PutIngrOn(HoldingIngr);
+		if (InteractActor->GetClass() == BP_CuttingBoard) {
+			ACuttingBoard* CuttingBoard = Cast<ACuttingBoard>(InteractActor);
+
+			if (!CuttingBoard->IsIngredientOn) {
+				CuttingBoard->PutIngrOn(HoldingIngr);
+			}
+		}
+		else if (InteractActor->GetClass() == BP_FryPan) {
+			AFryPan* FryPan = Cast<AFryPan>(InteractActor);
+
+			if (!FryPan->IsIngredientOn) {
+				FryPan->PutIngrOn(HoldingIngr);
+			}
 		}
 	}
 
@@ -268,8 +279,8 @@ void AReuben::Interaction()
 
 void AReuben::Chop()
 {
-	if (OverlappedActor->GetClass() == BP_CuttingBoard) {
-		ACuttingBoard* CuttingBoard = Cast<ACuttingBoard>(OverlappedActor);
+	ACuttingBoard* CuttingBoard = Cast<ACuttingBoard>(UGameplayStatics::GetActorOfClass(GetWorld(), BP_CuttingBoard));
+	if (IsOverlappingActor(CuttingBoard)) {
 		CuttingBoard->Chop();
 	}
 }

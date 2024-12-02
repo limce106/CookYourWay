@@ -13,6 +13,8 @@ UCLASS()
 class COOKYOURWAY_API AFryPan : public ACookingUtensil
 {
 	GENERATED_BODY()
+
+	class UVillageManagerSystem* VillageManagerSystem;
 	
 protected:
 	virtual void BeginPlay() override;
@@ -23,5 +25,7 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	bool IsFrying = false;
+
+	virtual void PutIngrOn(AIngredient* Ingr) override;
 	void Fry();
 };

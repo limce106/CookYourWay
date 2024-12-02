@@ -31,6 +31,6 @@ public:
 
 	virtual float GetOneCookIncreasement();
 
-	void PutIngrOn(AIngredient* Ingr);
+	virtual void PutIngrOn(AIngredient* Ingr);
 	void PickUpIngr();
 };

@@ -62,8 +62,8 @@ void ACustomer::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	if (IsEat) {
-		StartEatTime += DeltaTime;
+	if (IsEat && VillageManagerSystem->DelayWithDeltaTime(1.0f, DeltaTime)) {
+		StartEatTime += 1;
 	}
 
 

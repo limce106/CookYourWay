@@ -19,6 +19,11 @@ void ACuttingBoard::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 }
 
+void ACuttingBoard::PutIngrOn(AIngredient* Ingr)
+{
+	Super::PutIngrOn(Ingr);
+}
+
 void ACuttingBoard::Chop()
 {
 	if (IsIngredientOn && PlacedIngredient->CurCookRate < PlacedIngredient->MaxCookRate) {

@@ -6,6 +6,8 @@
 AReubenController::AReubenController()
 {
 	Reuben = (AReuben*)GetOwner();
+
+	bShowMouseCursor = true;
 }
 
 void AReubenController::SetupInputComponent()

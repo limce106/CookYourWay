@@ -22,5 +22,6 @@ protected:
 public:
 	virtual void Tick(float DeltaTime) override;
 
+	virtual void PutIngrOn(AIngredient* Ingr) override;
 	void Chop();
 };
