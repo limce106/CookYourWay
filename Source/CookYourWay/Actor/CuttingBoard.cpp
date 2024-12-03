@@ -28,5 +28,6 @@ void ACuttingBoard::Chop()
 {
 	if (IsIngredientOn && PlacedIngredient->CurCookRate < PlacedIngredient->MaxCookRate) {
 		PlacedIngredient->CurCookRate += GetOneCookIncreasement();
+		BP_CookRateWidget->CookRate += GetOneCookIncreasement();
 	}
 }

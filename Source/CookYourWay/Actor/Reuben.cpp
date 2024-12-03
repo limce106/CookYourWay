@@ -62,8 +62,10 @@ void AReuben::MoveRight(float Value)
 
 void AReuben::HoldActor(AActor* Actor)
 {
-	UShapeComponent* ActorCollision = Cast<UShapeComponent>(Actor->GetComponentByClass(UShapeComponent::StaticClass()));
-	ActorCollision->SetCollisionProfileName(TEXT("NoCollision"));
+	UShapeComponent* ActorCollision = Cast<UShapeComponent>(Actor->FindComponentByClass(UShapeComponent::StaticClass()));
+	if (ActorCollision) {
+		ActorCollision->SetCollisionProfileName(TEXT("NoCollision"));
+	}
 
 	HeldActor = Actor;
 	IsHold = true;
@@ -71,8 +73,15 @@ void AReuben::HoldActor(AActor* Actor)
 
 void AReuben::PutDownActor()
 {
-	UPrimitiveComponent* ActorCollision = Cast<UPrimitiveComponent>(HeldActor->GetComponentByClass(UPrimitiveComponent::StaticClass()));
-	ActorCollision->SetCollisionProfileName(TEXT("BlockAll"));
+	UPrimitiveComponent* ActorCollision = Cast<UPrimitiveComponent>(HeldActor->FindComponentByClass(UPrimitiveComponent::StaticClass()));
+	if (ActorCollision) {
+		if (HeldActor->GetClass() == BP_Ingredient) {
+			ActorCollision->SetCollisionProfileName(TEXT("IngrOnSomething"));
+		}
+		else {
+			ActorCollision->SetCollisionProfileName(TEXT("BlockAll"));
+		}
+	}
 
 	HeldActor = nullptr;
 	IsHold = false;
@@ -104,15 +113,28 @@ void AReuben::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 void AReuben::EmptyOnSocketInteraction(AActor* InteractActor)
 {
-	// 접시나 조리도구라면 든다.
-	if (InteractActor->GetClass() == BP_Sandwich || InteractActor->GetClass()->IsChildOf(ACookingUtensil::StaticClass())) {
+	ACuttingBoard* CuttingBoard = Cast<ACuttingBoard>(UGameplayStatics::GetActorOfClass(GetWorld(), BP_CuttingBoard));
+	AFryPan* FryPan = Cast<AFryPan>(UGameplayStatics::GetActorOfClass(GetWorld(), BP_FryPan));
+
+	if (InteractActor->GetClass() == BP_Sandwich) {
 		HoldActor(InteractActor);
 	}
 
-	// 타지 않은 조리된 재료라면 든다.
+	else if (InteractActor->GetClass()->IsChildOf(ACookingUtensil::StaticClass())) {
+		ACookingUtensil* CookingUtensil = Cast<ACookingUtensil>(InteractActor);
+		if (CookingUtensil->IsIngredientOn) {
+			HoldActor(CookingUtensil->PlacedIngredient);
+			CookingUtensil->PickUpIngr();
+		}
+		else {
+			HoldActor(InteractActor);
+		}
+	}
+
+	// 조리도구에 올라가지 않은, 조리 되지 않은 재료라면 든다.
 	else if (InteractActor->GetClass() == BP_Ingredient) {
 		AIngredient* Ingredient = Cast<AIngredient>(InteractActor);
-		if (Ingredient->IsCooked() && !Ingredient->IsBurn) {
+		if (!Ingredient->IsCooked()) {
 			HoldActor(Ingredient);
 		}
 	}
@@ -136,19 +158,20 @@ void AReuben::SandwichOnSocketInteraction(AActor* InteractActor)
 {
 	ASandwich* HoldingSandwich = Cast<ASandwich>(HeldActor);
 
-	// 타지 않은, 조리된 재료라면 접시/샌드위치 위로 올린다.
+	// 조리된 재료라면 접시/샌드위치 위로 올린다.
 	if (InteractActor->GetClass() == BP_Ingredient) {
 		AIngredient* Ingredient = Cast<AIngredient>(InteractActor);
-		if (Ingredient->IsCooked() && !Ingredient->IsBurn) {
+		if (Ingredient->IsCooked()) {
 			HoldingSandwich->AddIngredient(Ingredient);
 		}
 	}
 
-	// 타지 않은, 조리된 재료가 조리도구 위에 있다면 접시/샌드위치 위로 올린다.
+	// 조리 완료된 재료가 조리도구 위에 있다면 접시/샌드위치 위로 올린다.
 	else if (InteractActor->GetClass()->IsChildOf(ACookingUtensil::StaticClass())) {
 		ACookingUtensil* CookingUtensil = Cast<ACookingUtensil>(InteractActor);
-		if (CookingUtensil->PlacedIngredient->IsCooked() && !CookingUtensil->PlacedIngredient->IsBurn) {
+		if (CookingUtensil->IsIngredientOn && CookingUtensil->PlacedIngredient->IsCooked()) {
 			HoldingSandwich->AddIngredient(CookingUtensil->PlacedIngredient);
+			CookingUtensil->PickUpIngr();
 		}
 	}
 
@@ -173,10 +196,10 @@ void AReuben::CookingUtensilOnSocketInteraction(AActor* InteractActor)
 		}
 	}
 
-	// 조리도구 위에 조리된 재료가 있고 타지 않았다면 재료를 접시/샌드위치 위로 올린다.
+	// 조리도구 위에 조리 완료된 재료가 있다면 재료를 접시/샌드위치 위로 올린다.
 	else if (InteractActor->GetClass() == BP_Sandwich) {
 		ASandwich* Sandwich = Cast<ASandwich>(InteractActor);
-		if (HoldingCookingUtensil->IsIngredientOn && !HoldingCookingUtensil->PlacedIngredient->IsBurn) {
+		if (HoldingCookingUtensil->IsIngredientOn && HoldingCookingUtensil->PlacedIngredient->IsCooked()) {
 			Sandwich->AddIngredient(HoldingCookingUtensil->PlacedIngredient);
 		}
 	}
@@ -194,10 +217,18 @@ void AReuben::IngrOnSocketInteraction(AActor* InteractActor)
 {
 	AIngredient* HoldingIngr = Cast<AIngredient>(HeldActor);
 
-	// 타지 않은, 조리된 재료라면 접시/샌드위치 위로 올린다.
-	if (InteractActor->GetClass() == BP_Sandwich) {
+	if (InteractActor->GetClass() == BP_Plates) {
+		ASandwich* Sandwich = GetWorld()->SpawnActor<ASandwich>(BP_Sandwich, GetActorLocation(), GetActorRotation());
+		HoldActor(Sandwich);
+		if (HoldingIngr->IsCooked()) {
+			Sandwich->AddIngredient(HoldingIngr);
+		}
+	}
+
+	// 조리된 재료라면 접시/샌드위치 위로 올린다.
+	else if (InteractActor->GetClass() == BP_Sandwich) {
 		ASandwich* Sandwich = Cast<ASandwich>(InteractActor);
-		if (HoldingIngr->IsCooked() && !HoldingIngr->IsBurn) {
+		if (HoldingIngr->IsCooked()) {
 			Sandwich->AddIngredient(HoldingIngr);
 		}
 	}
@@ -244,7 +275,7 @@ void AReuben::Interaction()
 		TryGiveSomething(Customer);
 	}
 	// 냉장고
-	else if (OverlappedActor->GetClass() == BP_Fridge) {
+	else if (!IsHold && OverlappedActor->GetClass() == BP_Fridge) {
 		UIngredientBoardWidget* BP_IngredientBoard = CreateWidget<UIngredientBoardWidget>(GetWorld(), BP_IngredientBoardClass);
 		if (BP_IngredientBoard) {
 			BP_IngredientBoard->AddToViewport();

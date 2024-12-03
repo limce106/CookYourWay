@@ -15,7 +15,8 @@ void AFryPan::BeginPlay()
 
 float AFryPan::GetOneCookIncreasement()
 {
-	return (1.0f / 10.0f);
+	// return (1.0f / 10.0f);
+	return (1.0f / 1.0f);
 }
 
 void AFryPan::Tick(float DeltaTime)
@@ -36,6 +37,7 @@ void AFryPan::PutIngrOn(AIngredient* Ingr)
 void AFryPan::Fry()
 {
 	PlacedIngredient->CurCookRate += GetOneCookIncreasement();
+	BP_CookRateWidget->CookRate += GetOneCookIncreasement();
 
 	// 최대 조리 정도에서 5초 더 구워지면 태움 처리
 	if (PlacedIngredient->CurCookRate > PlacedIngredient->MaxCookRate + (GetOneCookIncreasement() * 5)) {

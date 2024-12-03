@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "Widget/CookRateWidget.h"
 #include "CookingUtensil.generated.h"
 
 UCLASS()
@@ -21,6 +22,9 @@ protected:
 
 public:	
 	virtual void Tick(float DeltaTime) override;
+
+	UPROPERTY(BlueprintReadWrite, EditAnyWhere)
+	UCookRateWidget* BP_CookRateWidget;
 
 	// 조리도구 위에 재료가 올라갔는지
 	UPROPERTY(BlueprintReadWrite)

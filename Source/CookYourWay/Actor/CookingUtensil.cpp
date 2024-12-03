@@ -44,12 +44,15 @@ void ACookingUtensil::PutIngrOn(AIngredient* Ingr)
 
 	IsIngredientOn = true;
 	PlacedIngredient = Ingr;
+
+	BP_CookRateWidget->CookRate = PlacedIngredient->CurCookRate;
+	BP_CookRateWidget->SetVisibility(ESlateVisibility::Visible);
 }
 
 void ACookingUtensil::PickUpIngr()
 {
-	Reuben->HoldActor(PlacedIngredient);
-
 	IsIngredientOn = false;
 	PlacedIngredient = NULL;
+
+	BP_CookRateWidget->SetVisibility(ESlateVisibility::Hidden);
 }

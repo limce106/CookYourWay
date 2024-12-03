@@ -31,10 +31,10 @@ void ASandwich::AddIngredient(AIngredient* Ingr)
 	float IngrHeight = IngrBounds.Z * 2;
 
 	CurIngrLoc.Z += IngrHeight;
-	Ingr->SetActorLocation(CurIngrLoc);
 
 	// Àç·á ºÎÂø
 	Ingr->AttachToComponent(GetRootComponent(), FAttachmentTransformRules::KeepWorldTransform);
+	Ingr->SetActorLocation(CurIngrLoc);
 
 	int IngrIndex = *IngredientManagerSystem->IngrNameIndexMap.Find(Ingr->CurIngrData->IngrName);
 	Ingredients.Add(IngrIndex);
