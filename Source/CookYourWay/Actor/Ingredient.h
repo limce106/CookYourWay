@@ -46,7 +46,7 @@ public:
 	bool IsCooked();
 };
 
-class IngredientFactory
+class IngredientSpawnFactory
 {
 public:
 	static AIngredient* SpawnIngredient(UWorld* World, TSubclassOf<AIngredient> IngredientClass, const FVector& Location, const FRotator& Rotation, FString IngrName, bool IsSliced)
