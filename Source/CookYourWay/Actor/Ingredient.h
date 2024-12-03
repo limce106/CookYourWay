@@ -12,12 +12,14 @@ class COOKYOURWAY_API AIngredient : public AActor
 {
 	GENERATED_BODY()
 
-	class UIngredientManagerSystem* IngredientManagerSystem;
+	USceneComponent* MeshPivot;
+	UStaticMeshComponent* StaticMesh;
 
-	void Init(FString IngrName);
+	class UIngredientManagerSystem* IngredientManagerSystem;
 
 	// 제각각인 재료들의 피봇을 맞추기 위한 함수
 	void SetPivotCenter();
+	void SetStaticMeshAndPivot(FString IngrName, bool IsSliced);
 	
 public:	
 	AIngredient();
@@ -30,9 +32,6 @@ public:
 
 	FIngrData* CurIngrData;
 
-	USceneComponent* MeshPivot;
-	UStaticMeshComponent* StaticMesh;
-
 	// 고기 재료 탔는지
 	bool IsBurn = false;
 
@@ -41,7 +40,19 @@ public:
 	float CurCookRate = 0.0f;
 	const float MaxCookRate = 1.0f;
 
-	bool IsCooked();
+	// 스폰 시 필수로 호출
+	void Init(FString IngrName, bool IsSliced);
 
-	void SetStaticMeshAndPivot(FString IngrName, bool IsSliced);
+	bool IsCooked();
+};
+
+class IngredientFactory
+{
+public:
+	static AIngredient* SpawnIngredient(UWorld* World, TSubclassOf<AIngredient> IngredientClass, const FVector& Location, const FRotator& Rotation, FString IngrName, bool IsSliced)
+	{
+		AIngredient* Ingredient = World->SpawnActor<AIngredient>(IngredientClass, Location, Rotation);
+		Ingredient->Init(IngrName, IsSliced);
+		return Ingredient;
+	}
 };

@@ -1,6 +1,5 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-
 #include "Widget/IngredientBtnWidget.h"
 #include "Components/Button.h"
 #include "Components/TextBlock.h"
@@ -40,9 +39,8 @@ void UIngredientBtnWidget::OnClick_ButtonIngredient()
 	}
 
 	if (!Reuben->IsHold) {
-		AIngredient* Ingredient = GetWorld()->SpawnActor<AIngredient>(BP_IngredientClass, Reuben->GetActorLocation(), Reuben->GetActorRotation());
 		/*나중에 false로 바꿀 것!!*/
-		Ingredient->SetStaticMeshAndPivot(IngrEngName, true);
+		AIngredient* Ingredient = IngredientFactory::SpawnIngredient(GetWorld(), BP_IngredientClass, Reuben->GetActorLocation(), Reuben->GetActorRotation(), IngrEngName, true);
 		Reuben->HoldActor(Ingredient);
 
 		TArray<UUserWidget*> AllIngredientBoardWidgetArr;

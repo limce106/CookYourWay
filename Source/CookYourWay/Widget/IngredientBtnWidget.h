@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
-#include "Actor/Ingredient.h"
+#include <Actor/Ingredient.h>
 #include "IngredientBtnWidget.generated.h"
 
 /**

@@ -17,7 +17,7 @@ AIngredient::AIngredient()
 	StaticMesh->SetCollisionProfileName(TEXT("NoCollision"));
 }
 
-void AIngredient::Init(FString IngrName)
+void AIngredient::Init(FString IngrName, bool IsSliced)
 {
 	for (int i = 0; i < IngredientManagerSystem->IngredientTableRowNames.Num(); i++) {
 		FString IngredientTableRowName = IngredientManagerSystem->IngredientTableRowNames[i].ToString();
@@ -26,6 +26,8 @@ void AIngredient::Init(FString IngrName)
 			break;
 		}
 	}
+
+	SetStaticMeshAndPivot(IngrName, IsSliced);
 }
 
 void AIngredient::SetPivotCenter()

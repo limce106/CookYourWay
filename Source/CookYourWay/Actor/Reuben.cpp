@@ -204,14 +204,17 @@ void AReuben::IngrOnSocketInteraction(AActor* InteractActor)
 
 	// 조리도구 위에 재료가 없다면 재료를 조리도구 위로 올린다.
 	else if (InteractActor->GetClass()->IsChildOf(ACookingUtensil::StaticClass())) {
-		if (InteractActor->GetClass() == BP_CuttingBoard) {
+		// 도마
+		if ((InteractActor->GetClass() == BP_CuttingBoard) 
+			&& (HoldingIngr->CurIngrData->IngrType == "Filling")) {
 			ACuttingBoard* CuttingBoard = Cast<ACuttingBoard>(InteractActor);
 
 			if (!CuttingBoard->IsIngredientOn) {
 				CuttingBoard->PutIngrOn(HoldingIngr);
 			}
 		}
-		else if (InteractActor->GetClass() == BP_FryPan) {
+		// 후라이팬
+		else if ((InteractActor->GetClass() == BP_FryPan) && (HoldingIngr->CurIngrData->IngrType == "Meat")) {
 			AFryPan* FryPan = Cast<AFryPan>(InteractActor);
 
 			if (!FryPan->IsIngredientOn) {
