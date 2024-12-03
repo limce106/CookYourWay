@@ -40,7 +40,7 @@ void UIngredientBtnWidget::OnClick_ButtonIngredient()
 
 	if (!Reuben->IsHold) {
 		/*나중에 false로 바꿀 것!!*/
-		AIngredient* Ingredient = IngredientFactory::SpawnIngredient(GetWorld(), BP_IngredientClass, Reuben->GetActorLocation(), Reuben->GetActorRotation(), IngrEngName, true);
+		AIngredient* Ingredient = IngredientSpawnFactory::SpawnIngredient(GetWorld(), BP_IngredientClass, Reuben->GetActorLocation(), Reuben->GetActorRotation(), IngrEngName, true);
 		Reuben->HoldActor(Ingredient);
 
 		TArray<UUserWidget*> AllIngredientBoardWidgetArr;
