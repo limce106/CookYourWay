@@ -15,7 +15,7 @@ class COOKYOURWAY_API ASandwich : public AActor
 	class UIngredientManagerSystem* IngredientManagerSystem;
 
 	// 현재 제일 위에 있는 재료의 위치
-	FVector CurIngrLoc = GetActorLocation();
+	float LastIngrLocZ;
 	
 public:	
 	ASandwich();
@@ -30,5 +30,7 @@ public:
 	TArray<int32> Ingredients;
 
 	void AddIngredient(AIngredient* Ingr);
+
+	void DestroySandwich();
 	//void DetachOneIngr(AIngredient* Ingr);
 };

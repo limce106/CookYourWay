@@ -291,7 +291,13 @@ void AReuben::Interaction()
 	else {
 		// 손에 들고 있던 것을 버린다.
 		if (OverlappedActor->GetClass() == BP_TrashBin) {
-			HeldActor->Destroy();
+			if (HeldActor->GetClass() == BP_Sandwich) {
+				ASandwich* HeldSandwich = Cast<ASandwich>(HeldActor);
+				HeldSandwich->DestroySandwich();
+			}
+			else {
+				HeldActor->Destroy();
+			}
 			IsHold = false;
 			return;
 		}
@@ -347,7 +353,7 @@ void AReuben::GiveSandwich(ACustomer* Customer)
 	}
 
 	Customer->AddSandwichReview(Sandwich);
-	Sandwich->Destroy();
+	Sandwich->DestroySandwich();
 	IsHold = false;
 
 	Customer->EatSandwich();
