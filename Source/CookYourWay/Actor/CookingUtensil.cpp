@@ -51,6 +51,17 @@ void ACookingUtensil::PutIngrOn(AIngredient* Ingr)
 
 void ACookingUtensil::PickUpIngr()
 {
+	if (!IsIngredientOn)
+		return;
+
+	if (!Reuben->IsHold) {
+		Reuben->HoldActor(PlacedIngredient);
+	}
+	else if (Reuben->IsHold && Reuben->HeldActor->GetClass() == BP_Sandwich) {
+		ASandwich* HoldingSandwich = Cast<ASandwich>(Reuben->HeldActor);
+		HoldingSandwich->AddIngredient(PlacedIngredient);
+	}
+
 	IsIngredientOn = false;
 	PlacedIngredient = NULL;
 

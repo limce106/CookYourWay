@@ -5,12 +5,16 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "Widget/CookRateWidget.h"
+#include "Sandwich.h"
 #include "CookingUtensil.generated.h"
 
 UCLASS()
 class COOKYOURWAY_API ACookingUtensil : public AActor
 {
 	GENERATED_BODY()
+
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<ASandwich> BP_Sandwich;
 
 	class AReuben* Reuben;
 	
@@ -21,9 +25,10 @@ protected:
 	virtual void BeginPlay() override;
 
 public:	
+
 	virtual void Tick(float DeltaTime) override;
 
-	UPROPERTY(BlueprintReadWrite, EditAnyWhere)
+	UPROPERTY(BlueprintReadWrite)
 	UCookRateWidget* BP_CookRateWidget;
 
 	// 조리도구 위에 재료가 올라갔는지

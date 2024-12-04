@@ -17,6 +17,32 @@ class COOKYOURWAY_API AReuben : public ACharacter
 {
 	GENERATED_BODY()
 
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<AActor> BP_PlayerBistro;
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<AIngredient> BP_Ingredient;
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<ACookingUtensil> BP_CuttingBoard;
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<ACookingUtensil> BP_FryPan;
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<AActor> BP_Plates;
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<ASandwich> BP_Sandwich;
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<ATable> BP_Table;
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<AActor> BP_TrashBin;
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<AActor> BP_Fridge;
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<AActor> BP_Dessert;
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<ACustomer> BP_Customer;
+
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<UUserWidget> BP_IngredientBoardClass;
+
 	class APlayerBistro* PlayerBistro;
 	FTimerHandle CustSandwichTimerHandler;
 
@@ -43,32 +69,6 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-
-	UPROPERTY(EditDefaultsOnly)
-	TSubclassOf<AActor> BP_PlayerBistro;
-	UPROPERTY(EditDefaultsOnly)
-	TSubclassOf<AIngredient> BP_Ingredient;
-	UPROPERTY(EditDefaultsOnly)
-	TSubclassOf<ACookingUtensil> BP_CuttingBoard;
-	UPROPERTY(EditDefaultsOnly)
-	TSubclassOf<ACookingUtensil> BP_FryPan;
-	UPROPERTY(EditDefaultsOnly)
-	TSubclassOf<AActor> BP_Plates;
-	UPROPERTY(EditDefaultsOnly)
-	TSubclassOf<ASandwich> BP_Sandwich;
-	UPROPERTY(EditDefaultsOnly)
-	TSubclassOf<ATable> BP_Table;
-	UPROPERTY(EditDefaultsOnly)
-	TSubclassOf<AActor> BP_TrashBin;
-	UPROPERTY(EditDefaultsOnly)
-	TSubclassOf<AActor> BP_Fridge;
-	UPROPERTY(EditDefaultsOnly)
-	TSubclassOf<AActor> BP_Dessert;
-	UPROPERTY(EditDefaultsOnly)
-	TSubclassOf<ACustomer> BP_Customer;
-
-	UPROPERTY(EditDefaultsOnly)
-	TSubclassOf<UUserWidget> BP_IngredientBoardClass;
 
 	UPROPERTY(BlueprintReadWrite)
 	AActor* OverlappedActor;

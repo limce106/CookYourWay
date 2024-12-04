@@ -116,14 +116,15 @@ void AReuben::EmptyOnSocketInteraction(AActor* InteractActor)
 	ACuttingBoard* CuttingBoard = Cast<ACuttingBoard>(UGameplayStatics::GetActorOfClass(GetWorld(), BP_CuttingBoard));
 	AFryPan* FryPan = Cast<AFryPan>(UGameplayStatics::GetActorOfClass(GetWorld(), BP_FryPan));
 
+	// 샌드위치
 	if (InteractActor->GetClass() == BP_Sandwich) {
 		HoldActor(InteractActor);
 	}
 
+	// 조리도구
 	else if (InteractActor->GetClass()->IsChildOf(ACookingUtensil::StaticClass())) {
 		ACookingUtensil* CookingUtensil = Cast<ACookingUtensil>(InteractActor);
 		if (CookingUtensil->IsIngredientOn) {
-			HoldActor(CookingUtensil->PlacedIngredient);
 			CookingUtensil->PickUpIngr();
 		}
 		else {
@@ -131,7 +132,7 @@ void AReuben::EmptyOnSocketInteraction(AActor* InteractActor)
 		}
 	}
 
-	// 조리도구에 올라가지 않은, 조리 되지 않은 재료라면 든다.
+	// 조리도구에 올라가지 않은, 조리 되지 않은 재료
 	else if (InteractActor->GetClass() == BP_Ingredient) {
 		AIngredient* Ingredient = Cast<AIngredient>(InteractActor);
 		if (!Ingredient->IsCooked()) {
@@ -139,13 +140,13 @@ void AReuben::EmptyOnSocketInteraction(AActor* InteractActor)
 		}
 	}
 
-	// 접시를 스폰하여 플레이어가 들게 한다.
+	// 접시 더미
 	else if (InteractActor->GetClass() == BP_Plates) {
 		ASandwich* Sandwich = GetWorld()->SpawnActor<ASandwich>(BP_Sandwich, GetActorLocation(), GetActorRotation());
 		HoldActor(Sandwich);
 	}
 
-	// 테이블이 비어있다면 위에 둔다.
+	// 테이블
 	else if (InteractActor->GetClass() == BP_Table) {
 		ATable* Table = Cast<ATable>(InteractActor);
 		if (Table->IsActorOn) {
@@ -169,8 +170,7 @@ void AReuben::SandwichOnSocketInteraction(AActor* InteractActor)
 	// 조리 완료된 재료가 조리도구 위에 있다면 접시/샌드위치 위로 올린다.
 	else if (InteractActor->GetClass()->IsChildOf(ACookingUtensil::StaticClass())) {
 		ACookingUtensil* CookingUtensil = Cast<ACookingUtensil>(InteractActor);
-		if (CookingUtensil->IsIngredientOn && CookingUtensil->PlacedIngredient->IsCooked()) {
-			HoldingSandwich->AddIngredient(CookingUtensil->PlacedIngredient);
+		if (CookingUtensil->PlacedIngredient->IsCooked()) {
 			CookingUtensil->PickUpIngr();
 		}
 	}

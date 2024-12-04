@@ -39,6 +39,10 @@ void ATable::PutActorOn(AActor* Actor)
 
 void ATable::PickUpActor()
 {
+	if (!IsActorOn || Reuben->IsHold) {
+		return;
+	}
+
 	Reuben->HoldActor(PlacedActor);
 
 	IsActorOn = false;
