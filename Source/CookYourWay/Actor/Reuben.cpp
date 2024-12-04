@@ -75,8 +75,8 @@ void AReuben::PutDownActor()
 {
 	UPrimitiveComponent* ActorCollision = Cast<UPrimitiveComponent>(HeldActor->FindComponentByClass(UPrimitiveComponent::StaticClass()));
 	if (ActorCollision) {
-		if (HeldActor->GetClass() == BP_Ingredient) {
-			ActorCollision->SetCollisionProfileName(TEXT("IngrOnSomething"));
+		if ((HeldActor->GetClass() == BP_Ingredient) || (HeldActor->GetClass() == BP_Sandwich)) {
+			ActorCollision->SetCollisionProfileName(TEXT("OnSomething"));
 		}
 		else {
 			ActorCollision->SetCollisionProfileName(TEXT("BlockAll"));
