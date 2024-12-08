@@ -27,7 +27,7 @@ class COOKYOURWAY_API ACustomer : public ACharacter
 	bool DestroyTimer = false;
 
 	// 인내심
-	float Patience = 100;
+	float Patience = 100.0f;
 
 	// 먹는 중인지
 	bool IsEat = false;

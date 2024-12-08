@@ -67,7 +67,7 @@ void ACustomer::Tick(float DeltaTime)
 	}
 
 
-	if (IsWaiting) {
+	if (IsWaiting && VillageManagerSystem->DelayWithDeltaTime(1.0f, DeltaTime)) {
 		// 40초 후 인내심은 0이 된다.
 		Patience -= 2.5;
 

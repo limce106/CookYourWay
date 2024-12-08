@@ -36,6 +36,8 @@ void APlayerBistro::SitCust(ACustomer* Customer, int32 SeatIdx)
 void APlayerBistro::WaitCust(ACustomer* Customer)
 {
 	WaitingCustQueue.Enqueue(Customer);
+	WaitingCustNum++;
+
 	Customer->SetHidden(true);
 	Customer->SetActorEnableCollision(false);
 	Customer->IsWaiting = true;
@@ -71,8 +73,13 @@ int32 APlayerBistro::FindEmptySeatIdx()
 
 void APlayerBistro::CustomerVisited(ACustomer* Customer)
 {
-	VisitedCustNum++;
+
+	AAIController* AINpcController = Cast<AAIController>(Customer->GetController());
+	AINpcController->StopMovement();
 	Customer->IsWalk = false;
+	Customer->SetActorRotation(FRotator(0.0f, 90.0f, 0.0f));
+
+	VisitedCustNum++;
 
 	SitOrWaitCust(Customer);
 }
@@ -82,10 +89,16 @@ void APlayerBistro::UpdateCustomerReviewAvg(int32 ReveiwRate)
 	CustomerReviewAvg = (CustomerReviewAvg * (VisitedCustNum - 1) + ReveiwRate) / VisitedCustNum;
 }
 
+int32 APlayerBistro::GetWaitingCustNum()
+{
+	return WaitingCustNum;
+}
+
 void APlayerBistro::SitNextCust(int32 SeatIdx)
 {
 	AActor* WaitingCust;
 	WaitingCustQueue.Dequeue(WaitingCust);
+	WaitingCustNum--;
 
 	ACustomer* NextCustomer = Cast<ACustomer>(WaitingCust);
 	NextCustomer->SetHidden(false);
@@ -112,5 +125,6 @@ void APlayerBistro::LeaveWaitingCust(ACustomer* Customer)
 {
 	// 대기열에 있는 모든 손님들 중 인내심이 0이 된 손님은 맨 앞에 있는 손님이므로
 	WaitingCustQueue.Pop();
+	WaitingCustNum--;
 	Customer->Destroy();
 }

@@ -17,17 +17,18 @@ class COOKYOURWAY_API APlayerBistro : public AActor
 	// 손님 위치
 	TArray<FVector> CustSeatLocArr = {
 		/*추후 지정 필요*/
-		FVector(0.0f, 0.0f, 0.0f),
-		FVector(0.0f, 0.0f, 0.0f),
-		FVector(0.0f, 0.0f, 0.0f),
-		FVector(0.0f, 0.0f, 0.0f),
-		FVector(0.0f, 0.0f, 0.0f)
+		FVector(440.0f, -5450.0f, 120.0f),
+		FVector(640.0f, -5450.0f, 120.0f),
+		FVector(840.0f, -5450.0f, 120.0f),
+		FVector(1040.0f, -5450.0f, 120.0f),
+		FVector(1240.0f, -5450.0f, 120.0f)
 	};
 
 	// 자리에 손님이 앉았는지
 	TArray<bool> IsSeated;
 	// 대기 손님
 	TQueue<AActor*> WaitingCustQueue;
+	int32 WaitingCustNum = 0;
 	// 다음 손님이 앉기까지의 시간
 	const float NextCustDelay = 1.5f;
 
@@ -57,6 +58,9 @@ public:
 	int32 VisitedCustNum = 0;
 	// 오늘 손님의 평점 평균
 	float CustomerReviewAvg = 0;
+
+	UFUNCTION(BlueprintCallable)
+	int32 GetWaitingCustNum();
 
 	// 손님이 방문했을 때
 	UFUNCTION(BlueprintCallable)
