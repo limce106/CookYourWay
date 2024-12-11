@@ -13,6 +13,8 @@ class COOKYOURWAY_API UCustomerRateComponent : public UActorComponent
 
 	class AVillageManager* VillageManager;
 
+	void Init();
+
 public:	
 	UCustomerRateComponent();
 
@@ -27,4 +29,8 @@ public:
 	// <¼Õ´ÔÅ¸ÀÔ, Æò±ÕÆòÁ¡>
 	UPROPERTY(BlueprintReadWrite)
 	TMap<FString, float> CustStringToRateMap;
+
+	// <¼Õ´ÔÅ¸ÀÔ, Ãæ¼ºµµ>
+	UPROPERTY(BlueprintReadWrite)
+	TMap<FString, int32> CustStringToRoyaltyMap;
 };

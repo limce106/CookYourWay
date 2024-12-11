@@ -10,6 +10,14 @@ UCustomerRateComponent::UCustomerRateComponent()
 
 }
 
+void UCustomerRateComponent::Init()
+{
+	// 손님의 평균평점, 충성도 초기화
+	for (int i = 0; i < VillageManager->CustomerNames.Num(); i++) {
+		CustStringToRateMap.Add(VillageManager->CustomerNames[i], 0.0f);
+		CustStringToRoyaltyMap.Add(VillageManager->CustomerNames[i], 0);
+	}
+}
 
 void UCustomerRateComponent::BeginPlay()
 {
@@ -17,10 +25,7 @@ void UCustomerRateComponent::BeginPlay()
 
 	VillageManager = Cast<AVillageManager>(UGameplayStatics::GetActorOfClass(GetWorld(), AVillageManager::StaticClass()));
 
-	// 손님의 평균평점 초기화
-	for (int i = 0; i < VillageManager->CustomerNames.Num(); i++) {
-		CustStringToRateMap.Add(VillageManager->CustomerNames[i], 0.0f);
-	}
+	Init();
 }
 
 
