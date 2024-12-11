@@ -270,9 +270,9 @@ void AReuben::Interaction()
 	}
 
 	// ¼Õ´Ô
-	if (OverlappedActor->GetClass() == BP_Customer) {
-		ACustomer* Customer = Cast<ACustomer>(OverlappedActor);
-		TryGiveSomething(Customer);
+	if (OverlappedActor->GetClass() == BP_DiningTable) {
+		ADiningTable* DiningTable = Cast<ADiningTable>(OverlappedActor);
+		TryGiveSomething(DiningTable->SeatedCustomer);
 	}
 	// ³ÃÀå°í
 	else if (!IsHold && OverlappedActor->GetClass() == BP_Fridge) {
@@ -345,7 +345,6 @@ void AReuben::TryGiveSomething(ACustomer* Customer)
 
 void AReuben::GiveSandwich(ACustomer* Customer)
 {
-
 	ASandwich* Sandwich = Cast<ASandwich>(HeldActor);
 	// »÷µåÀ§Ä¡°¡ ¾ø´Â ºó Á¢½Ã¶ó¸é 
 	if (Sandwich->Ingredients.Num() == 0) {

@@ -5,12 +5,16 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "Component/CustomerRateComponent.h"
+#include "DiningTable.h"
 #include "PlayerBistro.generated.h"
 
 UCLASS()
 class COOKYOURWAY_API APlayerBistro : public AActor
 {
 	GENERATED_BODY()
+
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<ADiningTable> BP_DiningTable;
 
 	class UVillageManagerSystem* VillageManagerSystem;
 
@@ -32,6 +36,9 @@ class COOKYOURWAY_API APlayerBistro : public AActor
 	// ¥Ÿ¿Ω º’¥‘¿Ã æ…±‚±Ó¡ˆ¿« Ω√∞£
 	const float NextCustDelay = 1.5f;
 
+
+	void SpawnDiningTable();
+	ADiningTable* GetDiningTable(int32 SeatIdx);
 
 	// º’¥‘ æ…»˜±‚
 	void SitCust(ACustomer* Customer, int32 SeatIdx);

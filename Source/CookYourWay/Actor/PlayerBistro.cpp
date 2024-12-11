@@ -12,12 +12,33 @@ APlayerBistro::APlayerBistro()
 	CustRateComponent = CreateDefaultSubobject<UCustomerRateComponent>(TEXT("CustRateComponent"));
 }
 
+void APlayerBistro::SpawnDiningTable()
+{
+	for (int i = 0; i < CustSeatLocArr.Num(); i++) {
+		FVector Location = CustSeatLocArr[i];
+		Location.Y += 100.0f;
+		Location.Z = 0.0f;
+
+		GetWorld()->SpawnActor<ADiningTable>(BP_DiningTable, Location, FRotator::ZeroRotator);
+	}
+}
+
+ADiningTable* APlayerBistro::GetDiningTable(int32 SeatIdx)
+{
+	TArray<AActor*> DiningTablesArr;
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), BP_DiningTable, DiningTablesArr);
+	ADiningTable* DiningTable = Cast<ADiningTable>(DiningTablesArr[SeatIdx]);
+
+	return DiningTable;
+}
+
 void APlayerBistro::BeginPlay()
 {
 	Super::BeginPlay();
 	
 	VillageManagerSystem = UGameplayStatics::GetGameInstance(GetWorld())->GetSubsystem<UVillageManagerSystem>();
 
+	SpawnDiningTable();
 	IsSeated.Init(false, 5);
 }
 
@@ -31,6 +52,8 @@ void APlayerBistro::SitCust(ACustomer* Customer, int32 SeatIdx)
 	IsSeated[SeatIdx] = true;
 	Customer->CurSeatNum = SeatIdx;
 	Customer->SetActorLocation(CustSeatLocArr[SeatIdx]);
+
+	GetDiningTable(SeatIdx)->SeatedCustomer = Customer;
 }
 
 void APlayerBistro::WaitCust(ACustomer* Customer)
@@ -113,12 +136,17 @@ void APlayerBistro::LeaveAndSitNextCust(ACustomer* LeftCustomer)
 	int32 LeftCustSeatIdx = LeftCustomer->CurSeatNum;
 	LeftCustomer->Destroy();
 
-	const float NextCustDelayTime = 1.0f;
-	FTimerHandle DestroyCustTimerHandler;
-	GetWorld()->GetTimerManager().SetTimer(DestroyCustTimerHandler, FTimerDelegate::CreateLambda([&]()
-		{
-			SitNextCust(LeftCustSeatIdx);
-		}), NextCustDelayTime, false);
+	if (!WaitingCustQueue.IsEmpty()) {
+		const float NextCustDelayTime = 1.0f;
+		FTimerHandle DestroyCustTimerHandler;
+		GetWorld()->GetTimerManager().SetTimer(DestroyCustTimerHandler, FTimerDelegate::CreateLambda([&]()
+			{
+				SitNextCust(LeftCustSeatIdx);
+			}), NextCustDelayTime, false);
+	}
+	else {
+		GetDiningTable(LeftCustSeatIdx)->SeatedCustomer = nullptr;
+	}
 }
 
 void APlayerBistro::LeaveWaitingCust(ACustomer* Customer)

@@ -10,6 +10,7 @@
 #include "Table.h"
 #include "CuttingBoard.h"
 #include "Customer.h"
+#include "DiningTable.h"
 #include "Reuben.generated.h"
 
 UCLASS()
@@ -39,6 +40,8 @@ class COOKYOURWAY_API AReuben : public ACharacter
 	TSubclassOf<AActor> BP_Dessert;
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<ACustomer> BP_Customer;
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<ADiningTable> BP_DiningTable;
 
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<UUserWidget> BP_IngredientBoardClass;
