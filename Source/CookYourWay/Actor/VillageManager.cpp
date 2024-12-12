@@ -67,7 +67,7 @@ TArray<int32> AVillageManager::GetRandomTaste()
 	TArray<int32> Taste;
 
 	// 임의로 "레벨 상관없이" 속재료는 항상 3개를 선택하도록 함
-	for (int i = 0; i < 3; i++) {
+	/*for (int i = 0; i < 3; i++) {
 		int FillingIndex = UKismetMathLibrary::RandomIntegerInRange(0, IngredientManagerSystem->FillingRows.Num() - 1);
 		Taste.Add(FillingIndex);
 	}
@@ -76,7 +76,11 @@ TArray<int32> AVillageManager::GetRandomTaste()
 	Taste.Add(MeatIndex);
 
 	int SauceIndex = UKismetMathLibrary::RandomIntegerInRange(0, IngredientManagerSystem->SauceRows.Num() - 1);
-	Taste.Add(SauceIndex);
+	Taste.Add(SauceIndex);*/
+
+	// 테스트
+	Taste.Add(0);
+	//
 
 	return Taste;
 }

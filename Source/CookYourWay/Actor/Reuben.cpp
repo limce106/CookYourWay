@@ -260,12 +260,6 @@ void AReuben::IngrOnSocketInteraction(AActor* InteractActor)
 		if (!Table->IsActorOn) {
 			Table->PutActorOn(HoldingIngr);
 		}
-		else {
-			if (Table->PlacedActor->GetClass() == BP_Sandwich) {
-				ASandwich* PlacedSandwich = Cast<ASandwich>(Table->PlacedActor);
-				PlacedSandwich->AddIngredient(HoldingIngr);
-			}
-		}
 	}
 }
 
@@ -365,7 +359,8 @@ void AReuben::GiveSandwich(ACustomer* Customer)
 
 	GetWorld()->GetTimerManager().SetTimer(CustSandwichTimerHandler, FTimerDelegate::CreateLambda([&]()
 		{
-			PlayerBistro->LeaveAndSitNextCust(Customer);
+			if(Customer)
+				PlayerBistro->LeaveAndSitNextCust(Customer);
 		}), Customer->LeaveDelayTime, false);
 }
 
