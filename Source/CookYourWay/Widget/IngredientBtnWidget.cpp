@@ -7,6 +7,7 @@
 #include <Actor/Reuben.h>
 #include <GameInstance/IngredientManagerSystem.h>
 #include <Blueprint/WidgetBlueprintLibrary.h>
+#include "IngredientBoardWidget.h"
 
 void UIngredientBtnWidget::NativePreConstruct()
 {
@@ -38,13 +39,38 @@ void UIngredientBtnWidget::OnClick_ButtonIngredient()
 		}
 	}
 
+	AIngredient* ClickedIngredient = IngredientSpawnFactory::SpawnIngredient(GetWorld(), BP_IngredientClass, Reuben->GetActorLocation(), Reuben->GetActorRotation(), IngrEngName, true);
 	if (!Reuben->IsHold) {
 		/*³ªÁß¿¡ false·Î ¹Ù²Ü °Í!!*/
-		AIngredient* Ingredient = IngredientSpawnFactory::SpawnIngredient(GetWorld(), BP_IngredientClass, Reuben->GetActorLocation(), Reuben->GetActorRotation(), IngrEngName, true);
-		Reuben->HoldActor(Ingredient);
+		Reuben->HoldActor(ClickedIngredient);
 
-		TArray<UUserWidget*> AllIngredientBoardWidgetArr;
-		UWidgetBlueprintLibrary::GetAllWidgetsOfClass(this, AllIngredientBoardWidgetArr, BP_IngredientBoardClass);
-		AllIngredientBoardWidgetArr[0]->RemoveFromParent();
+		RemoveIngredientBoard();
 	}
+	else {
+		if (Reuben->HeldActor->GetClass() == BP_Sandwich) {
+			TArray<UUserWidget*> AllIngredientBoardWidgetArr;
+			UWidgetBlueprintLibrary::GetAllWidgetsOfClass(this, AllIngredientBoardWidgetArr, BP_IngredientBoardClass);
+			UIngredientBoardWidget* IngredientBoardWidget = Cast<UIngredientBoardWidget>(AllIngredientBoardWidgetArr[0]);
+
+			// ¼Ò½º¸¦ °ñ¶ú´Ù¸é
+			if (IngredientBoardWidget->IsSauceTab) {
+				IngredientBoardWidget->TextBlock_Error->SetVisibility(ESlateVisibility::Hidden);
+
+				ASandwich* HoldingSandwich = Cast<ASandwich>(Reuben->HeldActor);
+				HoldingSandwich->AddIngredient(ClickedIngredient);
+
+				IngredientBoardWidget->RemoveFromParent();
+			}
+			else {
+				IngredientBoardWidget->TextBlock_Error->SetVisibility(ESlateVisibility::Visible);
+			}
+		}
+	}
+}
+
+void UIngredientBtnWidget::RemoveIngredientBoard()
+{
+	TArray<UUserWidget*> AllIngredientBoardWidgetArr;
+	UWidgetBlueprintLibrary::GetAllWidgetsOfClass(this, AllIngredientBoardWidgetArr, BP_IngredientBoardClass);
+	AllIngredientBoardWidgetArr[0]->RemoveFromParent();
 }

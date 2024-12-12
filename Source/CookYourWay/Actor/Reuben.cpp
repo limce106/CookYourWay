@@ -260,6 +260,12 @@ void AReuben::IngrOnSocketInteraction(AActor* InteractActor)
 		if (!Table->IsActorOn) {
 			Table->PutActorOn(HoldingIngr);
 		}
+		else {
+			if (Table->PlacedActor->GetClass() == BP_Sandwich) {
+				ASandwich* PlacedSandwich = Cast<ASandwich>(Table->PlacedActor);
+				PlacedSandwich->AddIngredient(HoldingIngr);
+			}
+		}
 	}
 }
 
@@ -275,7 +281,7 @@ void AReuben::Interaction()
 		TryGiveSomething(DiningTable->SeatedCustomer);
 	}
 	// ³ÃÀå°í
-	else if (!IsHold && OverlappedActor->GetClass() == BP_Fridge) {
+	else if (OverlappedActor->GetClass() == BP_Fridge) {
 		UIngredientBoardWidget* BP_IngredientBoard = CreateWidget<UIngredientBoardWidget>(GetWorld(), BP_IngredientBoardClass);
 		if (BP_IngredientBoard) {
 			BP_IngredientBoard->AddToViewport();

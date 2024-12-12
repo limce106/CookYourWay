@@ -37,7 +37,11 @@ public:
 	class UButton* Button_Sauce;
 	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
 	class UUniformGridPanel* UniformGridPanel;
+	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
+	class UTextBlock* TextBlock_Error;
 
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<UIngredientBtnWidget> BP_IngredientBtnWidgetClass;
+
+	bool IsSauceTab = false;
 };

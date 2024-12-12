@@ -16,6 +16,7 @@ void UIngredientBoardWidget::NativePreConstruct()
 	Button_Meat = (UButton*)GetWidgetFromName(TEXT("Button_Meat"));
 	Button_Sauce = (UButton*)GetWidgetFromName(TEXT("Button_Sauce"));
 	UniformGridPanel = (UUniformGridPanel*)GetWidgetFromName(TEXT("UniformGridPanel"));
+	TextBlock_Error = (UTextBlock*)GetWidgetFromName(TEXT("TextBlock_Error"));
 }
 
 void UIngredientBoardWidget::NativeConstruct()
@@ -33,6 +34,7 @@ void UIngredientBoardWidget::NativeConstruct()
 
 void UIngredientBoardWidget::CreateFillingButtons()
 {
+	IsSauceTab = false;
 	UniformGridPanel->ClearChildren();
 
 	int row = 0;
@@ -52,6 +54,7 @@ void UIngredientBoardWidget::CreateFillingButtons()
 
 void UIngredientBoardWidget::CreateMeatButtons()
 {
+	IsSauceTab = false;
 	UniformGridPanel->ClearChildren();
 
 	int row = 0;
@@ -71,6 +74,7 @@ void UIngredientBoardWidget::CreateMeatButtons()
 
 void UIngredientBoardWidget::CreateSauceButtons()
 {
+	IsSauceTab = true;
 	UniformGridPanel->ClearChildren();
 
 	int row = 0;
