@@ -69,7 +69,7 @@ void ACustomer::Tick(float DeltaTime)
 
 	if (IsWaiting && VillageManagerSystem->DelayWithDeltaTime(1.0f, DeltaTime)) {
 		// 40초 후 인내심은 0이 된다.
-		Patience -= 2.5;
+		Patience -= (100 / MaxWaitingTime);
 
 		if (Patience <= 0) {
 			PlayerBistro->LeaveWaitingCust(this);
@@ -127,38 +127,28 @@ void ACustomer::SetVisitDest()
 
 int32 ACustomer::CountNotTasteNum(ASandwich* Sandwich)
 {
+	const int32 BreadIndex = IngredientManagerSystem->BreadIndex;
 	TArray<int32> Taste = VillageManager->GetCustTaste(CustName);
 	// 취향이 아닌 재료 개수
 	int32 NotTasteNum = 0;
 
-	Taste.Sort([](const int32 A, const int32 B)
-		{
-			return A < B;
-		});
-
-	Sandwich->Ingredients.Sort([](const int32 A, const int32 B)
-		{
-			return A < B;
-		});
-
 	// 첫 번째 재료가 빵일 때
 	if (Sandwich->Ingredients[0] == IngredientManagerSystem->BreadIndex) {
-		Sandwich->Ingredients.Remove(0);
+		Sandwich->Ingredients.RemoveAt(0);
 	}
 	else {
 		NotTasteNum++;
 	}
 
-	const int IngrNum = Sandwich->Ingredients.Num();
 	// 마지막 재료가 빵일 때
-	if (Sandwich->Ingredients[IngrNum - 1] == IngredientManagerSystem->BreadIndex) {
-		Sandwich->Ingredients.Remove(IngrNum - 1);
+	if (Sandwich->Ingredients[Sandwich->Ingredients.Num() - 1] == IngredientManagerSystem->BreadIndex) {
+		Sandwich->Ingredients.RemoveAt(Sandwich->Ingredients.Num() - 1);
 	}
 	else {
 		NotTasteNum++;
 	}
 
-	for (int i = 0; i < IngrNum; i++) {
+	for (int i = 0; i < Sandwich->Ingredients.Num(); i++) {
 
 		// 샌드위치 재료가 손님의 취향이 아니라면
 		if ((Taste.Contains(Sandwich->Ingredients[i])) == false) {
@@ -217,11 +207,17 @@ void ACustomer::AddDessertReview()
 
 void ACustomer::EatSandwich()
 {
-	Eat(10.0f);
+	// 테스트 - 10초로 변경하기
+	Eat(3.0f);
+	//
 	
 	/*손님대사 출력 필요*/
 
 	PlayerBistro->UpdateCustomerReviewAvg(ReviewRate);
+
+	// 테스트
+	UE_LOG(LogTemp, Warning, TEXT("ReviewRate: %d"), ReviewRate);
+	//
 }
 
 void ACustomer::ClearDestroyTimer()

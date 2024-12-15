@@ -22,7 +22,7 @@ void AStore::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	if (VillageManagerSystem->DelayWithDeltaTime(2, DeltaTime)) {
+	if (VillageManagerSystem->DelayWithDeltaTime(SpawnDelayTime, DeltaTime)) {
 		CreateCustomer();
 	}
 }

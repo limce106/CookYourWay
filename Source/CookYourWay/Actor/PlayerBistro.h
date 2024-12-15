@@ -6,6 +6,8 @@
 #include "GameFramework/Actor.h"
 #include "Component/CustomerRateComponent.h"
 #include "DiningTable.h"
+
+#include "VillageManager.h"
 #include "PlayerBistro.generated.h"
 
 UCLASS()
@@ -16,6 +18,10 @@ class COOKYOURWAY_API APlayerBistro : public AActor
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<ADiningTable> BP_DiningTable;
 
+	// 테스트
+	class AVillageManager* VillageManager;
+	class UIngredientManagerSystem* IngredientManagerSystem;
+	//
 	class UVillageManagerSystem* VillageManagerSystem;
 
 	// 손님 위치

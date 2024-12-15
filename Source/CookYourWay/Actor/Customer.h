@@ -26,6 +26,8 @@ class COOKYOURWAY_API ACustomer : public ACharacter
 	// 손님 제거 타이머
 	bool DestroyTimer = false;
 
+	// 최대 대기 시간(초)
+	const float MaxWaitingTime = 40;
 	// 인내심
 	float Patience = 100.0f;
 

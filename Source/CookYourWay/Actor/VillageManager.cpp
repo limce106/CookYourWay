@@ -79,7 +79,8 @@ TArray<int32> AVillageManager::GetRandomTaste()
 	Taste.Add(SauceIndex);*/
 
 	// Å×½ºÆ®
-	Taste.Add(0);
+	Taste.Add(12);
+	Taste.Add(12);
 	//
 
 	return Taste;

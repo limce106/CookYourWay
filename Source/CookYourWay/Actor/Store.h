@@ -12,6 +12,9 @@ class COOKYOURWAY_API AStore : public AActor
 	GENERATED_BODY()
 	class UVillageManagerSystem* VillageManagerSystem;
 
+	// 스폰 주기(초)
+	const float SpawnDelayTime = 5.0f;
+
 public:
 	AStore();
 

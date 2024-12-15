@@ -39,9 +39,9 @@ void UIngredientBtnWidget::OnClick_ButtonIngredient()
 		}
 	}
 
+	/*나중에 false로 바꿀 것!!*/
 	AIngredient* ClickedIngredient = IngredientSpawnFactory::SpawnIngredient(GetWorld(), BP_IngredientClass, Reuben->GetActorLocation(), Reuben->GetActorRotation(), IngrEngName, true);
 	if (!Reuben->IsHold) {
-		/*나중에 false로 바꿀 것!!*/
 		Reuben->HoldActor(ClickedIngredient);
 
 		RemoveIngredientBoard();
