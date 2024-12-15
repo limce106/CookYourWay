@@ -272,7 +272,10 @@ void AReuben::Interaction()
 	// ¼Õ´Ô
 	if (OverlappedActor->GetClass() == BP_DiningTable) {
 		ADiningTable* DiningTable = Cast<ADiningTable>(OverlappedActor);
-		TryGiveSomething(DiningTable->SeatedCustomer);
+
+		if (DiningTable->SeatedCustomer) {
+			TryGiveSomething(DiningTable->SeatedCustomer);
+		}
 	}
 	// ³ÃÀå°í
 	else if (OverlappedActor->GetClass() == BP_Fridge) {
@@ -357,10 +360,16 @@ void AReuben::GiveSandwich(ACustomer* Customer)
 
 	Customer->EatSandwich();
 
-	GetWorld()->GetTimerManager().SetTimer(CustSandwichTimerHandler, FTimerDelegate::CreateLambda([&]()
+	GetWorld()->GetTimerManager().SetTimer(CustSandwichTimerHandler, FTimerDelegate::CreateLambda([=]()
 		{
-			if(Customer)
+			if (IsValid(Customer) && !Customer->IsActorBeingDestroyed())
+			{
 				PlayerBistro->LeaveAndSitNextCust(Customer);
+			}
+			else
+			{
+				UE_LOG(LogTemp, Warning, TEXT("Customer is invalid or being destroyed."));
+			}
 		}), Customer->LeaveDelayTime, false);
 }
 
