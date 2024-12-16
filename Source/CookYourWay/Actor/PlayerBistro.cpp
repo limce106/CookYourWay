@@ -56,6 +56,8 @@ void APlayerBistro::SitCust(ACustomer* Customer, int32 SeatIdx)
 {
 	IsSeated[SeatIdx] = true;
 	Customer->CurSeatNum = SeatIdx;
+	Customer->IsSit = true;
+
 	Customer->SetActorLocation(CustSeatLocArr[SeatIdx]);
 	// Customer->SetActorHiddenInGame(false);
 

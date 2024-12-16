@@ -79,6 +79,7 @@ public:
 
 	// 대기 중인지
 	bool IsWaiting = false;
+	bool IsSit = false;
 
 	float LeaveDelayTime;
 
@@ -96,6 +97,8 @@ public:
 
 	bool CanGetDessert();
 	void EatDessert();
+
+	void IncreasePatience(float Increasement);
 
 	void Eat(float EatingTime);
 };

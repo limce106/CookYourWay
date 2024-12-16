@@ -67,12 +67,17 @@ void ACustomer::Tick(float DeltaTime)
 	}
 
 
-	if (IsWaiting && VillageManagerSystem->DelayWithDeltaTime(1.0f, DeltaTime)) {
+	if (!IsEat && (IsWaiting || IsSit) && VillageManagerSystem->DelayWithDeltaTime(1.0f, DeltaTime)) {
 		// 40초 후 인내심은 0이 된다.
 		Patience -= (100 / MaxWaitingTime);
 
 		if (Patience <= 0) {
-			PlayerBistro->LeaveWaitingCust(this);
+			if (IsWaiting) {
+				PlayerBistro->LeaveWaitingCust(this);
+			}
+			else if (IsSit) {
+				PlayerBistro->LeaveAndSitNextCust(this);
+			}
 		}
 	}
 }
@@ -210,6 +215,8 @@ void ACustomer::EatSandwich()
 	// 테스트 - 10초로 변경하기
 	Eat(3.0f);
 	//
+
+	IncreasePatience(20.0f);
 	
 	/*손님대사 출력 필요*/
 
@@ -240,6 +247,12 @@ void ACustomer::EatDessert()
 {
 	ClearDestroyTimer();
 	Eat(2.0f);
+	IncreasePatience(10.0f);
+}
+
+void ACustomer::IncreasePatience(float Increasement)
+{
+	Patience += Increasement;
 }
 
 void ACustomer::Eat(float EatingTime)
