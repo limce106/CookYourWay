@@ -69,6 +69,10 @@ void AReuben::HoldActor(AActor* Actor)
 
 	HeldActor = Actor;
 	IsHold = true;
+
+	FRotator HeldActorRotation = GetActorRotation();
+	HeldActorRotation.Yaw -= 180.0f;
+	HeldActor->SetActorRotation(HeldActorRotation);
 }
 
 void AReuben::PutDownActor()

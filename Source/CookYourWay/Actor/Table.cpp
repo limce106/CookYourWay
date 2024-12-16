@@ -35,6 +35,9 @@ void ATable::PutActorOn(AActor* Actor)
 
 	IsActorOn = true;
 	PlacedActor = Actor;
+
+	FRotator PlacedActorRotation = Reuben->GetActorRotation();
+	PlacedActor->SetActorRotation(PlacedActorRotation);
 }
 
 void ATable::PickUpActor()

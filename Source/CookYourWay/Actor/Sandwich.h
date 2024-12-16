@@ -13,6 +13,7 @@ class COOKYOURWAY_API ASandwich : public AActor
 	GENERATED_BODY()
 
 	class UIngredientManagerSystem* IngredientManagerSystem;
+	USceneComponent* DefaultRootComponent;
 
 	// 현재 제일 위에 있는 재료의 위치
 	float LastIngrLocZ;
@@ -27,10 +28,12 @@ public:
 	virtual void Tick(float DeltaTime) override;
 	
 	UPROPERTY(BlueprintReadOnly)
-	TArray<int32> Ingredients;
+	TArray<AIngredient*> Ingredients;
 
 	void AddIngredient(AIngredient* Ingr);
 
 	void DestroySandwich();
 	//void DetachOneIngr(AIngredient* Ingr);
+
+	TArray<int32> IngrActorToNum();
 };

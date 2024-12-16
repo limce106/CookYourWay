@@ -9,6 +9,8 @@ ASandwich::ASandwich()
 {
 	PrimaryActorTick.bCanEverTick = true;
 
+	DefaultRootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("DefaultRootComponent"));
+	RootComponent = DefaultRootComponent;
 }
 
 void ASandwich::BeginPlay()
@@ -26,26 +28,29 @@ void ASandwich::Tick(float DeltaTime)
 
 void ASandwich::AddIngredient(AIngredient* Ingr)
 {
-	FVector CurIngrLoc = GetActorLocation();
-	if (Ingredients.Num() == 0) {
-		LastIngrLocZ = GetActorLocation().Z;
-	}
-
 	// 재료 높이 계산
 	FVector IngrBounds = Ingr->GetComponentsBoundingBox().GetExtent();
 	float IngrHeight = IngrBounds.Z * 2;
 
-	CurIngrLoc.Z = LastIngrLocZ + IngrHeight;
-	LastIngrLocZ = CurIngrLoc.Z;
+	FVector CurIngrLoc;
+	if (Ingredients.Num() == 0) {
+		CurIngrLoc = GetActorLocation();
+	}
+	else {
+		CurIngrLoc = Ingredients[Ingredients.Num() - 1]->GetActorLocation();
+	}
+	CurIngrLoc.Z += IngrHeight;
 
 	// 재료 부착
-	Ingr->AttachToComponent(GetRootComponent(), FAttachmentTransformRules::KeepWorldTransform);
+	// Ingr->SetActorEnableCollision(false);
+	Ingr->AttachToComponent(DefaultRootComponent, FAttachmentTransformRules::KeepRelativeTransform);
+
 	Ingr->SetActorLocation(CurIngrLoc);
 
-	int IngrIndex = *IngredientManagerSystem->IngrNameIndexMap.Find(Ingr->CurIngrData->IngrName);
-	Ingredients.Add(IngrIndex);
+	FRotator IngrRotation = UGameplayStatics::GetPlayerPawn(this, 0)->GetActorRotation();
+	Ingr->SetActorRotation(IngrRotation);
 
-	UE_LOG(LogTemp, Warning, TEXT("CurIngrLoc: %s"), *CurIngrLoc.ToString());
+	Ingredients.Add(Ingr);
 }
 
 void ASandwich::DestroySandwich()
@@ -67,3 +72,14 @@ void ASandwich::DestroySandwich()
 //	}
 //}
 
+TArray<int32> ASandwich::IngrActorToNum()
+{
+	TArray<int32> IngrNum;
+
+	for (int i = 0; i < Ingredients.Num(); i++) {
+		int IngrIndex = *IngredientManagerSystem->IngrNameIndexMap.Find(Ingredients[i]->CurIngrData->IngrName);
+		IngrNum.Add(IngrIndex);
+	}
+
+	return IngrNum;
+}

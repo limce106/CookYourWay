@@ -127,37 +127,37 @@ void ACustomer::SetVisitDest()
 
 int32 ACustomer::CountNotTasteNum(ASandwich* Sandwich)
 {
-	const int32 BreadIndex = IngredientManagerSystem->BreadIndex;
+	TArray<int32> IngrNumArr = Sandwich->IngrActorToNum();
 	TArray<int32> Taste = VillageManager->GetCustTaste(CustName);
 	// 취향이 아닌 재료 개수
 	int32 NotTasteNum = 0;
 
 	// 첫 번째 재료가 빵일 때
-	if (Sandwich->Ingredients[0] == IngredientManagerSystem->BreadIndex) {
-		Sandwich->Ingredients.RemoveAt(0);
+	if (IngrNumArr[0] == IngredientManagerSystem->BreadIndex) {
+		IngrNumArr.RemoveAt(0);
 	}
 	else {
 		NotTasteNum++;
 	}
 
 	// 마지막 재료가 빵일 때
-	if (Sandwich->Ingredients[Sandwich->Ingredients.Num() - 1] == IngredientManagerSystem->BreadIndex) {
-		Sandwich->Ingredients.RemoveAt(Sandwich->Ingredients.Num() - 1);
+	if (IngrNumArr[IngrNumArr.Num() - 1] == IngredientManagerSystem->BreadIndex) {
+		IngrNumArr.RemoveAt(IngrNumArr.Num() - 1);
 	}
 	else {
 		NotTasteNum++;
 	}
 
-	for (int i = 0; i < Sandwich->Ingredients.Num(); i++) {
+	for (int i = 0; i < IngrNumArr.Num(); i++) {
 
 		// 샌드위치 재료가 손님의 취향이 아니라면
-		if ((Taste.Contains(Sandwich->Ingredients[i])) == false) {
+		if ((Taste.Contains(IngrNumArr[i])) == false) {
 			NotTasteNum++;
 		}
 		// 샌드위치 재료가 손님의 취향이라면
 		else {
 			// 중복 방지를 위해 찾은 취향은 제거
-			int32 Ingr = Sandwich->Ingredients[i];
+			int32 Ingr = IngrNumArr[i];
 			// 손님이 한 종류의 재료를 두 개 이상 선택했을 가능성을 고려하여, 같은 재료가 여러 개 있어도 하나만 삭제
 			Taste.RemoveSingle(Ingr);
 		}
