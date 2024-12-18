@@ -15,16 +15,22 @@ class COOKYOURWAY_API AVillageManager : public AActor
 
 	TMap<int32, FVector> AreaLocMap;
 
-	UPROPERTY(EditDefaultsOnly)
-	TSubclassOf<AActor> BP_PlayerBistro;
+	FTimerHandle LeftDayTimeHandler;
+	int32 LeftMinute = 5;
+	int32 LeftSecond = 0;
 
-	UPROPERTY(EditDefaultsOnly)
-	TSubclassOf<AActor> BP_Competitor;
-
-	UPROPERTY(EditDefaultsOnly)
-	TSubclassOf<AActor> BP_Store;
+	// 남은 하루 시간 계산하기
+	void DecreaseDayTime();
 
 	void Init();
+	void RunDayTimer();
+
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<AActor> BP_PlayerBistro;
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<AActor> BP_Competitor;
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<AActor> BP_Store;
 
 public:
 	AVillageManager();
@@ -53,4 +59,9 @@ public:
 	void SetAllCustTastes();
 	// 특정 손님의 취향 가져오기
 	TArray<int32> GetCustTaste(FString CustName);
+
+	UFUNCTION(BlueprintCallable)
+	int32 GetLeftMinute();
+	UFUNCTION(BlueprintCallable)
+	int32 GetLeftSecond();
 };

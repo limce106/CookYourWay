@@ -7,6 +7,7 @@
 #include "Store.h"
 #include <Kismet/KismetMathLibrary.h>
 #include <Kismet/GameplayStatics.h>
+#include "GameInstance/VillageManagerSystem.h"
 
 AVillageManager::AVillageManager()
 {
@@ -41,18 +42,26 @@ void AVillageManager::Init()
 	SetAllCustTastes();
 }
 
+void AVillageManager::RunDayTimer()
+{
+	GetWorld()->GetTimerManager().SetTimer(LeftDayTimeHandler, this, &AVillageManager::DecreaseDayTime, 1.0f, true);
+}
+
 void AVillageManager::BeginPlay()
 {
 	Super::BeginPlay();
 
 	IngredientManagerSystem = UGameplayStatics::GetGameInstance(GetWorld())->GetSubsystem<UIngredientManagerSystem>();
+
 	Init();
+	RunDayTimer();
 }
 
 void AVillageManager::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	//DecreaseDayTime();
 }
 
 FString AVillageManager::GetRandomCustName()
@@ -97,4 +106,27 @@ TArray<int32> AVillageManager::GetCustTaste(FString CustName)
 {
 	TArray<int32> Taste = *CustNameToTasteMap.Find(CustName);
 	return Taste;
+}
+
+int32 AVillageManager::GetLeftMinute()
+{
+	return LeftMinute;
+}
+
+int32 AVillageManager::GetLeftSecond()
+{
+	return LeftSecond;
+}
+
+void AVillageManager::DecreaseDayTime()
+{
+	if (LeftSecond == 0) {
+		if (LeftMinute > 0) {
+			LeftMinute--;
+			LeftSecond = 59;
+		}
+	}
+	else {
+		LeftSecond --;
+	}
 }
