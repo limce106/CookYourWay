@@ -3,6 +3,7 @@
 
 #include "Actor/Ingredient.h"
 #include <Kismet/GameplayStatics.h>
+#include "Reuben.h"
 
 AIngredient::AIngredient()
 {
@@ -67,4 +68,30 @@ bool AIngredient::IsCooked()
 		return true;
 	else
 		return false;
+}
+
+void AIngredient::IngredientInteraction()
+{
+	AReuben* Reuben = Cast<AReuben>(UGameplayStatics::GetPlayerPawn(this, 0));
+
+	// 조리도구에 올라가지 않은, 조리 되지 않은 재료
+	if (!Reuben->IsHold) {
+		if (!IsCooked()) {
+			Reuben->HoldActor(this);
+		}
+	}
+	// 조리된 재료라면 접시/샌드위치 위로 올린다.
+	else if (Reuben->GetHeldActorClass()->IsChildOf(ASandwich::StaticClass())) {
+		if (IsCooked()) {
+			ASandwich* HoldingSandwich = Cast<ASandwich>(Reuben->HeldActor);
+			HoldingSandwich->AddIngredient(this);
+		}
+	}
+	// 조리도구 위에 재료가 없다면 재료를 조리도구 위로 올린다.
+	else if (Reuben->GetHeldActorClass()->IsChildOf(ACookingUtensil::StaticClass())) {
+		ACookingUtensil* HoldingCookingUtensil = Cast<ACookingUtensil>(Reuben->HeldActor);
+		if (!HoldingCookingUtensil->IsIngredientOn) {
+			HoldingCookingUtensil->PutIngrOn(this);
+		}
+	}
 }

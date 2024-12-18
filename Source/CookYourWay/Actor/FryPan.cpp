@@ -5,6 +5,7 @@
 #include "Ingredient.h"
 #include <Kismet/GameplayStatics.h>
 #include "GameInstance/VillageManagerSystem.h"
+#include "Reuben.h"
 
 void AFryPan::BeginPlay()
 {
@@ -45,5 +46,20 @@ void AFryPan::Fry()
 	if (PlacedIngredient->CurCookRate > PlacedIngredient->MaxCookRate + (GetOneCookIncreasement() * 5)) {
 		IsFrying = false;
 		PlacedIngredient->IsBurn = true;
+	}
+}
+
+void AFryPan::FryPanInteraction()
+{
+	bool InteractionSuccess = CommonCookingUtensilInteraction();
+	if (InteractionSuccess) {
+		return;
+	}
+
+	if (Reuben->GetHeldActorClass()->IsChildOf(AIngredient::StaticClass())) {
+		AIngredient* HoldingIngr = Cast<AIngredient>(Reuben->HeldActor);
+		if (HoldingIngr->CurIngrData->IngrType == "Meat" && !this->IsIngredientOn) {
+			PutIngrOn(HoldingIngr);
+		}
 	}
 }

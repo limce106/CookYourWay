@@ -3,10 +3,13 @@
 
 #include "Actor/CuttingBoard.h"
 #include "Ingredient.h"
+#include <Kismet/GameplayStatics.h>
+#include "Reuben.h"
 
 void ACuttingBoard::BeginPlay()
 {
 	Super::BeginPlay();
+
 }
 
 float ACuttingBoard::GetOneCookIncreasement()
@@ -33,5 +36,20 @@ void ACuttingBoard::Chop()
 	if (IsIngredientOn && PlacedIngredient->CurCookRate < PlacedIngredient->MaxCookRate) {
 		PlacedIngredient->CurCookRate += GetOneCookIncreasement();
 		BP_CookRateWidget->CookRate += GetOneCookIncreasement();
+	}
+}
+
+void ACuttingBoard::CuttingBoardInteraction()
+{
+	bool InteractionSuccess = CommonCookingUtensilInteraction();
+	if (InteractionSuccess) {
+		return;
+	}
+
+	if (Reuben->GetHeldActorClass()->IsChildOf(AIngredient::StaticClass())) {
+		AIngredient* HoldingIngr = Cast<AIngredient>(Reuben->HeldActor);
+		if (HoldingIngr->CurIngrData->IngrType == "Filling" && !this->IsIngredientOn) {
+			PutIngrOn(HoldingIngr);
+		}
 	}
 }

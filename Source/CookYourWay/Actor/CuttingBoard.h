@@ -24,4 +24,6 @@ public:
 
 	virtual void PutIngrOn(AIngredient* Ingr) override;
 	void Chop();
+
+	void CuttingBoardInteraction();
 };

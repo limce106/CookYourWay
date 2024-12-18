@@ -57,7 +57,7 @@ void ACookingUtensil::PickUpIngr()
 	if (!Reuben->IsHold) {
 		Reuben->HoldActor(PlacedIngredient);
 	}
-	else if (Reuben->IsHold && Reuben->HeldActor->GetClass() == BP_Sandwich) {
+	else if (Reuben->IsHold && Reuben->HeldActor->GetClass()->IsChildOf(ASandwich::StaticClass())) {
 		ASandwich* HoldingSandwich = Cast<ASandwich>(Reuben->HeldActor);
 		HoldingSandwich->AddIngredient(PlacedIngredient);
 	}
@@ -66,4 +66,26 @@ void ACookingUtensil::PickUpIngr()
 	PlacedIngredient = NULL;
 
 	BP_CookRateWidget->SetVisibility(ESlateVisibility::Hidden);
+}
+
+bool ACookingUtensil::CommonCookingUtensilInteraction()
+{
+	if (!Reuben->IsHold) {
+		if (IsIngredientOn) {
+			PickUpIngr();
+		}
+		else {
+			Reuben->HoldActor(this);
+		}
+		return true;
+	}
+	else if (Reuben->GetHeldActorClass()->IsChildOf(ASandwich::StaticClass())) {
+		if (PlacedIngredient->IsCooked()) {
+			PickUpIngr();
+		}
+		return true;
+	}
+	else {
+		return false;
+	}
 }

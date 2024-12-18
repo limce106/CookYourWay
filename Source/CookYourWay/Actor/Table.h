@@ -31,4 +31,6 @@ public:
 
 	void PutActorOn(AActor* Actor);
 	void PickUpActor();
+
+	void TableInteraction();
 };

@@ -22,4 +22,6 @@ public:
 
 	UPROPERTY()
 	ACustomer* SeatedCustomer;
+
+	void DiningTableInteraction();
 };

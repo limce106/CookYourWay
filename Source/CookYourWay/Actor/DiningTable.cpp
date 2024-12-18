@@ -2,6 +2,8 @@
 
 
 #include "Actor/DiningTable.h"
+#include <Kismet/GameplayStatics.h>
+#include "Reuben.h"
 
 ADiningTable::ADiningTable()
 {
@@ -12,12 +14,21 @@ ADiningTable::ADiningTable()
 void ADiningTable::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
 }
 
 void ADiningTable::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+}
+
+void ADiningTable::DiningTableInteraction()
+{
+	AReuben* Reuben = Cast<AReuben>(UGameplayStatics::GetPlayerPawn(this, 0));
+
+	if (SeatedCustomer) {
+		Reuben->TryGiveSomething(SeatedCustomer);
+	}
 }
 

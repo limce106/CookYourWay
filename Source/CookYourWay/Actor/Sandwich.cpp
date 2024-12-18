@@ -4,6 +4,7 @@
 #include "Actor/Sandwich.h"
 #include <Kismet/GameplayStatics.h>
 #include "GameInstance/IngredientManagerSystem.h"
+#include "Reuben.h"
 
 ASandwich::ASandwich()
 {
@@ -64,14 +65,6 @@ void ASandwich::DestroySandwich()
 	Destroy();
 }
 
-//void ASandwich::DetachOneIngr(AIngredient* Ingr)
-//{
-//	if (Ingredients.Num() == 1) {
-//		Ingr->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
-//		Ingredients.RemoveAt(0);
-//	}
-//}
-
 TArray<int32> ASandwich::IngrActorToNum()
 {
 	TArray<int32> IngrNum;
@@ -82,4 +75,27 @@ TArray<int32> ASandwich::IngrActorToNum()
 	}
 
 	return IngrNum;
+}
+
+void ASandwich::SandwichInteraction()
+{
+	AReuben* Reuben = Cast<AReuben>(UGameplayStatics::GetPlayerPawn(this, 0));
+
+	if (!Reuben->IsHold) {
+		Reuben->HoldActor(this);
+	}
+	// 조리도구 위에 조리 완료된 재료가 있다면 재료를 접시/샌드위치 위로 올린다.
+	else if (Reuben->GetHeldActorClass() ==  ACookingUtensil::StaticClass()) {
+		ACookingUtensil* HoldingCookingUtensil = Cast<ACookingUtensil>(Reuben->HeldActor);
+		if (HoldingCookingUtensil->IsIngredientOn && HoldingCookingUtensil->PlacedIngredient->IsCooked()) {
+			AddIngredient(HoldingCookingUtensil->PlacedIngredient);
+		}
+	}
+	// 조리된 재료라면 접시/샌드위치 위로 올린다.
+	else if (Reuben->GetHeldActorClass()->IsChildOf(AIngredient::StaticClass())) {
+		AIngredient* HoldingIngr = Cast<AIngredient>(Reuben->HeldActor);
+		if (HoldingIngr->IsCooked()) {
+			AddIngredient(HoldingIngr);
+		}
+	}
 }

@@ -5,24 +5,21 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "Widget/CookRateWidget.h"
-#include "Sandwich.h"
 #include "CookingUtensil.generated.h"
 
 UCLASS()
 class COOKYOURWAY_API ACookingUtensil : public AActor
 {
 	GENERATED_BODY()
-
-	UPROPERTY(EditDefaultsOnly)
-	TSubclassOf<ASandwich> BP_Sandwich;
-
-	class AReuben* Reuben;
 	
 public:	
 	ACookingUtensil();
 
 protected:
+	class AReuben* Reuben;
+
 	virtual void BeginPlay() override;
+	bool CommonCookingUtensilInteraction();
 
 public:	
 

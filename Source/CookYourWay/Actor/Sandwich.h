@@ -30,10 +30,13 @@ public:
 	UPROPERTY(BlueprintReadOnly)
 	TArray<AIngredient*> Ingredients;
 
+	UFUNCTION(BlueprintCallable)
 	void AddIngredient(AIngredient* Ingr);
 
+	UFUNCTION(BlueprintCallable)
 	void DestroySandwich();
-	//void DetachOneIngr(AIngredient* Ingr);
 
 	TArray<int32> IngrActorToNum();
+
+	void SandwichInteraction();
 };

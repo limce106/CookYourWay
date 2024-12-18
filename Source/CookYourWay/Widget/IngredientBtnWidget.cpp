@@ -39,9 +39,9 @@ void UIngredientBtnWidget::OnClick_ButtonIngredient()
 		}
 	}
 
-	/*나중에 false로 바꿀 것!!*/
-	AIngredient* ClickedIngredient = IngredientSpawnFactory::SpawnIngredient(GetWorld(), BP_IngredientClass, Reuben->GetActorLocation(), Reuben->GetActorRotation(), IngrEngName, true);
 	if (!Reuben->IsHold) {
+		/*나중에 false로 바꿀 것!!*/
+		AIngredient* ClickedIngredient = IngredientSpawnFactory::SpawnIngredient(GetWorld(), BP_IngredientClass, Reuben->GetActorLocation(), Reuben->GetActorRotation(), IngrEngName, true);
 		Reuben->HoldActor(ClickedIngredient);
 
 		RemoveIngredientBoard();
@@ -56,6 +56,8 @@ void UIngredientBtnWidget::OnClick_ButtonIngredient()
 			if (IngredientBoardWidget->IsSauceTab) {
 				IngredientBoardWidget->TextBlock_Error->SetVisibility(ESlateVisibility::Hidden);
 
+				/*나중에 false로 바꿀 것!!*/
+				AIngredient* ClickedIngredient = IngredientSpawnFactory::SpawnIngredient(GetWorld(), BP_IngredientClass, Reuben->GetActorLocation(), Reuben->GetActorRotation(), IngrEngName, true);
 				ASandwich* HoldingSandwich = Cast<ASandwich>(Reuben->HeldActor);
 				HoldingSandwich->AddIngredient(ClickedIngredient);
 

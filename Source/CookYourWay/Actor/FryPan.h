@@ -28,4 +28,6 @@ public:
 
 	virtual void PutIngrOn(AIngredient* Ingr) override;
 	void Fry();
+
+	void FryPanInteraction();
 };

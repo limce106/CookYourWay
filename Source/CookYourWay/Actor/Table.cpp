@@ -52,3 +52,18 @@ void ATable::PickUpActor()
 	PlacedActor = NULL;
 }
 
+void ATable::TableInteraction()
+{
+	if (!Reuben->IsHold) {
+		if (IsActorOn) {
+			PickUpActor();
+		}
+	}
+	// 테이블 위에 아무것도 없다면 접시/샌드위치 또는 조리도구 또는 재료를 테이블 위로 올린다.
+	else {
+		if (!IsActorOn) {
+			PutActorOn(Reuben->HeldActor);
+		}
+	}
+}
+

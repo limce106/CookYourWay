@@ -43,7 +43,10 @@ public:
 	// 스폰 시 필수로 호출
 	void Init(FString IngrName, bool IsSliced);
 
+	UFUNCTION(BlueprintCallable)
 	bool IsCooked();
+
+	void IngredientInteraction();
 };
 
 class IngredientSpawnFactory

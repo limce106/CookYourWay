@@ -25,26 +25,9 @@ class COOKYOURWAY_API AReuben : public ACharacter
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<ACookingUtensil> BP_CuttingBoard;
 	UPROPERTY(EditDefaultsOnly)
-	TSubclassOf<ACookingUtensil> BP_FryPan;
-	UPROPERTY(EditDefaultsOnly)
-	TSubclassOf<AActor> BP_Plates;
-	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<ASandwich> BP_Sandwich;
 	UPROPERTY(EditDefaultsOnly)
-	TSubclassOf<ATable> BP_Table;
-	UPROPERTY(EditDefaultsOnly)
-	TSubclassOf<AActor> BP_TrashBin;
-	UPROPERTY(EditDefaultsOnly)
-	TSubclassOf<AActor> BP_Fridge;
-	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<AActor> BP_Dessert;
-	UPROPERTY(EditDefaultsOnly)
-	TSubclassOf<ACustomer> BP_Customer;
-	UPROPERTY(EditDefaultsOnly)
-	TSubclassOf<ADiningTable> BP_DiningTable;
-
-	UPROPERTY(EditDefaultsOnly)
-	TSubclassOf<UUserWidget> BP_IngredientBoardClass;
 
 	class APlayerBistro* PlayerBistro;
 	FTimerHandle CustSandwichTimerHandler;
@@ -53,14 +36,12 @@ class COOKYOURWAY_API AReuben : public ACharacter
 	void MoveForward(float Value);
 	void MoveRight(float Value);
 
-	// 현재 들고 있는 것에 따라 상호작용
-	void EmptyOnSocketInteraction(AActor* InteractActor);
-	void SandwichOnSocketInteraction(AActor* InteractActor);
-	void CookingUtensilOnSocketInteraction(AActor* InteractActor);
-	void IngrOnSocketInteraction(AActor* InteractActor);
-	void Interaction();
-
 	void Chop();
+
+	// 손님에게 샌드위치 주기
+	void GiveSandwich(ACustomer* Customer);
+	// 손님에게 디저트 주기
+	void GiveDessert(ACustomer* Customer);
 
 public:
 	AReuben();
@@ -81,16 +62,16 @@ public:
 	UPROPERTY(BlueprintReadWrite)
 	AActor* HeldActor;
 
+	UClass* GetHeldActorClass();
+
 	// 소켓에 액터 부착/떼기
+	UFUNCTION(BlueprintCallable)
 	void HoldActor(AActor* Actor);
+	UFUNCTION(BlueprintCallable)
 	void PutDownActor();
 
 	void SetHeldActorLoc();
 
 	// 손님에게 무언가 주기
 	void TryGiveSomething(ACustomer* Customer);
-	// 손님에게 샌드위치 주기
-	void GiveSandwich(ACustomer* Customer);
-	// 손님에게 디저트 주기
-	void GiveDessert(ACustomer* Customer);
 };
