@@ -77,6 +77,19 @@ TArray<int32> ASandwich::IngrActorToNum()
 	return IngrNum;
 }
 
+bool ASandwich::IsMeatBurn() {
+	for (auto OneIngredient : Ingredients) {
+		if (OneIngredient->CurIngrData->IngrType == "Meat") {
+			if (OneIngredient->IsBurn) {
+				return true;
+			}
+			else {
+				return false;
+			}
+		}
+	}
+}
+
 void ASandwich::SandwichInteraction()
 {
 	AReuben* Reuben = Cast<AReuben>(UGameplayStatics::GetPlayerPawn(this, 0));

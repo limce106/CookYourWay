@@ -179,6 +179,7 @@ void ACustomer::AddSandwichReview(ASandwich* Sandwich)
 	int Score = 0;
 	int NotTasteNum = CountNotTasteNum(Sandwich);
 	
+	// 맞추지 못한 재료 개수에 따른 점수
 	if (NotTasteNum == 0) {
 		Score = 100;
 	}
@@ -199,6 +200,16 @@ void ACustomer::AddSandwichReview(ASandwich* Sandwich)
 	}
 	else {
 		Score = 0;
+	}
+
+	// 고기가 탔다면 점수 감소
+	const int MeatBurnScoreDeduction = 30;
+	if (Sandwich->IsMeatBurn()) {
+		Score -= MeatBurnScoreDeduction;
+
+		if (Score <= 0) {
+			Score = 0;
+		}
 	}
 
 	ReviewRate += Score;

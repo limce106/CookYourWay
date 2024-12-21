@@ -38,5 +38,6 @@ public:
 
 	TArray<int32> IngrActorToNum();
 
+	bool IsMeatBurn();
 	void SandwichInteraction();
 };
