@@ -88,6 +88,8 @@ bool ASandwich::IsMeatBurn() {
 			}
 		}
 	}
+
+	return false;
 }
 
 void ASandwich::SandwichInteraction()
