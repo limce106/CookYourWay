@@ -144,6 +144,7 @@ void APlayerBistro::SitNextCust(int32 SeatIdx)
 
 	ACustomer* NextCustomer = Cast<ACustomer>(WaitingCust);
 	NextCustomer->IsWaiting = false;
+	NextCustomer->IncreasePatience(40);
 
 	SitCust(NextCustomer, SeatIdx);
 
