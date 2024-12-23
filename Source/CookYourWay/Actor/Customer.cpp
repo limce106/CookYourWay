@@ -36,7 +36,7 @@ void ACustomer::BeginPlay()
 
 void ACustomer::Init()
 {
-	CustName = VillageManager->GetRandomCustName();
+	CustName = VillageManagerSystem->GetRandomCustName();
 	SetSkeletalMesh();
 	SetVisitDest();
 
@@ -77,7 +77,7 @@ void ACustomer::Tick(float DeltaTime)
 	}
 
 	if (!IsEat && IsSit && VillageManagerSystem->DelayWithDeltaTime(3.0f, DeltaTime)) {
-		// 대기 시간 * 2(초에 한 번씩 감소)
+		// 대기 시간 * 3(초에 한 번씩 감소)
 		Patience -= (100 / MaxWaitingTime);
 
 		if (Patience <= 0) {

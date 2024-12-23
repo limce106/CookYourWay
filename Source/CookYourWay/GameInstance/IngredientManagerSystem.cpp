@@ -30,6 +30,8 @@ UIngredientManagerSystem::UIngredientManagerSystem()
 
 		index++;
 	}
+
+	HavingIngrNum.Init(0, IngredientRows.Num());
 }
 
 UStaticMesh* UIngredientManagerSystem::GetIngrModel(FString Ingr, bool IsSliced)

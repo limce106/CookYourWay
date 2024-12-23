@@ -2,6 +2,7 @@
 
 
 #include "GameInstance/VillageManagerSystem.h"
+#include <Kismet/KismetMathLibrary.h>
 
 UVillageManagerSystem::UVillageManagerSystem()
 {
@@ -28,6 +29,13 @@ TArray<FCompetitorReviewData> UVillageManagerSystem::GetCompetitorReviewDataOnTa
 		CompetitorReviewData.Add(FCompetitorReviewData::FCompetitorReviewData());
 	}
 	return CompetitorReviewData;
+}
+
+FString UVillageManagerSystem::GetRandomCustName()
+{
+	int32 RandomIdx = UKismetMathLibrary::RandomIntegerInRange(0, CustomerNames.Num() - 1);
+	FString RandomCustName = CustomerNames[RandomIdx];
+	return RandomCustName;
 }
 
 bool UVillageManagerSystem::DelayWithDeltaTime(float DelayTime, float DeltaSeconds)

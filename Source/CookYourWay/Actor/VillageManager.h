@@ -12,6 +12,7 @@ class COOKYOURWAY_API AVillageManager : public AActor
 	GENERATED_BODY()
 
 	class UIngredientManagerSystem* IngredientManagerSystem;
+	class UVillageManagerSystem* VillageManagerSystem;
 
 	TMap<int32, FVector> AreaLocMap;
 
@@ -41,15 +42,9 @@ protected:
 public:
 	virtual void Tick(float DeltaTime) override;
 
-	TArray<FString> CustomerNames = {
-		"Amy",
-		"Michelle"
-	};
+	
 
 	TMap<FString, TArray<int32>> CustNameToTasteMap;
-
-	// 랜덤 손님 이름 가져오기
-	FString GetRandomCustName();
 
 	// 랜덤 취향 배열 반환
 	UFUNCTION(BlueprintCallable)

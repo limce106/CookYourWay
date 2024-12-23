@@ -40,5 +40,13 @@ public:
 
 	TArray<FCompetitorReviewData> GetCompetitorReviewDataOnTable(FString DataType);
 
+	TArray<FString> CustomerNames = {
+		"Amy",
+		"Michelle"
+	};
+
+	// ·£´ý ¼Õ´Ô ÀÌ¸§ °¡Á®¿À±â
+	FString GetRandomCustName();
+
 	bool DelayWithDeltaTime(float DelayTime, float DeltaSeconds);
 };

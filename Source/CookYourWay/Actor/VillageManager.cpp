@@ -52,6 +52,7 @@ void AVillageManager::BeginPlay()
 	Super::BeginPlay();
 
 	IngredientManagerSystem = UGameplayStatics::GetGameInstance(GetWorld())->GetSubsystem<UIngredientManagerSystem>();
+	VillageManagerSystem = UGameplayStatics::GetGameInstance(GetWorld())->GetSubsystem<UVillageManagerSystem>();
 
 	Init();
 	RunDayTimer();
@@ -61,14 +62,6 @@ void AVillageManager::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	//DecreaseDayTime();
-}
-
-FString AVillageManager::GetRandomCustName()
-{
-	int32 RandomIdx = UKismetMathLibrary::RandomIntegerInRange(0, CustomerNames.Num() - 1);
-	FString RandomCustName = CustomerNames[RandomIdx];
-	return RandomCustName;
 }
 
 TArray<int32> AVillageManager::GetRandomTaste()
@@ -97,8 +90,8 @@ TArray<int32> AVillageManager::GetRandomTaste()
 
 void AVillageManager::SetAllCustTastes()
 {
-	for (int i = 0; i < CustomerNames.Num(); i++) {
-		CustNameToTasteMap.Add(CustomerNames[i], GetRandomTaste());
+	for (int i = 0; i < VillageManagerSystem->CustomerNames.Num(); i++) {
+		CustNameToTasteMap.Add(VillageManagerSystem->CustomerNames[i], GetRandomTaste());
 	}
 }
 

@@ -51,5 +51,8 @@ public:
 	TArray<FIngrData*> MeatRows;
 	TArray<FIngrData*> SauceRows;
 
+	// 가지고 있는 재료 개수
+	TArray<int32> HavingIngrNum;
+
 	UStaticMesh* GetIngrModel(FString Ingr, bool IsSliced);
 };

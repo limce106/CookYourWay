@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
+#include "GameInstance/VillageManagerSystem.h"
 #include "CustomerRateComponent.generated.h"
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
@@ -11,7 +12,7 @@ class COOKYOURWAY_API UCustomerRateComponent : public UActorComponent
 {
 	GENERATED_BODY()
 
-	class AVillageManager* VillageManager;
+	class UVillageManagerSystem* VillageManagerSystem;
 
 	void Init();
 
