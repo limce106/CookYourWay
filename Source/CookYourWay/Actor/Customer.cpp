@@ -206,14 +206,18 @@ void ACustomer::AddSandwichReview(ASandwich* Sandwich)
 		Score = 0;
 	}
 
+	// 인내심에 따라 점수 감소
+	int PatienceScoreDeduction = (100 - Patience) / 5;
+	Score -= PatienceScoreDeduction;
+
 	// 고기가 탔다면 점수 감소
 	const int MeatBurnScoreDeduction = 30;
 	if (Sandwich->IsMeatBurn()) {
 		Score -= MeatBurnScoreDeduction;
+	}
 
-		if (Score <= 0) {
-			Score = 0;
-		}
+	if (Score <= 0) {
+		Score = 0;
 	}
 
 	ReviewRate += Score;
