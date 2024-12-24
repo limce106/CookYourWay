@@ -9,7 +9,6 @@ APlayerBistro::APlayerBistro()
 {
 	PrimaryActorTick.bCanEverTick = true;
 
-	CustRateComponent = CreateDefaultSubobject<UCustomerRateComponent>(TEXT("CustRateComponent"));
 }
 
 void APlayerBistro::SpawnDiningTable()
@@ -37,8 +36,8 @@ void APlayerBistro::BeginPlay()
 	Super::BeginPlay();
 
 	// 테스트
-	VillageManager = Cast<AVillageManager>(UGameplayStatics::GetActorOfClass(GetWorld(), AVillageManager::StaticClass()));
 	IngredientManagerSystem = UGameplayStatics::GetGameInstance(GetWorld())->GetSubsystem<UIngredientManagerSystem>();
+	CustomerDataManagerSystem = UGameplayStatics::GetGameInstance(GetWorld())->GetSubsystem<UCustomerDataManagerSystem>();
 	//
 
 	VillageManagerSystem = UGameplayStatics::GetGameInstance(GetWorld())->GetSubsystem<UVillageManagerSystem>();
@@ -64,12 +63,12 @@ void APlayerBistro::SitCust(ACustomer* Customer, int32 SeatIdx)
 	ADiningTable* SeatedDiningTable = GetDiningTable(SeatIdx);
 	SeatedDiningTable->SeatedCustomer = Customer;
 
-	TArray<int32> Arr = VillageManager->GetCustTaste(Customer->CustName);
 	// 테스트
+	/*TArray<int32> Arr = CustomerDataManagerSystem->GetCustTaste(Customer->CustName);
 	for (int i = 0; i < Arr.Num(); i++) {
 		FString name = IngredientManagerSystem->IngredientTableRowNames[Arr[i]].ToString();
 		UE_LOG(LogTemp, Warning, TEXT("Taste: %s"), *name)
-	}
+	}*/
 	//
 }
 
@@ -124,11 +123,6 @@ void APlayerBistro::CustomerVisited(ACustomer* Customer)
 	VisitedCustNum++;
 
 	SitOrWaitCust(Customer);
-}
-
-void APlayerBistro::UpdateCustomerReviewAvg(int32 ReveiwRate)
-{
-	CustomerReviewAvg = (CustomerReviewAvg * (VisitedCustNum - 1) + ReveiwRate) / VisitedCustNum;
 }
 
 int32 APlayerBistro::GetWaitingCustNum()

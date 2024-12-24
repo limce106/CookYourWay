@@ -26,20 +26,19 @@ AVillageManager::AVillageManager()
 
 void AVillageManager::Init()
 {
-	APlayerBistro* PlayerBistro = GetWorld()->SpawnActor<APlayerBistro>(BP_PlayerBistro, *AreaLocMap.Find(16), FRotator::ZeroRotator);
+	APlayerBistro* PlayerBistro = GetWorld()->SpawnActor<APlayerBistro>(BP_PlayerBistro, *AreaLocMap.Find(VillageManagerSystem->PlayerBistroAreaID), FRotator::ZeroRotator);
+	PlayerBistro->AreaID = VillageManagerSystem->PlayerBistroAreaID;
 
-	ACompetitor* Competitor1 = GetWorld()->SpawnActor<ACompetitor>(BP_Competitor, *AreaLocMap.Find(5), FRotator::ZeroRotator);
-	ACompetitor* Competitor2 = GetWorld()->SpawnActor<ACompetitor>(BP_Competitor, *AreaLocMap.Find(7), FRotator::ZeroRotator);
-	ACompetitor* Competitor3 = GetWorld()->SpawnActor<ACompetitor>(BP_Competitor, *AreaLocMap.Find(11), FRotator::ZeroRotator);
-	ACompetitor* Competitor4 = GetWorld()->SpawnActor<ACompetitor>(BP_Competitor, *AreaLocMap.Find(14), FRotator::ZeroRotator);
-	ACompetitor* Competitor5 = GetWorld()->SpawnActor<ACompetitor>(BP_Competitor, *AreaLocMap.Find(18), FRotator::ZeroRotator);
-	ACompetitor* Competitor6 = GetWorld()->SpawnActor<ACompetitor>(BP_Competitor, *AreaLocMap.Find(21), FRotator::ZeroRotator);
+	for (int i = 0; i < VillageManagerSystem->CompetitorAreaID.Num(); i++) {
+		int32 AreaID = VillageManagerSystem->CompetitorAreaID[i];
+		ACompetitor* Competitor = GetWorld()->SpawnActor<ACompetitor>(BP_Competitor, *AreaLocMap.Find(AreaID), FRotator::ZeroRotator);
+		Competitor->AreaID = AreaID;
+	}
 
-	AStore* Store1 = GetWorld()->SpawnActor<AStore>(BP_Store, *AreaLocMap.Find(2), FRotator::ZeroRotator);
-	AStore* Store2 = GetWorld()->SpawnActor<AStore>(BP_Store, *AreaLocMap.Find(10), FRotator::ZeroRotator);
-	AStore* Store3 = GetWorld()->SpawnActor<AStore>(BP_Store, *AreaLocMap.Find(23), FRotator::ZeroRotator);
-
-	SetAllCustTastes();
+	for (int i = 0; i < VillageManagerSystem->StoreAreaID.Num(); i++) {
+		int32 AreaID = VillageManagerSystem->StoreAreaID[i];
+		AStore* Store = GetWorld()->SpawnActor<AStore>(BP_Store, *AreaLocMap.Find(AreaID), FRotator::ZeroRotator);
+	}
 }
 
 void AVillageManager::RunDayTimer()
@@ -51,8 +50,8 @@ void AVillageManager::BeginPlay()
 {
 	Super::BeginPlay();
 
-	IngredientManagerSystem = UGameplayStatics::GetGameInstance(GetWorld())->GetSubsystem<UIngredientManagerSystem>();
 	VillageManagerSystem = UGameplayStatics::GetGameInstance(GetWorld())->GetSubsystem<UVillageManagerSystem>();
+	CustomerDataManagerSystem = UGameplayStatics::GetGameInstance(GetWorld())->GetSubsystem<UCustomerDataManagerSystem>();
 
 	Init();
 	RunDayTimer();
@@ -62,43 +61,6 @@ void AVillageManager::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-}
-
-TArray<int32> AVillageManager::GetRandomTaste()
-{
-	TArray<int32> Taste;
-
-	// 임의로 "레벨 상관없이" 속재료는 항상 3개를 선택하도록 함
-	/*for (int i = 0; i < 3; i++) {
-		int FillingIndex = UKismetMathLibrary::RandomIntegerInRange(0, IngredientManagerSystem->FillingRows.Num() - 1);
-		Taste.Add(FillingIndex);
-	}
-
-	int MeatIndex = UKismetMathLibrary::RandomIntegerInRange(0, IngredientManagerSystem->MeatRows.Num() - 1);
-	Taste.Add(MeatIndex);
-
-	int SauceIndex = UKismetMathLibrary::RandomIntegerInRange(0, IngredientManagerSystem->SauceRows.Num() - 1);
-	Taste.Add(SauceIndex);*/
-
-	// 테스트
-	Taste.Add(12);
-	Taste.Add(12);
-	//
-
-	return Taste;
-}
-
-void AVillageManager::SetAllCustTastes()
-{
-	for (int i = 0; i < VillageManagerSystem->CustomerNames.Num(); i++) {
-		CustNameToTasteMap.Add(VillageManagerSystem->CustomerNames[i], GetRandomTaste());
-	}
-}
-
-TArray<int32> AVillageManager::GetCustTaste(FString CustName)
-{
-	TArray<int32> Taste = *CustNameToTasteMap.Find(CustName);
-	return Taste;
 }
 
 int32 AVillageManager::GetLeftMinute()

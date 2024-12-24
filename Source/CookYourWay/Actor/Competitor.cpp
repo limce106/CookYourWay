@@ -8,7 +8,6 @@ ACompetitor::ACompetitor()
 {
 	PrimaryActorTick.bCanEverTick = true;
 
-	CustRateComponent = CreateDefaultSubobject<UCustomerRateComponent>(TEXT("CustRateComponent"));
 }
 
 void ACompetitor::BeginPlay()
@@ -58,16 +57,10 @@ int ACompetitor::GetCustomerReview()
 	return ReviewRate;
 }
 
-void ACompetitor::UpdateCustomerReviewAvg(int32 ReveiwRate)
-{
-	CustomerReviewAvg = (CustomerReviewAvg * (VisitedCustNum - 1) + ReveiwRate) / VisitedCustNum;
-}
-
-
 void ACompetitor::CustomerVisited(ACustomer* Customer)
 {
 	Customer->Destroy();
 	VisitedCustNum++;
 
-	UpdateCustomerReviewAvg(GetCustomerReview());
+	CustomerDataManagerSystem->UpdateAvgRate(Customer->CustName, AreaID, VisitedCustNum, GetCustomerReview());
 }

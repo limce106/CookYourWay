@@ -3,6 +3,8 @@
 
 #include "GameInstance/VillageManagerSystem.h"
 #include <Kismet/KismetMathLibrary.h>
+#include "CustomerDataManagerSystem.h"
+#include <Kismet/GameplayStatics.h>
 
 UVillageManagerSystem::UVillageManagerSystem()
 {
@@ -12,6 +14,12 @@ UVillageManagerSystem::UVillageManagerSystem()
 
 	CompetitorReviewTable->GetAllRows<FCompetitorReviewData>("Get All Rows Of IngrData", CompetitorReviewTableRows);
 	CompetitorReviewTableRowNames = CompetitorReviewTable->GetRowNames();
+}
+
+void UVillageManagerSystem::Initialize(FSubsystemCollectionBase& Collection)
+{
+	Super::Initialize(Collection);
+
 }
 
 TArray<FCompetitorReviewData> UVillageManagerSystem::GetCompetitorReviewDataOnTable(FString DataType)
@@ -29,13 +37,6 @@ TArray<FCompetitorReviewData> UVillageManagerSystem::GetCompetitorReviewDataOnTa
 		CompetitorReviewData.Add(FCompetitorReviewData::FCompetitorReviewData());
 	}
 	return CompetitorReviewData;
-}
-
-FString UVillageManagerSystem::GetRandomCustName()
-{
-	int32 RandomIdx = UKismetMathLibrary::RandomIntegerInRange(0, CustomerNames.Num() - 1);
-	FString RandomCustName = CustomerNames[RandomIdx];
-	return RandomCustName;
 }
 
 bool UVillageManagerSystem::DelayWithDeltaTime(float DelayTime, float DeltaSeconds)

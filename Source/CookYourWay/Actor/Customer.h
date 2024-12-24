@@ -17,6 +17,7 @@ class COOKYOURWAY_API ACustomer : public ACharacter
 	class AVillageManager* VillageManager;
 	class UVillageManagerSystem* VillageManagerSystem;
 	class UIngredientManagerSystem* IngredientManagerSystem;
+	class UCustomerDataManagerSystem* CustomerDataManagerSystem;
 
 	TArray<AActor*> AllCompetitorActorArr;
 	class APlayerBistro* PlayerBistro;

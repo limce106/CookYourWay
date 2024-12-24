@@ -27,6 +27,7 @@ void ACustomer::BeginPlay()
 	VillageManager = Cast<AVillageManager>(UGameplayStatics::GetActorOfClass(GetWorld(), AVillageManager::StaticClass()));
 	VillageManagerSystem = UGameplayStatics::GetGameInstance(GetWorld())->GetSubsystem<UVillageManagerSystem>();
 	IngredientManagerSystem = UGameplayStatics::GetGameInstance(GetWorld())->GetSubsystem<UIngredientManagerSystem>();
+	CustomerDataManagerSystem = UGameplayStatics::GetGameInstance(GetWorld())->GetSubsystem<UCustomerDataManagerSystem>();
 
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), BP_Competitor, AllCompetitorActorArr);
 	PlayerBistro = Cast<APlayerBistro>(UGameplayStatics::GetActorOfClass(GetWorld(), BP_PlayerBistro));
@@ -36,7 +37,7 @@ void ACustomer::BeginPlay()
 
 void ACustomer::Init()
 {
-	CustName = VillageManagerSystem->GetRandomCustName();
+	CustName = CustomerDataManagerSystem->GetRandomCustName();
 	SetSkeletalMesh();
 	SetVisitDest();
 
@@ -98,11 +99,18 @@ float ACustomer::CalcVisitRank(AActor* Bistro)
 	FVector CustomerLoc = GetActorLocation();
 	FVector BistroLoc = Bistro->GetActorLocation();
 
-	UCustomerRateComponent* CustomerRateComponent = Cast<UCustomerRateComponent>(Bistro->GetComponentByClass(UCustomerRateComponent::StaticClass()));
+	int BistroAreaID = 0;
+	if (Bistro->GetClass()->IsChildOf(APlayerBistro::StaticClass())) {
+		BistroAreaID = PlayerBistro->AreaID;
+	}
+	else {
+		ACompetitor* Competitor = Cast<ACompetitor>(Bistro);
+		BistroAreaID = Competitor->AreaID;
+	}
 
 	// '평점평균 * 맨해튼거리' 값이 가장 작은 가게를 방문해야 하므로 (최대 평점평균 - 실제 평점평균) 값을 곱하도록 한다.
 	// '최대 평점평균 == 실제 평점평균'일 때 BistroRateAvg 값이 0이 되어 ManhattanDist 함수 값에 상관없이 VisitRank이 0이 되는 것을 방지하기 위해 0.1을 더해주었다.
-	float BistroRateAvg = (CustomerRateComponent->MaxRate + 0.1) - (*CustomerRateComponent->CustStringToRateMap.Find(CustName));
+	float BistroRateAvg = (CustomerDataManagerSystem->MaxRate + 0.1) - (CustomerDataManagerSystem->GetAvgRate(CustName, BistroAreaID));
 	float VisitRank = BistroRateAvg * (ManhattanDist(CustomerLoc, BistroLoc));
 
 	BistroLocRankMap.Add(BistroLoc, VisitRank);
@@ -118,6 +126,7 @@ void ACustomer::SetVisitDest()
 	CalcVisitRank(PlayerBistro);
 
 	for (auto Competitor : AllCompetitorActorArr) {
+		Competitor = Cast<ACompetitor>(Competitor);
 		CalcVisitRank(Competitor);
 	}
 
@@ -137,7 +146,7 @@ void ACustomer::SetVisitDest()
 int32 ACustomer::CountNotTasteNum(ASandwich* Sandwich)
 {
 	TArray<int32> IngrNumArr = Sandwich->IngrActorToNum();
-	TArray<int32> Taste = VillageManager->GetCustTaste(CustName);
+	TArray<int32> Taste = CustomerDataManagerSystem->GetCustTaste(CustName);
 	// 취향이 아닌 재료 개수
 	int32 NotTasteNum = 0;
 
@@ -239,7 +248,7 @@ void ACustomer::EatSandwich()
 	
 	/*손님대사 출력 필요*/
 
-	PlayerBistro->UpdateCustomerReviewAvg(ReviewRate);
+	CustomerDataManagerSystem->UpdateAvgRate(CustName, PlayerBistro->AreaID, PlayerBistro->VisitedCustNum, ReviewRate);
 
 	// 테스트
 	UE_LOG(LogTemp, Warning, TEXT("ReviewRate: %d"), ReviewRate);

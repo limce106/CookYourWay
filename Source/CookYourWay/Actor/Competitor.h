@@ -4,8 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "Component/CustomerRateComponent.h"
 #include "GameInstance/VillageManagerSystem.h"
+#include "GameInstance/CustomerDataManagerSystem.h"
 #include "Customer.h"
 #include "Competitor.generated.h"
 
@@ -15,22 +15,20 @@ class COOKYOURWAY_API ACompetitor : public AActor
 	GENERATED_BODY()
 	
 	class UVillageManagerSystem* VillageManagerSystem;
+	class UCustomerDataManagerSystem* CustomerDataManagerSystem;
 
 	void SetDefaultReviewRate();
 	
-	// 전체 평점 평균 갱신
-	void UpdateCustomerReviewAvg(int32 ReveiwRate);
-	
 public:	
 	ACompetitor();
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Rate)
-	class UCustomerRateComponent* CustRateComponent;
 
 	TArray<FCompetitorReviewData> NormalReviewData;
 	TArray<FCompetitorReviewData> IngrFestReviewData;
 	TArray<FCompetitorReviewData> OpenPromoReviewData;
 
+	// 부지 번호
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	int32 AreaID;
 	// 오늘 방문한 손님 수
 	int32 VisitedCustNum = 0;
 	// 오늘 손님의 평점 평균

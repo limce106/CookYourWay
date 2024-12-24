@@ -30,6 +30,8 @@ class COOKYOURWAY_API UVillageManagerSystem : public UGameInstanceSubsystem
 
 	float TempDelayTime;
 
+	virtual void Initialize(FSubsystemCollectionBase& Collection) override;
+
 public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Table")
@@ -40,13 +42,17 @@ public:
 
 	TArray<FCompetitorReviewData> GetCompetitorReviewDataOnTable(FString DataType);
 
-	TArray<FString> CustomerNames = {
-		"Amy",
-		"Michelle"
-	};
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	int32 Day = 1;
 
-	// ·£´ý ¼Õ´Ô ÀÌ¸§ °¡Á®¿À±â
-	FString GetRandomCustName();
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	int32 PlayerBistroAreaID = 16;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	TArray<int32> CompetitorAreaID = {5, 7, 11, 14, 18, 21};
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	TArray<int32> StoreAreaID = { 2, 10, 23 };
 
 	bool DelayWithDeltaTime(float DelayTime, float DeltaSeconds);
 };

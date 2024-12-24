@@ -4,10 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "Component/CustomerRateComponent.h"
 #include "DiningTable.h"
-
-#include "VillageManager.h"
+#include "GameInstance/CustomerDataManagerSystem.h"
 #include "PlayerBistro.generated.h"
 
 UCLASS()
@@ -19,7 +17,7 @@ class COOKYOURWAY_API APlayerBistro : public AActor
 	TSubclassOf<ADiningTable> BP_DiningTable;
 
 	// 테스트
-	class AVillageManager* VillageManager;
+	class UCustomerDataManagerSystem* CustomerDataManagerSystem;
 	class UIngredientManagerSystem* IngredientManagerSystem;
 	//
 	class UVillageManagerSystem* VillageManagerSystem;
@@ -58,15 +56,15 @@ class COOKYOURWAY_API APlayerBistro : public AActor
 public:	
 	APlayerBistro();
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Rate)
-	class UCustomerRateComponent* CustRateComponent;
-
 protected:
 	virtual void BeginPlay() override;
 
 public:	
 	virtual void Tick(float DeltaTime) override;
 
+	// 부지 번호
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	int32 AreaID;
 	// 오늘 방문한 손님 수
 	int32 VisitedCustNum = 0;
 	// 오늘 손님의 평점 평균
@@ -78,9 +76,6 @@ public:
 	// 손님이 방문했을 때
 	UFUNCTION(BlueprintCallable)
 	void CustomerVisited(ACustomer* Customer);
-
-	// 전체 평점 평균 갱신
-	void UpdateCustomerReviewAvg(int32 ReveiwRate);
 
 	void LeaveAndSitNextCust(ACustomer* LeftCustomer);
 
