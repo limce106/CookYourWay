@@ -27,8 +27,8 @@ class COOKYOURWAY_API ACustomer : public ACharacter
 	// 최대 대기 시간(초)
 	const float MaxWaitingTime = 40;
 
-	// 식사 시간이 6초가 지난 시점부터 디저트를 받을 수 있다.
-	const float CanGetDessertTime = 6.0f;
+	// 식사 시간이 3초가 지난 시점부터 디저트를 받을 수 있다.
+	const float CanGetDessertTime = 3.0f;
 
 	void Init();
 
@@ -36,6 +36,10 @@ class COOKYOURWAY_API ACustomer : public ACharacter
 	float ManhattanDist(FVector Loc1, FVector Loc2);
 	// 방문 우선순위 구하기
 	float CalcVisitRank(AActor* Bistro);
+	// 방문 우선순위에 따라 목적지 설정
+	FVector GetDestByVisitRank();
+	// 충성도에 따라 목적지 설정
+	bool GetDestByLoyalty();
 	// 방문할 목적지(가게) 설정
 	void SetVisitDest();
 

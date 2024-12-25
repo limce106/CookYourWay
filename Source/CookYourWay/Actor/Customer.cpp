@@ -118,7 +118,7 @@ float ACustomer::CalcVisitRank(AActor* Bistro)
 	return VisitRank;
 }
 
-void ACustomer::SetVisitDest()
+FVector ACustomer::GetDestByVisitRank()
 {
 	FVector CustomerLoc = GetActorLocation();
 
@@ -132,13 +132,53 @@ void ACustomer::SetVisitDest()
 
 	// 방문 점수들을 오름차순으로 정렬
 	BistroLocRankMap.ValueSort([](const float A, const float B)
-	{
-		return A < B;
-	});
+		{
+			return A < B;
+		});
 
 	TArray<FVector> BistroLocRankMapKeys;
 	BistroLocRankMap.GenerateKeyArray(BistroLocRankMapKeys);
-	VisitDest = BistroLocRankMapKeys[0];	// 가장 점수가 낮은 가게를 목적지로 설정
+	VisitDest = BistroLocRankMapKeys[0];
+	return VisitDest;		// 가장 점수가 낮은 가게를 목적지로 설정
+}
+
+bool ACustomer::GetDestByLoyalty()
+{
+	FCustomerBistroKey PlayerBistroKey = CustomerDataManagerSystem->GetCustomerBistroKey(CustName, VillageManagerSystem->PlayerBistroAreaID);
+	if (CustomerDataManagerSystem->IsRegularCustMap.Find(PlayerBistroKey)) {
+		int32 Rand = UKismetMathLibrary::RandomIntegerInRange(1, 100);
+		float Loyalty = *CustomerDataManagerSystem->LoyaltyMap.Find(PlayerBistroKey);
+
+		if (Rand <= Loyalty) {
+			VisitDest = *VillageManager->AreaLocMap.Find(VillageManagerSystem->PlayerBistroAreaID);
+			return true;
+		}
+	}
+
+	for (auto AreaID : VillageManagerSystem->CompetitorAreaID) {
+		int32 Rand = UKismetMathLibrary::RandomIntegerInRange(1, 100);
+		FCustomerBistroKey CompetitorKey = CustomerDataManagerSystem->GetCustomerBistroKey(CustName, AreaID);
+
+		if (CustomerDataManagerSystem->IsRegularCustMap.Find(CompetitorKey)) {
+			float Loyalty = *CustomerDataManagerSystem->LoyaltyMap.Find(CompetitorKey);
+
+			if (Rand <= Loyalty) {
+				VisitDest = *VillageManager->AreaLocMap.Find(AreaID);
+				return true;
+			}
+		}
+	}
+	
+	return false;
+}
+
+void ACustomer::SetVisitDest()
+{
+	bool SuccessFindingDest = GetDestByLoyalty();
+	if (!SuccessFindingDest) {
+		GetDestByVisitRank();
+	}
+
 	VisitDest.Y += 100.0f;
 	VisitDest.Z = 95.0f;
 }
@@ -195,7 +235,7 @@ void ACustomer::AddSandwichReview(ASandwich* Sandwich)
 	// 맞추지 못한 재료 개수에 따른 점수
 	if (NotTasteNum == 0) {
 		TasteScore = 100;
-		CustomerDataManagerSystem->SetPlayerBistroRegularCust(CustName);
+		CustomerDataManagerSystem->AddRegularCust(CustName, VillageManagerSystem->PlayerBistroAreaID);
 	}
 	else {
 		if (NotTasteNum == 1) {
@@ -252,7 +292,7 @@ void ACustomer::AddDessertReview()
 
 void ACustomer::EatSandwich()
 {
-	// 테스트 - 10초로 변경하기
+	// 테스트 - 7초로 변경하기
 	Eat(3.0f);
 	//
 
