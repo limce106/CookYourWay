@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "GameInstance/VillageManagerSystem.h"
 #include "GameInstance/CustomerDataManagerSystem.h"
 #include "VillageManager.generated.h"
 
@@ -14,8 +15,6 @@ class COOKYOURWAY_API AVillageManager : public AActor
 
 	class UVillageManagerSystem* VillageManagerSystem;
 	class UCustomerDataManagerSystem* CustomerDataManagerSystem;
-
-	TMap<int32, FVector> AreaLocMap;
 
 	FTimerHandle LeftDayTimeHandler;
 	int32 LeftMinute = 5;
@@ -42,6 +41,8 @@ protected:
 
 public:
 	virtual void Tick(float DeltaTime) override;
+
+	TMap<int32, FVector> AreaLocMap;
 
 	UFUNCTION(BlueprintCallable)
 	int32 GetLeftMinute();

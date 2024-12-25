@@ -7,7 +7,6 @@
 #include "Store.h"
 #include <Kismet/KismetMathLibrary.h>
 #include <Kismet/GameplayStatics.h>
-#include "GameInstance/VillageManagerSystem.h"
 
 AVillageManager::AVillageManager()
 {

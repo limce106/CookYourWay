@@ -130,10 +130,11 @@ bool UCustomerDataManagerSystem::IsRegularCust(FString CustomerName, int32 Bistr
 	return IsRegular;
 }
 
-void UCustomerDataManagerSystem::SetPlayerBistroRegularCust(FString CustomerName)
+void UCustomerDataManagerSystem::AddRegularCust(FString CustomerName, int32 BistroAreaID)
 {
 	FCustomerBistroKey Key = GetCustomerBistroKey(CustomerName, VillageManagerSystem->PlayerBistroAreaID);
 	IsRegularCustMap.Add(Key, true);
+	LoyaltyMap.Add(Key, 100);
 }
 
 void UCustomerDataManagerSystem::DecreaseLoyalty(FString CustomerName, int32 BistroAreaID, float Decreasement)
@@ -179,6 +180,17 @@ void UCustomerDataManagerSystem::DecreaseCompetitorLoyalty(int32 CompetitorAreaI
 		}
 
 		DecreaseLoyalty(CustomerName, CompetitorAreaID, Decreasement);
+	}
+}
+
+void UCustomerDataManagerSystem::AddCompetitorRegularCust()
+{
+	for (auto AreaID : VillageManagerSystem->CompetitorAreaID) {
+		int32 Rand = UKismetMathLibrary::RandomIntegerInRange(1, 100);
+		if (Rand <= 5) {
+			int32 RandomCust = UKismetMathLibrary::RandomIntegerInRange(0, CustomerNames.Num() - 1);
+			AddRegularCust(CustomerNames[RandomCust], AreaID);
+		}
 	}
 }
 

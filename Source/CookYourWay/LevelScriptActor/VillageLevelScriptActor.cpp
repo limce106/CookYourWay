@@ -2,6 +2,7 @@
 
 
 #include "LevelScriptActor/VillageLevelScriptActor.h"
+#include <Kismet/GameplayStatics.h>
 
 void AVillageLevelScriptActor::Init()
 {
@@ -9,10 +10,17 @@ void AVillageLevelScriptActor::Init()
 		UUserWidget* PlayerBistroHUD = CreateWidget<UUserWidget>(GetWorld(), BP_PlayerBistroHUDClass);
 		PlayerBistroHUD->AddToViewport();
 	}
+
+	VillageManagerSystem->Day++;
+	CustomerDataManagerSystem->SetAllCustTastes();
+	CustomerDataManagerSystem->AddCompetitorRegularCust();
 }
 
 void AVillageLevelScriptActor::BeginPlay()
 {
+	VillageManagerSystem = UGameplayStatics::GetGameInstance(GetWorld())->GetSubsystem<UVillageManagerSystem>();
+	CustomerDataManagerSystem = UGameplayStatics::GetGameInstance(GetWorld())->GetSubsystem<UCustomerDataManagerSystem>();
+
 	Init();
 }
 

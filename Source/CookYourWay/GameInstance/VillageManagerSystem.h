@@ -43,7 +43,7 @@ public:
 	TArray<FCompetitorReviewData> GetCompetitorReviewDataOnTable(FString DataType);
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	int32 Day = 1;
+	int32 Day = 0;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	int32 PlayerBistroAreaID = 16;

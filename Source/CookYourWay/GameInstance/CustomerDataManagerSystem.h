@@ -37,8 +37,6 @@ class COOKYOURWAY_API UCustomerDataManagerSystem : public UGameInstanceSubsystem
 	class UVillageManagerSystem* VillageManagerSystem;
 	class UIngredientManagerSystem* IngredientManagerSystem;
 
-	FCustomerBistroKey GetCustomerBistroKey(FString CustomerName, int32 BistroAreaID);
-
 protected:
 	virtual void Initialize(FSubsystemCollectionBase& Collection) override;
 
@@ -63,6 +61,8 @@ public:
 
 	// 최대 평점 
 	const float MaxRate = 5.0;
+
+	FCustomerBistroKey GetCustomerBistroKey(FString CustomerName, int32 BistroAreaID);
 	
 	// 랜덤 손님 이름 가져오기
 	FString GetRandomCustName();
@@ -81,12 +81,14 @@ public:
 
 	// 단골 손님 여부 반환
 	bool IsRegularCust(FString CustomerName, int32 BistroAreaID);
-	// 플레이어 가게의 단골손님
-	void SetPlayerBistroRegularCust(FString CustomerName);
+	// 단골 손님 추가
+	void AddRegularCust(FString CustomerName, int32 BistroAreaID);
 	// 충성도 감소
 	void DecreaseLoyalty(FString CustomerName, int32 BistroAreaID, float Decreasement);
 	// 경쟁사의 단골 손님 충성도 감소
 	void DecreaseCompetitorLoyalty(int32 CompetitorAreaID);
+	// 경쟁사의 단골 손님 랜덤으로 추가
+	void AddCompetitorRegularCust();
 
 	// 전체 평점 평균 갱신
 	void UpdateAvgRate(FString CustomerName, int32 BistroAreaID, int32 VisitedCustNum, int32 ReveiwRate);
