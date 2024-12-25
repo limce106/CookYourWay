@@ -83,6 +83,10 @@ public:
 	bool IsRegularCust(FString CustomerName, int32 BistroAreaID);
 	// 플레이어 가게의 단골손님
 	void SetPlayerBistroRegularCust(FString CustomerName);
+	// 충성도 감소
+	void DecreaseLoyalty(FString CustomerName, int32 BistroAreaID, float Decreasement);
+	// 경쟁사의 단골 손님 충성도 감소
+	void DecreaseCompetitorLoyalty(int32 CompetitorAreaID);
 
 	// 전체 평점 평균 갱신
 	void UpdateAvgRate(FString CustomerName, int32 BistroAreaID, int32 VisitedCustNum, int32 ReveiwRate);

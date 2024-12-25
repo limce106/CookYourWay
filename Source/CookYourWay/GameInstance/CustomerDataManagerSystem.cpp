@@ -136,6 +136,52 @@ void UCustomerDataManagerSystem::SetPlayerBistroRegularCust(FString CustomerName
 	IsRegularCustMap.Add(Key, true);
 }
 
+void UCustomerDataManagerSystem::DecreaseLoyalty(FString CustomerName, int32 BistroAreaID, float Decreasement)
+{
+	FCustomerBistroKey Key = GetCustomerBistroKey(CustomerName, BistroAreaID);
+	float CurLoyalty = *LoyaltyMap.Find(Key);
+
+	CurLoyalty -= Decreasement;
+	if (CurLoyalty <= 0) {
+		CurLoyalty = 0;
+		// ´Ü°ñ¼Õ´Ô¿¡¼­ Á¦¿Ü
+		IsRegularCustMap.Add(Key, false);
+	}
+	LoyaltyMap.Add(Key, CurLoyalty);
+}
+
+void UCustomerDataManagerSystem::DecreaseCompetitorLoyalty(int32 CompetitorAreaID)
+{
+	for (auto CustomerName : CustomerNames) {
+		// ´Ü°ñ ¼Õ´ÔÀÎ °æ¿ì¿¡¸¸ °è»ê ÁøÇà
+		FCustomerBistroKey Key = GetCustomerBistroKey(CustomerName, CompetitorAreaID);
+		if (LoyaltyMap.Find(Key) == false) {
+			continue;
+		}
+
+		float Decreasement = 0;
+		int32 Rand = UKismetMathLibrary::RandomIntegerInRange(1, 100);
+
+		if (Rand <= 10) {
+			Decreasement = 0;
+		}
+		else if (Rand <= 40) {
+			Decreasement = 5;
+		}
+		else if (Rand <= 80) {
+			Decreasement = 10;
+		}
+		else if (Rand <= 95) {
+			Decreasement = 15;
+		}
+		else {
+			Decreasement = 20;
+		}
+
+		DecreaseLoyalty(CustomerName, CompetitorAreaID, Decreasement);
+	}
+}
+
 void UCustomerDataManagerSystem::UpdateAvgRate(FString CustomerName, int32 BistroAreaID, int32 VisitedCustNum, int32 ReveiwRate)
 {
 	FCustomerBistroKey Key = GetCustomerBistroKey(CustomerName, BistroAreaID);

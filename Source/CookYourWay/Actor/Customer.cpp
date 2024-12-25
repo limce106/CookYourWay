@@ -197,23 +197,27 @@ void ACustomer::AddSandwichReview(ASandwich* Sandwich)
 		TasteScore = 100;
 		CustomerDataManagerSystem->SetPlayerBistroRegularCust(CustName);
 	}
-	else if (NotTasteNum == 1) {
-		TasteScore = 90;
-	}
-	else if (NotTasteNum == 2) {
-		TasteScore = 70;
-	}
-	else if (NotTasteNum == 3) {
-		TasteScore = 50;
-	}
-	else if (NotTasteNum == 4) {
-		TasteScore = 30;
-	}
-	else if (NotTasteNum == 5) {
-		TasteScore = 10;
-	}
 	else {
-		TasteScore = 0;
+		if (NotTasteNum == 1) {
+			TasteScore = 90;
+		}
+		else if (NotTasteNum == 2) {
+			TasteScore = 70;
+		}
+		else if (NotTasteNum == 3) {
+			TasteScore = 50;
+		}
+		else if (NotTasteNum == 4) {
+			TasteScore = 30;
+		}
+		else if (NotTasteNum == 5) {
+			TasteScore = 10;
+		}
+		else {
+			TasteScore = 0;
+		}
+
+		CustomerDataManagerSystem->DecreaseLoyalty(CustName, VillageManagerSystem->PlayerBistroAreaID, 10);
 	}
 
 	ReviewRate += TasteScore;
