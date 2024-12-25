@@ -82,6 +82,7 @@ TArray<int32> UCustomerDataManagerSystem::GetRandomTaste()
 
 void UCustomerDataManagerSystem::SetAllCustTastes()
 {
+	CustNameToTasteMap.Empty();
 	for (int i = 0; i < CustomerNames.Num(); i++) {
 		CustNameToTasteMap.Add(CustomerNames[i], GetRandomTaste());
 	}
@@ -127,6 +128,12 @@ bool UCustomerDataManagerSystem::IsRegularCust(FString CustomerName, int32 Bistr
 	}
 
 	return IsRegular;
+}
+
+void UCustomerDataManagerSystem::SetPlayerBistroRegularCust(FString CustomerName)
+{
+	FCustomerBistroKey Key = GetCustomerBistroKey(CustomerName, VillageManagerSystem->PlayerBistroAreaID);
+	IsRegularCustMap.Add(Key, true);
 }
 
 void UCustomerDataManagerSystem::UpdateAvgRate(FString CustomerName, int32 BistroAreaID, int32 VisitedCustNum, int32 ReveiwRate)

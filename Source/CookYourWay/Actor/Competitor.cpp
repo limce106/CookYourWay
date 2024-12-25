@@ -62,5 +62,5 @@ void ACompetitor::CustomerVisited(ACustomer* Customer)
 	Customer->Destroy();
 	VisitedCustNum++;
 
-	CustomerDataManagerSystem->UpdateAvgRate(Customer->CustName, AreaID, VisitedCustNum, GetCustomerReview());
+	//CustomerDataManagerSystem->UpdateAvgRate(Customer->CustName, AreaID, VisitedCustNum, GetCustomerReview());
 }

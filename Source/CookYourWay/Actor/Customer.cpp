@@ -195,6 +195,7 @@ void ACustomer::AddSandwichReview(ASandwich* Sandwich)
 	// 맞추지 못한 재료 개수에 따른 점수
 	if (NotTasteNum == 0) {
 		TasteScore = 100;
+		CustomerDataManagerSystem->SetPlayerBistroRegularCust(CustName);
 	}
 	else if (NotTasteNum == 1) {
 		TasteScore = 90;
@@ -231,8 +232,11 @@ void ACustomer::AddSandwichReview(ASandwich* Sandwich)
 		ReviewRate -= MeatBurnScoreDeduction;
 	}
 
-	if (ReviewRate <= 0) {
+	if (ReviewRate < 0) {
 		ReviewRate = 0;
+	}
+	else if (ReviewRate > 100) {
+		ReviewRate = 100;
 	}
 }
 
@@ -250,7 +254,7 @@ void ACustomer::EatSandwich()
 
 	/*손님대사 출력 필요*/
 
-	CustomerDataManagerSystem->UpdateAvgRate(CustName, PlayerBistro->AreaID, PlayerBistro->VisitedCustNum, ReviewRate);
+	//CustomerDataManagerSystem->UpdateAvgRate(CustName, PlayerBistro->AreaID, PlayerBistro->VisitedCustNum, ReviewRate);
 
 	// 테스트
 	UE_LOG(LogTemp, Warning, TEXT("ReviewRate: %d"), ReviewRate);

@@ -53,6 +53,7 @@ void APlayerBistro::Tick(float DeltaTime)
 
 void APlayerBistro::SitCust(ACustomer* Customer, int32 SeatIdx)
 {
+	VisitedCustNum++;
 	IsSeated[SeatIdx] = true;
 	Customer->CurSeatNum = SeatIdx;
 	Customer->IsSit = true;
@@ -119,8 +120,6 @@ void APlayerBistro::CustomerVisited(ACustomer* Customer)
 	AINpcController->StopMovement();
 	Customer->IsWalk = false;
 	Customer->SetActorRotation(FRotator(0.0f, 90.0f, 0.0f));
-
-	VisitedCustNum++;
 
 	SitOrWaitCust(Customer);
 }
