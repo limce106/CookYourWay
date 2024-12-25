@@ -6,6 +6,7 @@
 #include "GameFramework/Actor.h"
 #include "GameInstance/VillageManagerSystem.h"
 #include "GameInstance/CustomerDataManagerSystem.h"
+#include "GameMode/CookYourWayGameState.h"
 #include "VillageManager.generated.h"
 
 UCLASS()
@@ -15,6 +16,7 @@ class COOKYOURWAY_API AVillageManager : public AActor
 
 	class UVillageManagerSystem* VillageManagerSystem;
 	class UCustomerDataManagerSystem* CustomerDataManagerSystem;
+	ACookYourWayGameState* CookYourWayGameState;
 
 	FTimerHandle LeftDayTimeHandler;
 	int32 LeftMinute = 5;

@@ -51,6 +51,7 @@ void AVillageManager::BeginPlay()
 
 	VillageManagerSystem = UGameplayStatics::GetGameInstance(GetWorld())->GetSubsystem<UVillageManagerSystem>();
 	CustomerDataManagerSystem = UGameplayStatics::GetGameInstance(GetWorld())->GetSubsystem<UCustomerDataManagerSystem>();
+	CookYourWayGameState = Cast<ACookYourWayGameState>(UGameplayStatics::GetGameState(GetWorld()));
 
 	Init();
 	RunDayTimer();
@@ -59,7 +60,6 @@ void AVillageManager::BeginPlay()
 void AVillageManager::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 }
 
 int32 AVillageManager::GetLeftMinute()
@@ -78,6 +78,9 @@ void AVillageManager::DecreaseDayTime()
 		if (LeftMinute > 0) {
 			LeftMinute--;
 			LeftSecond = 59;
+		}
+		else {
+			CookYourWayGameState->SaveCookYourWayData();
 		}
 	}
 	else {

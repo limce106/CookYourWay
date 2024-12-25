@@ -8,7 +8,8 @@ void ACookYourWayGameState::HandleBeginPlay() {
 	Super::HandleBeginPlay();
 
 	VillageManagerSystem = UGameplayStatics::GetGameInstance(GetWorld())->GetSubsystem<UVillageManagerSystem>();
-
+	IngredientManagerSystem = UGameplayStatics::GetGameInstance(GetWorld())->GetSubsystem<UIngredientManagerSystem>();
+	CustomerDataManagerSystem = UGameplayStatics::GetGameInstance(GetWorld())->GetSubsystem<UCustomerDataManagerSystem>();
 }
 
 ACookYourWayGameState::ACookYourWayGameState()
@@ -23,11 +24,31 @@ void ACookYourWayGameState::LoadCookYourWayData()
 	if (CookYourWaySaveGame == nullptr) {
 		CookYourWaySaveGame = GetMutableDefault<UCookYourWaySaveGame>();
 	}
+
+	IngredientManagerSystem->HavingIngrNum = CookYourWaySaveGame->HavingIngrNum;
+	VillageManagerSystem->Day = CookYourWaySaveGame->Day;
+	VillageManagerSystem->PlayerBistroAreaID = CookYourWaySaveGame->PlayerBistroAreaID;
+	VillageManagerSystem->CompetitorAreaID = CookYourWaySaveGame->CompetitorAreaID;
+	VillageManagerSystem->StoreAreaID = CookYourWaySaveGame->StoreAreaID;
+	CustomerDataManagerSystem->CustomerNames = CookYourWaySaveGame->CustomerNames;
+	CustomerDataManagerSystem->IsRegularCustMap = CookYourWaySaveGame->IsRegularCustMap;
+	CustomerDataManagerSystem->LoyaltyMap = CookYourWaySaveGame->LoyaltyMap;
+	CustomerDataManagerSystem->AvgRateMap = CookYourWaySaveGame->AvgRateMap;
 }
 
 void ACookYourWayGameState::SaveCookYourWayData()
 {
 	UCookYourWaySaveGame* NewCookYourWayData = NewObject<UCookYourWaySaveGame>();
+
+	NewCookYourWayData->HavingIngrNum = IngredientManagerSystem->HavingIngrNum;
+	NewCookYourWayData->Day = VillageManagerSystem->Day;
+	NewCookYourWayData->PlayerBistroAreaID = VillageManagerSystem->PlayerBistroAreaID;
+	NewCookYourWayData->CompetitorAreaID = VillageManagerSystem->CompetitorAreaID;
+	NewCookYourWayData->StoreAreaID = VillageManagerSystem->StoreAreaID;
+	NewCookYourWayData->CustomerNames = CustomerDataManagerSystem->CustomerNames;
+	NewCookYourWayData->IsRegularCustMap = CustomerDataManagerSystem->IsRegularCustMap;
+	NewCookYourWayData->LoyaltyMap = CustomerDataManagerSystem->LoyaltyMap;
+	NewCookYourWayData->AvgRateMap = CustomerDataManagerSystem->AvgRateMap;
 
 	if (!UGameplayStatics::SaveGameToSlot(NewCookYourWayData, SaveSlotName, UserIndex)) {
 		UE_LOG(LogTemp, Error, TEXT("SaveGame Error!"));

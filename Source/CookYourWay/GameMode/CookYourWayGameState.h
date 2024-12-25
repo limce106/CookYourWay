@@ -6,6 +6,8 @@
 #include "GameFramework/GameState.h"
 #include "CookYourWaySaveGame.h"
 #include "GameInstance/VillageManagerSystem.h"
+#include "GameInstance/IngredientManagerSystem.h"
+#include "GameInstance/CustomerDataManagerSystem.h"
 #include "CookYourWayGameState.generated.h"
 
 /**
@@ -17,6 +19,8 @@ class COOKYOURWAY_API ACookYourWayGameState : public AGameState
 	GENERATED_BODY()
 	ACookYourWayGameState();
 	class UVillageManagerSystem* VillageManagerSystem;
+	class UIngredientManagerSystem* IngredientManagerSystem;
+	class UCustomerDataManagerSystem* CustomerDataManagerSystem;
 
 public:
 	UPROPERTY(Transient)
