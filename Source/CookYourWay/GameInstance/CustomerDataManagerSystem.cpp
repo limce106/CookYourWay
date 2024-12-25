@@ -194,6 +194,20 @@ void UCustomerDataManagerSystem::AddCompetitorRegularCust()
 	}
 }
 
+bool UCustomerDataManagerSystem::HasRegularCust(int32 BistroAreaID)
+{
+	for (auto CustName : CustomerNames) {
+		FCustomerBistroKey Key = GetCustomerBistroKey(CustName, BistroAreaID);
+		bool IsRegualrCust = *IsRegularCustMap.Find(Key);
+
+		if (IsRegualrCust) {
+			return true;
+		}
+	}
+
+	return false;
+}
+
 void UCustomerDataManagerSystem::UpdateAvgRate(FString CustomerName, int32 BistroAreaID, int32 VisitedCustNum, int32 ReveiwRate)
 {
 	FCustomerBistroKey Key = GetCustomerBistroKey(CustomerName, BistroAreaID);

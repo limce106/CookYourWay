@@ -28,6 +28,8 @@ class COOKYOURWAY_API AVillageManager : public AActor
 	void Init();
 	void RunDayTimer();
 
+	void SpawnBistrosAndStore();
+
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<AActor> BP_PlayerBistro;
 	UPROPERTY(EditDefaultsOnly)
@@ -50,4 +52,7 @@ public:
 	int32 GetLeftMinute();
 	UFUNCTION(BlueprintCallable)
 	int32 GetLeftSecond();
+
+	void TryCreateNewCompetitor();
+	int32 GetRandomAreaId();
 };

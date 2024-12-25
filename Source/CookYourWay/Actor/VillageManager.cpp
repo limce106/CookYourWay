@@ -25,6 +25,21 @@ AVillageManager::AVillageManager()
 
 void AVillageManager::Init()
 {
+	// 월요일이면
+	if (VillageManagerSystem->Day != 1 && VillageManagerSystem->Day % 7 == 1) {
+		TryCreateNewCompetitor();
+	}
+
+	SpawnBistrosAndStore();
+}
+
+void AVillageManager::RunDayTimer()
+{
+	GetWorld()->GetTimerManager().SetTimer(LeftDayTimeHandler, this, &AVillageManager::DecreaseDayTime, 1.0f, true);
+}
+
+void AVillageManager::SpawnBistrosAndStore()
+{
 	APlayerBistro* PlayerBistro = GetWorld()->SpawnActor<APlayerBistro>(BP_PlayerBistro, *AreaLocMap.Find(VillageManagerSystem->PlayerBistroAreaID), FRotator::ZeroRotator);
 	PlayerBistro->AreaID = VillageManagerSystem->PlayerBistroAreaID;
 
@@ -38,11 +53,6 @@ void AVillageManager::Init()
 		int32 AreaID = VillageManagerSystem->StoreAreaID[i];
 		AStore* Store = GetWorld()->SpawnActor<AStore>(BP_Store, *AreaLocMap.Find(AreaID), FRotator::ZeroRotator);
 	}
-}
-
-void AVillageManager::RunDayTimer()
-{
-	GetWorld()->GetTimerManager().SetTimer(LeftDayTimeHandler, this, &AVillageManager::DecreaseDayTime, 1.0f, true);
 }
 
 void AVillageManager::BeginPlay()
@@ -85,5 +95,47 @@ void AVillageManager::DecreaseDayTime()
 	}
 	else {
 		LeftSecond --;
+	}
+}
+void AVillageManager::TryCreateNewCompetitor()
+{
+	for (auto CurCompetitorAreaID : VillageManagerSystem->CompetitorAreaID) {
+		// 단골 손님 보유 여부
+		bool HasRegularCust = CustomerDataManagerSystem->HasRegularCust(CurCompetitorAreaID);
+
+		if (!HasRegularCust) {
+			int32 NewCompetitorAreaID = GetRandomAreaId();
+			VillageManagerSystem->CompetitorAreaID.Remove(CurCompetitorAreaID);
+			VillageManagerSystem->CompetitorAreaID.Add(NewCompetitorAreaID);
+			
+			for (auto CustName : CustomerDataManagerSystem->CustomerNames) {
+				FCustomerBistroKey CurKey = CustomerDataManagerSystem->GetCustomerBistroKey(CustName, CurCompetitorAreaID);
+				FCustomerBistroKey NewKey = CustomerDataManagerSystem->GetCustomerBistroKey(CustName, NewCompetitorAreaID);
+
+				CustomerDataManagerSystem->IsRegularCustMap.Remove(CurKey);
+				CustomerDataManagerSystem->LoyaltyMap.Remove(CurKey);
+				CustomerDataManagerSystem->AvgRateMap.Remove(CurKey);
+
+				CustomerDataManagerSystem->IsRegularCustMap.Add(NewKey, false);
+				CustomerDataManagerSystem->LoyaltyMap.Add(NewKey, 0.0f);
+				CustomerDataManagerSystem->AvgRateMap.Add(NewKey, 0.0f);
+			}
+		}
+	}
+}
+
+int32 AVillageManager::GetRandomAreaId()
+{
+	// 기존 경쟁사, 상점과 플레이어 가게와 중복되지 않는 부지
+	int32 RandomAreaId = UKismetMathLibrary::RandomIntegerInRange(1, AreaLocMap.Num());
+
+	if (RandomAreaId == VillageManagerSystem->PlayerBistroAreaID ||
+		VillageManagerSystem->CompetitorAreaID.Contains(RandomAreaId) ||
+		VillageManagerSystem->StoreAreaID.Contains(RandomAreaId)) {
+		GetRandomAreaId();
+		return 0;
+	}
+	else {
+		return RandomAreaId;
 	}
 }

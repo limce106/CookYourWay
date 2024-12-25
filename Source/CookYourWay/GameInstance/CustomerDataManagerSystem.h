@@ -89,6 +89,8 @@ public:
 	void DecreaseCompetitorLoyalty(int32 CompetitorAreaID);
 	// 경쟁사의 단골 손님 랜덤으로 추가
 	void AddCompetitorRegularCust();
+	// 단골 손님 보유 여부
+	bool HasRegularCust(int32 BistroAreaID);
 
 	// 전체 평점 평균 갱신
 	void UpdateAvgRate(FString CustomerName, int32 BistroAreaID, int32 VisitedCustNum, int32 ReveiwRate);
