@@ -36,7 +36,6 @@ class COOKYOURWAY_API UCustomerDataManagerSystem : public UGameInstanceSubsystem
 
 	class UVillageManagerSystem* VillageManagerSystem;
 	class UIngredientManagerSystem* IngredientManagerSystem;
-	bool IsInitialized = false;
 
 	FCustomerBistroKey GetCustomerBistroKey(FString CustomerName, int32 BistroAreaID);
 

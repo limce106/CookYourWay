@@ -31,8 +31,6 @@ public:
 	int32 AreaID;
 	// 오늘 방문한 손님 수
 	int32 VisitedCustNum = 0;
-	// 오늘 손님의 평점 평균
-	float CustomerReviewAvg = 0;
 	// 새로운 손님의 평점 평균 가져오기
 	int32 GetCustomerReview();
 

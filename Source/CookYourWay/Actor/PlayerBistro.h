@@ -67,8 +67,6 @@ public:
 	int32 AreaID;
 	// ¿À´Ã ¹æ¹®ÇÑ ¼Õ´Ô ¼ö
 	int32 VisitedCustNum = 0;
-	// ¿À´Ã ¼Õ´ÔÀÇ ÆòÁ¡ Æò±Õ
-	float CustomerReviewAvg = 0;
 
 	UFUNCTION(BlueprintCallable)
 	int32 GetWaitingCustNum();

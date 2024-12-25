@@ -189,47 +189,51 @@ int32 ACustomer::CountNotTasteNum(ASandwich* Sandwich)
 
 void ACustomer::AddSandwichReview(ASandwich* Sandwich)
 {
-	int Score = 0;
+	int TasteScore = 0;
 	int NotTasteNum = CountNotTasteNum(Sandwich);
 	
 	// 맞추지 못한 재료 개수에 따른 점수
 	if (NotTasteNum == 0) {
-		Score = 100;
+		TasteScore = 100;
 	}
 	else if (NotTasteNum == 1) {
-		Score = 90;
+		TasteScore = 90;
 	}
 	else if (NotTasteNum == 2) {
-		Score = 70;
+		TasteScore = 70;
 	}
 	else if (NotTasteNum == 3) {
-		Score = 50;
+		TasteScore = 50;
 	}
 	else if (NotTasteNum == 4) {
-		Score = 30;
+		TasteScore = 30;
 	}
 	else if (NotTasteNum == 5) {
-		Score = 10;
+		TasteScore = 10;
 	}
 	else {
-		Score = 0;
+		TasteScore = 0;
 	}
 
-	// 인내심에 따라 점수 감소
-	int PatienceScoreDeduction = (100 - Patience) / 5;
-	Score -= PatienceScoreDeduction;
+	ReviewRate += TasteScore;
+
+	// 인내심에 따라 점수 증감
+	if (Patience < 50) {
+		ReviewRate -= 10;
+	}
+	else {
+		ReviewRate += 5;
+	}
 
 	// 고기가 탔다면 점수 감소
-	const int MeatBurnScoreDeduction = 30;
+	const int MeatBurnScoreDeduction = 10;
 	if (Sandwich->IsMeatBurn()) {
-		Score -= MeatBurnScoreDeduction;
+		ReviewRate -= MeatBurnScoreDeduction;
 	}
 
-	if (Score <= 0) {
-		Score = 0;
+	if (ReviewRate <= 0) {
+		ReviewRate = 0;
 	}
-
-	ReviewRate += Score;
 }
 
 void ACustomer::AddDessertReview()
@@ -244,8 +248,6 @@ void ACustomer::EatSandwich()
 	Eat(3.0f);
 	//
 
-	IncreasePatience(20.0f);
-	
 	/*손님대사 출력 필요*/
 
 	CustomerDataManagerSystem->UpdateAvgRate(CustName, PlayerBistro->AreaID, PlayerBistro->VisitedCustNum, ReviewRate);
@@ -275,7 +277,7 @@ void ACustomer::EatDessert()
 {
 	ClearDestroyTimer();
 	Eat(2.0f);
-	IncreasePatience(10.0f);
+	ReviewRate += 10;
 }
 
 void ACustomer::IncreasePatience(float Increasement)
