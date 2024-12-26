@@ -40,7 +40,6 @@ class COOKYOURWAY_API APlayerBistro : public AActor
 	// 다음 손님이 앉기까지의 시간
 	const float NextCustDelay = 1.5f;
 
-
 	void SpawnDiningTable();
 	ADiningTable* GetDiningTable(int32 SeatIdx);
 
@@ -66,6 +65,7 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	int32 AreaID;
 	// 오늘 방문한 손님 수
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	int32 VisitedCustNum = 0;
 
 	UFUNCTION(BlueprintCallable)

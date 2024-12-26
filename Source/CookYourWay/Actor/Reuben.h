@@ -62,6 +62,9 @@ public:
 	UPROPERTY(BlueprintReadWrite)
 	AActor* HeldActor;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	int32 GivenSandwichNum = 0;
+
 	UClass* GetHeldActorClass();
 
 	// 家南俊 咀磐 何馒/都扁

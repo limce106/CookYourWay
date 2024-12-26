@@ -148,6 +148,7 @@ void AReuben::TryGiveSomething(ACustomer* Customer)
 
 void AReuben::GiveSandwich(ACustomer* Customer)
 {
+	GivenSandwichNum++;
 	ASandwich* Sandwich = Cast<ASandwich>(HeldActor);
 	// 샌드위치가 없는 빈 접시라면 
 	if (Sandwich->Ingredients.Num() == 0) {
