@@ -19,8 +19,8 @@ class COOKYOURWAY_API AVillageManager : public AActor
 	ACookYourWayGameState* CookYourWayGameState;
 
 	FTimerHandle LeftDayTimeHandler;
-	int32 LeftMinute = 5;
-	int32 LeftSecond = 0;
+	int32 LeftMinute = 0;
+	int32 LeftSecond = 5;
 
 	// 남은 하루 시간 계산하기
 	void DecreaseDayTime();
@@ -36,6 +36,8 @@ class COOKYOURWAY_API AVillageManager : public AActor
 	TSubclassOf<AActor> BP_Competitor;
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<AActor> BP_Store;
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<UUserWidget> BP_SubtractClass;
 
 public:
 	AVillageManager();
@@ -55,4 +57,7 @@ public:
 
 	void TryCreateNewCompetitor();
 	int32 GetRandomAreaId();
+
+	// 하루가 끝났을 때
+	void EndDay();
 };

@@ -10,6 +10,8 @@ void ACookYourWayGameState::HandleBeginPlay() {
 	VillageManagerSystem = UGameplayStatics::GetGameInstance(GetWorld())->GetSubsystem<UVillageManagerSystem>();
 	IngredientManagerSystem = UGameplayStatics::GetGameInstance(GetWorld())->GetSubsystem<UIngredientManagerSystem>();
 	CustomerDataManagerSystem = UGameplayStatics::GetGameInstance(GetWorld())->GetSubsystem<UCustomerDataManagerSystem>();
+
+	UE_LOG(LogTemp, Warning, TEXT("HandleBeginPlay called!"));
 }
 
 ACookYourWayGameState::ACookYourWayGameState()
@@ -30,6 +32,7 @@ void ACookYourWayGameState::LoadCookYourWayData()
 	VillageManagerSystem->PlayerBistroAreaID = CookYourWaySaveGame->PlayerBistroAreaID;
 	VillageManagerSystem->CompetitorAreaID = CookYourWaySaveGame->CompetitorAreaID;
 	VillageManagerSystem->StoreAreaID = CookYourWaySaveGame->StoreAreaID;
+	VillageManagerSystem->TotalAsset = CookYourWaySaveGame->TotalAsset;
 	CustomerDataManagerSystem->CustomerNames = CookYourWaySaveGame->CustomerNames;
 	CustomerDataManagerSystem->IsRegularCustMap = CookYourWaySaveGame->IsRegularCustMap;
 	CustomerDataManagerSystem->LoyaltyMap = CookYourWaySaveGame->LoyaltyMap;
@@ -45,6 +48,7 @@ void ACookYourWayGameState::SaveCookYourWayData()
 	NewCookYourWayData->PlayerBistroAreaID = VillageManagerSystem->PlayerBistroAreaID;
 	NewCookYourWayData->CompetitorAreaID = VillageManagerSystem->CompetitorAreaID;
 	NewCookYourWayData->StoreAreaID = VillageManagerSystem->StoreAreaID;
+	NewCookYourWayData->TotalAsset = VillageManagerSystem->TotalAsset;
 	NewCookYourWayData->CustomerNames = CustomerDataManagerSystem->CustomerNames;
 	NewCookYourWayData->IsRegularCustMap = CustomerDataManagerSystem->IsRegularCustMap;
 	NewCookYourWayData->LoyaltyMap = CustomerDataManagerSystem->LoyaltyMap;

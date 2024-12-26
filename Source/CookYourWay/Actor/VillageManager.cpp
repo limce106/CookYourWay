@@ -7,6 +7,7 @@
 #include "Store.h"
 #include <Kismet/KismetMathLibrary.h>
 #include <Kismet/GameplayStatics.h>
+#include "Blueprint/UserWidget.h"
 
 AVillageManager::AVillageManager()
 {
@@ -90,7 +91,8 @@ void AVillageManager::DecreaseDayTime()
 			LeftSecond = 59;
 		}
 		else {
-			CookYourWayGameState->SaveCookYourWayData();
+			GetWorld()->GetTimerManager().PauseTimer(LeftDayTimeHandler);
+			EndDay();
 		}
 	}
 	else {
@@ -137,5 +139,16 @@ int32 AVillageManager::GetRandomAreaId()
 	}
 	else {
 		return RandomAreaId;
+	}
+}
+
+void AVillageManager::EndDay()
+{
+	UGameplayStatics::SetGamePaused(GetWorld(), true);
+	CookYourWayGameState->SaveCookYourWayData();
+
+	UUserWidget* BP_Subtract = CreateWidget<UUserWidget>(GetWorld(), BP_SubtractClass);
+	if (BP_Subtract) {
+		BP_Subtract->AddToViewport();
 	}
 }

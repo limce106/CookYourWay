@@ -9,5 +9,6 @@ UCookYourWaySaveGame::UCookYourWaySaveGame()
 	PlayerBistroAreaID = 16;
 	CompetitorAreaID = { 5, 7, 11, 14, 18, 21 };
 	StoreAreaID = { 2, 10, 23 };
+	TotalAsset = 0;
 	CustomerNames = { "Amy", "Michelle" };
 }

@@ -29,6 +29,8 @@ public:
 	UPROPERTY()
 	TArray<int32> StoreAreaID = { 2, 10, 23 };
 	UPROPERTY()
+	int32 TotalAsset = 0;
+	UPROPERTY()
 	TArray<FString> CustomerNames;
 	UPROPERTY()
 	TMap<FCustomerBistroKey, bool> IsRegularCustMap;

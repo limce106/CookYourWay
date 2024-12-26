@@ -54,5 +54,9 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	TArray<int32> StoreAreaID = { 2, 10, 23 };
 
+	// 전체 자산
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	int32 TotalAsset = 0;
+
 	bool DelayWithDeltaTime(float DelayTime, float DeltaSeconds);
 };
