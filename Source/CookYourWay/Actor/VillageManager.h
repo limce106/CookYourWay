@@ -20,7 +20,7 @@ class COOKYOURWAY_API AVillageManager : public AActor
 
 	FTimerHandle LeftDayTimeHandler;
 	int32 LeftMinute = 0;
-	int32 LeftSecond = 5;
+	int32 LeftSecond = 2;
 
 	// 남은 하루 시간 계산하기
 	void DecreaseDayTime();
@@ -36,8 +36,6 @@ class COOKYOURWAY_API AVillageManager : public AActor
 	TSubclassOf<AActor> BP_Competitor;
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<AActor> BP_Store;
-	UPROPERTY(EditDefaultsOnly)
-	TSubclassOf<UUserWidget> BP_SubtractClass;
 
 public:
 	AVillageManager();
@@ -64,4 +62,8 @@ public:
 	// 날 수를 주차, 요일 문자열로 변환
 	UFUNCTION(BlueprintCallable)
 	FString DayToWeekString(int32 Day);
+
+	// 페이드 아웃 후 정산표 띄우기
+	UFUNCTION(BlueprintImplementableEvent)
+	void StartSubtractAnim();
 };

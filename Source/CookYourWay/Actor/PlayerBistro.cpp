@@ -179,5 +179,10 @@ void APlayerBistro::UpdateTotalCustAndRateSum(int32 Rate) {
 }
 
 float APlayerBistro::GetTotalAvgRate() {
-	return (VillageManagerSystem->PlayerBistroTotalRateSum / VillageManagerSystem->PlayerBistroTotalCust);
+	if (VillageManagerSystem->PlayerBistroTotalCust == 0) {
+		return 0;
+	}
+	else {
+		return (VillageManagerSystem->PlayerBistroTotalRateSum / VillageManagerSystem->PlayerBistroTotalCust);
+	}
 }

@@ -149,10 +149,7 @@ void AVillageManager::EndDay()
 	UGameplayStatics::SetGamePaused(GetWorld(), true);
 	CookYourWayGameState->SaveCookYourWayData();
 
-	UUserWidget* BP_Subtract = CreateWidget<UUserWidget>(GetWorld(), BP_SubtractClass);
-	if (BP_Subtract) {
-		BP_Subtract->AddToViewport();
-	}
+	StartSubtractAnim();
 }
 
 FString AVillageManager::DayToWeekString(int32 Day)
