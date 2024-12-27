@@ -263,10 +263,10 @@ void ACustomer::AddSandwichReview(ASandwich* Sandwich)
 	ReviewRate += TasteScore;
 
 	// 인내심에 따라 점수 증감
-	if (Patience < 50) {
+	if (Patience <= 30) {
 		ReviewRate -= 10;
 	}
-	else {
+	else if (Patience >= 70 ) {
 		ReviewRate += 5;
 	}
 
