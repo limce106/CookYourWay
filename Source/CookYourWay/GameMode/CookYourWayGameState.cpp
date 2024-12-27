@@ -4,14 +4,11 @@
 #include "GameMode/CookYourWayGameState.h"
 #include <Kismet/GameplayStatics.h>
 
-void ACookYourWayGameState::HandleBeginPlay() {
-	Super::HandleBeginPlay();
-
+void ACookYourWayGameState::BeginPlay()
+{
 	VillageManagerSystem = UGameplayStatics::GetGameInstance(GetWorld())->GetSubsystem<UVillageManagerSystem>();
 	IngredientManagerSystem = UGameplayStatics::GetGameInstance(GetWorld())->GetSubsystem<UIngredientManagerSystem>();
 	CustomerDataManagerSystem = UGameplayStatics::GetGameInstance(GetWorld())->GetSubsystem<UCustomerDataManagerSystem>();
-
-	UE_LOG(LogTemp, Warning, TEXT("HandleBeginPlay called!"));
 }
 
 ACookYourWayGameState::ACookYourWayGameState()

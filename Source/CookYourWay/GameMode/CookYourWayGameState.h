@@ -36,5 +36,5 @@ public:
 	bool IsSaveDataExist();
 
 protected:
-	void HandleBeginPlay() override;
+	virtual void BeginPlay() override;
 };
