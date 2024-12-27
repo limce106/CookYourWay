@@ -53,7 +53,9 @@ void APlayerBistro::Tick(float DeltaTime)
 
 void APlayerBistro::SitCust(ACustomer* Customer, int32 SeatIdx)
 {
-	VisitedCustNum++;
+	TodayCust++;
+	VillageManagerSystem->PlayerBistroTotalCust++;
+
 	IsSeated[SeatIdx] = true;
 	Customer->CurSeatNum = SeatIdx;
 	Customer->IsSit = true;
@@ -170,4 +172,12 @@ void APlayerBistro::LeaveWaitingCust(ACustomer* Customer)
 	WaitingCustQueue.Pop();
 	WaitingCustNum--;
 	Customer->Destroy();
+}
+
+void APlayerBistro::UpdateTotalCustAndRateSum(int32 Rate) {
+	VillageManagerSystem->PlayerBistroTotalRateSum = VillageManagerSystem->PlayerBistroTotalRateSum + Rate;
+}
+
+float APlayerBistro::GetTotalAvgRate() {
+	return (VillageManagerSystem->PlayerBistroTotalRateSum / VillageManagerSystem->PlayerBistroTotalCust);
 }

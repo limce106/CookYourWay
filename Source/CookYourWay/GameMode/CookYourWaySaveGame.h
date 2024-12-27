@@ -38,4 +38,26 @@ public:
 	TMap<FCustomerBistroKey, float> LoyaltyMap;
 	UPROPERTY()
 	TMap<FCustomerBistroKey, float> AvgRateMap;
+	UPROPERTY()
+	int32 PlayerBistroTotalCust = 0;
+	UPROPERTY()
+	TMap<int32, int32> CompetitorTotalCust = {
+		{5, 0},
+		{7, 0},
+		{11, 0},
+		{14, 0},
+		{18, 0},
+		{21, 0}
+	};
+	UPROPERTY()
+	int32 PlayerBistroTotalRateSum = 0;
+	UPROPERTY()
+	TMap<int32, int32> CompetitorTotalRateSum = {
+		{5, 0},
+		{7, 0},
+		{11, 0},
+		{14, 0},
+		{18, 0},
+		{21, 0}
+	};
 };

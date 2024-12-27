@@ -298,7 +298,8 @@ void ACustomer::EatSandwich()
 
 	/*손님대사 출력 필요*/
 
-	//CustomerDataManagerSystem->UpdateAvgRate(CustName, PlayerBistro->AreaID, PlayerBistro->VisitedCustNum, ReviewRate);
+	//CustomerDataManagerSystem->UpdateAvgRateByCustName(CustName, PlayerBistro->AreaID, PlayerBistro->VisitedCustNum, ReviewRate);
+	PlayerBistro->UpdateTotalCustAndRateSum(ReviewRate);
 
 	// 테스트
 	UE_LOG(LogTemp, Warning, TEXT("ReviewRate: %d"), ReviewRate);

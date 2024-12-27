@@ -208,7 +208,7 @@ bool UCustomerDataManagerSystem::HasRegularCust(int32 BistroAreaID)
 	return false;
 }
 
-void UCustomerDataManagerSystem::UpdateAvgRate(FString CustomerName, int32 BistroAreaID, int32 VisitedCustNum, int32 ReveiwRate)
+void UCustomerDataManagerSystem::UpdateAvgRateByCustName(FString CustomerName, int32 BistroAreaID, int32 VisitedCustNum, int32 ReveiwRate)
 {
 	FCustomerBistroKey Key = GetCustomerBistroKey(CustomerName, BistroAreaID);
 	float TotalAvgRate = GetAvgRate(CustomerName, BistroAreaID);

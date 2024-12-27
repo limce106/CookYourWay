@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+ï»¿// Fill out your copyright notice in the Description page of Project Settings.
 
 
 #include "Actor/VillageManager.h"
@@ -26,7 +26,7 @@ AVillageManager::AVillageManager()
 
 void AVillageManager::Init()
 {
-	// ¿ù¿äÀÏÀÌ¸é
+	// ì›”ìš”ì¼ì´ë©´
 	if (VillageManagerSystem->Day != 1 && VillageManagerSystem->Day % 7 == 1) {
 		TryCreateNewCompetitor();
 	}
@@ -102,7 +102,7 @@ void AVillageManager::DecreaseDayTime()
 void AVillageManager::TryCreateNewCompetitor()
 {
 	for (auto CurCompetitorAreaID : VillageManagerSystem->CompetitorAreaID) {
-		// ´Ü°ñ ¼Õ´Ô º¸À¯ ¿©ºÎ
+		// ë‹¨ê³¨ ì†ë‹˜ ë³´ìœ  ì—¬ë¶€
 		bool HasRegularCust = CustomerDataManagerSystem->HasRegularCust(CurCompetitorAreaID);
 
 		if (!HasRegularCust) {
@@ -117,10 +117,12 @@ void AVillageManager::TryCreateNewCompetitor()
 				CustomerDataManagerSystem->IsRegularCustMap.Remove(CurKey);
 				CustomerDataManagerSystem->LoyaltyMap.Remove(CurKey);
 				CustomerDataManagerSystem->AvgRateMap.Remove(CurKey);
+				VillageManagerSystem->CompetitorTotalCust.Remove(CurCompetitorAreaID);
 
 				CustomerDataManagerSystem->IsRegularCustMap.Add(NewKey, false);
 				CustomerDataManagerSystem->LoyaltyMap.Add(NewKey, 0.0f);
 				CustomerDataManagerSystem->AvgRateMap.Add(NewKey, 0.0f);
+				VillageManagerSystem->CompetitorTotalCust.Add(NewCompetitorAreaID, 0);
 			}
 		}
 	}
@@ -128,7 +130,7 @@ void AVillageManager::TryCreateNewCompetitor()
 
 int32 AVillageManager::GetRandomAreaId()
 {
-	// ±âÁ¸ °æÀï»ç, »óÁ¡°ú ÇÃ·¹ÀÌ¾î °¡°Ô¿Í Áßº¹µÇÁö ¾Ê´Â ºÎÁö
+	// ê¸°ì¡´ ê²½ìŸì‚¬, ìƒì ê³¼ í”Œë ˆì´ì–´ ê°€ê²Œì™€ ì¤‘ë³µë˜ì§€ ì•ŠëŠ” ë¶€ì§€
 	int32 RandomAreaId = UKismetMathLibrary::RandomIntegerInRange(1, AreaLocMap.Num());
 
 	if (RandomAreaId == VillageManagerSystem->PlayerBistroAreaID ||
@@ -151,4 +153,41 @@ void AVillageManager::EndDay()
 	if (BP_Subtract) {
 		BP_Subtract->AddToViewport();
 	}
+}
+
+FString AVillageManager::DayToWeekString(int32 Day)
+{
+	FString WeekString;
+	// ì£¼ì°¨
+	int32 Week = Day / 7 + 1;
+	WeekString = FString::Printf(TEXT("%dì£¼ì°¨ "), Week);
+
+	// ìš”ì¼
+	int32 Remainder = Day % 7;
+	FString DayStr;
+	if (Remainder == 1) {
+		DayStr = FString(TEXT("ì›”ìš”ì¼"));
+	}
+	else if (Remainder == 2) {
+		DayStr = FString(TEXT("í™”ìš”ì¼"));
+	}
+	else if (Remainder == 3) {
+		DayStr = FString(TEXT("ìˆ˜ìš”ì¼"));
+	}
+	else if (Remainder == 4) {
+		DayStr = FString(TEXT("ëª©ìš”ì¼"));
+	}
+	else if (Remainder == 5) {
+		DayStr = FString(TEXT("ê¸ˆìš”ì¼"));
+	}
+	else if (Remainder == 6) {
+		DayStr = FString(TEXT("í† ìš”ì¼"));
+	}
+	else {
+		DayStr = FString(TEXT("ì¼ìš”ì¼"));
+	}
+
+	WeekString.Append(DayStr);
+
+	return WeekString;
 }

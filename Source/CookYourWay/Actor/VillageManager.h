@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+ï»¿// Fill out your copyright notice in the Description page of Project Settings.
 
 #pragma once
 
@@ -22,7 +22,7 @@ class COOKYOURWAY_API AVillageManager : public AActor
 	int32 LeftMinute = 0;
 	int32 LeftSecond = 5;
 
-	// ³²Àº ÇÏ·ç ½Ã°£ °è»êÇÏ±â
+	// ë‚¨ì€ í•˜ë£¨ ì‹œê°„ ê³„ì‚°í•˜ê¸°
 	void DecreaseDayTime();
 
 	void Init();
@@ -58,6 +58,10 @@ public:
 	void TryCreateNewCompetitor();
 	int32 GetRandomAreaId();
 
-	// ÇÏ·ç°¡ ³¡³µÀ» ¶§
+	// í•˜ë£¨ê°€ ëë‚¬ì„ ë•Œ
 	void EndDay();
+
+	// ë‚  ìˆ˜ë¥¼ ì£¼ì°¨, ìš”ì¼ ë¬¸ìì—´ë¡œ ë³€í™˜
+	UFUNCTION(BlueprintCallable)
+	FString DayToWeekString(int32 Day);
 };

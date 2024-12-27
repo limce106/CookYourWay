@@ -66,7 +66,7 @@ public:
 	int32 AreaID;
 	// ¿À´Ã ¹æ¹®ÇÑ ¼Õ´Ô ¼ö
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	int32 VisitedCustNum = 0;
+	int32 TodayCust = 0;
 
 	UFUNCTION(BlueprintCallable)
 	int32 GetWaitingCustNum();
@@ -80,4 +80,8 @@ public:
 	void SitNextCust(int32 SeatIdx);
 
 	void LeaveWaitingCust(ACustomer* Customer);
+
+	void UpdateTotalCustAndRateSum(int32 Rate);
+	UFUNCTION(BlueprintCallable)
+	float GetTotalAvgRate();
 };

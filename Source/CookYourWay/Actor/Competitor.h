@@ -18,6 +18,7 @@ class COOKYOURWAY_API ACompetitor : public AActor
 	class UCustomerDataManagerSystem* CustomerDataManagerSystem;
 
 	void SetDefaultReviewRate();
+	void UpdateTotalCustAndRateSum();
 	
 public:	
 	ACompetitor();
@@ -29,8 +30,6 @@ public:
 	// 부지 번호
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	int32 AreaID;
-	// 오늘 방문한 손님 수
-	int32 VisitedCustNum = 0;
 	// 새로운 손님의 평점 평균 가져오기
 	int32 GetCustomerReview();
 

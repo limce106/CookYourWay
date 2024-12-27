@@ -60,7 +60,16 @@ int ACompetitor::GetCustomerReview()
 void ACompetitor::CustomerVisited(ACustomer* Customer)
 {
 	Customer->Destroy();
-	VisitedCustNum++;
+	UpdateTotalCustAndRateSum();	
 
-	//CustomerDataManagerSystem->UpdateAvgRate(Customer->CustName, AreaID, VisitedCustNum, GetCustomerReview());
+	//CustomerDataManagerSystem->UpdateAvgRateByCustName(Customer->CustName, AreaID, VisitedCustNum, GetCustomerReview());
+}
+
+void ACompetitor::UpdateTotalCustAndRateSum()
+{
+	int32 CurTotalCust = *VillageManagerSystem->CompetitorTotalCust.Find(AreaID);
+	VillageManagerSystem->CompetitorTotalCust.Add(AreaID, ++CurTotalCust);
+
+	int32 CurRateSum = *VillageManagerSystem->CompetitorTotalRateSum.Find(AreaID);
+	VillageManagerSystem->CompetitorTotalRateSum.Add(AreaID, CurRateSum + GetCustomerReview());
 }

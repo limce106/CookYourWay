@@ -33,6 +33,10 @@ void ACookYourWayGameState::LoadCookYourWayData()
 	VillageManagerSystem->CompetitorAreaID = CookYourWaySaveGame->CompetitorAreaID;
 	VillageManagerSystem->StoreAreaID = CookYourWaySaveGame->StoreAreaID;
 	VillageManagerSystem->TotalAsset = CookYourWaySaveGame->TotalAsset;
+	VillageManagerSystem->PlayerBistroTotalCust = CookYourWaySaveGame->PlayerBistroTotalCust;
+	VillageManagerSystem->CompetitorTotalCust = CookYourWaySaveGame->CompetitorTotalCust;
+	VillageManagerSystem->PlayerBistroTotalRateSum = CookYourWaySaveGame->PlayerBistroTotalRateSum;
+	VillageManagerSystem->CompetitorTotalRateSum = CookYourWaySaveGame->CompetitorTotalRateSum;
 	CustomerDataManagerSystem->CustomerNames = CookYourWaySaveGame->CustomerNames;
 	CustomerDataManagerSystem->IsRegularCustMap = CookYourWaySaveGame->IsRegularCustMap;
 	CustomerDataManagerSystem->LoyaltyMap = CookYourWaySaveGame->LoyaltyMap;
@@ -49,6 +53,10 @@ void ACookYourWayGameState::SaveCookYourWayData()
 	NewCookYourWayData->CompetitorAreaID = VillageManagerSystem->CompetitorAreaID;
 	NewCookYourWayData->StoreAreaID = VillageManagerSystem->StoreAreaID;
 	NewCookYourWayData->TotalAsset = VillageManagerSystem->TotalAsset;
+	NewCookYourWayData->PlayerBistroTotalCust = VillageManagerSystem->PlayerBistroTotalCust;
+	NewCookYourWayData->CompetitorTotalCust = VillageManagerSystem->CompetitorTotalCust;
+	NewCookYourWayData->PlayerBistroTotalRateSum = VillageManagerSystem->PlayerBistroTotalRateSum;
+	NewCookYourWayData->CompetitorTotalRateSum = VillageManagerSystem->CompetitorTotalRateSum;
 	NewCookYourWayData->CustomerNames = CustomerDataManagerSystem->CustomerNames;
 	NewCookYourWayData->IsRegularCustMap = CustomerDataManagerSystem->IsRegularCustMap;
 	NewCookYourWayData->LoyaltyMap = CustomerDataManagerSystem->LoyaltyMap;

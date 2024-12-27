@@ -58,5 +58,35 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	int32 TotalAsset = 0;
 
+	// 플레이어 가게 누적 손님 수
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	int32 PlayerBistroTotalCust = 0;
+
+	// 경쟁사 누적 손님 수
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	TMap<int32, int32> CompetitorTotalCust = {
+		{5, 0},
+		{7, 0},
+		{11, 0},
+		{14, 0},
+		{18, 0},
+		{21, 0}
+	};
+
+	// 플레이어 가게 누적 평점 합
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	int32 PlayerBistroTotalRateSum = 0;
+
+	// 경쟁사 누적 평점 합
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	TMap<int32, int32> CompetitorTotalRateSum = {
+		{5, 0},
+		{7, 0},
+		{11, 0},
+		{14, 0},
+		{18, 0},
+		{21, 0}
+	};
+
 	bool DelayWithDeltaTime(float DelayTime, float DeltaSeconds);
 };
