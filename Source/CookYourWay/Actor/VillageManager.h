@@ -19,7 +19,7 @@ class COOKYOURWAY_API AVillageManager : public AActor
 	ACookYourWayGameState* CookYourWayGameState;
 
 	FTimerHandle LeftDayTimeHandler;
-	int32 LeftMinute = 0;
+	int32 LeftMinute = 2;
 	int32 LeftSecond = 2;
 
 	// 남은 하루 시간 계산하기

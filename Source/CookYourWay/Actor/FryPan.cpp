@@ -45,7 +45,7 @@ void AFryPan::Fry()
 	// 최대 조리 정도에서 5초 더 구워지면 태움 처리
 	if (PlacedIngredient->CurCookRate > PlacedIngredient->MaxCookRate + (GetOneCookIncreasement() * 5)) {
 		IsFrying = false;
-		PlacedIngredient->IsBurn = true;
+		PlacedIngredientBurnt();
 	}
 }
 
@@ -62,4 +62,10 @@ void AFryPan::FryPanInteraction()
 			PutIngrOn(HoldingIngr);
 		}
 	}
+}
+
+void AFryPan::PlacedIngredientBurnt()
+{
+	PlacedIngredient->IsBurn = true;
+	PlacedIngredient->ReplaceBurntMeatMaterial();
 }

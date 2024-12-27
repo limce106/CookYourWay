@@ -30,4 +30,6 @@ public:
 	void Fry();
 
 	void FryPanInteraction();
+
+	void PlacedIngredientBurnt();
 };

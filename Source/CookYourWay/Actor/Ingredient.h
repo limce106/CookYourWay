@@ -15,6 +15,9 @@ class COOKYOURWAY_API AIngredient : public AActor
 	USceneComponent* MeshPivot;
 	UStaticMeshComponent* StaticMesh;
 
+	// 탄 고기 머티리얼
+	UMaterialInterface* BurntMeatMaterial;
+
 	class UIngredientManagerSystem* IngredientManagerSystem;
 
 	// 제각각인 재료들의 피봇을 맞추기 위한 함수
@@ -47,6 +50,9 @@ public:
 	bool IsCooked();
 
 	void IngredientInteraction();
+
+	// 탄 고기 머티리얼 변경
+	void ReplaceBurntMeatMaterial();
 };
 
 class IngredientSpawnFactory
