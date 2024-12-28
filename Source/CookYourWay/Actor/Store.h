@@ -12,8 +12,9 @@ class COOKYOURWAY_API AStore : public AActor
 	GENERATED_BODY()
 	class UVillageManagerSystem* VillageManagerSystem;
 
+	float TempDelayTime;
 	// 스폰 주기(초)
-	const float SpawnDelayTime = 5.0f;
+	int32 SpawnDelayTime = 5.0f;
 
 public:
 	AStore();
@@ -27,6 +28,7 @@ public:
 
 	virtual void Tick(float DeltaTime) override;
 
+	bool DelayWithDeltaTime(float DelayTime, float DeltaSeconds);
 	void CreateCustomer();
 
 };

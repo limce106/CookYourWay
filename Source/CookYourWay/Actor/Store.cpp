@@ -4,6 +4,7 @@
 #include "Actor/Store.h"
 #include <Kismet/GameplayStatics.h>
 #include "GameInstance/VillageManagerSystem.h"
+#include <Kismet/KismetMathLibrary.h>
 
 AStore::AStore()
 {
@@ -22,8 +23,21 @@ void AStore::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	if (VillageManagerSystem->DelayWithDeltaTime(SpawnDelayTime, DeltaTime)) {
+	if (DelayWithDeltaTime(SpawnDelayTime, DeltaTime)) {
 		CreateCustomer();
+		SpawnDelayTime = UKismetMathLibrary::RandomIntegerInRange(5, 7);
+	}
+}
+
+bool AStore::DelayWithDeltaTime(float DelayTime, float DeltaSeconds)
+{
+	if (TempDelayTime > DelayTime) {
+		TempDelayTime = 0;
+		return true;
+	}
+	else {
+		TempDelayTime += DeltaSeconds;
+		return false;
 	}
 }
 
