@@ -56,6 +56,10 @@ void AReubenController::CookInteraction()
 		ACuttingBoard* CuttingBoard = Cast<ACuttingBoard>(Reuben->OverlappedActor);
 		CuttingBoard->CuttingBoardInteraction();
 	}
+	else if (OverlappedActorClass == BP_Oven) {
+		AOven* Oven = Cast<AOven>(Reuben->OverlappedActor);
+		Oven->OvenInteraction();
+	}
 	else if (OverlappedActorClass == BP_DiningTable) {
 		ADiningTable* DiningTable = Cast<ADiningTable>(Reuben->OverlappedActor);
 		DiningTable->DiningTableInteraction();

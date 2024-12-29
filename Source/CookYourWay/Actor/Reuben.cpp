@@ -8,6 +8,7 @@
 #include <Kismet/GameplayStatics.h>
 #include "PlayerBistro.h"
 #include <Components/ShapeComponent.h>
+#include "Dessert.h"
 #include "FryPan.h"
 
 AReuben::AReuben()
@@ -139,7 +140,10 @@ void AReuben::TryGiveSomething(ACustomer* Customer)
 		GiveSandwich(Customer);
 	}
 	else if (HeldActor->GetClass() == BP_Dessert) {
-		GiveDessert(Customer);
+		ADessert* Dessert = Cast<ADessert>(HeldActor);
+		if (Dessert->IsCooked) {
+			GiveDessert(Customer);
+		}
 	}
 	else {
 		return;
@@ -177,17 +181,10 @@ void AReuben::GiveSandwich(ACustomer* Customer)
 void AReuben::GiveDessert(ACustomer* Customer)
 {
 	if (Customer->CanGetDessert()) {
-		GetWorld()->GetTimerManager().ClearTimer(CustSandwichTimerHandler);
 		HeldActor->Destroy();
 		IsHold = false;
 
 		Customer->EatDessert();
 		Customer->AddDessertReview();
-
-		FTimerHandle CustDessertTimerHandler;
-		GetWorld()->GetTimerManager().SetTimer(CustDessertTimerHandler, FTimerDelegate::CreateLambda([&]()
-			{
-				PlayerBistro->LeaveAndSitNextCust(Customer);
-			}), Customer->LeaveDelayTime, false);
 	}
 }

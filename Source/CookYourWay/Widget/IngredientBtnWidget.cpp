@@ -39,19 +39,25 @@ void UIngredientBtnWidget::OnClick_ButtonIngredient()
 		}
 	}
 
+	TArray<UUserWidget*> AllIngredientBoardWidgetArr;
+	UWidgetBlueprintLibrary::GetAllWidgetsOfClass(this, AllIngredientBoardWidgetArr, BP_IngredientBoardClass);
+	UIngredientBoardWidget* IngredientBoardWidget = Cast<UIngredientBoardWidget>(AllIngredientBoardWidgetArr[0]);
+
 	if (!Reuben->IsHold) {
-		/*³ªÁß¿¡ false·Î ¹Ù²Ü °Í!!*/
-		AIngredient* ClickedIngredient = IngredientSpawnFactory::SpawnIngredient(GetWorld(), BP_IngredientClass, Reuben->GetActorLocation(), Reuben->GetActorRotation(), IngrEngName, true);
-		Reuben->HoldActor(ClickedIngredient);
+		if (IngredientBoardWidget->IsDessertTab) {
+			ADessert* Dessert = GetWorld()->SpawnActor<ADessert>(BP_Dessert, Reuben->GetActorLocation(), Reuben->GetActorRotation());
+			Reuben->HoldActor(Dessert);
+		}
+		else {
+			/*³ªÁß¿¡ false·Î ¹Ù²Ü °Í!!*/
+			AIngredient* ClickedIngredient = IngredientSpawnFactory::SpawnIngredient(GetWorld(), BP_IngredientClass, Reuben->GetActorLocation(), Reuben->GetActorRotation(), IngrEngName, true);
+			Reuben->HoldActor(ClickedIngredient);
+		}
 
 		RemoveIngredientBoard();
 	}
 	else {
 		if (Reuben->HeldActor->GetClass() == BP_Sandwich) {
-			TArray<UUserWidget*> AllIngredientBoardWidgetArr;
-			UWidgetBlueprintLibrary::GetAllWidgetsOfClass(this, AllIngredientBoardWidgetArr, BP_IngredientBoardClass);
-			UIngredientBoardWidget* IngredientBoardWidget = Cast<UIngredientBoardWidget>(AllIngredientBoardWidgetArr[0]);
-
 			// ¼Ò½º¸¦ °ñ¶ú´Ù¸é
 			if (IngredientBoardWidget->IsSauceTab) {
 				IngredientBoardWidget->TextBlock_Error->SetVisibility(ESlateVisibility::Hidden);

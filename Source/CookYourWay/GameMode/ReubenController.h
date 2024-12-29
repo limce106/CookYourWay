@@ -11,6 +11,7 @@
 #include <Actor/FryPan.h>
 #include <Actor/CuttingBoard.h>
 #include <Actor/DiningTable.h>
+#include <Actor/Oven.h>
 #include "ReubenController.generated.h"
 
 /**
@@ -36,6 +37,8 @@ class COOKYOURWAY_API AReubenController : public APlayerController
 	TSubclassOf<AFryPan> BP_FryPan;
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<ACuttingBoard> BP_CuttingBoard;
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<AOven> BP_Oven;
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<ADiningTable> BP_DiningTable;
 	UPROPERTY(EditDefaultsOnly)

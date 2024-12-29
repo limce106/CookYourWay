@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 #pragma once
 
@@ -27,6 +27,8 @@ protected:
 	void CreateMeatButtons();
 	UFUNCTION()
 	void CreateSauceButtons();
+	UFUNCTION()
+	void CreateDessertButtons();
 
 public:
 	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
@@ -36,6 +38,8 @@ public:
 	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
 	class UButton* Button_Sauce;
 	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
+	class UButton* Button_Dessert;
+	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
 	class UUniformGridPanel* UniformGridPanel;
 	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
 	class UTextBlock* TextBlock_Error;
@@ -44,4 +48,5 @@ public:
 	TSubclassOf<UIngredientBtnWidget> BP_IngredientBtnWidgetClass;
 
 	bool IsSauceTab = false;
+	bool IsDessertTab = false;
 };

@@ -6,6 +6,7 @@
 #include "Blueprint/UserWidget.h"
 #include <Actor/Ingredient.h>
 #include <Actor/Sandwich.h>
+#include <Actor/Dessert.h>
 #include "IngredientBtnWidget.generated.h"
 
 /**
@@ -28,6 +29,8 @@ class COOKYOURWAY_API UIngredientBtnWidget : public UUserWidget
 	TSubclassOf<UUserWidget> BP_IngredientBoardClass;
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<ASandwich> BP_Sandwich;
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<ADessert> BP_Dessert;
 
 public:
 	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))

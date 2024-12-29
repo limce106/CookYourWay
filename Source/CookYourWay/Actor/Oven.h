@@ -3,22 +3,24 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Actor/CookingUtensil.h"
-#include "FryPan.generated.h"
+#include "CookingUtensil.h"
+#include "Dessert.h"
+#include "Oven.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class COOKYOURWAY_API AFryPan : public ACookingUtensil
+class COOKYOURWAY_API AOven : public ACookingUtensil
 {
 	GENERATED_BODY()
 
-	class UVillageManagerSystem* VillageManagerSystem;
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<ADessert> BP_Dessert;
 
 	float TempDelayTime;
 	bool DelayWithDeltaTime(float DelayTime, float DeltaSeconds);
-	
+
 protected:
 	virtual void BeginPlay() override;
 
@@ -26,13 +28,10 @@ protected:
 
 public:
 	virtual void Tick(float DeltaTime) override;
+	bool IsBaking = false;
 
-	bool IsFrying = false;
-
-	virtual void PutIngrOn(AIngredient* Ingr) override;
-	void Fry();
-
-	void FryPanInteraction();
-
-	void PlacedIngredientBurnt();
+	void PutDessertIn(ADessert* Dessert);
+	void Bake();
+	bool IsCooked();
+	void OvenInteraction();
 };

@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 
 #include "Widget/IngredientBoardWidget.h"
@@ -15,6 +15,7 @@ void UIngredientBoardWidget::NativePreConstruct()
 	Button_Filling = (UButton*)GetWidgetFromName(TEXT("Button_Filling"));
 	Button_Meat = (UButton*)GetWidgetFromName(TEXT("Button_Meat"));
 	Button_Sauce = (UButton*)GetWidgetFromName(TEXT("Button_Sauce"));
+	Button_Dessert = (UButton*)GetWidgetFromName(TEXT("Button_Dessert"));
 	UniformGridPanel = (UUniformGridPanel*)GetWidgetFromName(TEXT("UniformGridPanel"));
 	TextBlock_Error = (UTextBlock*)GetWidgetFromName(TEXT("TextBlock_Error"));
 }
@@ -30,11 +31,13 @@ void UIngredientBoardWidget::NativeConstruct()
 	Button_Filling->OnClicked.AddDynamic(this, &UIngredientBoardWidget::CreateFillingButtons);
 	Button_Meat->OnClicked.AddDynamic(this, &UIngredientBoardWidget::CreateMeatButtons);
 	Button_Sauce->OnClicked.AddDynamic(this, &UIngredientBoardWidget::CreateSauceButtons);
+	Button_Dessert->OnClicked.AddDynamic(this, &UIngredientBoardWidget::CreateDessertButtons);
 }
 
 void UIngredientBoardWidget::CreateFillingButtons()
 {
 	IsSauceTab = false;
+	IsDessertTab = false;
 	UniformGridPanel->ClearChildren();
 
 	int row = 0;
@@ -55,6 +58,7 @@ void UIngredientBoardWidget::CreateFillingButtons()
 void UIngredientBoardWidget::CreateMeatButtons()
 {
 	IsSauceTab = false;
+	IsDessertTab = false;
 	UniformGridPanel->ClearChildren();
 
 	int row = 0;
@@ -75,6 +79,7 @@ void UIngredientBoardWidget::CreateMeatButtons()
 void UIngredientBoardWidget::CreateSauceButtons()
 {
 	IsSauceTab = true;
+	IsDessertTab = false;
 	UniformGridPanel->ClearChildren();
 
 	int row = 0;
@@ -89,5 +94,19 @@ void UIngredientBoardWidget::CreateSauceButtons()
 			}
 			UniformGridPanel->AddChildToUniformGrid(IngredientBtn, row, i % 3);
 		}
+	}
+}
+
+void UIngredientBoardWidget::CreateDessertButtons()
+{
+	IsSauceTab = false;
+	IsDessertTab = true;
+	UniformGridPanel->ClearChildren();
+
+	if (BP_IngredientBtnWidgetClass) {
+		UIngredientBtnWidget* DessertBtn = CreateWidget<UIngredientBtnWidget>(GetWorld(), BP_IngredientBtnWidgetClass);
+		FText IngrName = FText::FromString(FString::Printf(TEXT("딸기 케이크")));
+		DessertBtn->TextBlock_IngrName->SetText(IngrName);
+		UniformGridPanel->AddChildToUniformGrid(DessertBtn, 0, 0);
 	}
 }

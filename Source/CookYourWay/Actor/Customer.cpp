@@ -211,7 +211,7 @@ int32 ACustomer::CountNotTasteNum(ASandwich* Sandwich)
 	}
 
 	// 마지막 재료가 빵일 때
-	if (IngrNumArr[IngrNumArr.Num() - 1] == IngredientManagerSystem->BreadIndex) {
+	if (IngrNumArr.Num() > 0 && IngrNumArr[IngrNumArr.Num() - 1] == IngredientManagerSystem->BreadIndex) {
 		IngrNumArr.RemoveAt(IngrNumArr.Num() - 1);
 	}
 	else {
@@ -305,7 +305,7 @@ void ACustomer::AddDessertReview()
 void ACustomer::EatSandwich()
 {
 	// 테스트 - 7초로 변경하기
-	Eat(3.0f);
+	Eat(7.0f);
 	//
 
 	/*손님대사 출력 필요*/
