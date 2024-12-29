@@ -43,6 +43,9 @@ class COOKYOURWAY_API ACustomer : public ACharacter
 	// 방문할 목적지(가게) 설정
 	void SetVisitDest();
 
+	float TempDelayTime;
+	bool DelayWithDeltaTime(float DelayTime, float DeltaSeconds);
+
 public:
 	ACustomer();
 

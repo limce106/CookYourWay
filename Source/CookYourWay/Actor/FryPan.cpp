@@ -26,8 +26,20 @@ void AFryPan::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	if (IsIngredientOn && IsFrying && VillageManagerSystem->DelayWithDeltaTime(2.0f, DeltaTime)) {
+	if (IsIngredientOn && IsFrying && DelayWithDeltaTime(2.0f, DeltaTime)) {
 		Fry();
+	}
+}
+
+bool AFryPan::DelayWithDeltaTime(float DelayTime, float DeltaSeconds)
+{
+	if (TempDelayTime > DelayTime) {
+		TempDelayTime = 0;
+		return true;
+	}
+	else {
+		TempDelayTime += DeltaSeconds;
+		return false;
 	}
 }
 

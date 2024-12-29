@@ -15,6 +15,9 @@ class COOKYOURWAY_API AFryPan : public ACookingUtensil
 	GENERATED_BODY()
 
 	class UVillageManagerSystem* VillageManagerSystem;
+
+	float TempDelayTime;;
+	bool DelayWithDeltaTime(float DelayTime, float DeltaSeconds);
 	
 protected:
 	virtual void BeginPlay() override;

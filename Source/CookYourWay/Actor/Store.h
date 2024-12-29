@@ -16,6 +16,8 @@ class COOKYOURWAY_API AStore : public AActor
 	// 스폰 주기(초)
 	int32 SpawnDelayTime = 5.0f;
 
+	bool DelayWithDeltaTime(float DelayTime, float DeltaSeconds);
+
 public:
 	AStore();
 
@@ -28,7 +30,5 @@ public:
 
 	virtual void Tick(float DeltaTime) override;
 
-	bool DelayWithDeltaTime(float DelayTime, float DeltaSeconds);
 	void CreateCustomer();
-
 };

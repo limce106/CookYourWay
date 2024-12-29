@@ -63,12 +63,11 @@ void ACustomer::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	if (IsEat && VillageManagerSystem->DelayWithDeltaTime(1.0f, DeltaTime)) {
+	if (IsEat && DelayWithDeltaTime(1.0f, DeltaTime)) {
 		StartEatTime += 1;
 	}
 
-
-	if (IsWaiting && VillageManagerSystem->DelayWithDeltaTime(1.0f, DeltaTime)) {
+	if (IsWaiting && DelayWithDeltaTime(1.0f, DeltaTime)) {
 		// 40초 후 인내심은 0이 된다.
 		Patience -= (100 / MaxWaitingTime);
 
@@ -77,13 +76,26 @@ void ACustomer::Tick(float DeltaTime)
 		}
 	}
 
-	if (!IsEat && IsSit && VillageManagerSystem->DelayWithDeltaTime(3.0f, DeltaTime)) {
+	if (!IsEat && IsSit && DelayWithDeltaTime(3.0f, DeltaTime)) {
 		// 대기 시간 * 3(초에 한 번씩 감소)
 		Patience -= (100 / MaxWaitingTime);
+		UE_LOG(LogTemp, Warning, TEXT("Waiting"));
 
 		if (Patience <= 0) {
 			PlayerBistro->LeaveAndSitNextCust(this);
 		}
+	}
+}
+
+bool ACustomer::DelayWithDeltaTime(float DelayTime, float DeltaSeconds)
+{
+	if (TempDelayTime > DelayTime) {
+		TempDelayTime = 0;
+		return true;
+	}
+	else {
+		TempDelayTime += DeltaSeconds;
+		return false;
 	}
 }
 
