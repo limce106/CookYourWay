@@ -31,9 +31,9 @@ void ACompetitor::SetDefaultReviewRate()
 	OpenPromoReviewData = VillageManagerSystem->GetCompetitorReviewDataOnTable("OpenPromo");
 }
 
-int ACompetitor::GetCustomerReview()
+int32 ACompetitor::GetCustomerSatisfaction()
 {
-	int ReviewRate = 0;
+	int Satisfaction = 0;
 	float Probability = FMath::FRand();
 
 	float MinProb = 0.0f;
@@ -46,15 +46,15 @@ int ACompetitor::GetCustomerReview()
 			continue;
 		}
 		else {
-			ReviewRate = UKismetMathLibrary::RandomIntegerInRange(NormalReviewData[i].RatingMin, NormalReviewData[i].RatingMax);
+			Satisfaction = UKismetMathLibrary::RandomIntegerInRange(NormalReviewData[i].RatingMin, NormalReviewData[i].RatingMax);
 		}
 	}
 
-	if (ReviewRate == 0) {
+	if (Satisfaction == 0) {
 		UE_LOG(LogTemp, Error, TEXT("Competitor: Get Customer Review Fail"));
 	}
 
-	return ReviewRate;
+	return Satisfaction;
 }
 
 void ACompetitor::CustomerVisited(ACustomer* Customer)

@@ -76,10 +76,9 @@ void ACustomer::Tick(float DeltaTime)
 		}
 	}
 
-	if (!IsEat && IsSit && DelayWithDeltaTime(3.0f, DeltaTime)) {
+	if (!IsEat && IsSit && DelayWithDeltaTime(1.0f, DeltaTime)) {
 		// 대기 시간 * 3(초에 한 번씩 감소)
 		Patience -= (100 / MaxWaitingTime);
-		UE_LOG(LogTemp, Warning, TEXT("Waiting"));
 
 		if (Patience <= 0) {
 			PlayerBistro->LeaveAndSitNextCust(this);
@@ -197,26 +196,27 @@ void ACustomer::SetVisitDest()
 
 int32 ACustomer::CountNotTasteNum(ASandwich* Sandwich)
 {
-	TArray<int32> IngrNumArr = Sandwich->IngrActorToNum();
-	TArray<int32> Taste = CustomerDataManagerSystem->GetCustTaste(CustName);
 	// 취향이 아닌 재료 개수
 	int32 NotTasteNum = 0;
 
-	// 첫 번째 재료가 빵일 때
-	if (IngrNumArr[0] == IngredientManagerSystem->BreadIndex) {
-		IngrNumArr.RemoveAt(0);
+	// 첫 번째 재료가 빵이 아닐 때
+	if (!Sandwich->IsFirstIngrBread()) {
+		NotTasteNum++;
 	}
 	else {
-		NotTasteNum++;
+		Sandwich->Ingredients.RemoveAt(0);
 	}
 
-	// 마지막 재료가 빵일 때
-	if (IngrNumArr.Num() > 0 && IngrNumArr[IngrNumArr.Num() - 1] == IngredientManagerSystem->BreadIndex) {
-		IngrNumArr.RemoveAt(IngrNumArr.Num() - 1);
-	}
-	else {
+	// 마지막 재료가 빵이 아닐 때
+	if (!Sandwich->IsLastIngrBread()) {
 		NotTasteNum++;
 	}
+	else {
+		Sandwich->Ingredients.RemoveAt(Sandwich->Ingredients.Num() - 1);
+	}
+
+	TArray<int32> IngrNumArr = Sandwich->IngrActorToNum();
+	TArray<int32> Taste = CustomerDataManagerSystem->GetCustTaste(CustName);
 
 	for (int i = 0; i < IngrNumArr.Num(); i++) {
 
@@ -272,34 +272,34 @@ void ACustomer::AddSandwichReview(ASandwich* Sandwich)
 		CustomerDataManagerSystem->DecreaseLoyalty(CustName, VillageManagerSystem->PlayerBistroAreaID, 10);
 	}
 
-	ReviewRate += TasteScore;
+	Satisfaction += TasteScore;
 
 	// 인내심에 따라 점수 증감
 	if (Patience <= 30) {
-		ReviewRate -= 10;
+		Satisfaction -= 10;
 	}
 	else if (Patience >= 70 ) {
-		ReviewRate += 5;
+		Satisfaction += 5;
 	}
 
 	// 고기가 탔다면 점수 감소
 	const int MeatBurnScoreDeduction = 10;
 	if (Sandwich->IsMeatBurn()) {
-		ReviewRate -= MeatBurnScoreDeduction;
+		Satisfaction -= MeatBurnScoreDeduction;
 	}
 
-	if (ReviewRate < 0) {
-		ReviewRate = 0;
+	if (Satisfaction < 0) {
+		Satisfaction = 0;
 	}
-	else if (ReviewRate > 100) {
-		ReviewRate = 100;
+	else if (Satisfaction > 100) {
+		Satisfaction = 100;
 	}
 }
 
 void ACustomer::AddDessertReview()
 {
 	const int32 DessertBonus = 10;
-	ReviewRate += DessertBonus;
+	Satisfaction += DessertBonus;
 }
 
 void ACustomer::EatSandwich()
@@ -311,10 +311,10 @@ void ACustomer::EatSandwich()
 	/*손님대사 출력 필요*/
 
 	//CustomerDataManagerSystem->UpdateAvgRateByCustName(CustName, PlayerBistro->AreaID, PlayerBistro->VisitedCustNum, ReviewRate);
-	PlayerBistro->UpdateTotalCustAndRateSum(ReviewRate);
+	PlayerBistro->UpdateTotalCustAndRateSum(Satisfaction);
 
 	// 테스트
-	UE_LOG(LogTemp, Warning, TEXT("ReviewRate: %d"), ReviewRate);
+	UE_LOG(LogTemp, Warning, TEXT("Satisfaction: %d"), Satisfaction);
 	//
 }
 
@@ -338,7 +338,8 @@ void ACustomer::EatDessert()
 {
 	ClearDestroyTimer();
 	Eat(2.0f);
-	ReviewRate += 10;
+	Satisfaction += 10;
+	UE_LOG(LogTemp, Warning, TEXT("Dessert Bonus"));
 }
 
 void ACustomer::IncreasePatience(float Increasement)

@@ -114,3 +114,26 @@ void ASandwich::SandwichInteraction()
 		}
 	}
 }
+
+bool ASandwich::IsFirstIngrBread() {
+	if (Ingredients[0]->CurIngrData->IngrType == "Bread") {
+		return true;
+	}
+	else {
+		return false;
+	}
+}
+
+bool ASandwich::IsLastIngrBread() {
+	if (Ingredients.Num() > 0) {
+		if (Ingredients[Ingredients.Num() - 1]->CurIngrData->IngrType == "Bread") {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+	else {
+		return false;
+	}
+}

@@ -40,4 +40,7 @@ public:
 
 	bool IsMeatBurn();
 	void SandwichInteraction();
+
+	bool IsFirstIngrBread();
+	bool IsLastIngrBread();
 };

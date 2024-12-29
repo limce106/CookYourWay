@@ -22,6 +22,8 @@ class COOKYOURWAY_API UIngredientBoardWidget : public UUserWidget
 
 protected:
 	UFUNCTION()
+	void CreateBreadButtons();
+	UFUNCTION()
 	void CreateFillingButtons();
 	UFUNCTION()
 	void CreateMeatButtons();
@@ -31,6 +33,8 @@ protected:
 	void CreateDessertButtons();
 
 public:
+	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
+	class UButton* Button_Bread;
 	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
 	class UButton* Button_Filling;
 	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
@@ -47,6 +51,7 @@ public:
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<UIngredientBtnWidget> BP_IngredientBtnWidgetClass;
 
+	bool IsBreadTab= false;
 	bool IsSauceTab = false;
 	bool IsDessertTab = false;
 };

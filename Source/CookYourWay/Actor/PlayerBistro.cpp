@@ -183,6 +183,8 @@ float APlayerBistro::GetTotalAvgRate() {
 		return 0;
 	}
 	else {
-		return (VillageManagerSystem->PlayerBistroTotalRateSum / VillageManagerSystem->PlayerBistroTotalCust);
+		float TotalAvgRate = VillageManagerSystem->PlayerBistroTotalRateSum / VillageManagerSystem->PlayerBistroTotalCust;
+		TotalAvgRate = TotalAvgRate * 5 / 100;
+		return TotalAvgRate;
 	}
 }

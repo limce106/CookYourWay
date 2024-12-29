@@ -53,32 +53,24 @@ void UIngredientBtnWidget::OnClick_ButtonIngredient()
 			AIngredient* ClickedIngredient = IngredientSpawnFactory::SpawnIngredient(GetWorld(), BP_IngredientClass, Reuben->GetActorLocation(), Reuben->GetActorRotation(), IngrEngName, true);
 			Reuben->HoldActor(ClickedIngredient);
 		}
-
-		RemoveIngredientBoard();
 	}
 	else {
 		if (Reuben->HeldActor->GetClass() == BP_Sandwich) {
 			// ¼Ò½º¸¦ °ñ¶ú´Ù¸é
-			if (IngredientBoardWidget->IsSauceTab) {
+			if (IngredientBoardWidget->IsBreadTab || IngredientBoardWidget->IsSauceTab) {
 				IngredientBoardWidget->TextBlock_Error->SetVisibility(ESlateVisibility::Hidden);
 
 				/*³ªÁß¿¡ false·Î ¹Ù²Ü °Í!!*/
 				AIngredient* ClickedIngredient = IngredientSpawnFactory::SpawnIngredient(GetWorld(), BP_IngredientClass, Reuben->GetActorLocation(), Reuben->GetActorRotation(), IngrEngName, true);
 				ASandwich* HoldingSandwich = Cast<ASandwich>(Reuben->HeldActor);
 				HoldingSandwich->AddIngredient(ClickedIngredient);
-
-				IngredientBoardWidget->RemoveFromParent();
 			}
 			else {
 				IngredientBoardWidget->TextBlock_Error->SetVisibility(ESlateVisibility::Visible);
 			}
 		}
+		else if (Reuben->HeldActor->GetClass() == BP_IngredientClass) {
+			IngredientBoardWidget->TextBlock_Error->SetVisibility(ESlateVisibility::Visible);
+		}
 	}
-}
-
-void UIngredientBtnWidget::RemoveIngredientBoard()
-{
-	TArray<UUserWidget*> AllIngredientBoardWidgetArr;
-	UWidgetBlueprintLibrary::GetAllWidgetsOfClass(this, AllIngredientBoardWidgetArr, BP_IngredientBoardClass);
-	AllIngredientBoardWidgetArr[0]->RemoveFromParent();
 }

@@ -31,7 +31,7 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	int32 AreaID;
 	// 새로운 손님의 평점 평균 가져오기
-	int32 GetCustomerReview();
+	int32 GetCustomerSatisfaction();
 
 protected:
 	virtual void BeginPlay() override;

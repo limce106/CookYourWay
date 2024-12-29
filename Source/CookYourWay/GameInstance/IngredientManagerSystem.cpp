@@ -18,7 +18,10 @@ UIngredientManagerSystem::UIngredientManagerSystem()
 		IngredientRows.Add(Row);
 		IngrNameIndexMap.Add(Row->IngrName, index);
 
-		if (Row->IngrType == "Filling") {
+		if (Row->IngrType == "Bread") {
+			BreadRows.Add(Row);
+		}
+		else if (Row->IngrType == "Filling") {
 			FillingRows.Add(Row);
 		}
 		else if (Row->IngrType == "Meat") {
@@ -26,6 +29,19 @@ UIngredientManagerSystem::UIngredientManagerSystem()
 		}
 		else {
 			SauceRows.Add(Row);
+		}
+
+		if (Row->IngrClass == "S") {
+			SClassIngrRows.Add(Row);
+		}
+		else if (Row->IngrClass == "A") {
+			AClassIngrRows.Add(Row);
+		}
+		else if (Row->IngrClass == "B") {
+			BClassIngrRows.Add(Row);
+		}
+		else {
+			CClassIngrRows.Add(Row);
 		}
 
 		index++;

@@ -74,7 +74,6 @@ TArray<int32> UCustomerDataManagerSystem::GetRandomTaste()
 
 	// Å×½ºÆ®
 	Taste.Add(12);
-	Taste.Add(12);
 	//
 
 	return Taste;
@@ -214,6 +213,7 @@ void UCustomerDataManagerSystem::UpdateAvgRateByCustName(FString CustomerName, i
 	float TotalAvgRate = GetAvgRate(CustomerName, BistroAreaID);
 
 	float UpdatedReviewAvg = (TotalAvgRate * (VisitedCustNum - 1) + ReveiwRate) / VisitedCustNum;
+	UpdatedReviewAvg = UpdatedReviewAvg * 5 / 100;
 
 	AvgRateMap.Emplace(Key, UpdatedReviewAvg);
 }

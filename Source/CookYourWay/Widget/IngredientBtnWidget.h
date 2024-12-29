@@ -40,6 +40,4 @@ public:
 
 	UFUNCTION()
 	void OnClick_ButtonIngredient();
-
-	void RemoveIngredientBoard();
 };

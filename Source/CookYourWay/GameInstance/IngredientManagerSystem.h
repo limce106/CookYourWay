@@ -38,7 +38,19 @@ public:
 	TMap<FString, int32> IngrNameIndexMap;
 
 	// 빵 인덱스, *데이터 테이블 행 순서가 바뀔 것을 고려하여 - 수정 필요*
-	const int BreadIndex = 4;
+	const int32 BreadIndex = 4;
+
+	// 판매가
+	const int32 SClassSellingPrice = 50;
+	const int32 AClassSellingPrice = 40;
+	const int32 BClassSellingPrice = 30;
+	const int32 CClassSellingPrice = 20;
+
+	// 경매 시작가
+	const int32 SClassAuctionPrice = 20;
+	const int32 AClassAuctionPrice = 20;
+	const int32 BClassAuctionPrice = 15;
+	const int32 CClassAuctionPrice = 10;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Table")
 	class UDataTable* IngredientTable;
@@ -47,9 +59,15 @@ public:
 	TArray<FName> IngredientTableRowNames;
 
 	TArray<FIngrData*> IngredientRows;
+	TArray<FIngrData*> BreadRows;
 	TArray<FIngrData*> FillingRows;
 	TArray<FIngrData*> MeatRows;
 	TArray<FIngrData*> SauceRows;
+
+	TArray<FIngrData*> SClassIngrRows;
+	TArray<FIngrData*> AClassIngrRows;
+	TArray<FIngrData*> BClassIngrRows;
+	TArray<FIngrData*> CClassIngrRows;
 
 	// 가지고 있는 재료 개수
 	TArray<int32> HavingIngrNum;

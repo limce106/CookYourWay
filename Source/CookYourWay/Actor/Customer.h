@@ -64,7 +64,7 @@ protected:
 	// 먹기 시작한 시간
 	float StartEatTime = 0.0f;
 	// 손님의 평점
-	int32 ReviewRate = 0;
+	int32 Satisfaction = 0;
 
 public:	
 	virtual void Tick(float DeltaTime) override;
