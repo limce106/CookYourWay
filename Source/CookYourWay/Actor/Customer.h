@@ -30,6 +30,9 @@ class COOKYOURWAY_API ACustomer : public ACharacter
 	// 식사 시간이 3초가 지난 시점부터 디저트를 받을 수 있다.
 	const float CanGetDessertTime = 3.0f;
 
+	// 판 전체 가격
+	int32 TotalSellingPrice = 0;
+
 	void Init();
 
 	// 멘해튼 거리 구하기
@@ -111,4 +114,7 @@ public:
 	void IncreasePatience(float Increasement);
 
 	void Eat(float EatingTime);
+
+	float GetTip(int32 SandwichPrice);
+	void AddTotalSellingPriceAndTip();
 };

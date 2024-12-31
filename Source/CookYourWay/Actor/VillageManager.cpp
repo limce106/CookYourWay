@@ -188,3 +188,15 @@ FString AVillageManager::DayToWeekString(int32 Day)
 
 	return WeekString;
 }
+
+void AVillageManager::UpdateProfitsValue(int32 Value)
+{
+	APlayerBistro* PlayerBistro = Cast<APlayerBistro>(UGameplayStatics::GetActorOfClass(GetWorld(), BP_PlayerBistro));
+
+	VillageManagerSystem->TotalAsset += Value;
+	PlayerBistro->TodayNetIncome += Value;
+
+	if (Value > 0) {
+		PlayerBistro->TodaySoldPrice += Value;
+	}
+}

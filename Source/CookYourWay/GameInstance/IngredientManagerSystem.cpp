@@ -68,3 +68,39 @@ UStaticMesh* UIngredientManagerSystem::GetIngrModel(FString Ingr, bool IsSliced)
 
 	return StaticMesh;
 }
+
+int32 UIngredientManagerSystem::GetIngrSellingPriceByClass(FString Class)
+{
+	if (Class == "S")
+		return SClassSellingPrice;
+	else if (Class == "A")
+		return AClassSellingPrice;
+	else if (Class == "B")
+		return BClassSellingPrice;
+	else
+		return CClassSellingPrice;
+}
+
+int32 UIngredientManagerSystem::GetIngrAuctionPriceByClass(FString Class)
+{
+	if (Class == "S")
+		return SClassAuctionPrice;
+	else if (Class == "A")
+		return AClassAuctionPrice;
+	else if (Class == "B")
+		return BClassAuctionPrice;
+	else
+		return CClassAuctionPrice;
+}
+
+int32 UIngredientManagerSystem::GetSellingPriceByIndex(int32 Index)
+{
+	int32 Price = GetIngrSellingPriceByClass(IngredientRows[Index]->IngrClass);
+	return Price;
+}
+
+int32 UIngredientManagerSystem::GetAuctionPriceByIndex(int32 Index)
+{
+	int32 Price = GetIngrAuctionPriceByClass(IngredientRows[Index]->IngrClass);
+	return Price;
+}

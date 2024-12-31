@@ -58,6 +58,7 @@ void ASandwich::DestroySandwich()
 {
 	TArray<AActor*> AttachedIngrs;
 	GetAttachedActors(AttachedIngrs);
+
 	for (auto Ingr : AttachedIngrs) {
 		Ingr->Destroy();
 	}
@@ -70,7 +71,7 @@ TArray<int32> ASandwich::IngrActorToNum()
 	TArray<int32> IngrNum;
 
 	for (int i = 0; i < Ingredients.Num(); i++) {
-		int IngrIndex = *IngredientManagerSystem->IngrNameIndexMap.Find(Ingredients[i]->CurIngrData->IngrName);
+		int32 IngrIndex = *IngredientManagerSystem->IngrNameIndexMap.Find(Ingredients[i]->CurIngrData->IngrName);
 		IngrNum.Add(IngrIndex);
 	}
 

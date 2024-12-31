@@ -11,7 +11,6 @@ void AFryPan::BeginPlay()
 {
 	Super::BeginPlay();
 
-	VillageManagerSystem = UGameplayStatics::GetGameInstance(GetWorld())->GetSubsystem<UVillageManagerSystem>();
 }
 
 float AFryPan::GetOneCookIncreasement()

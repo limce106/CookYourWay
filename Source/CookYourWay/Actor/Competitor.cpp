@@ -71,5 +71,5 @@ void ACompetitor::UpdateTotalCustAndRateSum()
 	VillageManagerSystem->CompetitorTotalCust.Add(AreaID, ++CurTotalCust);
 
 	int32 CurRateSum = *VillageManagerSystem->CompetitorTotalRateSum.Find(AreaID);
-	VillageManagerSystem->CompetitorTotalRateSum.Add(AreaID, CurRateSum + GetCustomerReview());
+	VillageManagerSystem->CompetitorTotalRateSum.Add(AreaID, CurRateSum + GetCustomerSatisfaction());
 }

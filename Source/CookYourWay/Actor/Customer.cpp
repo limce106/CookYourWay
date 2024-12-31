@@ -198,12 +198,16 @@ int32 ACustomer::CountNotTasteNum(ASandwich* Sandwich)
 {
 	// 취향이 아닌 재료 개수
 	int32 NotTasteNum = 0;
+	// 빵 가격
+	int32 BreadSellPrice = 0;
 
 	// 첫 번째 재료가 빵이 아닐 때
 	if (!Sandwich->IsFirstIngrBread()) {
 		NotTasteNum++;
 	}
 	else {
+		int32 Price = IngredientManagerSystem->GetIngrSellingPriceByClass(Sandwich->Ingredients[0]->CurIngrData->IngrClass);
+		TotalSellingPrice += Price;
 		Sandwich->Ingredients.RemoveAt(0);
 	}
 
@@ -212,6 +216,8 @@ int32 ACustomer::CountNotTasteNum(ASandwich* Sandwich)
 		NotTasteNum++;
 	}
 	else {
+		int32 Price = IngredientManagerSystem->GetIngrSellingPriceByClass(Sandwich->Ingredients[Sandwich->Ingredients.Num() - 1]->CurIngrData->IngrClass);
+		TotalSellingPrice += Price;
 		Sandwich->Ingredients.RemoveAt(Sandwich->Ingredients.Num() - 1);
 	}
 
@@ -226,8 +232,9 @@ int32 ACustomer::CountNotTasteNum(ASandwich* Sandwich)
 		}
 		// 샌드위치 재료가 손님의 취향이라면
 		else {
-			// 중복 방지를 위해 찾은 취향은 제거
 			int32 Ingr = IngrNumArr[i];
+			int32 Price = IngredientManagerSystem->GetSellingPriceByIndex(Ingr);
+			TotalSellingPrice += Price;
 			// 손님이 한 종류의 재료를 두 개 이상 선택했을 가능성을 고려하여, 같은 재료가 여러 개 있어도 하나만 삭제
 			Taste.RemoveSingle(Ingr);
 		}
@@ -294,6 +301,8 @@ void ACustomer::AddSandwichReview(ASandwich* Sandwich)
 	else if (Satisfaction > 100) {
 		Satisfaction = 100;
 	}
+
+	AddTotalSellingPriceAndTip();
 }
 
 void ACustomer::AddDessertReview()
@@ -354,4 +363,29 @@ void ACustomer::Eat(float EatingTime)
 	IsEat = true;
 	DestroyTimer = true;
 	LeaveDelayTime = EatingTime;
+}
+
+float ACustomer::GetTip(int32 SandwichPrice)
+{
+	bool IsRegularCustomer = CustomerDataManagerSystem->IsRegularCust(CustName, VillageManagerSystem->PlayerBistroAreaID);
+	if (IsRegularCustomer) {
+		return SandwichPrice;
+	}
+	else {
+		if (Satisfaction >= 90) {
+			return (SandwichPrice * 0.3);
+		}
+		else if (Satisfaction >= 80) {
+			return (SandwichPrice * 0.2);
+		}
+		else {
+			return (SandwichPrice * 0.1);
+		}
+	}
+}
+
+void ACustomer::AddTotalSellingPriceAndTip()
+{
+	TotalSellingPrice += GetTip(TotalSellingPrice);
+	VillageManager->UpdateProfitsValue(TotalSellingPrice);
 }

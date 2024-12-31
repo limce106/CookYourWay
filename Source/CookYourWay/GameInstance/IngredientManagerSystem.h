@@ -73,4 +73,8 @@ public:
 	TArray<int32> HavingIngrNum;
 
 	UStaticMesh* GetIngrModel(FString Ingr, bool IsSliced);
+	int32 GetIngrSellingPriceByClass(FString Class);
+	int32 GetIngrAuctionPriceByClass(FString Class);
+	int32 GetSellingPriceByIndex(int32 Index);
+	int32 GetAuctionPriceByIndex(int32 Index);
 };

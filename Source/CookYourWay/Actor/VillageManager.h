@@ -66,4 +66,6 @@ public:
 	// 페이드 아웃 후 정산표 띄우기
 	UFUNCTION(BlueprintImplementableEvent)
 	void StartSubtractAnim();
+
+	void UpdateProfitsValue(int32 Value);
 };

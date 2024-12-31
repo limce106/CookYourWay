@@ -6,6 +6,7 @@
 #include <Kismet/GameplayStatics.h>
 #include <Actor/Reuben.h>
 #include <GameInstance/IngredientManagerSystem.h>
+#include <Actor/VillageManager.h>
 #include <Blueprint/WidgetBlueprintLibrary.h>
 #include "IngredientBoardWidget.h"
 
@@ -21,6 +22,7 @@ void UIngredientBtnWidget::NativeConstruct()
 {
 	Super::NativeConstruct();
 
+	VillageManager = Cast<AVillageManager>(UGameplayStatics::GetActorOfClass(GetWorld(), AVillageManager::StaticClass()));
 	IngredientManagerSystem = UGameplayStatics::GetGameInstance(GetWorld())->GetSubsystem<UIngredientManagerSystem>();
 	Reuben = Cast<AReuben>(UGameplayStatics::GetPlayerPawn(this, 0));
 
@@ -31,10 +33,13 @@ void UIngredientBtnWidget::OnClick_ButtonIngredient()
 {
 	FString IngrName = TextBlock_IngrName->GetText().ToString();
 	FString IngrEngName;
+	int32 IngrPrice = 0;
 
 	for (int i = 0; i < IngredientManagerSystem->IngredientRows.Num(); i++) {
 		if (IngredientManagerSystem->IngredientRows[i]->IngrName == IngrName) {
 			IngrEngName = IngredientManagerSystem->IngredientTableRowNames[i].ToString();
+			IngrPrice = IngredientManagerSystem->GetAuctionPriceByIndex(i);
+			VillageManager->UpdateProfitsValue(-IngrPrice);
 			break;
 		}
 	}

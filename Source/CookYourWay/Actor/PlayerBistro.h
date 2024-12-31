@@ -67,6 +67,15 @@ public:
 	// 오늘 방문한 손님 수
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	int32 TodayCust = 0;
+	// 오늘 순 수익
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	int32 TodayNetIncome = 0;
+	// 오늘 판 가격
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	int32 TodaySoldPrice = 0;
+	// 꺼낸 재료들의 가격
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	int32 UsedIngrPrice = 0;
 
 	UFUNCTION(BlueprintCallable)
 	int32 GetWaitingCustNum();

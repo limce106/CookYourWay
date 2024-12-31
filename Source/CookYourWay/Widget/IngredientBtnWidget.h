@@ -17,6 +17,7 @@ class COOKYOURWAY_API UIngredientBtnWidget : public UUserWidget
 {
 	GENERATED_BODY()
 
+	class AVillageManager* VillageManager;
 	class UIngredientManagerSystem* IngredientManagerSystem;
 	class AReuben* Reuben;
 
