@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Engine/LevelScriptActor.h"
+#include "GameInstance/IngredientManagerSystem.h"
 #include "AuctionLevelScriptActor.generated.h"
 
 /**
@@ -17,4 +18,12 @@ class COOKYOURWAY_API AAuctionLevelScriptActor : public ALevelScriptActor
 protected:
 	virtual void BeginPlay() override;
 	virtual void Tick(float DeltaTime) override;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	TArray<int32>AuctionIngrTableIdxArr;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	bool IsContainSClass = false;
+
+	UFUNCTION(BlueprintCallable)
+	void SetAuctionItems();
 };

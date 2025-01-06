@@ -22,8 +22,8 @@ public:
 	FString IngrType;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Data")
 	int32 IngrGroupCode;
-	/*UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Data")
-	UTexture2D* IngrIcon;*/
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Data")
+	UTexture2D* IngrIcon;
 };
 
 UCLASS()
@@ -36,9 +36,6 @@ class COOKYOURWAY_API UIngredientManagerSystem : public UGameInstanceSubsystem
 public:
 	// 재료명, 인덱스 맵
 	TMap<FString, int32> IngrNameIndexMap;
-
-	// 빵 인덱스, *데이터 테이블 행 순서가 바뀔 것을 고려하여 - 수정 필요*
-	const int32 BreadIndex = 4;
 
 	// 판매가
 	const int32 SClassSellingPrice = 50;
@@ -64,16 +61,19 @@ public:
 	TArray<FIngrData*> MeatRows;
 	TArray<FIngrData*> SauceRows;
 
-	TArray<FIngrData*> SClassIngrRows;
-	TArray<FIngrData*> AClassIngrRows;
-	TArray<FIngrData*> BClassIngrRows;
-	TArray<FIngrData*> CClassIngrRows;
+	TArray<int32> SClassIngrRows;
+	TArray<int32> AClassIngrRows;
+	TArray<int32> BClassIngrRows;
+	TArray<int32> CClassIngrRows;
 
 	// 가지고 있는 재료 개수
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	TArray<int32> HavingIngrNum;
 
 	UStaticMesh* GetIngrModel(FString Ingr, bool IsSliced);
+	UFUNCTION(BlueprintCallable)
 	int32 GetIngrSellingPriceByClass(FString Class);
+	UFUNCTION(BlueprintCallable)
 	int32 GetIngrAuctionPriceByClass(FString Class);
 	int32 GetSellingPriceByIndex(int32 Index);
 	int32 GetAuctionPriceByIndex(int32 Index);

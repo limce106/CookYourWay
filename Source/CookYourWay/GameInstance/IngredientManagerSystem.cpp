@@ -32,16 +32,16 @@ UIngredientManagerSystem::UIngredientManagerSystem()
 		}
 
 		if (Row->IngrClass == "S") {
-			SClassIngrRows.Add(Row);
+			SClassIngrRows.Add(index);
 		}
 		else if (Row->IngrClass == "A") {
-			AClassIngrRows.Add(Row);
+			AClassIngrRows.Add(index);
 		}
 		else if (Row->IngrClass == "B") {
-			BClassIngrRows.Add(Row);
+			BClassIngrRows.Add(index);
 		}
 		else {
-			CClassIngrRows.Add(Row);
+			CClassIngrRows.Add(index);
 		}
 
 		index++;
