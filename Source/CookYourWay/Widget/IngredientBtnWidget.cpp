@@ -42,7 +42,7 @@ void UIngredientBtnWidget::OnClick_ButtonIngredient()
 			}
 
 			IngrEngName = IngredientManagerSystem->IngredientTableRowNames[i].ToString();
-			IngrPrice = IngredientManagerSystem->GetAuctionPriceByIndex(i);
+			IngrPrice = IngredientManagerSystem->GetIngrBinMinByIndex(i);
 			VillageManager->UpdateProfitsValue(-IngrPrice);
 			break;
 		}

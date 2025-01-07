@@ -9,8 +9,15 @@ UIngredientManagerSystem::UIngredientManagerSystem()
 	static ConstructorHelpers::FObjectFinder<UDataTable> DT_INGREDIENTTABLE(*IngredientTablePath);
 	IngredientTable = DT_INGREDIENTTABLE.Object;
 
+	FString IngrClassTablePath = TEXT("/Game/Assets/Table/IngredientsClass.IngredientsClass");
+	static ConstructorHelpers::FObjectFinder<UDataTable> DT_INGREDIENTCLASSTABLE(*IngrClassTablePath);
+	IngrClassTable = DT_INGREDIENTCLASSTABLE.Object;
+
 	IngredientTable->GetAllRows<FIngrData>("Get All Rows Of IngrData", IngredientTableRows);
 	IngredientTableRowNames = IngredientTable->GetRowNames();
+
+	IngrClassTable->GetAllRows<FIngrClassData>("Get All Rows Of IngrClassData", IngrClassTableRows);
+	IngrClassTableRowNames = IngrClassTable->GetRowNames();
 
 	int index = 0;
 	// 재료 타입별 배열 추가
@@ -69,38 +76,32 @@ UStaticMesh* UIngredientManagerSystem::GetIngrModel(FString Ingr, bool IsSliced)
 	return StaticMesh;
 }
 
-int32 UIngredientManagerSystem::GetIngrSellingPriceByClass(FString Class)
+int32 UIngredientManagerSystem::GetIngrSellingPrice(FString Class)
 {
-	if (Class == "S")
-		return SClassSellingPrice;
-	else if (Class == "A")
-		return AClassSellingPrice;
-	else if (Class == "B")
-		return BClassSellingPrice;
-	else
-		return CClassSellingPrice;
+	FIngrClassData* IngrClassData = IngrClassTable->FindRow<FIngrClassData>(FName(*Class), TEXT(""));
+	return IngrClassData->IngrPrice;
 }
 
-int32 UIngredientManagerSystem::GetIngrAuctionPriceByClass(FString Class)
+int32 UIngredientManagerSystem::GetIngrBidMin(FString Class)
 {
-	if (Class == "S")
-		return SClassAuctionPrice;
-	else if (Class == "A")
-		return AClassAuctionPrice;
-	else if (Class == "B")
-		return BClassAuctionPrice;
-	else
-		return CClassAuctionPrice;
+	FIngrClassData* IngrClassData = IngrClassTable->FindRow<FIngrClassData>(FName(*Class), TEXT(""));
+	return IngrClassData->IngrBidMin;
+}
+
+int32 UIngredientManagerSystem::GetIngrBidMax(FString Class)
+{
+	FIngrClassData* IngrClassData = IngrClassTable->FindRow<FIngrClassData>(FName(*Class), TEXT(""));
+	return IngrClassData->IngrBidMax;
 }
 
 int32 UIngredientManagerSystem::GetSellingPriceByIndex(int32 Index)
 {
-	int32 Price = GetIngrSellingPriceByClass(IngredientRows[Index]->IngrClass);
+	int32 Price = GetIngrSellingPrice(IngredientRows[Index]->IngrClass);
 	return Price;
 }
 
-int32 UIngredientManagerSystem::GetAuctionPriceByIndex(int32 Index)
+int32 UIngredientManagerSystem::GetIngrBinMinByIndex(int32 Index)
 {
-	int32 Price = GetIngrAuctionPriceByClass(IngredientRows[Index]->IngrClass);
+	int32 Price = GetIngrBidMin(IngredientRows[Index]->IngrClass);
 	return Price;
 }

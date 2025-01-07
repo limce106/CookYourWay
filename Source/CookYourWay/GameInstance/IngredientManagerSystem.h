@@ -26,6 +26,25 @@ public:
 	UTexture2D* IngrIcon;
 };
 
+USTRUCT(BlueprintType)
+struct FIngrClassData : public FTableRowBase {
+	GENERATED_BODY()
+
+public:
+	FIngrClassData() : IngrTasteProb(-1), IngrPrice(-1), IngrBidMin(-1), IngrBidMax(-1), IngrClearSale(-1) {}
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Data")
+	float IngrTasteProb;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Data")
+	int32 IngrPrice;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Data")
+	int32 IngrBidMin;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Data")
+	int32 IngrBidMax;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Data")
+	int32 IngrClearSale;
+};
+
 UCLASS()
 class COOKYOURWAY_API UIngredientManagerSystem : public UGameInstanceSubsystem
 {
@@ -37,23 +56,16 @@ public:
 	// 재료명, 인덱스 맵
 	TMap<FString, int32> IngrNameIndexMap;
 
-	// 판매가
-	const int32 SClassSellingPrice = 50;
-	const int32 AClassSellingPrice = 40;
-	const int32 BClassSellingPrice = 30;
-	const int32 CClassSellingPrice = 20;
-
-	// 경매 시작가
-	const int32 SClassAuctionPrice = 20;
-	const int32 AClassAuctionPrice = 20;
-	const int32 BClassAuctionPrice = 15;
-	const int32 CClassAuctionPrice = 10;
-
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Table")
 	class UDataTable* IngredientTable;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Table")
+	class UDataTable* IngrClassTable;
 
 	TArray<FIngrData*> IngredientTableRows;
 	TArray<FName> IngredientTableRowNames;
+
+	TArray<FIngrClassData*> IngrClassTableRows;
+	TArray<FName> IngrClassTableRowNames;
 
 	TArray<FIngrData*> IngredientRows;
 	TArray<FIngrData*> BreadRows;
@@ -71,10 +83,14 @@ public:
 	TArray<int32> HavingIngrNum;
 
 	UStaticMesh* GetIngrModel(FString Ingr, bool IsSliced);
+
 	UFUNCTION(BlueprintCallable)
-	int32 GetIngrSellingPriceByClass(FString Class);
+	int32 GetIngrSellingPrice(FString Class);
 	UFUNCTION(BlueprintCallable)
-	int32 GetIngrAuctionPriceByClass(FString Class);
+	int32 GetIngrBidMin(FString Class);
+	UFUNCTION(BlueprintCallable)
+	int32 GetIngrBidMax(FString Class);
+
 	int32 GetSellingPriceByIndex(int32 Index);
-	int32 GetAuctionPriceByIndex(int32 Index);
+	int32 GetIngrBinMinByIndex(int32 Index);
 };
