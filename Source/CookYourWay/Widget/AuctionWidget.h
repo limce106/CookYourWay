@@ -32,6 +32,8 @@ public:
 	class UTextBlock* TextBlock_SellingPrice_Kor;
 	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
 	class UTextBlock* TextBlock_SellingPrice;
+	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
+	class UTextBlock* TextBlock_CurBidPrice;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	UUserWidget* BP_BidBar;
@@ -49,10 +51,14 @@ public:
 	FVector2D GetProgressBarPos();
 
 	UFUNCTION(BlueprintCallable)
-	void SetSellingPriceBarPos(float BinMin, float SellingPrice, float BinMax);
+	void SetSellingPricePos(float BinMin, float SellingPrice, float BinMax);
+	UFUNCTION(BlueprintCallable)
+	void SetCurBidPricePos();
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void CreateBidBar();
 	UFUNCTION(BlueprintImplementableEvent)
 	void SetCurViewingBidPrice(float PercentOnMouse);
+	UFUNCTION(BlueprintImplementableEvent)
+	void SetCurBidPrice();
 };

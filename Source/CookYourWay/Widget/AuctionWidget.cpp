@@ -12,6 +12,7 @@ void UAuctionWidget::NativeConstruct()
 	Image_SellingPriceBar = (UImage*)GetWidgetFromName(TEXT("Image_SellingPriceBar"));
 	TextBlock_SellingPrice_Kor = (UTextBlock*)GetWidgetFromName(TEXT("TextBlock_SellingPrice_Kor"));
 	TextBlock_SellingPrice = (UTextBlock*)GetWidgetFromName(TEXT("TextBlock_SellingPrice"));
+	TextBlock_CurBidPrice = (UTextBlock*)GetWidgetFromName(TEXT("TextBlock_CurBidPrice"));
 }
 
 FReply UAuctionWidget::NativeOnMouseMove(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent)
@@ -48,8 +49,13 @@ void UAuctionWidget::NativeOnMouseLeave(const FPointerEvent& InMouseEvent)
 
 FReply UAuctionWidget::NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent)
 {
+	// 프로그래스바 퍼센트 설정
 	float ClickedPercent = GetProgressBarPercentOnMouse(InGeometry, InMouseEvent);
 	ProgressBar_Auction->SetPercent(ClickedPercent);
+
+	// 현재까지 입찰된 가격 설정
+	SetCurBidPrice();
+	SetCurBidPricePos();
 
 	return FReply::Handled();
 }
@@ -101,7 +107,7 @@ FVector2D UAuctionWidget::GetProgressBarPos()
 	return ProgressBarPos;
 }
 
-void UAuctionWidget::SetSellingPriceBarPos(float BinMin, float SellingPrice, float BinMax)
+void UAuctionWidget::SetSellingPricePos(float BinMin, float SellingPrice, float BinMax)
 {
 	float Percent = (SellingPrice - BinMin) / (BinMax - BinMin);
 
@@ -117,4 +123,26 @@ void UAuctionWidget::SetSellingPriceBarPos(float BinMin, float SellingPrice, flo
 
 	UCanvasPanelSlot* TextSellingPriceCanvasSlot = Cast<UCanvasPanelSlot>(TextBlock_SellingPrice->Slot);
 	TextSellingPriceCanvasSlot->SetPosition(FVector2D(SellingPricePosX, 954.5f));
+}
+
+void UAuctionWidget::SetCurBidPricePos()
+{
+	float CurProgressBarPercent = ProgressBar_Auction->Percent;
+	if (CurProgressBarPercent == 0.0f) {
+		TextBlock_CurBidPrice->SetVisibility(ESlateVisibility::Hidden);
+	}
+	else if (TextBlock_CurBidPrice->GetText().ToString() == TextBlock_SellingPrice->GetText().ToString()) {
+		TextBlock_CurBidPrice->SetVisibility(ESlateVisibility::Hidden);
+	}
+	else {
+		TextBlock_CurBidPrice->SetVisibility(ESlateVisibility::Visible);
+
+		FVector2D ProgressBarPos = GetProgressBarPos();
+		FVector2D ProgressBarSize = GetProgressBarSize();
+
+		float CurBidPricePosX = ProgressBarPos.X + ProgressBarSize.X * CurProgressBarPercent;
+
+		UCanvasPanelSlot* CurBidPriceCanvasSlot = Cast<UCanvasPanelSlot>(TextBlock_CurBidPrice->Slot);
+		CurBidPriceCanvasSlot->SetPosition(FVector2D(CurBidPricePosX, 920.0f));
+	}
 }
