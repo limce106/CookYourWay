@@ -6,13 +6,11 @@
 #include "Blueprint/UserWidget.h"
 #include "Components/ProgressBar.h"
 #include "Components/CanvasPanelSlot.h"
+#include "Components/CanvasPanel.h"
 #include "Components/Image.h"
 #include "Components/TextBlock.h"
 #include "AuctionWidget.generated.h"
 
-/**
- * 
- */
 UCLASS()
 class COOKYOURWAY_API UAuctionWidget : public UUserWidget
 {
@@ -36,12 +34,17 @@ public:
 	class UTextBlock* TextBlock_CurBidPrice;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	UUserWidget* BP_BidBar;
+	UUserWidget* BP_BidBar = nullptr;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UUserWidget* BP_Turn;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	int32 AuctionSequence;
 
 	UFUNCTION()
 	FVector2D GetCurLocalMousePos(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent);
-	UFUNCTION()
-	float GetProgressBarPercentOnMouse(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent);
+	UFUNCTION(BlueprintCallable)
+	float BidBarPosToProgressBarPercent(FVector2D BidBarPos);
 	UFUNCTION()
 	bool IsMouseOnUnfilledProgressBar(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent);
 
@@ -54,11 +57,19 @@ public:
 	void SetSellingPricePos(float BinMin, float SellingPrice, float BinMax);
 	UFUNCTION(BlueprintCallable)
 	void SetCurBidPricePos();
+	UFUNCTION(BlueprintCallable)
+	float GetFilledProgressBarPosX();
+	UFUNCTION(BlueprintCallable)
+	void SetTurnWidgetPos();
+	UFUNCTION(BlueprintCallable)
+	void StartAuction();
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void CreateBidBar();
-	UFUNCTION(BlueprintImplementableEvent)
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 	void SetCurViewingBidPrice(float PercentOnMouse);
 	UFUNCTION(BlueprintImplementableEvent)
 	void SetCurBidPrice();
+	UFUNCTION(BlueprintImplementableEvent)
+	void FillProgressBarClickedPoint();
 };

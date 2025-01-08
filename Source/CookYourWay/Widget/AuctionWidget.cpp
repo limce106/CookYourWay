@@ -4,6 +4,9 @@
 #include "Widget/AuctionWidget.h"
 #include <Blueprint/WidgetLayoutLibrary.h>
 
+#define PlayerTurn 0;
+#define CompetitorTurn 1;
+
 void UAuctionWidget::NativeConstruct()
 {
 	Super::NativeConstruct();
@@ -17,23 +20,16 @@ void UAuctionWidget::NativeConstruct()
 
 FReply UAuctionWidget::NativeOnMouseMove(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent)
 {
+	if (AuctionSequence != 0) {
+		return Super::NativeOnMouseMove(InGeometry, InMouseEvent);
+	}
+
 	bool IsMouseOnUnfilled = IsMouseOnUnfilledProgressBar(InGeometry, InMouseEvent);
 
 	if (IsMouseOnUnfilled) {
 		if (BP_BidBar == nullptr || !IsValid(BP_BidBar)) {
 			CreateBidBar();
 		}
-		SetCurViewingBidPrice(GetProgressBarPercentOnMouse(InGeometry, InMouseEvent));
-
-		FVector2D BidBarPos;
-		UCanvasPanelSlot* ProgressBarCanvasSlot = Cast<UCanvasPanelSlot>(ProgressBar_Auction->Slot);
-		FVector2D ProgressBarPos = ProgressBarCanvasSlot->GetPosition();
-		FVector2D MouseScreenPos = InMouseEvent.GetScreenSpacePosition();
-
-		BidBarPos.X = InGeometry.AbsoluteToLocal(MouseScreenPos).X;
-		BidBarPos.Y = ProgressBarPos.Y - 12.0f;
-
-		BP_BidBar->SetPositionInViewport(BidBarPos, false);
 	}
 
 	return Super::NativeOnMouseMove(InGeometry, InMouseEvent);
@@ -41,6 +37,10 @@ FReply UAuctionWidget::NativeOnMouseMove(const FGeometry& InGeometry, const FPoi
 
 void UAuctionWidget::NativeOnMouseLeave(const FPointerEvent& InMouseEvent)
 {
+	if (AuctionSequence != 0) {
+		return;
+	}
+
 	if (IsValid(BP_BidBar)) {
 		BP_BidBar->RemoveFromParent();
 		BP_BidBar = nullptr;
@@ -49,9 +49,12 @@ void UAuctionWidget::NativeOnMouseLeave(const FPointerEvent& InMouseEvent)
 
 FReply UAuctionWidget::NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent)
 {
+	if (AuctionSequence != 0) {
+		return FReply::Handled();
+	}
+
 	// 프로그래스바 퍼센트 설정
-	float ClickedPercent = GetProgressBarPercentOnMouse(InGeometry, InMouseEvent);
-	ProgressBar_Auction->SetPercent(ClickedPercent);
+	FillProgressBarClickedPoint();
 
 	// 현재까지 입찰된 가격 설정
 	SetCurBidPrice();
@@ -66,12 +69,11 @@ FVector2D UAuctionWidget::GetCurLocalMousePos(const FGeometry& InGeometry, const
 	return LocalMousePos;
 }
 
-float UAuctionWidget::GetProgressBarPercentOnMouse(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent)
+float UAuctionWidget::BidBarPosToProgressBarPercent(FVector2D BidBarPos)
 {
-	FVector2D CurMousePos = GetCurLocalMousePos(InGeometry, InMouseEvent);
-	FVector2D ProgressBarSize = InGeometry.GetLocalSize();
+	FVector2D ProgressBarSize = GetProgressBarSize();
 
-	float Percent = FMath::Clamp(CurMousePos.X / ProgressBarSize.X, 0.0f, 1.0f);
+	float Percent = FMath::Clamp(BidBarPos.X / ProgressBarSize.X, 0.0f, 1.0f);
 	return Percent;
 }
 
@@ -116,13 +118,13 @@ void UAuctionWidget::SetSellingPricePos(float BinMin, float SellingPrice, float 
 	float SellingPricePosX = ProgressBarPos.X + ProgressBarSize.X * Percent;
 
 	UCanvasPanelSlot* ImageSellingPriceBarCanvasSlot = Cast<UCanvasPanelSlot>(Image_SellingPriceBar->Slot);
-	ImageSellingPriceBarCanvasSlot->SetPosition(FVector2D(SellingPricePosX, 800.0f));
+	ImageSellingPriceBarCanvasSlot->SetDesiredPosition(FVector2D(SellingPricePosX, 800.0f));
 
 	UCanvasPanelSlot* TextSellingPriceKorCanvasSlot = Cast<UCanvasPanelSlot>(TextBlock_SellingPrice_Kor->Slot);
-	TextSellingPriceKorCanvasSlot->SetPosition(FVector2D(SellingPricePosX, 920.0f));
+	TextSellingPriceKorCanvasSlot->SetDesiredPosition(FVector2D(SellingPricePosX, 920.0f));
 
 	UCanvasPanelSlot* TextSellingPriceCanvasSlot = Cast<UCanvasPanelSlot>(TextBlock_SellingPrice->Slot);
-	TextSellingPriceCanvasSlot->SetPosition(FVector2D(SellingPricePosX, 954.5f));
+	TextSellingPriceCanvasSlot->SetDesiredPosition(FVector2D(SellingPricePosX, 954.5f));
 }
 
 void UAuctionWidget::SetCurBidPricePos()
@@ -137,12 +139,38 @@ void UAuctionWidget::SetCurBidPricePos()
 	else {
 		TextBlock_CurBidPrice->SetVisibility(ESlateVisibility::Visible);
 
-		FVector2D ProgressBarPos = GetProgressBarPos();
-		FVector2D ProgressBarSize = GetProgressBarSize();
-
-		float CurBidPricePosX = ProgressBarPos.X + ProgressBarSize.X * CurProgressBarPercent;
-
+		float CurBidPricePosX = GetFilledProgressBarPosX();
 		UCanvasPanelSlot* CurBidPriceCanvasSlot = Cast<UCanvasPanelSlot>(TextBlock_CurBidPrice->Slot);
+		float CurBidPriceSizeX = CurBidPriceCanvasSlot->GetSize().X;
+		CurBidPricePosX -= CurBidPriceSizeX / 2;
 		CurBidPriceCanvasSlot->SetPosition(FVector2D(CurBidPricePosX, 920.0f));
 	}
+}
+
+float UAuctionWidget::GetFilledProgressBarPosX()
+{
+	FVector2D ProgressBarPos = GetProgressBarPos();
+	FVector2D ProgressBarSize = GetProgressBarSize();
+	float Percent = ProgressBar_Auction->Percent;
+
+	float FilledPosX = ProgressBarPos.X + ProgressBarSize.X * Percent;
+	return FilledPosX;
+}
+
+void UAuctionWidget::SetTurnWidgetPos()
+{
+	float PosX = GetFilledProgressBarPosX();
+	BP_Turn->SetPositionInViewport(FVector2D(PosX, 693.0f), false);
+}
+
+void UAuctionWidget::StartAuction()
+{
+	FLinearColor CurColor;
+	if (AuctionSequence == 0) {
+		CurColor = FLinearColor(1.0f, 0.617207f, 0.078187f, 1.0f);
+	}
+	else if (AuctionSequence == 1) {
+		CurColor = FLinearColor(0.768151f, 0.059511f, 0.059511f, 1.0f);
+	}
+	SetTurnWidgetPos();
 }
