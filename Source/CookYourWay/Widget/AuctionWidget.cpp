@@ -41,7 +41,7 @@ void UAuctionWidget::NativeOnMouseLeave(const FPointerEvent& InMouseEvent)
 		return;
 	}
 
-	if (IsValid(BP_BidBar)) {
+	if (IsValid(BP_BidBar) && BP_BidBar != nullptr && !BP_BidBar->IsHovered()) {
 		BP_BidBar->RemoveFromParent();
 		BP_BidBar = nullptr;
 	}
@@ -72,8 +72,9 @@ FVector2D UAuctionWidget::GetCurLocalMousePos(const FGeometry& InGeometry, const
 float UAuctionWidget::BidBarPosToProgressBarPercent(FVector2D BidBarPos)
 {
 	FVector2D ProgressBarSize = GetProgressBarSize();
+	FVector2D ProgressBarPos = GetProgressBarPos();
 
-	float Percent = FMath::Clamp(BidBarPos.X / ProgressBarSize.X, 0.0f, 1.0f);
+	float Percent = FMath::Clamp((BidBarPos.X - ProgressBarPos.X) / ProgressBarSize.X, 0.0f, 1.0f);
 	return Percent;
 }
 

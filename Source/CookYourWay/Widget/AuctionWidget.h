@@ -67,7 +67,7 @@ public:
 	UFUNCTION(BlueprintImplementableEvent)
 	void CreateBidBar();
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
-	void SetCurViewingBidPrice(float PercentOnMouse);
+	void SetBidBarPrice(float Percent);
 	UFUNCTION(BlueprintImplementableEvent)
 	void SetCurBidPrice();
 	UFUNCTION(BlueprintImplementableEvent)
