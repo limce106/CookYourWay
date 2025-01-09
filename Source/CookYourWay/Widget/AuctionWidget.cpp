@@ -4,9 +4,6 @@
 #include "Widget/AuctionWidget.h"
 #include <Blueprint/WidgetLayoutLibrary.h>
 
-#define PlayerTurn 0;
-#define CompetitorTurn 1;
-
 void UAuctionWidget::NativeConstruct()
 {
 	Super::NativeConstruct();
@@ -14,13 +11,13 @@ void UAuctionWidget::NativeConstruct()
 	ProgressBar_Auction = (UProgressBar*)GetWidgetFromName(TEXT("ProgressBar_Auction"));
 	Image_SellingPriceBar = (UImage*)GetWidgetFromName(TEXT("Image_SellingPriceBar"));
 	TextBlock_SellingPrice_Kor = (UTextBlock*)GetWidgetFromName(TEXT("TextBlock_SellingPrice_Kor"));
-	TextBlock_SellingPrice = (UTextBlock*)GetWidgetFromName(TEXT("TextBlock_SellingPrice"));
+	TextBlock_SellPrice = (UTextBlock*)GetWidgetFromName(TEXT("TextBlock_SellPrice"));
 	TextBlock_CurBidPrice = (UTextBlock*)GetWidgetFromName(TEXT("TextBlock_CurBidPrice"));
 }
 
 FReply UAuctionWidget::NativeOnMouseMove(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent)
 {
-	if (AuctionSequence != 0) {
+	if (AuctionSequence != PlayerTurn) {
 		return Super::NativeOnMouseMove(InGeometry, InMouseEvent);
 	}
 
@@ -37,7 +34,7 @@ FReply UAuctionWidget::NativeOnMouseMove(const FGeometry& InGeometry, const FPoi
 
 void UAuctionWidget::NativeOnMouseLeave(const FPointerEvent& InMouseEvent)
 {
-	if (AuctionSequence != 0) {
+	if (AuctionSequence != PlayerTurn) {
 		return;
 	}
 
@@ -49,7 +46,11 @@ void UAuctionWidget::NativeOnMouseLeave(const FPointerEvent& InMouseEvent)
 
 FReply UAuctionWidget::NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent)
 {
-	if (AuctionSequence != 0) {
+	if (AuctionSequence != PlayerTurn) {
+		return FReply::Handled();
+	}
+
+	if (!CanBuy) {
 		return FReply::Handled();
 	}
 
@@ -124,7 +125,7 @@ void UAuctionWidget::SetSellingPricePos(float BinMin, float SellingPrice, float 
 	UCanvasPanelSlot* TextSellingPriceKorCanvasSlot = Cast<UCanvasPanelSlot>(TextBlock_SellingPrice_Kor->Slot);
 	TextSellingPriceKorCanvasSlot->SetDesiredPosition(FVector2D(SellingPricePosX, 920.0f));
 
-	UCanvasPanelSlot* TextSellingPriceCanvasSlot = Cast<UCanvasPanelSlot>(TextBlock_SellingPrice->Slot);
+	UCanvasPanelSlot* TextSellingPriceCanvasSlot = Cast<UCanvasPanelSlot>(TextBlock_SellPrice->Slot);
 	TextSellingPriceCanvasSlot->SetDesiredPosition(FVector2D(SellingPricePosX, 954.5f));
 }
 
@@ -134,7 +135,7 @@ void UAuctionWidget::SetCurBidPricePos()
 	if (CurProgressBarPercent == 0.0f) {
 		TextBlock_CurBidPrice->SetVisibility(ESlateVisibility::Hidden);
 	}
-	else if (TextBlock_CurBidPrice->GetText().ToString() == TextBlock_SellingPrice->GetText().ToString()) {
+	else if (TextBlock_CurBidPrice->GetText().ToString() == TextBlock_SellPrice->GetText().ToString()) {
 		TextBlock_CurBidPrice->SetVisibility(ESlateVisibility::Hidden);
 	}
 	else {
@@ -162,16 +163,4 @@ void UAuctionWidget::SetTurnWidgetPos()
 {
 	float PosX = GetFilledProgressBarPosX();
 	BP_Turn->SetPositionInViewport(FVector2D(PosX, 693.0f), false);
-}
-
-void UAuctionWidget::StartAuction()
-{
-	FLinearColor CurColor;
-	if (AuctionSequence == 0) {
-		CurColor = FLinearColor(1.0f, 0.617207f, 0.078187f, 1.0f);
-	}
-	else if (AuctionSequence == 1) {
-		CurColor = FLinearColor(0.768151f, 0.059511f, 0.059511f, 1.0f);
-	}
-	SetTurnWidgetPos();
 }

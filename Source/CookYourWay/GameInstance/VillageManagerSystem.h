@@ -55,7 +55,7 @@ public:
 	TArray<int32> StoreAreaID = { 2, 10, 23 };
 
 	// 전체 자산
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	int32 TotalAsset = 0;
 
 	// 플레이어 가게 누적 손님 수

@@ -29,7 +29,7 @@ public:
 	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
 	class UTextBlock* TextBlock_SellingPrice_Kor;
 	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
-	class UTextBlock* TextBlock_SellingPrice;
+	class UTextBlock* TextBlock_SellPrice;
 	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
 	class UTextBlock* TextBlock_CurBidPrice;
 
@@ -40,6 +40,13 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	int32 AuctionSequence;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	int32 PlayerTurn = 0;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	int32 CompetitorTurn = 1;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	bool CanBuy = false;
 
 	UFUNCTION()
 	FVector2D GetCurLocalMousePos(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent);
@@ -61,8 +68,6 @@ public:
 	float GetFilledProgressBarPosX();
 	UFUNCTION(BlueprintCallable)
 	void SetTurnWidgetPos();
-	UFUNCTION(BlueprintCallable)
-	void StartAuction();
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void CreateBidBar();
