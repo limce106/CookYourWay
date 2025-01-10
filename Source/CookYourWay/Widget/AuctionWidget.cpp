@@ -50,16 +50,19 @@ FReply UAuctionWidget::NativeOnMouseButtonDown(const FGeometry& InGeometry, cons
 		return FReply::Handled();
 	}
 
-	if (!CanBuy) {
+	// 테스트를 위해 임시로 주석 처리
+	/*if (!CanBuy) {
 		return FReply::Handled();
-	}
+	}*/
+
+	IsPlayerBidPrevTurn = true;
 
 	// 프로그래스바 퍼센트 설정
 	FillProgressBarClickedPoint();
 
 	// 현재까지 입찰된 가격 설정
-	SetCurBidPrice();
-	SetCurBidPricePos();
+	SetBidPriceTextByClickedPrice();
+	SetBidPriceTextPosByPercent();
 
 	return FReply::Handled();
 }
@@ -113,7 +116,7 @@ FVector2D UAuctionWidget::GetProgressBarPos()
 
 void UAuctionWidget::SetSellingPricePos(float BinMin, float SellingPrice, float BinMax)
 {
-	float Percent = (SellingPrice - BinMin) / (BinMax - BinMin);
+	float Percent = PriceToProgressBarPercent(SellingPrice, BinMin, BinMax);
 
 	FVector2D ProgressBarPos = GetProgressBarPos();
 	FVector2D ProgressBarSize = GetProgressBarSize();
@@ -129,7 +132,7 @@ void UAuctionWidget::SetSellingPricePos(float BinMin, float SellingPrice, float 
 	TextSellingPriceCanvasSlot->SetDesiredPosition(FVector2D(SellingPricePosX, 954.5f));
 }
 
-void UAuctionWidget::SetCurBidPricePos()
+void UAuctionWidget::SetBidPriceTextPosByPercent()
 {
 	float CurProgressBarPercent = ProgressBar_Auction->Percent;
 	if (CurProgressBarPercent == 0.0f) {
@@ -162,5 +165,12 @@ float UAuctionWidget::GetFilledProgressBarPosX()
 void UAuctionWidget::SetTurnWidgetPos()
 {
 	float PosX = GetFilledProgressBarPosX();
+	// float SizeX = BP_Turn->GetDesiredSize().X;
 	BP_Turn->SetPositionInViewport(FVector2D(PosX, 693.0f), false);
+}
+
+float UAuctionWidget::PriceToProgressBarPercent(float Price, float BinMin, float BinMax)
+{
+	float Percent = (Price - BinMin) / (BinMax - BinMin);
+	return FMath::Clamp(Percent, 0.0f, 1.0f);;
 }

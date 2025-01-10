@@ -39,7 +39,7 @@ public:
 	UUserWidget* BP_Turn;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
-	int32 AuctionSequence;
+	int32 AuctionSequence = 0;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	int32 PlayerTurn = 0;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
@@ -47,6 +47,9 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	bool CanBuy = false;
+	// 직전 플레이어 턴에서 입찰했는지 여부
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	bool IsPlayerBidPrevTurn = false;
 
 	UFUNCTION()
 	FVector2D GetCurLocalMousePos(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent);
@@ -60,21 +63,32 @@ public:
 	UFUNCTION()
 	FVector2D GetProgressBarPos();
 
+	// 판매가 텍스트 위치 설정
 	UFUNCTION(BlueprintCallable)
 	void SetSellingPricePos(float BinMin, float SellingPrice, float BinMax);
+	// 프로그래스바 퍼센트에 따라 입찰 가격 텍스트 위치 설정
 	UFUNCTION(BlueprintCallable)
-	void SetCurBidPricePos();
+	void SetBidPriceTextPosByPercent();
+	// 프로그래스바 채워진 부분의 X 위치 가져오기
 	UFUNCTION(BlueprintCallable)
 	float GetFilledProgressBarPosX();
+	// 턴 타이머 위젯 위치 설정
 	UFUNCTION(BlueprintCallable)
 	void SetTurnWidgetPos();
+	// 가격을 프로그래스바 퍼센트로 변환
+	UFUNCTION(BlueprintCallable)
+	float PriceToProgressBarPercent(float Price, float BinMin, float BinMax);
 
+	// 입찰 바 생성
 	UFUNCTION(BlueprintImplementableEvent)
 	void CreateBidBar();
+	// 프로그래스바 퍼선트에 따라 입찰 바 가격 텍스트 설정
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 	void SetBidBarPrice(float Percent);
+	// 클릭한 가격에 따라 입찰 바 가격 텍스트 설정
 	UFUNCTION(BlueprintImplementableEvent)
-	void SetCurBidPrice();
+	void SetBidPriceTextByClickedPrice();
+	// 클리한 지점까지 프로그래스바 채우기
 	UFUNCTION(BlueprintImplementableEvent)
 	void FillProgressBarClickedPoint();
 };
