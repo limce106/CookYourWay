@@ -23,7 +23,7 @@ FReply UAuctionWidget::NativeOnMouseMove(const FGeometry& InGeometry, const FPoi
 
 	bool IsMouseOnUnfilled = IsMouseOnUnfilledProgressBar(InGeometry, InMouseEvent);
 
-	if (IsMouseOnUnfilled) {
+	if (IsMouseOnUnfilled && !IsPlayerBidThisTurn) {
 		if (BP_BidBar == nullptr || !IsValid(BP_BidBar)) {
 			CreateBidBar();
 		}
@@ -55,7 +55,10 @@ FReply UAuctionWidget::NativeOnMouseButtonDown(const FGeometry& InGeometry, cons
 		return FReply::Handled();
 	}*/
 
-	IsPlayerBidPrevTurn = true;
+	if (IsValid(BP_BidBar) && BP_BidBar != nullptr) {
+		BP_BidBar->RemoveFromParent();
+	}
+	IsPlayerBidThisTurn = true;
 
 	// 프로그래스바 퍼센트 설정
 	FillProgressBarClickedPoint();
@@ -169,9 +172,3 @@ void UAuctionWidget::SetTurnWidgetPos()
 	// float SizeX = BP_Turn->GetDesiredSize().X;
 	BP_Turn->SetPositionInViewport(FVector2D(PosX, 693.0f), false);
 }
-
-//float UAuctionWidget::PriceToProgressBarPercent(float Price, float BinMin, float BinMax)
-//{
-//	float Percent = (Price - BinMin) / (BinMax - BinMin);
-//	return FMath::Clamp(Percent, 0.0f, 1.0f);;
-//}

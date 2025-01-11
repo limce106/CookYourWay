@@ -8,11 +8,19 @@
 AReubenController::AReubenController()
 {
 	bShowMouseCursor = true;
+	DefaultMouseCursor = EMouseCursor::Default;
+
+	bEnableClickEvents = true;
+	bEnableMouseOverEvents = true;
 }
 
 void AReubenController::BeginPlay()
 {
 	Super::BeginPlay();
+
+	//FInputModeUIOnly InputModeData;
+	//InputModeData.SetLockMouseToViewportBehavior(EMouseLockMode::LockAlways);
+	//SetInputMode(InputModeData);
 
 	Reuben = Cast<AReuben>(UGameplayStatics::GetPlayerPawn(this, 0));
 }

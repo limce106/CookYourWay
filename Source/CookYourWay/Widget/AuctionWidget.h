@@ -49,7 +49,7 @@ public:
 	bool CanBuy = false;
 	// 직전 플레이어 턴에서 입찰했는지 여부
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
-	bool IsPlayerBidPrevTurn = false;
+	bool IsPlayerBidThisTurn = false;
 
 	UFUNCTION()
 	FVector2D GetCurLocalMousePos(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent);
