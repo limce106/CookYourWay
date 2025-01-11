@@ -73,12 +73,12 @@ FVector2D UAuctionWidget::GetCurLocalMousePos(const FGeometry& InGeometry, const
 	return LocalMousePos;
 }
 
-float UAuctionWidget::BidBarPosToProgressBarPercent(FVector2D BidBarPos)
+float UAuctionWidget::PosToProgressBarPercent(FVector2D Pos)
 {
 	FVector2D ProgressBarSize = GetProgressBarSize();
 	FVector2D ProgressBarPos = GetProgressBarPos();
 
-	float Percent = FMath::Clamp((BidBarPos.X - ProgressBarPos.X) / ProgressBarSize.X, 0.0f, 1.0f);
+	float Percent = FMath::Clamp((Pos.X - ProgressBarPos.X) / ProgressBarSize.X, 0.0f, 1.0f);
 	return Percent;
 }
 
@@ -114,9 +114,10 @@ FVector2D UAuctionWidget::GetProgressBarPos()
 	return ProgressBarPos;
 }
 
-void UAuctionWidget::SetSellingPricePos(float BinMin, float SellingPrice, float BinMax)
+void UAuctionWidget::SetSellingPricePos(float SellingPrice)
 {
-	float Percent = PriceToProgressBarPercent(SellingPrice, BinMin, BinMax);
+	float Percent;
+	PriceToProgressBarPercent(SellingPrice, Percent);
 
 	FVector2D ProgressBarPos = GetProgressBarPos();
 	FVector2D ProgressBarSize = GetProgressBarSize();
@@ -169,8 +170,8 @@ void UAuctionWidget::SetTurnWidgetPos()
 	BP_Turn->SetPositionInViewport(FVector2D(PosX, 693.0f), false);
 }
 
-float UAuctionWidget::PriceToProgressBarPercent(float Price, float BinMin, float BinMax)
-{
-	float Percent = (Price - BinMin) / (BinMax - BinMin);
-	return FMath::Clamp(Percent, 0.0f, 1.0f);;
-}
+//float UAuctionWidget::PriceToProgressBarPercent(float Price, float BinMin, float BinMax)
+//{
+//	float Percent = (Price - BinMin) / (BinMax - BinMin);
+//	return FMath::Clamp(Percent, 0.0f, 1.0f);;
+//}

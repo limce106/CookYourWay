@@ -54,7 +54,7 @@ public:
 	UFUNCTION()
 	FVector2D GetCurLocalMousePos(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent);
 	UFUNCTION(BlueprintCallable)
-	float BidBarPosToProgressBarPercent(FVector2D BidBarPos);
+	float PosToProgressBarPercent(FVector2D Pos);
 	UFUNCTION()
 	bool IsMouseOnUnfilledProgressBar(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent);
 
@@ -65,7 +65,7 @@ public:
 
 	// 판매가 텍스트 위치 설정
 	UFUNCTION(BlueprintCallable)
-	void SetSellingPricePos(float BinMin, float SellingPrice, float BinMax);
+	void SetSellingPricePos(float SellingPrice);
 	// 프로그래스바 퍼센트에 따라 입찰 가격 텍스트 위치 설정
 	UFUNCTION(BlueprintCallable)
 	void SetBidPriceTextPosByPercent();
@@ -75,9 +75,6 @@ public:
 	// 턴 타이머 위젯 위치 설정
 	UFUNCTION(BlueprintCallable)
 	void SetTurnWidgetPos();
-	// 가격을 프로그래스바 퍼센트로 변환
-	UFUNCTION(BlueprintCallable)
-	float PriceToProgressBarPercent(float Price, float BinMin, float BinMax);
 
 	// 입찰 바 생성
 	UFUNCTION(BlueprintImplementableEvent)
@@ -91,4 +88,12 @@ public:
 	// 클리한 지점까지 프로그래스바 채우기
 	UFUNCTION(BlueprintImplementableEvent)
 	void FillProgressBarClickedPoint();
+
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
+	void PercentToPrice(float Percent, int32& Price);
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
+	void PosToPrice(FVector2D Pos, int32& Price);
+	// 가격을 프로그래스바 퍼센트로 변환
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
+	void PriceToProgressBarPercent(float Price, float& Percent);
 };
