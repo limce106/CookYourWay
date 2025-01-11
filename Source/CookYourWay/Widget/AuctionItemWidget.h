@@ -33,7 +33,7 @@ public:
 	UFUNCTION(BlueprintImplementableEvent)
 	void SetSellingAuctionPrice(int32 TableIdx);
 
-	UFUNCTION(BlueprintImplementableEvent)
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 	void SetHavingNumText(int32 TableIdx);
 	UFUNCTION(BlueprintCallable)
 	int32 GetHavingIngrNum(int32 TableIdx);
