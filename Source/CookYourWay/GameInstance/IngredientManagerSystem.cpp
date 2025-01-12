@@ -94,6 +94,12 @@ int32 UIngredientManagerSystem::GetIngrBidMax(FString Class)
 	return IngrClassData->IngrBidMax;
 }
 
+int32 UIngredientManagerSystem::GetIngrSalePrice(FString Class)
+{
+	FIngrClassData* IngrClassData = IngrClassTable->FindRow<FIngrClassData>(FName(*Class), TEXT(""));
+	return IngrClassData->IngrClearSale;
+}
+
 int32 UIngredientManagerSystem::GetSellingPriceByIndex(int32 Index)
 {
 	int32 Price = GetIngrSellingPrice(IngredientRows[Index]->IngrClass);

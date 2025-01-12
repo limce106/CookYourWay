@@ -30,7 +30,10 @@ public:
 	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
 	class UTextBlock* TextBlock_HavingNum;
 
-	UFUNCTION(BlueprintImplementableEvent)
+	UPROPERTY(EditAnyWhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+	bool IsClearSale;
+
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 	void SetSellingAuctionPrice(int32 TableIdx);
 
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)

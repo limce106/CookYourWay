@@ -18,13 +18,13 @@ void AAuctionLevelScriptActor::Tick(float DeltaTime)
 void AAuctionLevelScriptActor::SetAuctionItems()
 {
 	UIngredientManagerSystem* IngredientManagerSystem = UGameplayStatics::GetGameInstance(GetWorld())->GetSubsystem<UIngredientManagerSystem>();
-	int32 ItemNum = 6;
+	int32 AuctionItemNum = 6;
 	int32 SClassProb = UKismetMathLibrary::RandomIntegerInRange(1, 100);
 
 	if (SClassProb <= 10) {
 		int32 SClassRandIdx = UKismetMathLibrary::RandomIntegerInRange(1, IngredientManagerSystem->SClassIngrRows.Num() - 1);
 		AuctionIngrTableIdxArr.Add(IngredientManagerSystem->SClassIngrRows[SClassRandIdx]);
-		ItemNum--;
+		AuctionItemNum--;
 		IsContainSClass = true;
 	}
 
@@ -32,9 +32,16 @@ void AAuctionLevelScriptActor::SetAuctionItems()
 	ABClassIngr += IngredientManagerSystem->AClassIngrRows;
 	ABClassIngr += IngredientManagerSystem->BClassIngrRows;
 	
-	for (int i = 0; i < ItemNum; i++) {
+	for (int i = 0; i < AuctionItemNum; i++) {
 		int32 ItemIdx = UKismetMathLibrary::RandomIntegerInRange(1, ABClassIngr.Num() - 1);
 		AuctionIngrTableIdxArr.Add(ABClassIngr[ItemIdx]);
+		ABClassIngr.RemoveAt(ItemIdx);
+	}
+
+	int32 SaleItemNum = 2;
+	for (int i = 0; i < SaleItemNum; i++) {
+		int32 ItemIdx = UKismetMathLibrary::RandomIntegerInRange(1, ABClassIngr.Num() - 1);
+		SaleIngrTableIdxArr.Add(ABClassIngr[ItemIdx]);
 		ABClassIngr.RemoveAt(ItemIdx);
 	}
 }

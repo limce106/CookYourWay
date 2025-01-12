@@ -90,6 +90,8 @@ public:
 	int32 GetIngrBidMin(FString Class);
 	UFUNCTION(BlueprintCallable)
 	int32 GetIngrBidMax(FString Class);
+	UFUNCTION(BlueprintCallable)
+	int32 GetIngrSalePrice(FString Class);
 
 	int32 GetSellingPriceByIndex(int32 Index);
 	int32 GetIngrBinMinByIndex(int32 Index);

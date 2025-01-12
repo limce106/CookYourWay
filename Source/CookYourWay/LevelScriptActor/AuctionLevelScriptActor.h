@@ -22,6 +22,8 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	TArray<int32>AuctionIngrTableIdxArr;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	TArray<int32>SaleIngrTableIdxArr;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	bool IsContainSClass = false;
 
 	UFUNCTION(BlueprintCallable)
