@@ -56,7 +56,7 @@ public:
 	UFUNCTION(BlueprintCallable)
 	float PosToProgressBarPercent(FVector2D Pos);
 	UFUNCTION()
-	bool IsMouseOnUnfilledProgressBar(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent);
+	bool IsMouseOnUnfilledProgressBar();
 
 	UFUNCTION()
 	FVector2D GetProgressBarSize();

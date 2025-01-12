@@ -3,6 +3,7 @@
 
 #include "Widget/AuctionWidget.h"
 #include <Blueprint/WidgetLayoutLibrary.h>
+#include <Kismet/GameplayStatics.h>
 
 void UAuctionWidget::NativeConstruct()
 {
@@ -21,7 +22,7 @@ FReply UAuctionWidget::NativeOnMouseMove(const FGeometry& InGeometry, const FPoi
 		return Super::NativeOnMouseMove(InGeometry, InMouseEvent);
 	}
 
-	bool IsMouseOnUnfilled = IsMouseOnUnfilledProgressBar(InGeometry, InMouseEvent);
+	bool IsMouseOnUnfilled = IsMouseOnUnfilledProgressBar();
 
 	if (IsMouseOnUnfilled && !IsPlayerBidThisTurn) {
 		if (BP_BidBar == nullptr || !IsValid(BP_BidBar)) {
@@ -78,6 +79,10 @@ FVector2D UAuctionWidget::GetCurLocalMousePos(const FGeometry& InGeometry, const
 
 float UAuctionWidget::PosToProgressBarPercent(FVector2D Pos)
 {
+	if (!IsValid(ProgressBar_Auction)) {
+		return 0.0f;
+	}
+
 	FVector2D ProgressBarSize = GetProgressBarSize();
 	FVector2D ProgressBarPos = GetProgressBarPos();
 
@@ -85,15 +90,17 @@ float UAuctionWidget::PosToProgressBarPercent(FVector2D Pos)
 	return Percent;
 }
 
-bool UAuctionWidget::IsMouseOnUnfilledProgressBar(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent)
+bool UAuctionWidget::IsMouseOnUnfilledProgressBar()
 {
-	FVector2D CurMousePos = GetCurLocalMousePos(InGeometry, InMouseEvent);
+	float MouseX, MouseY;
+	APlayerController* PlayerController = UGameplayStatics::GetPlayerController(GetWorld(), 0);
+	PlayerController->GetMousePosition(MouseX, MouseY);
 
-	float ProgressBarWidth = InGeometry.GetLocalSize().X;
-	float FilledWidth = ProgressBarWidth * ProgressBar_Auction->Percent;
+	float ProgressBarY = GetProgressBarPos().Y;
+	float ProgressBarHeight = GetProgressBarSize().Y;
 
 	// 마우스가 채워지지 않은 영역에 있는지
-	if (CurMousePos.X > FilledWidth) {
+	if (MouseX > GetFilledProgressBarPosX() && MouseY >= ProgressBarY && MouseY <= (ProgressBarY + ProgressBarHeight)) {
 		return true;
 	}
 	else {
@@ -169,6 +176,5 @@ float UAuctionWidget::GetFilledProgressBarPosX()
 void UAuctionWidget::SetTurnWidgetPos()
 {
 	float PosX = GetFilledProgressBarPosX();
-	// float SizeX = BP_Turn->GetDesiredSize().X;
 	BP_Turn->SetPositionInViewport(FVector2D(PosX, 693.0f), false);
 }
