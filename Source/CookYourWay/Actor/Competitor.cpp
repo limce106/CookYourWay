@@ -61,7 +61,7 @@ void ACompetitor::CustomerVisited(ACustomer* Customer)
 {
 	UpdateTotalCustAndRateSum();	
 
-	CustomerDataManagerSystem->UpdateAvgRateByCustName(Customer->CustName, AreaID, GetCustomerSatisfaction());
+	CustomerDataManagerSystem->AddTodaySatisfactionMap(Customer->CustName, AreaID, GetCustomerSatisfaction());
 	Customer->Destroy();
 }
 

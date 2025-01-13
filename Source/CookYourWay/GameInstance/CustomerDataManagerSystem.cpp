@@ -23,6 +23,7 @@ void UCustomerDataManagerSystem::Init()
 			IsRegularCustMap.Add(CustomerBistroKey, false);
 			LoyaltyMap.Add(CustomerBistroKey, 0.0f);
 			AvgRateMap.Add(CustomerBistroKey, 0.0f);
+			VisitedNumMap.Add(CustomerBistroKey, 0);
 		}
 
 		for (int CustNameIdx = 0; CustNameIdx < CustomerNames.Num(); CustNameIdx++) {
@@ -32,6 +33,7 @@ void UCustomerDataManagerSystem::Init()
 				IsRegularCustMap.Add(CustomerBistroKey, false);
 				LoyaltyMap.Add(CustomerBistroKey, 0.0f);
 				AvgRateMap.Add(CustomerBistroKey, 0.0f);
+				VisitedNumMap.Add(CustomerBistroKey, 0);
 			}
 		}
 	}
@@ -207,15 +209,49 @@ bool UCustomerDataManagerSystem::HasRegularCust(int32 BistroAreaID)
 	return false;
 }
 
-void UCustomerDataManagerSystem::UpdateAvgRateByCustName(FString CustomerName, int32 BistroAreaID, int32 Satisfaction)
+//void UCustomerDataManagerSystem::UpdateAvgRateByCustName(FString CustomerName, int32 BistroAreaID, int32 Satisfaction)
+//{
+//	FCustomerBistroKey Key = GetCustomerBistroKey(CustomerName, BistroAreaID);
+//	VisitedNumMap.Add(Key, VisitedNumMap[Key]++);
+//
+//	float TotalAvgRate = GetAvgRate(CustomerName, BistroAreaID);
+//
+//	float UpdatedReviewAvg = (TotalAvgRate * (VisitedNumMap[Key] - 1) + Satisfaction) / VisitedNumMap[Key];
+//	UpdatedReviewAvg = UpdatedReviewAvg * 5 / 100;
+//
+//	AvgRateMap.Emplace(Key, UpdatedReviewAvg);
+//}
+
+void UCustomerDataManagerSystem::UpdateTodayAvgRate()
+{
+	TArray<FCustomerBistroKey> TotalSatisfationSumMapKeys;
+	TotalSatisfationSumMap.GenerateKeyArray(TotalSatisfationSumMapKeys);
+
+	TArray<int32> TotalSatisfationSumMapValues;
+	TotalSatisfationSumMap.GenerateValueArray(TotalSatisfationSumMapValues);
+
+	for (int i = 0; i < TotalSatisfationSumMapKeys.Num(); i++) {
+		FCustomerBistroKey Key = TotalSatisfationSumMapKeys[i];
+		float CurTotalAvgRate = AvgRateMap[Key];
+
+		float UpdatedReviewAvg = (CurTotalAvgRate * (VisitedNumMap[Key] - 1) + TotalSatisfationSumMapValues[i]) / VisitedNumMap[Key];
+		UpdatedReviewAvg = UpdatedReviewAvg * 5 / 100;
+
+		AvgRateMap.Emplace(Key, UpdatedReviewAvg);
+	}
+}
+
+void UCustomerDataManagerSystem::AddTodaySatisfactionMap(FString CustomerName, int32 BistroAreaID, int32 Satisfaction)
 {
 	FCustomerBistroKey Key = GetCustomerBistroKey(CustomerName, BistroAreaID);
 	VisitedNumMap.Add(Key, VisitedNumMap[Key]++);
 
-	float TotalAvgRate = GetAvgRate(CustomerName, BistroAreaID);
-
-	float UpdatedReviewAvg = (TotalAvgRate * (VisitedNumMap[Key] - 1) + Satisfaction) / VisitedNumMap[Key];
-	UpdatedReviewAvg = UpdatedReviewAvg * 5 / 100;
-
-	AvgRateMap.Emplace(Key, UpdatedReviewAvg);
+	float CurSatisfationSum;
+	if (!TotalSatisfationSumMap.Contains(Key)) {
+		CurSatisfationSum = 0;
+	}
+	else {
+		CurSatisfationSum = TotalSatisfationSumMap[Key];
+	}
+	TotalSatisfationSumMap.Add(Key, CurSatisfationSum + Satisfaction);
 }

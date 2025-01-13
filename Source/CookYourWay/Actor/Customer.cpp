@@ -319,7 +319,7 @@ void ACustomer::EatSandwich()
 
 	/*손님대사 출력 필요*/
 
-	CustomerDataManagerSystem->UpdateAvgRateByCustName(CustName, PlayerBistro->AreaID, Satisfaction);
+	CustomerDataManagerSystem->AddTodaySatisfactionMap(CustName, PlayerBistro->AreaID, Satisfaction);
 	PlayerBistro->UpdateTotalCustAndRateSum(Satisfaction);
 
 	// 테스트

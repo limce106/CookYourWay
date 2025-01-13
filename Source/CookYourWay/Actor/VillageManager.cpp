@@ -148,6 +148,7 @@ void AVillageManager::EndDay()
 {
 	UGameplayStatics::SetGamePaused(GetWorld(), true);
 	CookYourWayGameState->SaveCookYourWayData();
+	CustomerDataManagerSystem->UpdateTodayAvgRate();
 
 	StartSubtractAnim();
 }
