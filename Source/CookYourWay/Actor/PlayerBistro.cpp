@@ -61,7 +61,6 @@ void APlayerBistro::SitCust(ACustomer* Customer, int32 SeatIdx)
 	Customer->IsSit = true;
 
 	Customer->SetActorLocation(CustSeatLocArr[SeatIdx]);
-	// Customer->SetActorHiddenInGame(false);
 
 	ADiningTable* SeatedDiningTable = GetDiningTable(SeatIdx);
 	SeatedDiningTable->SeatedCustomer = Customer;
@@ -117,7 +116,6 @@ int32 APlayerBistro::FindEmptySeatIdx()
 
 void APlayerBistro::CustomerVisited(ACustomer* Customer)
 {
-
 	AAIController* AINpcController = Cast<AAIController>(Customer->GetController());
 	AINpcController->StopMovement();
 	Customer->IsWalk = false;

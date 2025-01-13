@@ -319,7 +319,7 @@ void ACustomer::EatSandwich()
 
 	/*손님대사 출력 필요*/
 
-	//CustomerDataManagerSystem->UpdateAvgRateByCustName(CustName, PlayerBistro->AreaID, PlayerBistro->VisitedCustNum, ReviewRate);
+	CustomerDataManagerSystem->UpdateAvgRateByCustName(CustName, PlayerBistro->AreaID, PlayerBistro->TodayCust, Satisfaction);
 	PlayerBistro->UpdateTotalCustAndRateSum(Satisfaction);
 
 	// 테스트

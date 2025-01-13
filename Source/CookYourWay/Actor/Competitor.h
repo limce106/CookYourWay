@@ -30,6 +30,8 @@ public:
 	// 부지 번호
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	int32 AreaID;
+
+	int32 TodayCust = 0;
 	// 새로운 손님의 평점 평균 가져오기
 	int32 GetCustomerSatisfaction();
 
