@@ -58,6 +58,8 @@ public:
 	TMap<FCustomerBistroKey, float> LoyaltyMap;
 	// <손님 이름/가게, 평점평균>
 	TMap<FCustomerBistroKey, float> AvgRateMap;
+	// <손님 이름/가게, 해당 유형 손님이 방문한 횟수>
+	TMap<FCustomerBistroKey, int32> VisitedNumMap;
 
 	// 최대 평점 
 	const float MaxRate = 5.0;
@@ -93,5 +95,5 @@ public:
 	bool HasRegularCust(int32 BistroAreaID);
 
 	// 손님 유형별 평점 평균 갱신
-	void UpdateAvgRateByCustName(FString CustomerName, int32 BistroAreaID, int32 VisitedCustNum, int32 ReveiwRate);
+	void UpdateAvgRateByCustName(FString CustomerName, int32 BistroAreaID, int32 Satisfaction);
 };

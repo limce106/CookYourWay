@@ -207,12 +207,14 @@ bool UCustomerDataManagerSystem::HasRegularCust(int32 BistroAreaID)
 	return false;
 }
 
-void UCustomerDataManagerSystem::UpdateAvgRateByCustName(FString CustomerName, int32 BistroAreaID, int32 VisitedCustNum, int32 ReveiwRate)
+void UCustomerDataManagerSystem::UpdateAvgRateByCustName(FString CustomerName, int32 BistroAreaID, int32 Satisfaction)
 {
 	FCustomerBistroKey Key = GetCustomerBistroKey(CustomerName, BistroAreaID);
+	VisitedNumMap.Add(Key, VisitedNumMap[Key]++);
+
 	float TotalAvgRate = GetAvgRate(CustomerName, BistroAreaID);
 
-	float UpdatedReviewAvg = (TotalAvgRate * (VisitedCustNum - 1) + ReveiwRate) / VisitedCustNum;
+	float UpdatedReviewAvg = (TotalAvgRate * (VisitedNumMap[Key] - 1) + Satisfaction) / VisitedNumMap[Key];
 	UpdatedReviewAvg = UpdatedReviewAvg * 5 / 100;
 
 	AvgRateMap.Emplace(Key, UpdatedReviewAvg);
