@@ -222,35 +222,44 @@ bool UCustomerDataManagerSystem::HasRegularCust(int32 BistroAreaID)
 //	AvgRateMap.Emplace(Key, UpdatedReviewAvg);
 //}
 
-void UCustomerDataManagerSystem::UpdateTodayAvgRate()
-{
-	TArray<FCustomerBistroKey> TotalSatisfationSumMapKeys;
-	TodaySatisfationSumMap.GenerateKeyArray(TotalSatisfationSumMapKeys);
+//void UCustomerDataManagerSystem::UpdateTodayAvgRate()
+//{
+//	/*TArray<FCustomerBistroKey> TotalSatisfationSumMapKeys;
+//	TodaySatisfationSumMap.GenerateKeyArray(TotalSatisfationSumMapKeys);
+//
+//	TArray<int32> TotalSatisfationSumMapValues;
+//	TodaySatisfationSumMap.GenerateValueArray(TotalSatisfationSumMapValues);
+//
+//	for (int i = 0; i < TotalSatisfationSumMapKeys.Num(); i++) {
+//		FCustomerBistroKey Key = TotalSatisfationSumMapKeys[i];
+//		float CurTotalAvgRate = AvgRateMap[Key];
+//
+//		float UpdatedReviewAvg = (CurTotalAvgRate * (VisitedNumMap[Key] - 1) + TotalSatisfationSumMapValues[i]) / VisitedNumMap[Key];
+//		UpdatedReviewAvg = UpdatedReviewAvg * 5 / 100;
+//
+//		AvgRateMap.Emplace(Key, UpdatedReviewAvg);
+//	}*/
+//
+//
+//	for (int i = 0; i < TotalSatisfationSumMapKeys.Num(); i++) {
+//		FCustomerBistroKey Key = TotalSatisfationSumMapKeys[i];
+//		float CurTotalAvgRate = AvgRateMap[Key];
+//
+//		float UpdatedReviewAvg = (CurTotalAvgRate * (VisitedNumMap[Key] - 1) + TotalSatisfationSumMapValues[i]) / VisitedNumMap[Key];
+//		UpdatedReviewAvg = UpdatedReviewAvg * 5 / 100;
+//
+//		AvgRateMap.Emplace(Key, UpdatedReviewAvg);
+//	}
+//}
 
-	TArray<int32> TotalSatisfationSumMapValues;
-	TodaySatisfationSumMap.GenerateValueArray(TotalSatisfationSumMapValues);
-
-	for (int i = 0; i < TotalSatisfationSumMapKeys.Num(); i++) {
-		FCustomerBistroKey Key = TotalSatisfationSumMapKeys[i];
-		float CurTotalAvgRate = AvgRateMap[Key];
-
-		float UpdatedReviewAvg = (CurTotalAvgRate * (VisitedNumMap[Key] - 1) + TotalSatisfationSumMapValues[i]) / VisitedNumMap[Key];
-		UpdatedReviewAvg = UpdatedReviewAvg * 5 / 100;
-
-		AvgRateMap.Emplace(Key, UpdatedReviewAvg);
-	}
-}
-
-void UCustomerDataManagerSystem::AddTodaySatisfactionMap(FString CustomerName, int32 BistroAreaID, int32 Satisfaction)
-{
-	FScopeLock Lock(&DataCriticalSection);
-
-	FCustomerBistroKey Key = GetCustomerBistroKey(CustomerName, BistroAreaID);
-	VisitedNumMap.Add(Key, VisitedNumMap[Key]++);
-
-	float CurSatisfationSum = 0;
-	if (TodaySatisfationSumMap.Contains(Key)) {
-		CurSatisfationSum = TodaySatisfationSumMap[Key];
-	}
-	TodaySatisfationSumMap.Add(Key, CurSatisfationSum + Satisfaction);
-}
+//void UCustomerDataManagerSystem::AddTodaySatisfactionMap(FString CustomerName, int32 BistroAreaID, int32 Satisfaction)
+//{
+//	FCustomerBistroKey Key = GetCustomerBistroKey(CustomerName, BistroAreaID);
+//	VisitedNumMap.Add(Key, VisitedNumMap[Key]++);
+//
+//	float CurSatisfationSum = 0;
+//	if (TodaySatisfationSumMap.Contains(Key)) {
+//		CurSatisfationSum = TodaySatisfationSumMap[Key];
+//	}
+//	TodaySatisfationSumMap.Add(Key, CurSatisfationSum + Satisfaction);
+//}

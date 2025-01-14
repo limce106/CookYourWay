@@ -15,6 +15,8 @@ void ACompetitor::BeginPlay()
 	Super::BeginPlay();
 	
 	VillageManagerSystem = UGameplayStatics::GetGameInstance(GetWorld())->GetSubsystem<UVillageManagerSystem>();
+	CustomerDataManagerSystem = UGameplayStatics::GetGameInstance(GetWorld())->GetSubsystem<UCustomerDataManagerSystem>();
+	
 	SetDefaultReviewRate();
 }
 
@@ -22,6 +24,15 @@ void ACompetitor::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+}
+
+void ACompetitor::InitVisitNumAndSatisfationSumByCust()
+{
+	for (auto CustName : CustomerDataManagerSystem->CustomerNames) {
+		FCustomerBistroKey Key = CustomerDataManagerSystem->GetCustomerBistroKey(CustName, AreaID);
+		VisitNumByCust.Add(CustName, CustomerDataManagerSystem->VisitedNumMap[Key]);
+		SatisfationSumByCust.Add(CustName, (CustomerDataManagerSystem->AvgRateMap[Key]) / 5 * 100);
+	}
 }
 
 void ACompetitor::SetDefaultReviewRate()
@@ -61,8 +72,10 @@ void ACompetitor::CustomerVisited(ACustomer* Customer)
 {
 	UpdateTotalCustAndRateSum();
 
-	CustomerDataManagerSystem->AddTodaySatisfactionMap(Customer->CustName, AreaID, GetCustomerSatisfaction());
-	//Customer->Destroy();
+	// CustomerDataManagerSystem->AddTodaySatisfactionMap(Customer->CustName, AreaID, GetCustomerSatisfaction());
+	VisitNumByCust.Add(Customer->CustName, VisitNumByCust[Customer->CustName] + 1);
+	SatisfationSumByCust.Add(Customer->CustName, SatisfationSumByCust[Customer->CustName] + GetCustomerSatisfaction());
+	Customer->Destroy();
 }
 
 void ACompetitor::UpdateTotalCustAndRateSum()

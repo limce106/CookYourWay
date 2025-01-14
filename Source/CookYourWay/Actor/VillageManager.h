@@ -14,6 +14,8 @@ class COOKYOURWAY_API AVillageManager : public AActor
 {
 	GENERATED_BODY()
 
+	class APlayerBistro* PlayerBistro;
+
 	FTimerHandle LeftDayTimeHandler;
 	int32 LeftMinute = 0;
 	int32 LeftSecond = 30;
@@ -68,4 +70,5 @@ public:
 	void StartSubtractAnim();
 
 	void UpdateProfitsValue(int32 Value);
+	void UpdateTodayAvgRate();
 };

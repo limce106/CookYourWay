@@ -61,6 +61,12 @@ protected:
 public:	
 	virtual void Tick(float DeltaTime) override;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	TMap<FString, int32> VisitNumByCust;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	TMap<FString, int32> SatisfationSumByCust;
+
 	// 부지 번호
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	int32 AreaID;
@@ -90,7 +96,10 @@ public:
 
 	void LeaveWaitingCust(ACustomer* Customer);
 
+	void InitVisitNumAndSatisfationSumByCust();
+
 	void UpdateTotalCustAndRateSum(int32 Rate);
+
 	UFUNCTION(BlueprintCallable)
 	float GetTotalAvgRate();
 };

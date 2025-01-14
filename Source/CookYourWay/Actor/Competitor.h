@@ -31,6 +31,12 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	int32 AreaID;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	TMap<FString, int32> VisitNumByCust;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	TMap<FString, int32> SatisfationSumByCust;
+
 	// 새로운 손님의 평점 평균 가져오기
 	int32 GetCustomerSatisfaction();
 
@@ -44,4 +50,5 @@ protected:
 public:	
 	virtual void Tick(float DeltaTime) override;
 
+	void InitVisitNumAndSatisfationSumByCust();
 };

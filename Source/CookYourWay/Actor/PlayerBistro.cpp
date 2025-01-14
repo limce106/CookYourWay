@@ -37,9 +37,9 @@ void APlayerBistro::BeginPlay()
 
 	// Å×½ºÆ®
 	IngredientManagerSystem = UGameplayStatics::GetGameInstance(GetWorld())->GetSubsystem<UIngredientManagerSystem>();
-	CustomerDataManagerSystem = UGameplayStatics::GetGameInstance(GetWorld())->GetSubsystem<UCustomerDataManagerSystem>();
 	//
 
+	CustomerDataManagerSystem = UGameplayStatics::GetGameInstance(GetWorld())->GetSubsystem<UCustomerDataManagerSystem>();
 	VillageManagerSystem = UGameplayStatics::GetGameInstance(GetWorld())->GetSubsystem<UVillageManagerSystem>();
 
 	SpawnDiningTable();
@@ -174,6 +174,15 @@ void APlayerBistro::LeaveWaitingCust(ACustomer* Customer)
 
 void APlayerBistro::UpdateTotalCustAndRateSum(int32 Rate) {
 	VillageManagerSystem->PlayerBistroTotalRateSum = VillageManagerSystem->PlayerBistroTotalRateSum + Rate;
+}
+
+void APlayerBistro::InitVisitNumAndSatisfationSumByCust()
+{
+	for (auto CustName : CustomerDataManagerSystem->CustomerNames) {
+		FCustomerBistroKey Key = CustomerDataManagerSystem->GetCustomerBistroKey(CustName, AreaID);
+		VisitNumByCust.Add(CustName, CustomerDataManagerSystem->VisitedNumMap[Key]);
+		SatisfationSumByCust.Add(CustName, (CustomerDataManagerSystem->AvgRateMap[Key]) / 5 * 100);
+	}
 }
 
 float APlayerBistro::GetTotalAvgRate() {

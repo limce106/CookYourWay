@@ -44,13 +44,15 @@ void AVillageManager::RunDayTimer()
 
 void AVillageManager::SpawnBistrosAndStore()
 {
-	APlayerBistro* PlayerBistro = GetWorld()->SpawnActor<APlayerBistro>(BP_PlayerBistro, *AreaLocMap.Find(VillageManagerSystem->PlayerBistroAreaID), FRotator::ZeroRotator);
-	PlayerBistro->AreaID = VillageManagerSystem->PlayerBistroAreaID;
+	APlayerBistro* SpawnedPlayerBistro = GetWorld()->SpawnActor<APlayerBistro>(BP_PlayerBistro, *AreaLocMap.Find(VillageManagerSystem->PlayerBistroAreaID), FRotator::ZeroRotator);
+	SpawnedPlayerBistro->AreaID = VillageManagerSystem->PlayerBistroAreaID;
+	SpawnedPlayerBistro->InitVisitNumAndSatisfationSumByCust();
 
 	for (int i = 0; i < VillageManagerSystem->CompetitorAreaID.Num(); i++) {
 		int32 AreaID = VillageManagerSystem->CompetitorAreaID[i];
 		ACompetitor* Competitor = GetWorld()->SpawnActor<ACompetitor>(BP_Competitor, *AreaLocMap.Find(AreaID), FRotator::ZeroRotator);
 		Competitor->AreaID = AreaID;
+		Competitor->InitVisitNumAndSatisfationSumByCust();
 	}
 
 	for (int i = 0; i < VillageManagerSystem->StoreAreaID.Num(); i++) {
@@ -69,6 +71,8 @@ void AVillageManager::BeginPlay()
 
 	Init();
 	RunDayTimer();
+
+	PlayerBistro = Cast<APlayerBistro>(UGameplayStatics::GetActorOfClass(GetWorld(), BP_PlayerBistro));
 }
 
 void AVillageManager::Tick(float DeltaTime)
@@ -150,9 +154,10 @@ int32 AVillageManager::GetRandomAreaId()
 void AVillageManager::EndDay()
 {
 	UGameplayStatics::SetGamePaused(GetWorld(), true);
+	UpdateTodayAvgRate();
 	CookYourWayGameState->SaveCookYourWayData();
-	CustomerDataManagerSystem->UpdateTodayAvgRate();
-	CustomerDataManagerSystem->TodaySatisfationSumMap.Empty();
+	//CustomerDataManagerSystem->UpdateTodayAvgRate();
+	//CustomerDataManagerSystem->TodaySatisfationSumMap.Empty();
 
 	StartSubtractAnim();
 }
@@ -196,12 +201,43 @@ FString AVillageManager::DayToWeekString(int32 Day)
 
 void AVillageManager::UpdateProfitsValue(int32 Value)
 {
-	APlayerBistro* PlayerBistro = Cast<APlayerBistro>(UGameplayStatics::GetActorOfClass(GetWorld(), BP_PlayerBistro));
-
 	VillageManagerSystem->TotalAsset += Value;
 	PlayerBistro->TodayNetIncome += Value;
 
 	if (Value > 0) {
 		PlayerBistro->TodaySoldPrice += Value;
+	}
+}
+
+void AVillageManager::UpdateTodayAvgRate()
+{
+	TArray<AActor*> AllCompetitorActorArr;
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), BP_Competitor, AllCompetitorActorArr);
+	float TodaySatisfationSumByCustTotal = 0.0f;
+
+	for (auto Competitor : AllCompetitorActorArr) {
+		ACompetitor* CastedCompetitor = Cast<ACompetitor>(Competitor);
+
+		for (auto CustName : CustomerDataManagerSystem->CustomerNames) {
+			FCustomerBistroKey Key = CustomerDataManagerSystem->GetCustomerBistroKey(CustName, CastedCompetitor->AreaID);
+			CustomerDataManagerSystem->VisitedNumMap.Add(Key, CustomerDataManagerSystem->VisitedNumMap[Key] + CastedCompetitor->VisitNumByCust[CustName]);
+
+			float CurCompetitorTotalAvgRate = CustomerDataManagerSystem->AvgRateMap[Key];
+			float UpdatedCompetitorReviewAvg = (CurCompetitorTotalAvgRate * (CustomerDataManagerSystem->VisitedNumMap[Key] - 1) + CastedCompetitor->SatisfationSumByCust[CustName]) / CustomerDataManagerSystem->VisitedNumMap[Key];
+			UpdatedCompetitorReviewAvg = UpdatedCompetitorReviewAvg * 5 / 100;
+
+			CustomerDataManagerSystem->AvgRateMap.Emplace(Key, UpdatedCompetitorReviewAvg);
+		}
+	}
+
+	for (auto CustName : CustomerDataManagerSystem->CustomerNames) {
+		FCustomerBistroKey Key = CustomerDataManagerSystem->GetCustomerBistroKey(CustName, PlayerBistro->AreaID);
+		CustomerDataManagerSystem->VisitedNumMap.Add(Key, CustomerDataManagerSystem->VisitedNumMap[Key] + PlayerBistro->VisitNumByCust[CustName]);
+
+		float CurPlayerTotalAvgRate = CustomerDataManagerSystem->AvgRateMap[Key];
+		float UpdatedPlayerReviewAvg = (CurPlayerTotalAvgRate * (CustomerDataManagerSystem->VisitedNumMap[Key] - 1) + PlayerBistro->SatisfationSumByCust[CustName]) / CustomerDataManagerSystem->VisitedNumMap[Key];
+		UpdatedPlayerReviewAvg = UpdatedPlayerReviewAvg * 5 / 100;
+
+		CustomerDataManagerSystem->AvgRateMap.Emplace(Key, UpdatedPlayerReviewAvg);
 	}
 }
