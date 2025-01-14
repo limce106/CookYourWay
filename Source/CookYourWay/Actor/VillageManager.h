@@ -14,10 +14,6 @@ class COOKYOURWAY_API AVillageManager : public AActor
 {
 	GENERATED_BODY()
 
-	class UVillageManagerSystem* VillageManagerSystem;
-	class UCustomerDataManagerSystem* CustomerDataManagerSystem;
-	ACookYourWayGameState* CookYourWayGameState;
-
 	FTimerHandle LeftDayTimeHandler;
 	int32 LeftMinute = 0;
 	int32 LeftSecond = 30;
@@ -45,6 +41,10 @@ protected:
 
 public:
 	virtual void Tick(float DeltaTime) override;
+
+	class UVillageManagerSystem* VillageManagerSystem;
+	class UCustomerDataManagerSystem* CustomerDataManagerSystem;
+	ACookYourWayGameState* CookYourWayGameState;
 
 	TMap<int32, FVector> AreaLocMap;
 

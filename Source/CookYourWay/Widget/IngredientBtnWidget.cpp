@@ -6,6 +6,7 @@
 #include <Kismet/GameplayStatics.h>
 #include <Actor/Reuben.h>
 #include <GameInstance/IngredientManagerSystem.h>
+#include <GameInstance/VillageManagerSystem.h>
 #include <Actor/VillageManager.h>
 #include <Blueprint/WidgetBlueprintLibrary.h>
 #include "IngredientBoardWidget.h"
@@ -43,7 +44,12 @@ void UIngredientBtnWidget::OnClick_ButtonIngredient()
 
 			IngrEngName = IngredientManagerSystem->IngredientTableRowNames[i].ToString();
 			IngrPrice = IngredientManagerSystem->GetIngrBinMinByIndex(i);
-			VillageManager->UpdateProfitsValue(-IngrPrice);
+			Reuben->PlayerBistro->TodayNetIncome -= IngrPrice;
+
+			if (IngredientManagerSystem->IngredientRows[i]->IngrClass == "C") {
+				VillageManager->VillageManagerSystem->TotalAsset -= IngrPrice;
+			}
+
 			break;
 		}
 	}

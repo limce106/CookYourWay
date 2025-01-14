@@ -7,6 +7,7 @@
 #include <Actor/Ingredient.h>
 #include <Actor/Sandwich.h>
 #include <Actor/Dessert.h>
+#include "Actor/PlayerBistro.h"
 #include "IngredientBtnWidget.generated.h"
 
 /**

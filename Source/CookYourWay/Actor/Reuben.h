@@ -29,7 +29,6 @@ class COOKYOURWAY_API AReuben : public ACharacter
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<AActor> BP_Dessert;
 
-	class APlayerBistro* PlayerBistro;
 	FTimerHandle CustSandwichTimerHandler;
 
 	// 플레이어 움직이기
@@ -53,6 +52,8 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+	class APlayerBistro* PlayerBistro;
 
 	UPROPERTY(BlueprintReadWrite)
 	AActor* OverlappedActor;
