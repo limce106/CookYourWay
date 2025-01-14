@@ -37,6 +37,8 @@ class COOKYOURWAY_API UCustomerDataManagerSystem : public UGameInstanceSubsystem
 	class UVillageManagerSystem* VillageManagerSystem;
 	class UIngredientManagerSystem* IngredientManagerSystem;
 
+	FCriticalSection DataCriticalSection;
+
 protected:
 	virtual void Initialize(FSubsystemCollectionBase& Collection) override;
 

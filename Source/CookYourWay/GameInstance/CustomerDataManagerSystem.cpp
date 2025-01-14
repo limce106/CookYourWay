@@ -243,14 +243,13 @@ void UCustomerDataManagerSystem::UpdateTodayAvgRate()
 
 void UCustomerDataManagerSystem::AddTodaySatisfactionMap(FString CustomerName, int32 BistroAreaID, int32 Satisfaction)
 {
+	FScopeLock Lock(&DataCriticalSection);
+
 	FCustomerBistroKey Key = GetCustomerBistroKey(CustomerName, BistroAreaID);
 	VisitedNumMap.Add(Key, VisitedNumMap[Key]++);
 
-	float CurSatisfationSum;
-	if (!TodaySatisfationSumMap.Contains(Key)) {
-		CurSatisfationSum = 0;
-	}
-	else {
+	float CurSatisfationSum = 0;
+	if (TodaySatisfationSumMap.Contains(Key)) {
 		CurSatisfationSum = TodaySatisfationSumMap[Key];
 	}
 	TodaySatisfationSumMap.Add(Key, CurSatisfationSum + Satisfaction);

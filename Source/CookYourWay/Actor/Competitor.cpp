@@ -59,10 +59,10 @@ int32 ACompetitor::GetCustomerSatisfaction()
 
 void ACompetitor::CustomerVisited(ACustomer* Customer)
 {
-	UpdateTotalCustAndRateSum();	
+	UpdateTotalCustAndRateSum();
 
 	CustomerDataManagerSystem->AddTodaySatisfactionMap(Customer->CustName, AreaID, GetCustomerSatisfaction());
-	Customer->Destroy();
+	//Customer->Destroy();
 }
 
 void ACompetitor::UpdateTotalCustAndRateSum()
