@@ -61,7 +61,7 @@ public:
 	// <손님 이름/가게, 해당 유형 손님이 방문한 횟수>
 	TMap<FCustomerBistroKey, int32> VisitedNumMap;
 	// <손님 이름/가게, 오늘의 만족도 합계>
-	TMap<FCustomerBistroKey, int32> TotalSatisfationSumMap;
+	TMap<FCustomerBistroKey, int32> TodaySatisfationSumMap;
 
 	// 최대 평점 
 	const float MaxRate = 5.0;

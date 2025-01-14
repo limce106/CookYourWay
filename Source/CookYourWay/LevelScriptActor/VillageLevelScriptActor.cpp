@@ -11,7 +11,6 @@ void AVillageLevelScriptActor::Init()
 		PlayerBistroHUD->AddToViewport();
 	}
 
-	VillageManagerSystem->Day++;
 	CustomerDataManagerSystem->SetAllCustTastes();
 	CustomerDataManagerSystem->AddCompetitorRegularCust();
 }

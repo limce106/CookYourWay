@@ -225,10 +225,10 @@ bool UCustomerDataManagerSystem::HasRegularCust(int32 BistroAreaID)
 void UCustomerDataManagerSystem::UpdateTodayAvgRate()
 {
 	TArray<FCustomerBistroKey> TotalSatisfationSumMapKeys;
-	TotalSatisfationSumMap.GenerateKeyArray(TotalSatisfationSumMapKeys);
+	TodaySatisfationSumMap.GenerateKeyArray(TotalSatisfationSumMapKeys);
 
 	TArray<int32> TotalSatisfationSumMapValues;
-	TotalSatisfationSumMap.GenerateValueArray(TotalSatisfationSumMapValues);
+	TodaySatisfationSumMap.GenerateValueArray(TotalSatisfationSumMapValues);
 
 	for (int i = 0; i < TotalSatisfationSumMapKeys.Num(); i++) {
 		FCustomerBistroKey Key = TotalSatisfationSumMapKeys[i];
@@ -247,11 +247,11 @@ void UCustomerDataManagerSystem::AddTodaySatisfactionMap(FString CustomerName, i
 	VisitedNumMap.Add(Key, VisitedNumMap[Key]++);
 
 	float CurSatisfationSum;
-	if (!TotalSatisfationSumMap.Contains(Key)) {
+	if (!TodaySatisfationSumMap.Contains(Key)) {
 		CurSatisfationSum = 0;
 	}
 	else {
-		CurSatisfationSum = TotalSatisfationSumMap[Key];
+		CurSatisfationSum = TodaySatisfationSumMap[Key];
 	}
-	TotalSatisfationSumMap.Add(Key, CurSatisfationSum + Satisfaction);
+	TodaySatisfationSumMap.Add(Key, CurSatisfationSum + Satisfaction);
 }

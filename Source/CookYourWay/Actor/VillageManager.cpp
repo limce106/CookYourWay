@@ -26,6 +26,9 @@ AVillageManager::AVillageManager()
 
 void AVillageManager::Init()
 {
+	VillageManagerSystem->Day++;
+	DayToWeekString(VillageManagerSystem->Day);
+
 	// 월요일이면
 	if (VillageManagerSystem->Day != 1 && VillageManagerSystem->Day % 7 == 1) {
 		TryCreateNewCompetitor();
@@ -149,6 +152,7 @@ void AVillageManager::EndDay()
 	UGameplayStatics::SetGamePaused(GetWorld(), true);
 	CookYourWayGameState->SaveCookYourWayData();
 	CustomerDataManagerSystem->UpdateTodayAvgRate();
+	CustomerDataManagerSystem->TodaySatisfationSumMap.Empty();
 
 	StartSubtractAnim();
 }
