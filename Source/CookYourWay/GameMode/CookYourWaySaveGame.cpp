@@ -10,7 +10,6 @@ UCookYourWaySaveGame::UCookYourWaySaveGame()
 	CompetitorAreaID = { 5, 7, 11, 14, 18, 21 };
 	StoreAreaID = { 2, 10, 23 };
 	TotalAsset = 0;
-	CustomerNames = { "Amy", "Michelle" };
 	PlayerBistroTotalCust = 0;
 	CompetitorTotalCust = {
 		{5, 0},

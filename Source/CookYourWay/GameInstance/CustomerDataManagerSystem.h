@@ -9,6 +9,55 @@
 #include "CustomerDataManagerSystem.generated.h"
 
 USTRUCT(BlueprintType)
+struct FCustomerData : public FTableRowBase {
+	GENERATED_BODY()
+
+public:
+	FCustomerData() : CustName("-1"), CustTasteCount(-1), CustUnqTaste(-1) {}
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Data")
+	FString CustName;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Data")
+	int32 CustTasteCount;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Data")
+	int32 CustUnqTaste;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Data")
+	UTexture2D* CustIcon;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Data")
+	UStaticMesh* CustModel;
+};
+
+USTRUCT(BlueprintType)
+struct FCustomerReviewData : public FTableRowBase {
+	GENERATED_BODY()
+
+public:
+	FCustomerReviewData() : CustCode("-1"), ReviewRating(-1), ReviewString("-1") {}
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Data")
+	FString CustCode;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Data")
+	int32 ReviewRating;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Data")
+	FString ReviewString;
+};
+
+USTRUCT(BlueprintType)
+struct FCustomerCommentData : public FTableRowBase {
+	GENERATED_BODY()
+
+public:
+	FCustomerCommentData() : CustCode("-1"), CustCommentType(-1), CustCommentString("-1") {}
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Data")
+	FString CustCode;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Data")
+	int32 CustCommentType;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Data")
+	FString CustCommentString;
+};
+
+USTRUCT(BlueprintType)
 struct FCustomerBistroKey
 {
 	GENERATED_BODY()
@@ -45,10 +94,7 @@ public:
 	void Init();
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	TArray<FString> CustomerNames = {
-		"Amy",
-		"Michelle"
-	};
+	TArray<FString> CustomerNames;
 
 	// <¼Õ´Ô ÀÌ¸§, ÃëÇâ>
 	TMap<FString, TArray<int32>> CustNameToTasteMap;
@@ -93,9 +139,4 @@ public:
 	void AddCompetitorRegularCust();
 	// ´Ü°ñ ¼Õ´Ô º¸À¯ ¿©ºÎ
 	bool HasRegularCust(int32 BistroAreaID);
-
-	// ¼Õ´Ô À¯Çüº° ÆòÁ¡ Æò±Õ °»½Å
-	// void UpdateAvgRateByCustName(FString CustomerName, int32 BistroAreaID, int32 Satisfaction);
-	//void UpdateTodayAvgRate();
-	// void AddTodaySatisfactionMap(FString CustomerName, int32 BistroAreaID, int32 Satisfaction);
 };

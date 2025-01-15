@@ -31,8 +31,6 @@ public:
 	UPROPERTY()
 	int32 TotalAsset = 0;
 	UPROPERTY()
-	TArray<FString> CustomerNames;
-	UPROPERTY()
 	TMap<FCustomerBistroKey, bool> IsRegularCustMap;
 	UPROPERTY()
 	TMap<FCustomerBistroKey, float> LoyaltyMap;

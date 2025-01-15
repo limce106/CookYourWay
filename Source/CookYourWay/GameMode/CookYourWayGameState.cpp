@@ -34,7 +34,6 @@ void ACookYourWayGameState::LoadCookYourWayData()
 	VillageManagerSystem->CompetitorTotalCust = CookYourWaySaveGame->CompetitorTotalCust;
 	VillageManagerSystem->PlayerBistroTotalRateSum = CookYourWaySaveGame->PlayerBistroTotalRateSum;
 	VillageManagerSystem->CompetitorTotalRateSum = CookYourWaySaveGame->CompetitorTotalRateSum;
-	CustomerDataManagerSystem->CustomerNames = CookYourWaySaveGame->CustomerNames;
 	CustomerDataManagerSystem->IsRegularCustMap = CookYourWaySaveGame->IsRegularCustMap;
 	CustomerDataManagerSystem->LoyaltyMap = CookYourWaySaveGame->LoyaltyMap;
 	CustomerDataManagerSystem->AvgRateMap = CookYourWaySaveGame->AvgRateMap;
@@ -55,7 +54,6 @@ void ACookYourWayGameState::SaveCookYourWayData()
 	NewCookYourWayData->CompetitorTotalCust = VillageManagerSystem->CompetitorTotalCust;
 	NewCookYourWayData->PlayerBistroTotalRateSum = VillageManagerSystem->PlayerBistroTotalRateSum;
 	NewCookYourWayData->CompetitorTotalRateSum = VillageManagerSystem->CompetitorTotalRateSum;
-	NewCookYourWayData->CustomerNames = CustomerDataManagerSystem->CustomerNames;
 	NewCookYourWayData->IsRegularCustMap = CustomerDataManagerSystem->IsRegularCustMap;
 	NewCookYourWayData->LoyaltyMap = CustomerDataManagerSystem->LoyaltyMap;
 	NewCookYourWayData->AvgRateMap = CustomerDataManagerSystem->AvgRateMap;
