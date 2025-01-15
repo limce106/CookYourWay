@@ -56,7 +56,7 @@ public:
 
 	// 전체 자산
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
-	int32 TotalAsset = 0;
+	int32 TotalAsset = 1000;
 
 	// 플레이어 가게 누적 손님 수
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)

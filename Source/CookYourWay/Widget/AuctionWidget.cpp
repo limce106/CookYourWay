@@ -110,6 +110,10 @@ bool UAuctionWidget::IsMouseOnUnfilledProgressBar()
 
 FVector2D UAuctionWidget::GetProgressBarSize()
 {
+	if (!IsValid(ProgressBar_Auction)) {
+		return FVector2D(0.0f, 0.0f);
+	}
+
 	UCanvasPanelSlot* ProgressBarCanvasSlot = Cast<UCanvasPanelSlot>(ProgressBar_Auction->Slot);
 	FVector2D ProgressBarSize = ProgressBarCanvasSlot->GetSize();
 
@@ -118,6 +122,10 @@ FVector2D UAuctionWidget::GetProgressBarSize()
 
 FVector2D UAuctionWidget::GetProgressBarPos()
 {
+	if (!IsValid(ProgressBar_Auction)) {
+		return FVector2D(0.0f, 0.0f);
+	}
+
 	UCanvasPanelSlot* ProgressBarCanvasSlot = Cast<UCanvasPanelSlot>(ProgressBar_Auction->Slot);
 	FVector2D ProgressBarPos = ProgressBarCanvasSlot->GetPosition();
 
