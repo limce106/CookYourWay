@@ -9,8 +9,8 @@
 UVillageManagerSystem::UVillageManagerSystem()
 {
 	FString CompetitorReviewTablePath = TEXT("/Game/Assets/Table/CompetitorReview.CompetitorReview");
-	static ConstructorHelpers::FObjectFinder<UDataTable> DT_COMPETITORTABLE(*CompetitorReviewTablePath);
-	CompetitorReviewTable = DT_COMPETITORTABLE.Object;
+	static ConstructorHelpers::FObjectFinder<UDataTable> DT_COMPETITORREVIEWTABLE(*CompetitorReviewTablePath);
+	CompetitorReviewTable = DT_COMPETITORREVIEWTABLE.Object;
 
 	CompetitorReviewTable->GetAllRows<FCompetitorReviewData>("Get All Rows Of IngrData", CompetitorReviewTableRows);
 	CompetitorReviewTableRowNames = CompetitorReviewTable->GetRowNames();

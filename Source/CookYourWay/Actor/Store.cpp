@@ -17,6 +17,7 @@ void AStore::BeginPlay()
 	Super::BeginPlay();
 
 	VillageManagerSystem = UGameplayStatics::GetGameInstance(GetWorld())->GetSubsystem<UVillageManagerSystem>();
+	CreateCustomer();
 }
 
 void AStore::Tick(float DeltaTime)

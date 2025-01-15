@@ -5,6 +5,29 @@
 #include <Kismet/KismetMathLibrary.h>
 #include <Kismet/GameplayStatics.h>
 
+UCustomerDataManagerSystem::UCustomerDataManagerSystem()
+{
+	FString CustomerTablePath = TEXT("/Game/Assets/Table/Customer.Customer");
+	static ConstructorHelpers::FObjectFinder<UDataTable> DT_CUSTOMERTABLE(*CustomerTablePath);
+	CustomerTable = DT_CUSTOMERTABLE.Object;
+
+	FString CustomerReviewTablePath = TEXT("/Game/Assets/Table/CustomerReview.CustomerReview");
+	static ConstructorHelpers::FObjectFinder<UDataTable> DT_CUSTOMERREVIEWTABLE(*CustomerReviewTablePath);
+	CustomerReviewTable = DT_CUSTOMERREVIEWTABLE.Object;
+
+	FString CustomerCommentTablePath = TEXT("/Game/Assets/Table/CustComment.CustComment");
+	static ConstructorHelpers::FObjectFinder<UDataTable> DT_CUSTOMERCOMMENTTABLE(*CustomerCommentTablePath);
+	CustomerCommentTable = DT_CUSTOMERCOMMENTTABLE.Object;
+
+	CustomerReviewTable->GetAllRows<FCustomerReviewData>("Get All Rows Of CustomerReviewData", CustomerReviewTableRows);
+	CustomerCommentTable->GetAllRows<FCustomerCommentData>("Get All Rows Of CustomerCommentData", CustomerCommentTableRows);
+	CustomerTable->GetAllRows<FCustomerData>("Get All Rows Of CustomerData", CustomerTableRows);
+
+	for (int i = 0; i < CustomerTableRows.Num(); i++) {
+		CustomerNames.Add(CustomerTable->GetRowNames()[i].ToString());
+	}
+}
+
 void UCustomerDataManagerSystem::Initialize(FSubsystemCollectionBase& Collection)
 {
 	Super::Initialize(Collection);

@@ -82,6 +82,7 @@ UCLASS()
 class COOKYOURWAY_API UCustomerDataManagerSystem : public UGameInstanceSubsystem
 {
 	GENERATED_BODY()
+	UCustomerDataManagerSystem();
 
 	class UVillageManagerSystem* VillageManagerSystem;
 	class UIngredientManagerSystem* IngredientManagerSystem;
@@ -92,6 +93,17 @@ protected:
 public:
 
 	void Init();
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Table")
+	class UDataTable* CustomerTable;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Table")
+	class UDataTable* CustomerReviewTable;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Table")
+	class UDataTable* CustomerCommentTable;
+
+	TArray<FCustomerData*> CustomerTableRows;
+	TArray<FCustomerReviewData*> CustomerReviewTableRows;
+	TArray<FCustomerCommentData*> CustomerCommentTableRows;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	TArray<FString> CustomerNames;
