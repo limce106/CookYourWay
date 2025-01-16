@@ -77,5 +77,5 @@ public:
 	void SetHeldActorLoc();
 
 	// 손님에게 무언가 주기
-	void TryGiveSomething(ACustomer* Customer);
+	bool TryGiveSomething(ACustomer* Customer);
 };

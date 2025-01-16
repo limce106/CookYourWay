@@ -129,24 +129,29 @@ void AReuben::Chop()
 	}
 }
 
-void AReuben::TryGiveSomething(ACustomer* Customer)
+bool AReuben::TryGiveSomething(ACustomer* Customer)
 {
 	// 손에 아무것도 들고 있지 않으면
 	if (IsHold == false) {
-		return;
+		return false;
 	}
 
 	if (HeldActor->GetClass() == BP_Sandwich) {
 		GiveSandwich(Customer);
+		return true;
 	}
 	else if (HeldActor->GetClass() == BP_Dessert) {
 		ADessert* Dessert = Cast<ADessert>(HeldActor);
-		if (Dessert->IsCooked) {
+		if (Dessert->IsCooked && Customer->CanGetDessert()) {
 			GiveDessert(Customer);
+			return true;
+		}
+		else {
+			return false;
 		}
 	}
 	else {
-		return;
+		return false;
 	}
 }
 
@@ -180,11 +185,9 @@ void AReuben::GiveSandwich(ACustomer* Customer)
 
 void AReuben::GiveDessert(ACustomer* Customer)
 {
-	if (Customer->CanGetDessert()) {
-		HeldActor->Destroy();
-		IsHold = false;
+	HeldActor->Destroy();
+	IsHold = false;
 
-		Customer->EatDessert();
-		Customer->AddDessertReview();
-	}
+	Customer->EatDessert();
+	Customer->AddDessertReview();
 }

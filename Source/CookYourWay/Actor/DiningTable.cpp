@@ -28,7 +28,11 @@ void ADiningTable::DiningTableInteraction()
 	AReuben* Reuben = Cast<AReuben>(UGameplayStatics::GetPlayerPawn(this, 0));
 
 	if (SeatedCustomer) {
-		Reuben->TryGiveSomething(SeatedCustomer);
+		bool SucceessGive = Reuben->TryGiveSomething(SeatedCustomer);
+
+		if (!SucceessGive) {
+			SeatedCustomer->TrySetComment();
+		}
 	}
 }
 

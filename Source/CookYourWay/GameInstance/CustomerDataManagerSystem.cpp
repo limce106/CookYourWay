@@ -99,6 +99,7 @@ TArray<int32> UCustomerDataManagerSystem::GetRandomTaste()
 
 	// Å×½ºÆ®
 	Taste.Add(12);
+	Taste.Add(12);
 	//
 
 	return Taste;
@@ -230,4 +231,14 @@ bool UCustomerDataManagerSystem::HasRegularCust(int32 BistroAreaID)
 	}
 
 	return false;
+}
+
+FString UCustomerDataManagerSystem::GetCustReviewDialogue(FString CustName, int32 TasteScore)
+{
+	for (auto CustReviewData : CustomerReviewTableRows) {
+		if (CustReviewData->CustCode == CustName && CustReviewData->ReviewRating == TasteScore) {
+			return CustReviewData->ReviewString;
+		}
+	}
+	return FString();
 }

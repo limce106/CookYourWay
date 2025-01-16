@@ -49,6 +49,8 @@ class COOKYOURWAY_API ACustomer : public ACharacter
 	float TempDelayTime;
 	bool DelayWithDeltaTime(float DelayTime, float DeltaSeconds);
 
+	FString RedefineTasteHintComment(FString Comment);
+
 public:
 	ACustomer();
 
@@ -81,6 +83,8 @@ public:
 	FString CustName;	/*손님 스폰 시 이름 값 설정 필요*/
 	UPROPERTY(BlueprintReadWrite)
 	bool IsWalk = true;
+	UPROPERTY(BlueprintReadWrite)
+	bool IsComment = false;
 
 	// 방문할 가게
 	UPROPERTY(BlueprintReadOnly)
@@ -117,4 +121,11 @@ public:
 
 	float GetTip(int32 SandwichPrice);
 	void AddTotalSellingPriceAndTip();
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void StartReviewDialogue(int32 TasteScore);
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
+	void TrySetComment();
+	UFUNCTION(BlueprintCallable)
+	FString GetComment();
 };

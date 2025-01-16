@@ -292,6 +292,8 @@ void ACustomer::AddSandwichReview(ASandwich* Sandwich)
 			TasteScore = 0;
 		}
 
+		StartReviewDialogue(TasteScore);
+
 		CustomerDataManagerSystem->DecreaseLoyalty(CustName, VillageManagerSystem->PlayerBistroAreaID, 10);
 	}
 
@@ -406,4 +408,44 @@ void ACustomer::AddTotalSellingPriceAndTip()
 {
 	TotalSellingPrice += GetTip(TotalSellingPrice);
 	VillageManager->UpdateProfitsValue(TotalSellingPrice);
+}
+
+FString ACustomer::GetComment()
+{
+	int32 CommentType = UKismetMathLibrary::RandomIntegerInRange(1, 2);
+
+	for (auto CustCommentData : CustomerDataManagerSystem->CustomerCommentTableRows) {
+		if (CommentType == 1 && CustCommentData->CustCode == CustName && CustCommentData->CustCommentType == CommentType) {
+			Satisfaction += 20;
+			return CustCommentData->CustCommentString;
+		}
+		else if (CommentType == 2 && CustCommentData->CustCode == CustName && CustCommentData->CustCommentType == CommentType) {
+			return RedefineTasteHintComment(CustCommentData->CustCommentString);
+		}
+	}
+
+	UE_LOG(LogTemp, Error, TEXT("Can't Get Comment!"));
+	return FString();
+}
+
+FString ACustomer::RedefineTasteHintComment(FString Comment)
+{
+	FString Redefined = Comment;
+	FString tmp1;
+	FString tmp2;
+
+	TArray<int32> Tastes = CustomerDataManagerSystem->CustNameToTasteMap[CustName];
+	int32 OneTasteIdx = UKismetMathLibrary::RandomIntegerInRange(0, Tastes.Num() - 1);
+	FString OneTasteKor = IngredientManagerSystem->IngredientRows[OneTasteIdx]->IngrName;
+
+	for (int idx = 0; idx < Redefined.Len(); idx++) {
+		if (Redefined[idx] == '{') {
+			tmp1 = Redefined.Mid(0, idx);
+			tmp2 = Redefined.Mid(idx + 3, Redefined.Len() - (idx + 3));
+
+			Redefined = (tmp1.Append(OneTasteKor)).Append(tmp2);
+		}
+	}
+
+	return Redefined;
 }

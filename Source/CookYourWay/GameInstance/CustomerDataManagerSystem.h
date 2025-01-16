@@ -151,4 +151,7 @@ public:
 	void AddCompetitorRegularCust();
 	// ´Ü°ñ ¼Õ´Ô º¸À¯ ¿©ºÎ
 	bool HasRegularCust(int32 BistroAreaID);
+
+	UFUNCTION(BlueprintCallable)
+	FString GetCustReviewDialogue(FString CustName, int32 TasteScore);
 };
