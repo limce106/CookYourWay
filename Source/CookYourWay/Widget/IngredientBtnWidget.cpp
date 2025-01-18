@@ -38,9 +38,10 @@ void UIngredientBtnWidget::OnClick_ButtonIngredient()
 
 	for (int i = 0; i < IngredientManagerSystem->IngredientRows.Num(); i++) {
 		if (IngredientManagerSystem->IngredientRows[i]->IngrName == IngrName) {
-			if (IngredientManagerSystem->HavingIngrNum[i] <= 0) {
+			// Å×½ºÆ®
+			/*if (IngredientManagerSystem->HavingIngrNum[i] <= 0) {
 				return;
-			}
+			}*/
 
 			IngrEngName = IngredientManagerSystem->IngredientTableRowNames[i].ToString();
 			IngrPrice = IngredientManagerSystem->GetIngrBinMinByIndex(i);

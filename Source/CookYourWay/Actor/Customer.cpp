@@ -65,6 +65,11 @@ void ACustomer::Tick(float DeltaTime)
 
 	if (IsEat && DelayWithDeltaTime(1.0f, DeltaTime)) {
 		StartEatTime += 1;
+
+		if (StartEatTime == CanGetDessertTime) {
+			ADiningTable* DiningTable = PlayerBistro->GetDiningTable(CurSeatNum);
+			DiningTable->DestroyFoodOnDiningTable();
+		}
 	}
 
 	if (IsWaiting && DelayWithDeltaTime(1.0f, DeltaTime)) {

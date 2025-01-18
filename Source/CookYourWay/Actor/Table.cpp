@@ -26,6 +26,10 @@ void ATable::Tick(float DeltaTime)
 
 void ATable::PutActorOn(AActor* Actor)
 {
+	if (IsActorOn) {
+		return;
+	}
+
 	Reuben->PutDownActor();
 
 	FVector ActorLocation = GetActorLocation();

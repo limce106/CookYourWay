@@ -4,6 +4,7 @@
 #include "Customer.h"
 #include <Kismet/GameplayStatics.h>
 #include "GameInstance/VillageManagerSystem.h"
+#include "Dessert.h"
 
 APlayerBistro::APlayerBistro()
 {
@@ -148,6 +149,8 @@ void APlayerBistro::SitNextCust(int32 SeatIdx)
 void APlayerBistro::LeaveAndSitNextCust(ACustomer* LeftCustomer)
 {
 	int32 LeftCustSeatIdx = LeftCustomer->CurSeatNum;
+	ADiningTable* LeftCustDiningTable = GetDiningTable(LeftCustSeatIdx);
+	LeftCustDiningTable->DestroyFoodOnDiningTable();
 	LeftCustomer->Destroy();
 
 	if (!WaitingCustQueue.IsEmpty()) {

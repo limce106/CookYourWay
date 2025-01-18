@@ -164,9 +164,9 @@ void AReuben::GiveSandwich(ACustomer* Customer)
 		return;
 	}
 
+	ADiningTable* DiningTable = PlayerBistro->GetDiningTable(Customer->CurSeatNum);
+	DiningTable->PutFoodOn(Sandwich);
 	Customer->AddSandwichReview(Sandwich);
-	Sandwich->DestroySandwich();
-	IsHold = false;
 
 	Customer->EatSandwich();
 
@@ -185,8 +185,8 @@ void AReuben::GiveSandwich(ACustomer* Customer)
 
 void AReuben::GiveDessert(ACustomer* Customer)
 {
-	HeldActor->Destroy();
-	IsHold = false;
+	ADiningTable* DiningTable = PlayerBistro->GetDiningTable(Customer->CurSeatNum);
+	DiningTable->PutFoodOn(HeldActor);
 
 	Customer->EatDessert();
 	Customer->AddDessertReview();

@@ -36,3 +36,36 @@ void ADiningTable::DiningTableInteraction()
 	}
 }
 
+void ADiningTable::PutFoodOn(AActor* Food)
+{
+	if (IsActorOn) {
+		return;
+	}
+
+	AReuben* Reuben = Cast<AReuben>(UGameplayStatics::GetPlayerPawn(this, 0));
+	Reuben->PutDownActor();
+
+	FVector ActorLocation = GetActorLocation();
+	ActorLocation.Z += 65.0f;
+	Food->SetActorLocation(ActorLocation);
+	Food->SetActorRotation(GetActorRotation());
+
+	IsActorOn = true;
+	PlacedActor = Food;
+}
+
+void ADiningTable::DestroyFoodOnDiningTable()
+{
+	if (IsActorOn) {
+		if (PlacedActor->GetClass()->IsChildOf(ASandwich::StaticClass())) {
+			ASandwich* Sandwich = Cast<ASandwich>(PlacedActor);
+			Sandwich->DestroySandwich();
+		}
+		else {
+			PlacedActor->Destroy();
+		}
+		IsActorOn = false;
+		PlacedActor = NULL;
+	}
+}
+

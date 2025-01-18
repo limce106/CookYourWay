@@ -41,7 +41,6 @@ class COOKYOURWAY_API APlayerBistro : public AActor
 	const float NextCustDelay = 1.5f;
 
 	void SpawnDiningTable();
-	ADiningTable* GetDiningTable(int32 SeatIdx);
 
 	// ¼Õ´Ô ¾ÉÈ÷±â
 	void SitCust(ACustomer* Customer, int32 SeatIdx);
@@ -102,4 +101,6 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	float GetTotalAvgRate();
+
+	ADiningTable* GetDiningTable(int32 SeatIdx);
 };

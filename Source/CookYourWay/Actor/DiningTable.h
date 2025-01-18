@@ -23,5 +23,14 @@ public:
 	UPROPERTY()
 	ACustomer* SeatedCustomer;
 
+	// 테이블 위에 액터가 있는지
+	UPROPERTY(BlueprintReadWrite)
+	bool IsActorOn = false;
+	// 테이블 위에 올라간 액터
+	UPROPERTY(BlueprintReadWrite)
+	AActor* PlacedActor;
+
 	void DiningTableInteraction();
+	void PutFoodOn(AActor* Food);
+	void DestroyFoodOnDiningTable();
 };
