@@ -22,6 +22,8 @@ class COOKYOURWAY_API ACookYourWayGameState : public AGameState
 	class UIngredientManagerSystem* IngredientManagerSystem;
 	class UCustomerDataManagerSystem* CustomerDataManagerSystem;
 
+	UClass* BP_StoreClass;
+
 public:
 	UPROPERTY(Transient)
 	FString SaveSlotName;

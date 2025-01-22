@@ -72,7 +72,6 @@ void ACompetitor::CustomerVisited(ACustomer* Customer)
 {
 	UpdateTotalCustAndRateSum();
 
-	// CustomerDataManagerSystem->AddTodaySatisfactionMap(Customer->CustName, AreaID, GetCustomerSatisfaction());
 	VisitNumByCust.Add(Customer->CustName, VisitNumByCust[Customer->CustName] + 1);
 	SatisfationSumByCust.Add(Customer->CustName, SatisfationSumByCust[Customer->CustName] + GetCustomerSatisfaction());
 	Customer->Destroy();

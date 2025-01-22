@@ -31,13 +31,10 @@ void ACustomer::BeginPlay()
 
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), BP_Competitor, AllCompetitorActorArr);
 	PlayerBistro = Cast<APlayerBistro>(UGameplayStatics::GetActorOfClass(GetWorld(), BP_PlayerBistro));
-
-	Init();
 }
 
 void ACustomer::Init()
 {
-	CustName = CustomerDataManagerSystem->GetRandomCustName();
 	SetSkeletalMesh();
 	SetVisitDest();
 
@@ -89,6 +86,11 @@ void ACustomer::Tick(float DeltaTime)
 			PlayerBistro->LeaveAndSitNextCust(this);
 		}
 	}
+}
+
+void ACustomer::InitializeCustName(const FString& Name)
+{
+	CustName = Name;
 }
 
 bool ACustomer::DelayWithDeltaTime(float DelayTime, float DeltaSeconds)
@@ -336,13 +338,8 @@ void ACustomer::AddDessertReview()
 
 void ACustomer::EatSandwich()
 {
-	// 테스트 - 7초로 변경하기
 	Eat(7.0f);
-	//
 
-	/*손님대사 출력 필요*/
-
-	//CustomerDataManagerSystem->AddTodaySatisfactionMap(CustName, PlayerBistro->AreaID, Satisfaction);
 	PlayerBistro->VisitNumByCust.Add(CustName, PlayerBistro->VisitNumByCust[CustName] + 1);
 	PlayerBistro->SatisfationSumByCust.Add(CustName, PlayerBistro->SatisfationSumByCust[CustName] + Satisfaction);
 	PlayerBistro->UpdateTotalCustAndRateSum(Satisfaction);

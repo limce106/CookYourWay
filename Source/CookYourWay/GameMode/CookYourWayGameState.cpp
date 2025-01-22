@@ -3,6 +3,7 @@
 
 #include "GameMode/CookYourWayGameState.h"
 #include <Kismet/GameplayStatics.h>
+#include <Actor/Store.h>
 
 void ACookYourWayGameState::BeginPlay()
 {
@@ -15,6 +16,9 @@ ACookYourWayGameState::ACookYourWayGameState()
 {
 	SaveSlotName = TEXT("CookYourWaySaveFile");
 	UserIndex = 0;
+
+	static ConstructorHelpers::FClassFinder<AActor> BP_Store(TEXT("/Game/Blueprint/Village/BP_Store"));
+	BP_StoreClass = BP_Store.Class;
 }
 
 void ACookYourWayGameState::LoadCookYourWayData()
@@ -29,6 +33,7 @@ void ACookYourWayGameState::LoadCookYourWayData()
 	VillageManagerSystem->PlayerBistroAreaID = CookYourWaySaveGame->PlayerBistroAreaID;
 	VillageManagerSystem->CompetitorAreaID = CookYourWaySaveGame->CompetitorAreaID;
 	VillageManagerSystem->StoreAreaID = CookYourWaySaveGame->StoreAreaID;
+	VillageManagerSystem->LoadedStoreData = CookYourWaySaveGame->StoreDatas;
 	VillageManagerSystem->TotalAsset = CookYourWaySaveGame->TotalAsset;
 	VillageManagerSystem->PlayerBistroTotalCust = CookYourWaySaveGame->PlayerBistroTotalCust;
 	VillageManagerSystem->CompetitorTotalCust = CookYourWaySaveGame->CompetitorTotalCust;
@@ -58,6 +63,17 @@ void ACookYourWayGameState::SaveCookYourWayData()
 	NewCookYourWayData->LoyaltyMap = CustomerDataManagerSystem->LoyaltyMap;
 	NewCookYourWayData->AvgRateMap = CustomerDataManagerSystem->AvgRateMap;
 	NewCookYourWayData->VisitedNumMap = CustomerDataManagerSystem->VisitedNumMap;
+
+	NewCookYourWayData->StoreDatas.Empty();
+	//UClass* BP_StoreClass = StaticLoadClass(AStore::StaticClass(), nullptr, TEXT("/Game/Blueprint/Village/BP_Store.BP_Store_C"));
+
+	TArray<AActor*> StoreActors;
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), BP_StoreClass, StoreActors);
+	for (AActor* Actor : StoreActors)
+	{
+		AStore* Store = Cast<AStore>(Actor);
+		NewCookYourWayData->StoreDatas.Add(Store->CurStoreData);
+	}
 
 	if (!UGameplayStatics::SaveGameToSlot(NewCookYourWayData, SaveSlotName, UserIndex)) {
 		UE_LOG(LogTemp, Error, TEXT("SaveGame Error!"));

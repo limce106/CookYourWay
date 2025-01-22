@@ -26,6 +26,18 @@ AVillageManager::AVillageManager()
 
 void AVillageManager::Init()
 {
+	StartNewDay();
+	SpawnBistrosAndStore();
+	DecreaseStorePeriod();
+}
+
+void AVillageManager::RunDayTimer()
+{
+	GetWorld()->GetTimerManager().SetTimer(LeftDayTimeHandler, this, &AVillageManager::DecreaseDayTime, 1.0f, true);
+}
+
+void AVillageManager::StartNewDay()
+{
 	VillageManagerSystem->Day++;
 	DayToWeekString(VillageManagerSystem->Day);
 
@@ -33,13 +45,6 @@ void AVillageManager::Init()
 	if (VillageManagerSystem->Day != 1 && VillageManagerSystem->Day % 7 == 1) {
 		TryCreateNewCompetitor();
 	}
-
-	SpawnBistrosAndStore();
-}
-
-void AVillageManager::RunDayTimer()
-{
-	GetWorld()->GetTimerManager().SetTimer(LeftDayTimeHandler, this, &AVillageManager::DecreaseDayTime, 1.0f, true);
 }
 
 void AVillageManager::SpawnBistrosAndStore()
@@ -57,7 +62,25 @@ void AVillageManager::SpawnBistrosAndStore()
 
 	for (int i = 0; i < VillageManagerSystem->StoreAreaID.Num(); i++) {
 		int32 AreaID = VillageManagerSystem->StoreAreaID[i];
-		AStore* Store = GetWorld()->SpawnActor<AStore>(BP_Store, *AreaLocMap.Find(AreaID), FRotator::ZeroRotator);
+
+		if (VillageManagerSystem->LoadedStoreData.Num() > 0) {
+			AStore* Store = StoreSpawnFactory::SpawnStore(GetWorld(), BP_Store, *AreaLocMap.Find(AreaID), FRotator::ZeroRotator, VillageManagerSystem->LoadedStoreData[i]);
+		}
+		else {
+			int32 RandomStoreIdx = UKismetMathLibrary::RandomIntegerInRange(0, VillageManagerSystem->StoreTableRows.Num() - 1);
+			AStore* Store = StoreSpawnFactory::SpawnStore(GetWorld(), BP_Store, *AreaLocMap.Find(AreaID), FRotator::ZeroRotator, *VillageManagerSystem->StoreTableRows[RandomStoreIdx]);
+		}
+	}
+}
+
+void AVillageManager::DecreaseStorePeriod()
+{
+	TArray<AActor*> AllStoreActorArr;
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), BP_Store, AllStoreActorArr);
+
+	for (auto AActor : AllStoreActorArr) {
+		AStore* Store = Cast<AStore>(AActor);
+		Store->CurStoreData.StorePeriod--;
 	}
 }
 

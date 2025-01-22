@@ -12,8 +12,14 @@ UVillageManagerSystem::UVillageManagerSystem()
 	static ConstructorHelpers::FObjectFinder<UDataTable> DT_COMPETITORREVIEWTABLE(*CompetitorReviewTablePath);
 	CompetitorReviewTable = DT_COMPETITORREVIEWTABLE.Object;
 
-	CompetitorReviewTable->GetAllRows<FCompetitorReviewData>("Get All Rows Of IngrData", CompetitorReviewTableRows);
+	CompetitorReviewTable->GetAllRows<FCompetitorReviewData>("Get All Rows Of CompetitorReviewData", CompetitorReviewTableRows);
 	CompetitorReviewTableRowNames = CompetitorReviewTable->GetRowNames();
+
+	FString StoreTablePath = TEXT("/Game/Assets/Table/Store.Store");
+	static ConstructorHelpers::FObjectFinder<UDataTable> DT_STORETABLE(*StoreTablePath);
+	StoreTable = DT_STORETABLE.Object;
+
+	StoreTable->GetAllRows<FStoreData>("Get All Rows Of StoreData", StoreTableRows);
 }
 
 void UVillageManagerSystem::Initialize(FSubsystemCollectionBase& Collection)

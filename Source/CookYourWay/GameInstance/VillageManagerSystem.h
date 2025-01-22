@@ -12,7 +12,7 @@ struct FCompetitorReviewData : public FTableRowBase {
 	GENERATED_BODY()
 
 public:
-	FCompetitorReviewData() : RatingMin(0), RatingMax(0), RatingProb(0.0f) {}
+	FCompetitorReviewData() : RatingMin(-1), RatingMax(-1), RatingProb(0) {}
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Data")
 	int32 RatingMin;
@@ -20,6 +20,36 @@ public:
 	int32 RatingMax;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Data")
 	float RatingProb;
+};
+
+USTRUCT(BlueprintType)
+struct FStoreData : public FTableRowBase {
+	GENERATED_BODY()
+
+public:
+	FStoreData() : StoreName("-1"), StoreScope(-1), StorePeriod(-1), StoreCust1("-1"), StoreCust2("-1"), StoreCust3("-1"), 
+					StoreCustCreateProb(0), StoreGroupCode(-1) {}
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Data")
+	FString StoreName;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Data")
+	int32 StoreScope;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Data")
+	int32 StorePeriod;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Data")
+	FString StoreCust1;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Data")
+	FString StoreCust2;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Data")
+	FString StoreCust3;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Data")
+	float StoreCustCreateProb;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Data")
+	int32 StoreGroupCode;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Data")
+	UTexture2D* StoreIcon;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Data")
+	UStaticMesh* StoreModel;
 };
 
 UCLASS()
@@ -36,9 +66,13 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Table")
 	class UDataTable* CompetitorReviewTable;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Table")
+	class UDataTable* StoreTable;
 
 	TArray<FCompetitorReviewData*> CompetitorReviewTableRows;
 	TArray<FName> CompetitorReviewTableRowNames;
+
+	TArray<FStoreData*> StoreTableRows;
 
 	TArray<FCompetitorReviewData> GetCompetitorReviewDataOnTable(FString DataType);
 
@@ -53,6 +87,8 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	TArray<int32> StoreAreaID = { 2, 10, 23 };
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	TArray<FStoreData> LoadedStoreData;
 
 	// 전체 자산
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)

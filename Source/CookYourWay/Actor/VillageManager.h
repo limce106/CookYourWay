@@ -7,6 +7,7 @@
 #include "GameInstance/VillageManagerSystem.h"
 #include "GameInstance/CustomerDataManagerSystem.h"
 #include "GameMode/CookYourWayGameState.h"
+#include "Actor/Store.h"
 #include "VillageManager.generated.h"
 
 UCLASS()
@@ -26,14 +27,16 @@ class COOKYOURWAY_API AVillageManager : public AActor
 	void Init();
 	void RunDayTimer();
 
+	void StartNewDay();
 	void SpawnBistrosAndStore();
+	void DecreaseStorePeriod();
 
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<AActor> BP_PlayerBistro;
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<AActor> BP_Competitor;
 	UPROPERTY(EditDefaultsOnly)
-	TSubclassOf<AActor> BP_Store;
+	TSubclassOf<AStore> BP_Store;
 
 public:
 	AVillageManager();

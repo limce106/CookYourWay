@@ -33,7 +33,7 @@ class COOKYOURWAY_API ACustomer : public ACharacter
 	// 판 전체 가격
 	int32 TotalSellingPrice = 0;
 
-	void Init();
+	void SetSkeletalMesh();
 
 	// 멘해튼 거리 구하기
 	float ManhattanDist(FVector Loc1, FVector Loc2);
@@ -73,6 +73,9 @@ protected:
 
 public:	
 	virtual void Tick(float DeltaTime) override;
+	
+	void InitializeCustName(const FString& Name);
+	void Init();
 
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<AActor> BP_Competitor;
@@ -80,7 +83,7 @@ public:
 	TSubclassOf<AActor> BP_PlayerBistro;
 
 	UPROPERTY(BlueprintReadOnly)
-	FString CustName;	/*손님 스폰 시 이름 값 설정 필요*/
+	FString CustName;
 	UPROPERTY(BlueprintReadWrite)
 	bool IsWalk = true;
 	UPROPERTY(BlueprintReadWrite)
@@ -99,8 +102,6 @@ public:
 	bool IsSit = false;
 
 	float LeaveDelayTime;
-
-	void SetSkeletalMesh();
 
 	// 손님의 취향이 아닌 재료 개수 세기
 	int32 CountNotTasteNum(ASandwich* Sandwich);
@@ -128,4 +129,16 @@ public:
 	void TrySetComment();
 	UFUNCTION(BlueprintCallable)
 	FString GetComment();
+};
+
+class CustomerSpawnFactory
+{
+public:
+	static ACustomer* SpawnCustomer(UWorld* World, TSubclassOf<ACustomer> CustomerClass, const FVector& Location, const FRotator& Rotation, FString CustName)
+	{
+		ACustomer* Customer = World->SpawnActor<ACustomer>(CustomerClass, Location, Rotation);
+		Customer->InitializeCustName(CustName);
+		Customer->Init();
+		return Customer;
+	}
 };
