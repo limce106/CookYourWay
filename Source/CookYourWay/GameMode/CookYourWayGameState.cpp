@@ -33,7 +33,7 @@ void ACookYourWayGameState::LoadCookYourWayData()
 	VillageManagerSystem->PlayerBistroAreaID = CookYourWaySaveGame->PlayerBistroAreaID;
 	VillageManagerSystem->CompetitorAreaID = CookYourWaySaveGame->CompetitorAreaID;
 	VillageManagerSystem->StoreAreaID = CookYourWaySaveGame->StoreAreaID;
-	VillageManagerSystem->LoadedStoreData = CookYourWaySaveGame->StoreDatas;
+	VillageManagerSystem->StoreData = CookYourWaySaveGame->StoreData;
 	VillageManagerSystem->TotalAsset = CookYourWaySaveGame->TotalAsset;
 	VillageManagerSystem->PlayerBistroTotalCust = CookYourWaySaveGame->PlayerBistroTotalCust;
 	VillageManagerSystem->CompetitorTotalCust = CookYourWaySaveGame->CompetitorTotalCust;
@@ -54,6 +54,7 @@ void ACookYourWayGameState::SaveCookYourWayData()
 	NewCookYourWayData->PlayerBistroAreaID = VillageManagerSystem->PlayerBistroAreaID;
 	NewCookYourWayData->CompetitorAreaID = VillageManagerSystem->CompetitorAreaID;
 	NewCookYourWayData->StoreAreaID = VillageManagerSystem->StoreAreaID;
+	NewCookYourWayData->StoreData = VillageManagerSystem->StoreData;
 	NewCookYourWayData->TotalAsset = VillageManagerSystem->TotalAsset;
 	NewCookYourWayData->PlayerBistroTotalCust = VillageManagerSystem->PlayerBistroTotalCust;
 	NewCookYourWayData->CompetitorTotalCust = VillageManagerSystem->CompetitorTotalCust;
@@ -63,17 +64,6 @@ void ACookYourWayGameState::SaveCookYourWayData()
 	NewCookYourWayData->LoyaltyMap = CustomerDataManagerSystem->LoyaltyMap;
 	NewCookYourWayData->AvgRateMap = CustomerDataManagerSystem->AvgRateMap;
 	NewCookYourWayData->VisitedNumMap = CustomerDataManagerSystem->VisitedNumMap;
-
-	NewCookYourWayData->StoreDatas.Empty();
-	//UClass* BP_StoreClass = StaticLoadClass(AStore::StaticClass(), nullptr, TEXT("/Game/Blueprint/Village/BP_Store.BP_Store_C"));
-
-	TArray<AActor*> StoreActors;
-	UGameplayStatics::GetAllActorsOfClass(GetWorld(), BP_StoreClass, StoreActors);
-	for (AActor* Actor : StoreActors)
-	{
-		AStore* Store = Cast<AStore>(Actor);
-		NewCookYourWayData->StoreDatas.Add(Store->CurStoreData);
-	}
 
 	if (!UGameplayStatics::SaveGameToSlot(NewCookYourWayData, SaveSlotName, UserIndex)) {
 		UE_LOG(LogTemp, Error, TEXT("SaveGame Error!"));

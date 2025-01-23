@@ -12,14 +12,18 @@ AStore::AStore()
 
 	MeshPivot = CreateDefaultSubobject<USceneComponent>(TEXT("MeshPivot"));
 	MeshPivot->SetupAttachment(RootComponent);
+	MeshPivot->SetWorldLocation(FVector(-900.0, -1010.0, 0.0));
+	MeshPivot->SetWorldRotation(FRotator(0.0, 90.0, 0.0));
 
 	StaticMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("StaticMesh"));
 	StaticMesh->SetupAttachment(MeshPivot);
+	StaticMesh->SetWorldLocation(FVector(1230.0, -570.0, 0.0));
+	StaticMesh->SetWorldRotation(FRotator(0.0, -90.0, 0.0));
 }
 
 void AStore::Init()
 {
-	SetStaticMesh();
+	SetStoreMesh();
 	CreateCustomer();
 }
 
@@ -43,6 +47,12 @@ TArray<FString> AStore::GetStoreCustNames()
 		CustNames.Add(CurStoreData.StoreCust3);
 	}
 	return CustNames;
+}
+
+void AStore::SetPivotCenter()
+{
+	// »óÁ¡ ÇÇº¿À» ¸ÂÃá´Ù.
+	
 }
 
 void AStore::InitializeStoreData(const FStoreData& StoreData)
@@ -72,10 +82,12 @@ bool AStore::DelayWithDeltaTime(float DelayTime, float DeltaSeconds)
 	}
 }
 
-void AStore::SetStaticMesh()
+void AStore::SetStoreMesh()
 {
 	UStaticMesh* StoreMesh = CurStoreData.StoreModel;
 	StaticMesh->SetStaticMesh(StoreMesh);
+
+	SetPivotCenter();
 }
 
 void AStore::CreateCustomer()

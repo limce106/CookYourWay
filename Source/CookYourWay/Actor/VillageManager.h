@@ -18,8 +18,8 @@ class COOKYOURWAY_API AVillageManager : public AActor
 	class APlayerBistro* PlayerBistro;
 
 	FTimerHandle LeftDayTimeHandler;
-	int32 LeftMinute = 0;
-	int32 LeftSecond = 30;
+	int32 LeftMinute = 1;
+	int32 LeftSecond = 0;
 
 	// 남은 하루 시간 계산하기
 	void DecreaseDayTime();
@@ -30,6 +30,10 @@ class COOKYOURWAY_API AVillageManager : public AActor
 	void StartNewDay();
 	void SpawnBistrosAndStore();
 	void DecreaseStorePeriod();
+
+	void TryCreateNewCompetitor();
+	void TryCreateNewStore();
+	void AddRandomRegularCust(int32 AreaID, int32 RegularCustNum);
 
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<AActor> BP_PlayerBistro;
@@ -58,7 +62,6 @@ public:
 	UFUNCTION(BlueprintCallable)
 	int32 GetLeftSecond();
 
-	void TryCreateNewCompetitor();
 	int32 GetRandomAreaId();
 
 	// 하루가 끝났을 때

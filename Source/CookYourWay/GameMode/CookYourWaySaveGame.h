@@ -29,7 +29,7 @@ public:
 	UPROPERTY()
 	TArray<int32> StoreAreaID = { 2, 10, 23 };
 	UPROPERTY()
-	TArray<FStoreData> StoreDatas;
+	TArray<FStoreData> StoreData;
 	UPROPERTY()
 	int32 TotalAsset = 0;
 	UPROPERTY()

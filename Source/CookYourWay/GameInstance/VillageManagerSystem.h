@@ -88,7 +88,7 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	TArray<int32> StoreAreaID = { 2, 10, 23 };
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	TArray<FStoreData> LoadedStoreData;
+	TArray<FStoreData> StoreData;
 
 	// 전체 자산
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)

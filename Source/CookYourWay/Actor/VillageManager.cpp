@@ -27,8 +27,8 @@ AVillageManager::AVillageManager()
 void AVillageManager::Init()
 {
 	StartNewDay();
-	SpawnBistrosAndStore();
 	DecreaseStorePeriod();
+	SpawnBistrosAndStore();
 }
 
 void AVillageManager::RunDayTimer()
@@ -60,28 +60,32 @@ void AVillageManager::SpawnBistrosAndStore()
 		Competitor->InitVisitNumAndSatisfationSumByCust();
 	}
 
+	bool IsStoreDataEmpty = VillageManagerSystem->StoreData.IsEmpty();
 	for (int i = 0; i < VillageManagerSystem->StoreAreaID.Num(); i++) {
 		int32 AreaID = VillageManagerSystem->StoreAreaID[i];
 
-		if (VillageManagerSystem->LoadedStoreData.Num() > 0) {
-			AStore* Store = StoreSpawnFactory::SpawnStore(GetWorld(), BP_Store, *AreaLocMap.Find(AreaID), FRotator::ZeroRotator, VillageManagerSystem->LoadedStoreData[i]);
+		if (!IsStoreDataEmpty) {
+			AStore* Store = StoreSpawnFactory::SpawnStore(GetWorld(), BP_Store, *AreaLocMap.Find(AreaID), FRotator::ZeroRotator, VillageManagerSystem->StoreData[i]);
 		}
 		else {
 			int32 RandomStoreIdx = UKismetMathLibrary::RandomIntegerInRange(0, VillageManagerSystem->StoreTableRows.Num() - 1);
 			AStore* Store = StoreSpawnFactory::SpawnStore(GetWorld(), BP_Store, *AreaLocMap.Find(AreaID), FRotator::ZeroRotator, *VillageManagerSystem->StoreTableRows[RandomStoreIdx]);
+			VillageManagerSystem->StoreData.Add(Store->CurStoreData);
 		}
 	}
 }
 
 void AVillageManager::DecreaseStorePeriod()
 {
-	TArray<AActor*> AllStoreActorArr;
-	UGameplayStatics::GetAllActorsOfClass(GetWorld(), BP_Store, AllStoreActorArr);
-
-	for (auto AActor : AllStoreActorArr) {
-		AStore* Store = Cast<AStore>(AActor);
-		Store->CurStoreData.StorePeriod--;
+	if (VillageManagerSystem->StoreData.Num() == 0) {
+		return;
 	}
+
+	for (int i = 0; i < VillageManagerSystem->StoreData.Num(); i++) {
+		VillageManagerSystem->StoreData[i].StorePeriod--;
+	}
+
+	TryCreateNewStore();
 }
 
 void AVillageManager::BeginPlay()
@@ -153,34 +157,70 @@ void AVillageManager::TryCreateNewCompetitor()
 				CustomerDataManagerSystem->LoyaltyMap.Add(NewKey, 0.0f);
 				CustomerDataManagerSystem->AvgRateMap.Add(NewKey, 0.0f);
 				VillageManagerSystem->CompetitorTotalCust.Add(NewCompetitorAreaID, 0);
+
+				// 오픈 프로모션: 전체 손님 유형 중 랜덤으로 2개의 유형을 초기 단골 손님으로 만든다.
+				AddRandomRegularCust(NewCompetitorAreaID, 2);
 			}
 		}
 	}
 }
 
+void AVillageManager::TryCreateNewStore()
+{
+	for (int i = 0; i < VillageManagerSystem->StoreData.Num(); i++) {
+		if (VillageManagerSystem->StoreData[i].StorePeriod == 0) {
+			int32 CurStoreAreaID = VillageManagerSystem->StoreAreaID[i];
+			int32 NewAreaID = GetRandomAreaId();
+			VillageManagerSystem->StoreAreaID.Remove(CurStoreAreaID);
+			VillageManagerSystem->StoreAreaID.Add(NewAreaID);
+
+			int32 RandomStoreIdx = UKismetMathLibrary::RandomIntegerInRange(0, VillageManagerSystem->StoreTableRows.Num() - 1);
+			VillageManagerSystem->StoreData.Add(*VillageManagerSystem->StoreTableRows[RandomStoreIdx]);
+		}
+	}
+}
+
+void AVillageManager::AddRandomRegularCust(int32 AreaID, int32 RegularCustNum)
+{
+	for (int i = 0; i < RegularCustNum; i++) {
+		int32 RegularCustNameIdx = UKismetMathLibrary::RandomIntegerInRange(0, CustomerDataManagerSystem->CustomerNames.Num() - 1);
+		FString RegularCustName = CustomerDataManagerSystem->CustomerNames[RegularCustNameIdx];
+
+		CustomerDataManagerSystem->AddRegularCust(RegularCustName, AreaID);
+	}
+}
+
 int32 AVillageManager::GetRandomAreaId()
 {
+	TArray<int32> BlankAreaID;
 	// 기존 경쟁사, 상점과 플레이어 가게와 중복되지 않는 부지
-	int32 RandomAreaId = UKismetMathLibrary::RandomIntegerInRange(1, AreaLocMap.Num());
+	for (int i = 0; i < AreaLocMap.Num(); i++) {
+		if (i != VillageManagerSystem->PlayerBistroAreaID ||
+			!VillageManagerSystem->CompetitorAreaID.Contains(i) ||
+			!VillageManagerSystem->StoreAreaID.Contains(i)) {
+			BlankAreaID.Add(i);
+		}
+	}
 
-	if (RandomAreaId == VillageManagerSystem->PlayerBistroAreaID ||
-		VillageManagerSystem->CompetitorAreaID.Contains(RandomAreaId) ||
-		VillageManagerSystem->StoreAreaID.Contains(RandomAreaId)) {
-		GetRandomAreaId();
-		return 0;
-	}
-	else {
-		return RandomAreaId;
-	}
+	int32 RandomAreaId = UKismetMathLibrary::RandomIntegerInRange(0, BlankAreaID.Num() - 1);
+	return 	BlankAreaID[RandomAreaId];
 }
 
 void AVillageManager::EndDay()
 {
 	UGameplayStatics::SetGamePaused(GetWorld(), true);
 	UpdateTodayAvgRate();
+
+	VillageManagerSystem->StoreData.Empty();
+
+	TArray<AActor*> AllStoreActorArr;
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), BP_Store, AllStoreActorArr);
+	for (auto Actor : AllStoreActorArr) {
+		AStore* Store = Cast<AStore>(Actor);
+		VillageManagerSystem->StoreData.Add(Store->CurStoreData);
+	}
+
 	CookYourWayGameState->SaveCookYourWayData();
-	//CustomerDataManagerSystem->UpdateTodayAvgRate();
-	//CustomerDataManagerSystem->TodaySatisfationSumMap.Empty();
 
 	StartSubtractAnim();
 }

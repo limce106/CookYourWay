@@ -27,6 +27,9 @@ public:
 	TArray<FCompetitorReviewData> IngrFestReviewData;
 	TArray<FCompetitorReviewData> OpenPromoReviewData;
 
+	// 오픈 프로모션 진행 여부
+	bool IsOpenPromo = true;
+
 	// 부지 번호
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	int32 AreaID;

@@ -157,7 +157,7 @@ bool UCustomerDataManagerSystem::IsRegularCust(FString CustomerName, int32 Bistr
 
 void UCustomerDataManagerSystem::AddRegularCust(FString CustomerName, int32 BistroAreaID)
 {
-	FCustomerBistroKey Key = GetCustomerBistroKey(CustomerName, VillageManagerSystem->PlayerBistroAreaID);
+	FCustomerBistroKey Key = GetCustomerBistroKey(CustomerName, BistroAreaID);
 	IsRegularCustMap.Add(Key, true);
 	LoyaltyMap.Add(Key, 100);
 }
