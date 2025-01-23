@@ -44,20 +44,27 @@ void ACompetitor::SetDefaultReviewRate()
 
 int32 ACompetitor::GetCustomerSatisfaction()
 {
+	TArray<FCompetitorReviewData> ReviewData;
+	if (IsOpenPromo) {
+		ReviewData = OpenPromoReviewData;
+	}
+	else {
+		ReviewData = NormalReviewData;
+	}
+
 	int Satisfaction = 0;
 	float Probability = FMath::FRand();
 
-	float MinProb = 0.0f;
-	float MaxProb = 0.0f;
+	float ProbRange = 0.0f;
 
-	for (int i = 0; i < NormalReviewData.Num(); i++) {
-		MaxProb += NormalReviewData[i].RatingProb;
-		if (Probability > MaxProb) {
-			MinProb = MaxProb;
+	for (int i = 0; i < ReviewData.Num(); i++) {
+		ProbRange += ReviewData[i].RatingProb;
+		if (Probability > ProbRange) {
 			continue;
 		}
 		else {
-			Satisfaction = UKismetMathLibrary::RandomIntegerInRange(NormalReviewData[i].RatingMin, NormalReviewData[i].RatingMax);
+			Satisfaction = UKismetMathLibrary::RandomIntegerInRange(ReviewData[i].RatingMin, ReviewData[i].RatingMax);
+			break;
 		}
 	}
 

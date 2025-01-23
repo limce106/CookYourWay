@@ -124,5 +124,10 @@ public:
 		{21, 0}
 	};
 
+	// 경쟁사의 남은 오픈 프로모션 기간
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	TArray<int32> CompetitorOpenPromoDay = { 3, 3, 3, 3, 3, 3 };
+
 	bool DelayWithDeltaTime(float DelayTime, float DeltaSeconds);
+	void DecreaseCompetitorOpenPromoDay();
 };

@@ -29,6 +29,7 @@ void AVillageManager::Init()
 	StartNewDay();
 	DecreaseStorePeriod();
 	SpawnBistrosAndStore();
+	VillageManagerSystem->DecreaseCompetitorOpenPromoDay();
 }
 
 void AVillageManager::RunDayTimer()
@@ -58,6 +59,13 @@ void AVillageManager::SpawnBistrosAndStore()
 		ACompetitor* Competitor = GetWorld()->SpawnActor<ACompetitor>(BP_Competitor, *AreaLocMap.Find(AreaID), FRotator::ZeroRotator);
 		Competitor->AreaID = AreaID;
 		Competitor->InitVisitNumAndSatisfationSumByCust();
+
+		if (VillageManagerSystem->CompetitorOpenPromoDay[i] > 0) {
+			Competitor->IsOpenPromo = true;
+		}
+		else {
+			Competitor->IsOpenPromo = false;
+		}
 	}
 
 	bool IsStoreDataEmpty = VillageManagerSystem->StoreData.IsEmpty();

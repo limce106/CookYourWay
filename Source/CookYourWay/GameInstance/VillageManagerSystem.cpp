@@ -56,3 +56,15 @@ bool UVillageManagerSystem::DelayWithDeltaTime(float DelayTime, float DeltaSecon
 		return false;
 	}
 }
+
+void UVillageManagerSystem::DecreaseCompetitorOpenPromoDay()
+{
+	for (int i = 0; i < CompetitorOpenPromoDay.Num(); i++) {
+		if (CompetitorOpenPromoDay[i] == 0) {
+			continue;
+		}
+
+		int32 DecreasedRemainDay = CompetitorOpenPromoDay[i] - 1;
+		CompetitorOpenPromoDay[i] = DecreasedRemainDay;
+	}
+}
