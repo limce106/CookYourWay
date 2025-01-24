@@ -54,13 +54,13 @@ void AVillageManager::SpawnBistrosAndStore()
 	SpawnedPlayerBistro->AreaID = VillageManagerSystem->PlayerBistroAreaID;
 	SpawnedPlayerBistro->InitVisitNumAndSatisfationSumByCust();
 
-	for (int i = 0; i < VillageManagerSystem->CompetitorAreaID.Num(); i++) {
-		int32 AreaID = VillageManagerSystem->CompetitorAreaID[i];
+	for (int i = 0; i < VillageManagerSystem->CompetitorDataArr.Num(); i++) {
+		int32 AreaID = VillageManagerSystem->CompetitorDataArr[i].AreaID;
 		ACompetitor* Competitor = GetWorld()->SpawnActor<ACompetitor>(BP_Competitor, *AreaLocMap.Find(AreaID), FRotator::ZeroRotator);
 		Competitor->AreaID = AreaID;
 		Competitor->InitVisitNumAndSatisfationSumByCust();
 
-		if (VillageManagerSystem->CompetitorOpenPromoDay[i] > 0) {
+		if (VillageManagerSystem->CompetitorDataArr[i].OpenPromoDay > 0) {
 			Competitor->IsOpenPromo = true;
 		}
 		else {
@@ -143,28 +143,27 @@ void AVillageManager::DecreaseDayTime()
 }
 void AVillageManager::TryCreateNewCompetitor()
 {
-	for (auto CurCompetitorAreaID : VillageManagerSystem->CompetitorAreaID) {
+	for (auto CustomerData : VillageManagerSystem->CompetitorDataArr) {
 		// 단골 손님 보유 여부
-		bool HasRegularCust = CustomerDataManagerSystem->HasRegularCust(CurCompetitorAreaID);
+		bool HasRegularCust = CustomerDataManagerSystem->HasRegularCust(CustomerData.AreaID);
 
 		if (!HasRegularCust) {
+			VillageManagerSystem->CompetitorDataArr.Remove(CustomerData);
 			int32 NewCompetitorAreaID = GetRandomAreaId();
-			VillageManagerSystem->CompetitorAreaID.Remove(CurCompetitorAreaID);
-			VillageManagerSystem->CompetitorAreaID.Add(NewCompetitorAreaID);
+			FCompetitorData NewCompetitorData = FCompetitorData(NewCompetitorAreaID);
+			VillageManagerSystem->CompetitorDataArr.Add(NewCompetitorData);
 			
 			for (auto CustName : CustomerDataManagerSystem->CustomerNames) {
-				FCustomerBistroKey CurKey = CustomerDataManagerSystem->GetCustomerBistroKey(CustName, CurCompetitorAreaID);
+				FCustomerBistroKey CurKey = CustomerDataManagerSystem->GetCustomerBistroKey(CustName, CustomerData.AreaID);
 				FCustomerBistroKey NewKey = CustomerDataManagerSystem->GetCustomerBistroKey(CustName, NewCompetitorAreaID);
 
 				CustomerDataManagerSystem->IsRegularCustMap.Remove(CurKey);
 				CustomerDataManagerSystem->LoyaltyMap.Remove(CurKey);
 				CustomerDataManagerSystem->AvgRateMap.Remove(CurKey);
-				VillageManagerSystem->CompetitorTotalCust.Remove(CurCompetitorAreaID);
 
 				CustomerDataManagerSystem->IsRegularCustMap.Add(NewKey, false);
 				CustomerDataManagerSystem->LoyaltyMap.Add(NewKey, 0.0f);
 				CustomerDataManagerSystem->AvgRateMap.Add(NewKey, 0.0f);
-				VillageManagerSystem->CompetitorTotalCust.Add(NewCompetitorAreaID, 0);
 
 				// 오픈 프로모션: 전체 손님 유형 중 랜덤으로 2개의 유형을 초기 단골 손님으로 만든다.
 				AddRandomRegularCust(NewCompetitorAreaID, 2);
@@ -204,7 +203,7 @@ int32 AVillageManager::GetRandomAreaId()
 	// 기존 경쟁사, 상점과 플레이어 가게와 중복되지 않는 부지
 	for (int i = 0; i < AreaLocMap.Num(); i++) {
 		if (i != VillageManagerSystem->PlayerBistroAreaID ||
-			!VillageManagerSystem->CompetitorAreaID.Contains(i) ||
+			VillageManagerSystem->CompetitorDataArr[i].AreaID != i ||
 			!VillageManagerSystem->StoreAreaID.Contains(i)) {
 			BlankAreaID.Add(i);
 		}

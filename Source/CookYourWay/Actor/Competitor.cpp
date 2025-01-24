@@ -86,9 +86,7 @@ void ACompetitor::CustomerVisited(ACustomer* Customer)
 
 void ACompetitor::UpdateTotalCustAndRateSum()
 {
-	int32 CurTotalCust = *VillageManagerSystem->CompetitorTotalCust.Find(AreaID);
-	VillageManagerSystem->CompetitorTotalCust.Add(AreaID, ++CurTotalCust);
-
-	int32 CurRateSum = *VillageManagerSystem->CompetitorTotalRateSum.Find(AreaID);
-	VillageManagerSystem->CompetitorTotalRateSum.Add(AreaID, CurRateSum + GetCustomerSatisfaction());
+	int32 Idx = VillageManagerSystem->FindCompetitorDataArrIdx(AreaID);
+	VillageManagerSystem->CompetitorDataArr[Idx].TotalCust += 1;
+	VillageManagerSystem->CompetitorDataArr[Idx].TotalRateSum += GetCustomerSatisfaction();
 }

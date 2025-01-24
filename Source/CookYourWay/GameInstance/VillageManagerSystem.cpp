@@ -28,6 +28,16 @@ void UVillageManagerSystem::Initialize(FSubsystemCollectionBase& Collection)
 
 }
 
+void UVillageManagerSystem::Init()
+{
+	TArray<int32> CompetitorAreaIDArr = { 5, 7, 11, 14, 18, 21 };
+
+	for (int i = 0; i < 6; i++) {
+		FCompetitorData CompetitorData(CompetitorAreaIDArr[i]);
+		CompetitorDataArr.Add(CompetitorData);
+	}
+}
+
 TArray<FCompetitorReviewData> UVillageManagerSystem::GetCompetitorReviewDataOnTable(FString DataType)
 {
 	TArray<FCompetitorReviewData> CompetitorReviewData;
@@ -59,12 +69,29 @@ bool UVillageManagerSystem::DelayWithDeltaTime(float DelayTime, float DeltaSecon
 
 void UVillageManagerSystem::DecreaseCompetitorOpenPromoDay()
 {
-	for (int i = 0; i < CompetitorOpenPromoDay.Num(); i++) {
-		if (CompetitorOpenPromoDay[i] == 0) {
+	for (int i = 0; i < CompetitorDataArr.Num(); i++) {
+		if (CompetitorDataArr[i].OpenPromoDay == 0) {
 			continue;
 		}
 
-		int32 DecreasedRemainDay = CompetitorOpenPromoDay[i] - 1;
-		CompetitorOpenPromoDay[i] = DecreasedRemainDay;
+		int32 DecreasedRemainDay = CompetitorDataArr[i].OpenPromoDay - 1;
+		CompetitorDataArr[i].OpenPromoDay = DecreasedRemainDay;
 	}
+}
+
+int32 UVillageManagerSystem::FindCompetitorDataArrIdx(int32 AreaID)
+{
+	int32 Idx = -1;
+	for (int i = 0; i < CompetitorDataArr.Num(); i++) {
+		if (CompetitorDataArr[i].AreaID == AreaID) {
+			Idx = i;
+			break;
+		}
+	}
+
+	if (Idx == -1) {
+		UE_LOG(LogTemp, Error, TEXT("Can't Find Competitor Data Arr Index!"));
+	}
+
+	return Idx;
 }

@@ -52,6 +52,33 @@ public:
 	UStaticMesh* StoreModel;
 };
 
+USTRUCT(BlueprintType)
+struct FCompetitorData
+{
+	GENERATED_BODY() 
+	FCompetitorData() : AreaID(-1), TotalCust(0), TotalRateSum(0), OpenPromoDay(3) {}
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int32 AreaID;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int32 TotalCust;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int32 TotalRateSum;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int32 OpenPromoDay;
+
+	FCompetitorData(int32 AreaID) {
+		this->AreaID = AreaID;
+		TotalCust = 0;
+		TotalRateSum = 0;
+		OpenPromoDay = 3;
+	}
+
+	bool operator==(const FCompetitorData& Other) const {
+		return AreaID == Other.AreaID && TotalCust == Other.TotalCust && TotalRateSum == Other.TotalRateSum && OpenPromoDay == Other.OpenPromoDay;
+	}
+};
+
 UCLASS()
 class COOKYOURWAY_API UVillageManagerSystem : public UGameInstanceSubsystem
 {
@@ -63,7 +90,6 @@ class COOKYOURWAY_API UVillageManagerSystem : public UGameInstanceSubsystem
 	virtual void Initialize(FSubsystemCollectionBase& Collection) override;
 
 public:
-
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Table")
 	class UDataTable* CompetitorReviewTable;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Table")
@@ -83,9 +109,6 @@ public:
 	int32 PlayerBistroAreaID = 16;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	TArray<int32> CompetitorAreaID = {5, 7, 11, 14, 18, 21};
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	TArray<int32> StoreAreaID = { 2, 10, 23 };
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	TArray<FStoreData> StoreData;
@@ -98,36 +121,17 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	int32 PlayerBistroTotalCust = 0;
 
-	// 경쟁사 누적 손님 수
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	TMap<int32, int32> CompetitorTotalCust = {
-		{5, 0},
-		{7, 0},
-		{11, 0},
-		{14, 0},
-		{18, 0},
-		{21, 0}
-	};
-
 	// 플레이어 가게 누적 평점 합
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	int32 PlayerBistroTotalRateSum = 0;
 
-	// 경쟁사 누적 평점 합
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	TMap<int32, int32> CompetitorTotalRateSum = {
-		{5, 0},
-		{7, 0},
-		{11, 0},
-		{14, 0},
-		{18, 0},
-		{21, 0}
-	};
+	TArray<FCompetitorData> CompetitorDataArr;
 
-	// 경쟁사의 남은 오픈 프로모션 기간
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	TArray<int32> CompetitorOpenPromoDay = { 3, 3, 3, 3, 3, 3 };
+	void Init();
 
 	bool DelayWithDeltaTime(float DelayTime, float DeltaSeconds);
 	void DecreaseCompetitorOpenPromoDay();
+
+	int32 FindCompetitorDataArrIdx(int32 AreaID);
 };

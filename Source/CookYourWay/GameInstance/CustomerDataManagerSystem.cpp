@@ -50,8 +50,8 @@ void UCustomerDataManagerSystem::Init()
 		}
 
 		for (int CustNameIdx = 0; CustNameIdx < CustomerNames.Num(); CustNameIdx++) {
-			for (int AreaIDIdx = 0; AreaIDIdx < VillageManagerSystem->CompetitorAreaID.Num(); AreaIDIdx++) {
-				FCustomerBistroKey CustomerBistroKey = GetCustomerBistroKey(CustomerNames[CustNameIdx], VillageManagerSystem->CompetitorAreaID[AreaIDIdx]);
+			for (int AreaIDIdx = 0; AreaIDIdx < VillageManagerSystem->CompetitorDataArr.Num(); AreaIDIdx++) {
+				FCustomerBistroKey CustomerBistroKey = GetCustomerBistroKey(CustomerNames[CustNameIdx], VillageManagerSystem->CompetitorDataArr[AreaIDIdx].AreaID);
 
 				IsRegularCustMap.Add(CustomerBistroKey, false);
 				LoyaltyMap.Add(CustomerBistroKey, 0.0f);
@@ -210,11 +210,11 @@ void UCustomerDataManagerSystem::DecreaseCompetitorLoyalty(int32 CompetitorAreaI
 
 void UCustomerDataManagerSystem::AddCompetitorRegularCust()
 {
-	for (auto AreaID : VillageManagerSystem->CompetitorAreaID) {
+	for (auto CompetitorData : VillageManagerSystem->CompetitorDataArr) {
 		int32 Rand = UKismetMathLibrary::RandomIntegerInRange(1, 100);
 		if (Rand <= 5) {
 			int32 RandomCust = UKismetMathLibrary::RandomIntegerInRange(0, CustomerNames.Num() - 1);
-			AddRegularCust(CustomerNames[RandomCust], AreaID);
+			AddRegularCust(CustomerNames[RandomCust], CompetitorData.AreaID);
 		}
 	}
 }

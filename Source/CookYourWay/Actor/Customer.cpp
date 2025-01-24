@@ -189,15 +189,15 @@ bool ACustomer::GetDestByLoyalty()
 		}
 	}
 
-	for (auto AreaID : VillageManagerSystem->CompetitorAreaID) {
+	for (FCompetitorData CompetitorData : VillageManagerSystem->CompetitorDataArr) {
 		int32 Rand = UKismetMathLibrary::RandomIntegerInRange(1, 100);
-		FCustomerBistroKey CompetitorKey = CustomerDataManagerSystem->GetCustomerBistroKey(CustName, AreaID);
+		FCustomerBistroKey CompetitorKey = CustomerDataManagerSystem->GetCustomerBistroKey(CustName, CompetitorData.AreaID);
 
 		if (CustomerDataManagerSystem->IsRegularCustMap.Find(CompetitorKey)) {
 			float Loyalty = *CustomerDataManagerSystem->LoyaltyMap.Find(CompetitorKey);
 
 			if (Rand <= Loyalty) {
-				VisitDest = *VillageManager->AreaLocMap.Find(AreaID);
+				VisitDest = *VillageManager->AreaLocMap.Find(CompetitorData.AreaID);
 				return true;
 			}
 		}
