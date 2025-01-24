@@ -12,7 +12,6 @@ class COOKYOURWAY_API AStore : public AActor
 {
 	GENERATED_BODY()
 
-	USceneComponent* MeshPivot;
 	UStaticMeshComponent* StaticMesh;
 
 	class UVillageManagerSystem* VillageManagerSystem;
@@ -21,7 +20,6 @@ class COOKYOURWAY_API AStore : public AActor
 	// 스폰 주기(초)
 	int32 SpawnDelayTime = 5.0f;
 
-	void SetPivotCenter();
 	void SetStoreMesh();
 	bool DelayWithDeltaTime(float DelayTime, float DeltaSeconds);
 
