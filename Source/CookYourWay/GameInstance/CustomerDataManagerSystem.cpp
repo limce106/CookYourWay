@@ -45,8 +45,7 @@ void UCustomerDataManagerSystem::Init()
 
 			IsRegularCustMap.Add(CustomerBistroKey, false);
 			LoyaltyMap.Add(CustomerBistroKey, 0.0f);
-			AvgRateMap.Add(CustomerBistroKey, 0.0f);
-			VisitedNumMap.Add(CustomerBistroKey, 0);
+			MaxSatisfactionMap.Add(CustomerBistroKey, 0.0f);
 		}
 
 		for (int CustNameIdx = 0; CustNameIdx < CustomerNames.Num(); CustNameIdx++) {
@@ -55,8 +54,7 @@ void UCustomerDataManagerSystem::Init()
 
 				IsRegularCustMap.Add(CustomerBistroKey, false);
 				LoyaltyMap.Add(CustomerBistroKey, 0.0f);
-				AvgRateMap.Add(CustomerBistroKey, 0.0f);
-				VisitedNumMap.Add(CustomerBistroKey, 0);
+				MaxSatisfactionMap.Add(CustomerBistroKey, 0.0f);
 			}
 		}
 	}
@@ -119,22 +117,6 @@ TArray<int32> UCustomerDataManagerSystem::GetCustTaste(FString CustName)
 	return Taste;
 }
 
-float UCustomerDataManagerSystem::GetAvgRate(FString CustomerName, int32 BistroAreaID)
-{
-	FCustomerBistroKey Key = GetCustomerBistroKey(CustomerName, BistroAreaID);
-
-	if (AvgRateMap.Contains(Key))
-	{
-		float* FoundAvgRate = AvgRateMap.Find(Key);
-		return *FoundAvgRate;
-	}
-	else
-	{
-		UE_LOG(LogTemp, Warning, TEXT("Key not found: %s, %d"), *CustomerName, BistroAreaID);
-		return 0;
-	}
-}
-
 float UCustomerDataManagerSystem::GetLoyalty(FString CustomerName, int32 BistroAreaID)
 {
 	FCustomerBistroKey Key = GetCustomerBistroKey(CustomerName, BistroAreaID);
@@ -172,6 +154,7 @@ void UCustomerDataManagerSystem::DecreaseLoyalty(FString CustomerName, int32 Bis
 		CurLoyalty = 0;
 		// ´Ü°ñ¼Õ´Ô¿¡¼­ Á¦¿Ü
 		IsRegularCustMap.Add(Key, false);
+		MaxSatisfactionMap.Add(Key, 0);
 	}
 	LoyaltyMap.Add(Key, CurLoyalty);
 }
@@ -216,6 +199,16 @@ void UCustomerDataManagerSystem::AddCompetitorRegularCust()
 			int32 RandomCust = UKismetMathLibrary::RandomIntegerInRange(0, CustomerNames.Num() - 1);
 			AddRegularCust(CustomerNames[RandomCust], CompetitorData.AreaID);
 		}
+	}
+}
+
+void UCustomerDataManagerSystem::UpdateMaxSatisfaction(FString CustName, int32 BistroAreaID, int32 Satisfaction)
+{
+	FCustomerBistroKey Key = GetCustomerBistroKey(CustName, BistroAreaID);
+	int32 CurMaxSatisfaction = *MaxSatisfactionMap.Find(Key);
+
+	if (Satisfaction > CurMaxSatisfaction) {
+		MaxSatisfactionMap.Add(Key, Satisfaction);
 	}
 }
 

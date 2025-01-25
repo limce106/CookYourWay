@@ -42,14 +42,6 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	int32 AreaID;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	TMap<FString, int32> VisitNumByCust;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	TMap<FString, int32> SatisfationSumByCust;
-
 	// 새로운 손님의 평점 평균 가져오기
 	int32 GetCustomerSatisfaction();
-	// 이 경쟁사의 누적 방문 손님 수와 만족도 합 데이터를 초기화
-	void InitVisitNumAndSatisfationSumByCust();
 };

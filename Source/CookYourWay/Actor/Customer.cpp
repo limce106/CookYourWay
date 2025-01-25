@@ -328,9 +328,8 @@ void ACustomer::EatSandwich()
 {
 	Eat(7.0f);
 
-	PlayerBistro->VisitNumByCust.Add(CustName, PlayerBistro->VisitNumByCust[CustName] + 1);
-	PlayerBistro->SatisfationSumByCust.Add(CustName, PlayerBistro->SatisfationSumByCust[CustName] + Satisfaction);
-	PlayerBistro->UpdateRating(Satisfaction);
+
+	VillageManagerSystem->UpdatePlayerBistroRating(Satisfaction);
 
 	// Å×½ºÆ®
 	UE_LOG(LogTemp, Warning, TEXT("Satisfaction: %d"), Satisfaction);

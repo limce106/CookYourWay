@@ -174,16 +174,3 @@ void APlayerBistro::LeaveWaitingCust(ACustomer* Customer)
 	WaitingCustNum--;
 	Customer->Destroy();
 }
-
-void APlayerBistro::UpdateRating(int32 Satisfaction) {
-	VillageManagerSystem->PlayerBistroRating = ((VillageManagerSystem->PlayerBistroRating / 5 * 100) + Satisfaction) / VillageManagerSystem->PlayerBistroTotalCust;
-}
-
-void APlayerBistro::InitVisitNumAndSatisfationSumByCust()
-{
-	for (auto CustName : CustomerDataManagerSystem->CustomerNames) {
-		FCustomerBistroKey Key = CustomerDataManagerSystem->GetCustomerBistroKey(CustName, AreaID);
-		VisitNumByCust.Add(CustName, CustomerDataManagerSystem->VisitedNumMap[Key]);
-		SatisfationSumByCust.Add(CustName, (CustomerDataManagerSystem->AvgRateMap[Key]) / 5 * 100);
-	}
-}

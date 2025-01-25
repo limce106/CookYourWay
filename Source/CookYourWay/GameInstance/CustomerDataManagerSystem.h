@@ -114,10 +114,12 @@ public:
 	TMap<FCustomerBistroKey, bool> IsRegularCustMap;
 	// <손님 이름/가게, 충성도>
 	TMap<FCustomerBistroKey, float> LoyaltyMap;
-	// <손님 이름/가게, 평점평균>
-	TMap<FCustomerBistroKey, float> AvgRateMap;
-	// <손님 이름/가게, 해당 유형 손님이 방문한 횟수>
-	TMap<FCustomerBistroKey, int32> VisitedNumMap;
+	// <손님 이름/가게, 충성도>
+	TMap<FCustomerBistroKey, int32> MaxSatisfactionMap;
+	//// <손님 이름/가게, 평점평균>
+	//TMap<FCustomerBistroKey, float> AvgRateMap;
+	//// <손님 이름/가게, 해당 유형 손님이 방문한 횟수>
+	//TMap<FCustomerBistroKey, int32> VisitedNumMap;
 
 	// 최대 평점 
 	const float MaxRate = 5.0;
@@ -136,8 +138,8 @@ public:
 	// 특정 손님의 취향 가져오기
 	TArray<int32> GetCustTaste(FString CustName);
 
-	float GetAvgRate(FString CustomerName, int32 BistroAreaID);
 	float GetLoyalty(FString CustomerName, int32 BistroAreaID);
+	void UpdateMaxSatisfaction(FString CustName, int32 BistroAreaID, int32 Satisfaction);
 
 	// 단골 손님 여부 반환
 	bool IsRegularCust(FString CustomerName, int32 BistroAreaID);

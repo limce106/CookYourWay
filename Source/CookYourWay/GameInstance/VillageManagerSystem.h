@@ -168,4 +168,6 @@ public:
 	void DecreaseCompetitorOpenPromoDay();
 
 	int32 FindCompetitorDataArrIdx(int32 AreaID);
+
+	void UpdatePlayerBistroRating(int32 Satisfaction);
 };

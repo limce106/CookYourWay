@@ -26,15 +26,6 @@ void ACompetitor::Tick(float DeltaTime)
 
 }
 
-void ACompetitor::InitVisitNumAndSatisfationSumByCust()
-{
-	for (auto CustName : CustomerDataManagerSystem->CustomerNames) {
-		FCustomerBistroKey Key = CustomerDataManagerSystem->GetCustomerBistroKey(CustName, AreaID);
-		VisitNumByCust.Add(CustName, CustomerDataManagerSystem->VisitedNumMap[Key]);
-		SatisfationSumByCust.Add(CustName, (CustomerDataManagerSystem->AvgRateMap[Key]) / 5 * 100);
-	}
-}
-
 void ACompetitor::SetDefaultReviewRate()
 {
 	NormalReviewData = VillageManagerSystem->GetCompetitorReviewDataOnTable("normal");
@@ -78,9 +69,7 @@ int32 ACompetitor::GetCustomerSatisfaction()
 void ACompetitor::CustomerVisited(ACustomer* Customer)
 {
 	UpdateTotalCustAndRateSum();
-
-	VisitNumByCust.Add(Customer->CustName, VisitNumByCust[Customer->CustName] + 1);
-	SatisfationSumByCust.Add(Customer->CustName, SatisfationSumByCust[Customer->CustName] + GetCustomerSatisfaction());
+	CustomerDataManagerSystem->UpdateMaxSatisfaction(Customer->CustName, AreaID, GetCustomerSatisfaction());
 	Customer->Destroy();
 }
 

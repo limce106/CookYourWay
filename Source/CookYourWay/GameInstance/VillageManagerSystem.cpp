@@ -116,3 +116,8 @@ int32 UVillageManagerSystem::FindCompetitorDataArrIdx(int32 AreaID)
 
 	return Idx;
 }
+
+void UVillageManagerSystem::UpdatePlayerBistroRating(int32 Satisfaction)
+{
+	PlayerBistroRating = ((PlayerBistroRating / 5 * 100) + Satisfaction) / PlayerBistroTotalCust;
+}

@@ -35,12 +35,7 @@ public:
 	UPROPERTY()
 	TMap<FCustomerBistroKey, float> LoyaltyMap;
 	UPROPERTY()
-	TMap<FCustomerBistroKey, float> AvgRateMap;
-	TMap<FCustomerBistroKey, int32> VisitedNumMap;
-	UPROPERTY()
 	int32 PlayerBistroTotalCust = 0;
-	UPROPERTY()
-	int32 PlayerBistroRating = 0;
 	UPROPERTY()
 	int32 PlayerBistroRating = 0;
 };

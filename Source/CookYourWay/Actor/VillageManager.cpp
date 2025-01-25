@@ -52,13 +52,11 @@ void AVillageManager::SpawnBistrosAndStore()
 {
 	APlayerBistro* SpawnedPlayerBistro = GetWorld()->SpawnActor<APlayerBistro>(BP_PlayerBistro, *AreaLocMap.Find(VillageManagerSystem->PlayerBistroAreaID), FRotator::ZeroRotator);
 	SpawnedPlayerBistro->AreaID = VillageManagerSystem->PlayerBistroAreaID;
-	SpawnedPlayerBistro->InitVisitNumAndSatisfationSumByCust();
 
 	for (int i = 0; i < VillageManagerSystem->CompetitorDataArr.Num(); i++) {
 		int32 AreaID = VillageManagerSystem->CompetitorDataArr[i].AreaID;
 		ACompetitor* Competitor = GetWorld()->SpawnActor<ACompetitor>(BP_Competitor, *AreaLocMap.Find(AreaID), FRotator::ZeroRotator);
 		Competitor->AreaID = AreaID;
-		Competitor->InitVisitNumAndSatisfationSumByCust();
 
 		if (VillageManagerSystem->CompetitorDataArr[i].OpenPromoDay > 0) {
 			Competitor->IsOpenPromo = true;
@@ -151,11 +149,13 @@ void AVillageManager::TryCreateNewCompetitor()
 
 				CustomerDataManagerSystem->IsRegularCustMap.Remove(CurKey);
 				CustomerDataManagerSystem->LoyaltyMap.Remove(CurKey);
-				CustomerDataManagerSystem->AvgRateMap.Remove(CurKey);
+				CustomerDataManagerSystem->MaxSatisfactionMap.Remove(CurKey);
 
 				CustomerDataManagerSystem->IsRegularCustMap.Add(NewKey, false);
 				CustomerDataManagerSystem->LoyaltyMap.Add(NewKey, 0.0f);
-				CustomerDataManagerSystem->AvgRateMap.Add(NewKey, 0.0f);
+				CustomerDataManagerSystem->MaxSatisfactionMap.Add(NewKey, 0.0f);
+
+
 
 				// 오픈 프로모션: 전체 손님 유형 중 랜덤으로 2개의 유형을 초기 단골 손님으로 만든다.
 				AddRandomRegularCust(NewCompetitorAreaID, 2);
@@ -222,7 +222,6 @@ int32 AVillageManager::GetRandomAreaId()
 void AVillageManager::EndDay()
 {
 	UGameplayStatics::SetGamePaused(GetWorld(), true);
-	UpdateTodayAvgRate();
 
 	VillageManagerSystem->StoreDataArr.Empty();
 
@@ -284,38 +283,5 @@ void AVillageManager::UpdateProfitsValue(int32 Value)
 
 	if (Value > 0) {
 		PlayerBistro->TodaySoldPrice += Value;
-	}
-}
-
-void AVillageManager::UpdateTodayAvgRate()
-{
-	TArray<AActor*> AllCompetitorActorArr;
-	UGameplayStatics::GetAllActorsOfClass(GetWorld(), BP_Competitor, AllCompetitorActorArr);
-	float TodaySatisfationSumByCustTotal = 0.0f;
-
-	for (auto Competitor : AllCompetitorActorArr) {
-		ACompetitor* CastedCompetitor = Cast<ACompetitor>(Competitor);
-
-		for (auto CustName : CustomerDataManagerSystem->CustomerNames) {
-			FCustomerBistroKey Key = CustomerDataManagerSystem->GetCustomerBistroKey(CustName, CastedCompetitor->AreaID);
-			CustomerDataManagerSystem->VisitedNumMap.Add(Key, CustomerDataManagerSystem->VisitedNumMap[Key] + CastedCompetitor->VisitNumByCust[CustName]);
-
-			float CurCompetitorTotalAvgRate = CustomerDataManagerSystem->AvgRateMap[Key];
-			float UpdatedCompetitorReviewAvg = (CurCompetitorTotalAvgRate * (CustomerDataManagerSystem->VisitedNumMap[Key] - 1) + CastedCompetitor->SatisfationSumByCust[CustName]) / CustomerDataManagerSystem->VisitedNumMap[Key];
-			UpdatedCompetitorReviewAvg = UpdatedCompetitorReviewAvg * 5 / 100;
-
-			CustomerDataManagerSystem->AvgRateMap.Emplace(Key, UpdatedCompetitorReviewAvg);
-		}
-	}
-
-	for (auto CustName : CustomerDataManagerSystem->CustomerNames) {
-		FCustomerBistroKey Key = CustomerDataManagerSystem->GetCustomerBistroKey(CustName, PlayerBistro->AreaID);
-		CustomerDataManagerSystem->VisitedNumMap.Add(Key, CustomerDataManagerSystem->VisitedNumMap[Key] + PlayerBistro->VisitNumByCust[CustName]);
-
-		float CurPlayerTotalAvgRate = CustomerDataManagerSystem->AvgRateMap[Key];
-		float UpdatedPlayerReviewAvg = (CurPlayerTotalAvgRate * (CustomerDataManagerSystem->VisitedNumMap[Key] - 1) + PlayerBistro->SatisfationSumByCust[CustName]) / CustomerDataManagerSystem->VisitedNumMap[Key];
-		UpdatedPlayerReviewAvg = UpdatedPlayerReviewAvg * 5 / 100;
-
-		CustomerDataManagerSystem->AvgRateMap.Emplace(Key, UpdatedPlayerReviewAvg);
 	}
 }
