@@ -232,7 +232,15 @@ void AVillageManager::EndDay()
 
 	CookYourWayGameState->SaveCookYourWayData();
 
+	StartFadeOutAnim();
 	StartSubtractAnim();
+
+	/*FTimerHandle FadeOutTimerHandle;
+	GetWorld()->GetTimerManager().SetTimer(FadeOutTimerHandle, FTimerDelegate::CreateLambda([=]()
+		{
+			UE_LOG(LogTemp, Warning, TEXT("Anim"));
+			StartSubtractAnim();
+		}), 1, false);*/
 }
 
 FString AVillageManager::DayToWeekString(int32 Day)

@@ -53,6 +53,21 @@ public:
 };
 
 USTRUCT(BlueprintType)
+struct FNewsData : public FTableRowBase {
+	GENERATED_BODY()
+
+public:
+	FNewsData() : NewsCode("-1"), NewsProb(0), NewsString("-1") {}
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Data")
+	FString NewsCode;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Data")
+	float NewsProb;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Data")
+	FString NewsString;
+};
+
+USTRUCT(BlueprintType)
 struct FCompetitorData
 {
 	GENERATED_BODY() 
