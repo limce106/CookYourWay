@@ -38,4 +38,6 @@ public:
 	int32 PlayerBistroTotalCust = 0;
 	UPROPERTY()
 	int32 PlayerBistroRating = 0;
+	UPROPERTY()
+	int32 DestroyedCompetitor = 0;
 };

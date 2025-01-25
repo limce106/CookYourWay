@@ -10,4 +10,5 @@ UCookYourWaySaveGame::UCookYourWaySaveGame()
 	TotalAsset = 0;
 	PlayerBistroTotalCust = 0;
 	PlayerBistroRating = 0;
+	DestroyedCompetitor = 0;
 }

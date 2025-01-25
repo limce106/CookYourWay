@@ -162,6 +162,10 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	int32 TotalAsset = 1000;
 
+	// 전체 자산
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	int32 DestroyedCompetitor = 0;
+
 	void Init();
 
 	bool DelayWithDeltaTime(float DelayTime, float DeltaSeconds);

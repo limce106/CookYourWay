@@ -139,6 +139,8 @@ void AVillageManager::TryCreateNewCompetitor()
 
 		if (!HasRegularCust) {
 			VillageManagerSystem->CompetitorDataArr.Remove(CustomerData);
+			VillageManagerSystem->DestroyedCompetitor++;
+
 			int32 NewCompetitorAreaID = GetRandomAreaId();
 			FCompetitorData NewCompetitorData = FCompetitorData(NewCompetitorAreaID, 3.5);
 			VillageManagerSystem->CompetitorDataArr.Add(NewCompetitorData);
@@ -155,10 +157,12 @@ void AVillageManager::TryCreateNewCompetitor()
 				CustomerDataManagerSystem->LoyaltyMap.Add(NewKey, 0.0f);
 				CustomerDataManagerSystem->MaxSatisfactionMap.Add(NewKey, 0.0f);
 
-
-
 				// 오픈 프로모션: 전체 손님 유형 중 랜덤으로 2개의 유형을 초기 단골 손님으로 만든다.
 				AddRandomRegularCust(NewCompetitorAreaID, 2);
+
+				if (VillageManagerSystem->DestroyedCompetitor <= 8) {
+					CreateNewStore();
+				}
 			}
 		}
 	}
