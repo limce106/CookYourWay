@@ -19,7 +19,7 @@ UVillageManagerSystem::UVillageManagerSystem()
 	static ConstructorHelpers::FObjectFinder<UDataTable> DT_STORETABLE(*StoreTablePath);
 	StoreTable = DT_STORETABLE.Object;
 
-	StoreTable->GetAllRows<FStoreData>("Get All Rows Of StoreData", StoreTableRows);
+	StoreTable->GetAllRows<FStoreTable>("Get All Rows Of StoreTableData", StoreTableRows);
 }
 
 void UVillageManagerSystem::Initialize(FSubsystemCollectionBase& Collection)
@@ -31,10 +31,22 @@ void UVillageManagerSystem::Initialize(FSubsystemCollectionBase& Collection)
 void UVillageManagerSystem::Init()
 {
 	TArray<int32> CompetitorAreaIDArr = { 5, 7, 11, 14, 18, 21 };
+	bool IsCompetitorDataEmpty = CompetitorDataArr.IsEmpty();
+	if (IsCompetitorDataEmpty) {
+		for (int i = 0; i < 6; i++) {
+			FCompetitorData CompetitorData(CompetitorAreaIDArr[i]);
+			CompetitorDataArr.Add(CompetitorData);
+		}
+	}
 
-	for (int i = 0; i < 6; i++) {
-		FCompetitorData CompetitorData(CompetitorAreaIDArr[i]);
-		CompetitorDataArr.Add(CompetitorData);
+	TArray<int32> StoreAreaID = { 2, 10, 23 };
+	bool IsStoreDataEmpty = StoreDataArr.IsEmpty();
+	if (IsStoreDataEmpty) {
+		for (int i = 0; i < 3; i++) {
+			int32 RandomStoreIdx = UKismetMathLibrary::RandomIntegerInRange(0, StoreTableRows.Num() - 1);
+			FStoreData StoreData(StoreAreaID[i], StoreTableRows[RandomStoreIdx]);
+			StoreDataArr.Add(StoreData);
+		}
 	}
 }
 

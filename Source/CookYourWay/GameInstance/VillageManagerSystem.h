@@ -23,11 +23,11 @@ public:
 };
 
 USTRUCT(BlueprintType)
-struct FStoreData : public FTableRowBase {
+struct FStoreTable : public FTableRowBase {
 	GENERATED_BODY()
 
 public:
-	FStoreData() : StoreName("-1"), StoreScope(-1), StorePeriod(-1), StoreCust1("-1"), StoreCust2("-1"), StoreCust3("-1"), 
+	FStoreTable() : StoreName("-1"), StoreScope(-1), StorePeriod(-1), StoreCust1("-1"), StoreCust2("-1"), StoreCust3("-1"),
 					StoreCustCreateProb(0), StoreGroupCode(-1) {}
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Data")
@@ -59,13 +59,13 @@ struct FCompetitorData
 	FCompetitorData() : AreaID(-1), TotalCust(0), TotalRateSum(0), OpenPromoDay(3) {}
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	int32 AreaID;
+	int32 AreaID;	// 부지 번호
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	int32 TotalCust;
+	int32 TotalCust;	// 누적 손님 수 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	int32 TotalRateSum;
+	int32 TotalRateSum;	// 누적 평점 합
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	int32 OpenPromoDay;
+	int32 OpenPromoDay;	// 오픈 프로모션 남은 기한
 
 	FCompetitorData(int32 AreaID) {
 		this->AreaID = AreaID;
@@ -75,7 +75,28 @@ struct FCompetitorData
 	}
 
 	bool operator==(const FCompetitorData& Other) const {
-		return AreaID == Other.AreaID && TotalCust == Other.TotalCust && TotalRateSum == Other.TotalRateSum && OpenPromoDay == Other.OpenPromoDay;
+		return AreaID == Other.AreaID;
+	}
+};
+
+USTRUCT(BlueprintType)
+struct FStoreData
+{
+	GENERATED_BODY()
+	FStoreData() : AreaID(-1), StoreTableData(FStoreTable()) {}
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int32 AreaID;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Data")
+	FStoreTable StoreTableData;
+
+	FStoreData(int32 AreaID, FStoreTable* StoreTableData) {
+		this->AreaID = AreaID;
+		this->StoreTableData = *StoreTableData;
+	}
+
+	bool operator==(const FStoreData& Other) const {
+		return AreaID == Other.AreaID;
 	}
 };
 
@@ -98,24 +119,12 @@ public:
 	TArray<FCompetitorReviewData*> CompetitorReviewTableRows;
 	TArray<FName> CompetitorReviewTableRowNames;
 
-	TArray<FStoreData*> StoreTableRows;
+	TArray<FStoreTable*> StoreTableRows;
 
 	TArray<FCompetitorReviewData> GetCompetitorReviewDataOnTable(FString DataType);
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	int32 Day = 0;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	int32 PlayerBistroAreaID = 16;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	TArray<int32> StoreAreaID = { 2, 10, 23 };
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	TArray<FStoreData> StoreData;
-
-	// 전체 자산
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
-	int32 TotalAsset = 1000;
 
 	// 플레이어 가게 누적 손님 수
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
@@ -127,6 +136,16 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	TArray<FCompetitorData> CompetitorDataArr;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	TArray<FStoreData> StoreDataArr;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	int32 Day = 0;
+
+	// 전체 자산
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	int32 TotalAsset = 1000;
 
 	void Init();
 

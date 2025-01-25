@@ -68,29 +68,21 @@ void AVillageManager::SpawnBistrosAndStore()
 		}
 	}
 
-	bool IsStoreDataEmpty = VillageManagerSystem->StoreData.IsEmpty();
-	for (int i = 0; i < VillageManagerSystem->StoreAreaID.Num(); i++) {
-		int32 AreaID = VillageManagerSystem->StoreAreaID[i];
-
-		if (!IsStoreDataEmpty) {
-			AStore* Store = StoreSpawnFactory::SpawnStore(GetWorld(), BP_Store, *AreaLocMap.Find(AreaID), FRotator::ZeroRotator, VillageManagerSystem->StoreData[i]);
-		}
-		else {
-			int32 RandomStoreIdx = UKismetMathLibrary::RandomIntegerInRange(0, VillageManagerSystem->StoreTableRows.Num() - 1);
-			AStore* Store = StoreSpawnFactory::SpawnStore(GetWorld(), BP_Store, *AreaLocMap.Find(AreaID), FRotator::ZeroRotator, *VillageManagerSystem->StoreTableRows[RandomStoreIdx]);
-			VillageManagerSystem->StoreData.Add(Store->CurStoreData);
-		}
+	for (int i = 0; i < VillageManagerSystem->StoreDataArr.Num(); i++) {
+		FStoreTable StoreTableData = VillageManagerSystem->StoreDataArr[i].StoreTableData;
+		AStore* Store = StoreSpawnFactory::SpawnStore(GetWorld(), BP_Store, *AreaLocMap.Find(VillageManagerSystem->StoreDataArr[i].AreaID), FRotator::ZeroRotator, 
+														VillageManagerSystem->StoreDataArr[i].AreaID, StoreTableData);
 	}
 }
 
 void AVillageManager::DecreaseStorePeriod()
 {
-	if (VillageManagerSystem->StoreData.Num() == 0) {
+	if (VillageManagerSystem->StoreDataArr.Num() == 0) {
 		return;
 	}
 
-	for (int i = 0; i < VillageManagerSystem->StoreData.Num(); i++) {
-		VillageManagerSystem->StoreData[i].StorePeriod--;
+	for (int i = 0; i < VillageManagerSystem->StoreDataArr.Num(); i++) {
+		VillageManagerSystem->StoreDataArr[i].StoreTableData.StorePeriod--;
 	}
 
 	TryCreateNewStore();
@@ -174,15 +166,16 @@ void AVillageManager::TryCreateNewCompetitor()
 
 void AVillageManager::TryCreateNewStore()
 {
-	for (int i = 0; i < VillageManagerSystem->StoreData.Num(); i++) {
-		if (VillageManagerSystem->StoreData[i].StorePeriod == 0) {
-			int32 CurStoreAreaID = VillageManagerSystem->StoreAreaID[i];
-			int32 NewAreaID = GetRandomAreaId();
-			VillageManagerSystem->StoreAreaID.Remove(CurStoreAreaID);
-			VillageManagerSystem->StoreAreaID.Add(NewAreaID);
+	for (int i = 0; i < VillageManagerSystem->StoreDataArr.Num(); i++) {
+		if (VillageManagerSystem->StoreDataArr[i].StoreTableData.StorePeriod == 0) {
 
+			VillageManagerSystem->StoreDataArr.Remove(VillageManagerSystem->StoreDataArr[i]);
+
+			int32 NewAreaID = GetRandomAreaId();
 			int32 RandomStoreIdx = UKismetMathLibrary::RandomIntegerInRange(0, VillageManagerSystem->StoreTableRows.Num() - 1);
-			VillageManagerSystem->StoreData.Add(*VillageManagerSystem->StoreTableRows[RandomStoreIdx]);
+			FStoreTable* NewStoreTableData = VillageManagerSystem->StoreTableRows[RandomStoreIdx];
+			FStoreData NewStoreData(NewAreaID, NewStoreTableData);
+			VillageManagerSystem->StoreDataArr.Add(NewStoreData);
 		}
 	}
 }
@@ -199,12 +192,21 @@ void AVillageManager::AddRandomRegularCust(int32 AreaID, int32 RegularCustNum)
 
 int32 AVillageManager::GetRandomAreaId()
 {
+	TArray<int32> CompetitorAreaID;
+	for (FCompetitorData CompetitorData : VillageManagerSystem->CompetitorDataArr) {
+		CompetitorAreaID.Add(CompetitorData.AreaID);
+	}
+
+	TArray<int32> StoreAreaID;
+	for (FStoreData StoreData : VillageManagerSystem->StoreDataArr) {
+		StoreAreaID.Add(StoreData.AreaID);
+	}
+
 	TArray<int32> BlankAreaID;
 	// 기존 경쟁사, 상점과 플레이어 가게와 중복되지 않는 부지
 	for (int i = 0; i < AreaLocMap.Num(); i++) {
-		if (i != VillageManagerSystem->PlayerBistroAreaID ||
-			VillageManagerSystem->CompetitorDataArr[i].AreaID != i ||
-			!VillageManagerSystem->StoreAreaID.Contains(i)) {
+		if (i != VillageManagerSystem->PlayerBistroAreaID || !CompetitorAreaID.Contains(i) ||
+			VillageManagerSystem->StoreDataArr[i].AreaID != i) {
 			BlankAreaID.Add(i);
 		}
 	}
@@ -218,13 +220,14 @@ void AVillageManager::EndDay()
 	UGameplayStatics::SetGamePaused(GetWorld(), true);
 	UpdateTodayAvgRate();
 
-	VillageManagerSystem->StoreData.Empty();
+	VillageManagerSystem->StoreDataArr.Empty();
 
 	TArray<AActor*> AllStoreActorArr;
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), BP_Store, AllStoreActorArr);
 	for (auto Actor : AllStoreActorArr) {
 		AStore* Store = Cast<AStore>(Actor);
-		VillageManagerSystem->StoreData.Add(Store->CurStoreData);
+		FStoreData StoreData(Store->AreaID, &Store->CurStoreTableData);
+		VillageManagerSystem->StoreDataArr.Add(StoreData);
 	}
 
 	CookYourWayGameState->SaveCookYourWayData();

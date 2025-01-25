@@ -27,9 +27,7 @@ public:
 	UPROPERTY()
 	TArray<FCompetitorData> CompetitorDataArr;
 	UPROPERTY()
-	TArray<int32> StoreAreaID = { 2, 10, 23 };
-	UPROPERTY()
-	TArray<FStoreData> StoreData;
+	TArray<FStoreData> StoreDataArr;
 	UPROPERTY()
 	int32 TotalAsset = 0;
 	UPROPERTY()

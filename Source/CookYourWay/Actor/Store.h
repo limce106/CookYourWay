@@ -35,22 +35,26 @@ public:
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<ACustomer> BP_Customer;
 
-	FStoreData CurStoreData;
+	// 부지 번호
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	int32 AreaID;
+
+	FStoreTable CurStoreTableData;
 
 	virtual void Tick(float DeltaTime) override;
 
 	void Init();
-	void InitializeStoreData(const FStoreData& StoreData);
+	void InitializeStoreTableData(int32 StoreAreaID, FStoreTable StoreTableData);
 	void CreateCustomer();
 };
 
 class StoreSpawnFactory
 {
 public:
-	static AStore* SpawnStore(UWorld* World, TSubclassOf<AStore> StoreClass, const FVector& Location, const FRotator& Rotation, FStoreData StoreData)
+	static AStore* SpawnStore(UWorld* World, TSubclassOf<AStore> StoreClass, const FVector& Location, const FRotator& Rotation, int32 StoreAreaID, FStoreTable StoreTableData)
 	{
 		AStore* Store = World->SpawnActor<AStore>(StoreClass, Location, Rotation);
-		Store->InitializeStoreData(StoreData);
+		Store->InitializeStoreTableData(StoreAreaID, StoreTableData);
 		Store->Init();
 		return Store;
 	}

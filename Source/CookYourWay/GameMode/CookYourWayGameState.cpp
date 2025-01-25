@@ -16,9 +16,6 @@ ACookYourWayGameState::ACookYourWayGameState()
 {
 	SaveSlotName = TEXT("CookYourWaySaveFile");
 	UserIndex = 0;
-
-	static ConstructorHelpers::FClassFinder<AActor> BP_Store(TEXT("/Game/Blueprint/Village/BP_Store"));
-	BP_StoreClass = BP_Store.Class;
 }
 
 void ACookYourWayGameState::LoadCookYourWayData()
@@ -32,8 +29,7 @@ void ACookYourWayGameState::LoadCookYourWayData()
 	VillageManagerSystem->Day = CookYourWaySaveGame->Day;
 	VillageManagerSystem->PlayerBistroAreaID = CookYourWaySaveGame->PlayerBistroAreaID;
 	VillageManagerSystem->CompetitorDataArr = CookYourWaySaveGame->CompetitorDataArr;
-	VillageManagerSystem->StoreAreaID = CookYourWaySaveGame->StoreAreaID;
-	VillageManagerSystem->StoreData = CookYourWaySaveGame->StoreData;
+	VillageManagerSystem->StoreDataArr = CookYourWaySaveGame->StoreDataArr;
 	VillageManagerSystem->TotalAsset = CookYourWaySaveGame->TotalAsset;
 	VillageManagerSystem->PlayerBistroTotalCust = CookYourWaySaveGame->PlayerBistroTotalCust;
 	VillageManagerSystem->PlayerBistroTotalRateSum = CookYourWaySaveGame->PlayerBistroTotalRateSum;
@@ -51,8 +47,7 @@ void ACookYourWayGameState::SaveCookYourWayData()
 	NewCookYourWayData->Day = VillageManagerSystem->Day;
 	NewCookYourWayData->PlayerBistroAreaID = VillageManagerSystem->PlayerBistroAreaID;
 	NewCookYourWayData->CompetitorDataArr = VillageManagerSystem->CompetitorDataArr;
-	NewCookYourWayData->StoreAreaID = VillageManagerSystem->StoreAreaID;
-	NewCookYourWayData->StoreData = VillageManagerSystem->StoreData;
+	NewCookYourWayData->StoreDataArr = VillageManagerSystem->StoreDataArr;
 	NewCookYourWayData->TotalAsset = VillageManagerSystem->TotalAsset;
 	NewCookYourWayData->PlayerBistroTotalCust = VillageManagerSystem->PlayerBistroTotalCust;
 	NewCookYourWayData->PlayerBistroTotalRateSum = VillageManagerSystem->PlayerBistroTotalRateSum;

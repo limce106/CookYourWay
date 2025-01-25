@@ -39,21 +39,22 @@ void AStore::BeginPlay()
 TArray<FString> AStore::GetStoreCustNames()
 {
 	TArray<FString> CustNames;
-	if (CurStoreData.StoreCust1 != "-1") {
-		CustNames.Add(CurStoreData.StoreCust1);
+	if (CurStoreTableData.StoreCust1 != "-1") {
+		CustNames.Add(CurStoreTableData.StoreCust1);
 	}
-	if (CurStoreData.StoreCust2 != "-1") {
-		CustNames.Add(CurStoreData.StoreCust2);
+	if (CurStoreTableData.StoreCust2 != "-1") {
+		CustNames.Add(CurStoreTableData.StoreCust2);
 	}
-	if (CurStoreData.StoreCust3 != "-1") {
-		CustNames.Add(CurStoreData.StoreCust3);
+	if (CurStoreTableData.StoreCust3 != "-1") {
+		CustNames.Add(CurStoreTableData.StoreCust3);
 	}
 	return CustNames;
 }
 
-void AStore::InitializeStoreData(const FStoreData& StoreData)
+void AStore::InitializeStoreTableData(int32 StoreAreaID, FStoreTable StoreTableData)
 {
-	CurStoreData = StoreData;
+	AreaID = StoreAreaID;
+	CurStoreTableData = StoreTableData;
 }
 
 void AStore::Tick(float DeltaTime)
@@ -80,7 +81,7 @@ bool AStore::DelayWithDeltaTime(float DelayTime, float DeltaSeconds)
 
 void AStore::SetStoreMesh()
 {
-	UStaticMesh* StoreMesh = CurStoreData.StoreModel;
+	UStaticMesh* StoreMesh = CurStoreTableData.StoreModel;
 	StaticMesh->SetStaticMesh(StoreMesh);
 }
 
