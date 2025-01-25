@@ -30,11 +30,20 @@ void UVillageManagerSystem::Initialize(FSubsystemCollectionBase& Collection)
 
 void UVillageManagerSystem::Init()
 {
-	TArray<int32> CompetitorAreaIDArr = { 5, 7, 11, 14, 18, 21 };
+	TArray<int32> CompetitorAreaIDArr = { 5, 18 };
 	bool IsCompetitorDataEmpty = CompetitorDataArr.IsEmpty();
 	if (IsCompetitorDataEmpty) {
-		for (int i = 0; i < 6; i++) {
-			FCompetitorData CompetitorData(CompetitorAreaIDArr[i]);
+		float InitCompetitorRating;
+
+		for (int i = 0; i < CompetitorAreaIDArr.Num(); i++) {
+			if (i == 0) {
+				InitCompetitorRating = 3.5;
+			}
+			else {
+				InitCompetitorRating = 2.5;
+			}
+
+			FCompetitorData CompetitorData(CompetitorAreaIDArr[i], InitCompetitorRating);
 			CompetitorDataArr.Add(CompetitorData);
 		}
 	}
@@ -42,7 +51,7 @@ void UVillageManagerSystem::Init()
 	TArray<int32> StoreAreaID = { 2, 10, 23 };
 	bool IsStoreDataEmpty = StoreDataArr.IsEmpty();
 	if (IsStoreDataEmpty) {
-		for (int i = 0; i < 3; i++) {
+		for (int i = 0; i < StoreAreaID.Num(); i++) {
 			int32 RandomStoreIdx = UKismetMathLibrary::RandomIntegerInRange(0, StoreTableRows.Num() - 1);
 			FStoreData StoreData(StoreAreaID[i], StoreTableRows[RandomStoreIdx]);
 			StoreDataArr.Add(StoreData);

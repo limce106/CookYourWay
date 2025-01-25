@@ -71,21 +71,21 @@ USTRUCT(BlueprintType)
 struct FCompetitorData
 {
 	GENERATED_BODY() 
-	FCompetitorData() : AreaID(-1), TotalCust(0), TotalRateSum(0), OpenPromoDay(3) {}
+	FCompetitorData() : AreaID(-1), TotalCust(0), Rating(0), OpenPromoDay(3) {}
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int32 AreaID;	// 부지 번호
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int32 TotalCust;	// 누적 손님 수 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	int32 TotalRateSum;	// 누적 평점 합
+	float Rating;	// 평균평점
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int32 OpenPromoDay;	// 오픈 프로모션 남은 기한
 
-	FCompetitorData(int32 AreaID) {
+	FCompetitorData(int32 AreaID, float Rating) {
 		this->AreaID = AreaID;
-		TotalCust = 0;
-		TotalRateSum = 0;
+		this->TotalCust = 0;
+		this->Rating = Rating;
 		OpenPromoDay = 3;
 	}
 
@@ -145,9 +145,9 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	int32 PlayerBistroTotalCust = 0;
 
-	// 플레이어 가게 누적 평점 합
+	// 플레이어 가게 평균 평점
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	int32 PlayerBistroTotalRateSum = 0;
+	float PlayerBistroRating = 2.5;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	TArray<FCompetitorData> CompetitorDataArr;

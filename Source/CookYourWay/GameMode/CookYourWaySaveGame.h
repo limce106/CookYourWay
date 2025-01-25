@@ -40,5 +40,7 @@ public:
 	UPROPERTY()
 	int32 PlayerBistroTotalCust = 0;
 	UPROPERTY()
-	int32 PlayerBistroTotalRateSum = 0;
+	int32 PlayerBistroRating = 0;
+	UPROPERTY()
+	int32 PlayerBistroRating = 0;
 };

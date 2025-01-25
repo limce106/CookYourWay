@@ -142,7 +142,7 @@ void AVillageManager::TryCreateNewCompetitor()
 		if (!HasRegularCust) {
 			VillageManagerSystem->CompetitorDataArr.Remove(CustomerData);
 			int32 NewCompetitorAreaID = GetRandomAreaId();
-			FCompetitorData NewCompetitorData = FCompetitorData(NewCompetitorAreaID);
+			FCompetitorData NewCompetitorData = FCompetitorData(NewCompetitorAreaID, 3.5);
 			VillageManagerSystem->CompetitorDataArr.Add(NewCompetitorData);
 			
 			for (auto CustName : CustomerDataManagerSystem->CustomerNames) {
@@ -170,14 +170,18 @@ void AVillageManager::TryCreateNewStore()
 		if (VillageManagerSystem->StoreDataArr[i].StoreTableData.StorePeriod == 0) {
 
 			VillageManagerSystem->StoreDataArr.Remove(VillageManagerSystem->StoreDataArr[i]);
-
-			int32 NewAreaID = GetRandomAreaId();
-			int32 RandomStoreIdx = UKismetMathLibrary::RandomIntegerInRange(0, VillageManagerSystem->StoreTableRows.Num() - 1);
-			FStoreTable* NewStoreTableData = VillageManagerSystem->StoreTableRows[RandomStoreIdx];
-			FStoreData NewStoreData(NewAreaID, NewStoreTableData);
-			VillageManagerSystem->StoreDataArr.Add(NewStoreData);
+			CreateNewStore();
 		}
 	}
+}
+
+void AVillageManager::CreateNewStore()
+{
+	int32 NewAreaID = GetRandomAreaId();
+	int32 RandomStoreIdx = UKismetMathLibrary::RandomIntegerInRange(0, VillageManagerSystem->StoreTableRows.Num() - 1);
+	FStoreTable* NewStoreTableData = VillageManagerSystem->StoreTableRows[RandomStoreIdx];
+	FStoreData NewStoreData(NewAreaID, NewStoreTableData);
+	VillageManagerSystem->StoreDataArr.Add(NewStoreData);
 }
 
 void AVillageManager::AddRandomRegularCust(int32 AreaID, int32 RegularCustNum)
@@ -234,13 +238,6 @@ void AVillageManager::EndDay()
 
 	StartFadeOutAnim();
 	StartSubtractAnim();
-
-	/*FTimerHandle FadeOutTimerHandle;
-	GetWorld()->GetTimerManager().SetTimer(FadeOutTimerHandle, FTimerDelegate::CreateLambda([=]()
-		{
-			UE_LOG(LogTemp, Warning, TEXT("Anim"));
-			StartSubtractAnim();
-		}), 1, false);*/
 }
 
 FString AVillageManager::DayToWeekString(int32 Day)

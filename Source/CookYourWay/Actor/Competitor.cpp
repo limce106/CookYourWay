@@ -88,5 +88,7 @@ void ACompetitor::UpdateTotalCustAndRateSum()
 {
 	int32 Idx = VillageManagerSystem->FindCompetitorDataArrIdx(AreaID);
 	VillageManagerSystem->CompetitorDataArr[Idx].TotalCust += 1;
-	VillageManagerSystem->CompetitorDataArr[Idx].TotalRateSum += GetCustomerSatisfaction();
+
+	float UpdatedRating = ((VillageManagerSystem->CompetitorDataArr[Idx].Rating / 5 * 100) + GetCustomerSatisfaction()) / VillageManagerSystem->CompetitorDataArr[Idx].TotalCust;
+	VillageManagerSystem->CompetitorDataArr[Idx].Rating += UpdatedRating;
 }

@@ -114,37 +114,25 @@ float ACustomer::ManhattanDist(FVector Loc1, FVector Loc2)
 
 float ACustomer::CalcVisitRank(AActor* Bistro)
 {
-	float AvgRateByCust;
+	float AvgRate;
 	FVector CustomerLoc = GetActorLocation();
 	FVector BistroLoc = Bistro->GetActorLocation();
 
 	int BistroAreaID = 0;
 	if (Bistro->GetClass()->IsChildOf(APlayerBistro::StaticClass())) {
 		BistroAreaID = PlayerBistro->AreaID;
-
-		if (PlayerBistro->VisitNumByCust[CustName] == 0) {
-			AvgRateByCust = 0.1;
-		}
-		else {
-			AvgRateByCust = PlayerBistro->SatisfationSumByCust[CustName] / PlayerBistro->VisitNumByCust[CustName];
-		}
+		AvgRate = VillageManagerSystem->PlayerBistroRating;
 	}
 	else {
 		ACompetitor* Competitor = Cast<ACompetitor>(Bistro);
 		BistroAreaID = Competitor->AreaID;
-
-		if (Competitor->VisitNumByCust[CustName] == 0) {
-			AvgRateByCust = 0.1;
-		}
-		else {
-			AvgRateByCust = Competitor->SatisfationSumByCust[CustName] / Competitor->VisitNumByCust[CustName];
-		}
+		int32 CompetitorDataArrIdx = VillageManagerSystem->FindCompetitorDataArrIdx(Competitor->AreaID);
+		AvgRate = VillageManagerSystem->CompetitorDataArr[CompetitorDataArrIdx].Rating;
 	}
 
 	// '평점평균 * 맨해튼거리' 값이 가장 작은 가게를 방문해야 하므로 (최대 평점평균 - 실제 평점평균) 값을 곱하도록 한다.
 	// '최대 평점평균 == 실제 평점평균'일 때 BistroRateAvg 값이 0이 되어 ManhattanDist 함수 값에 상관없이 VisitRank이 0이 되는 것을 방지하기 위해 0.1을 더해주었다.
-	AvgRateByCust = AvgRateByCust * 5 / 100;
-	float BistroRateAvg = (CustomerDataManagerSystem->MaxRate + 0.1) - AvgRateByCust;
+	float BistroRateAvg = (CustomerDataManagerSystem->MaxRate + 0.1) - AvgRate;
 	float VisitRank = BistroRateAvg * (ManhattanDist(CustomerLoc, BistroLoc));
 
 	BistroLocRankMap.Add(BistroLoc, VisitRank);
@@ -342,7 +330,7 @@ void ACustomer::EatSandwich()
 
 	PlayerBistro->VisitNumByCust.Add(CustName, PlayerBistro->VisitNumByCust[CustName] + 1);
 	PlayerBistro->SatisfationSumByCust.Add(CustName, PlayerBistro->SatisfationSumByCust[CustName] + Satisfaction);
-	PlayerBistro->UpdateTotalCustAndRateSum(Satisfaction);
+	PlayerBistro->UpdateRating(Satisfaction);
 
 	// 테스트
 	UE_LOG(LogTemp, Warning, TEXT("Satisfaction: %d"), Satisfaction);

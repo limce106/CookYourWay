@@ -33,6 +33,7 @@ class COOKYOURWAY_API AVillageManager : public AActor
 
 	void TryCreateNewCompetitor();
 	void TryCreateNewStore();
+	void CreateNewStore();
 	void AddRandomRegularCust(int32 AreaID, int32 RegularCustNum);
 
 	UPROPERTY(EditDefaultsOnly)

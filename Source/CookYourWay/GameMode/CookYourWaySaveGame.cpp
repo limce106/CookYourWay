@@ -9,5 +9,5 @@ UCookYourWaySaveGame::UCookYourWaySaveGame()
 	PlayerBistroAreaID = 16;
 	TotalAsset = 0;
 	PlayerBistroTotalCust = 0;
-	PlayerBistroTotalRateSum = 0;
+	PlayerBistroRating = 0;
 }

@@ -97,10 +97,7 @@ public:
 
 	void InitVisitNumAndSatisfationSumByCust();
 
-	void UpdateTotalCustAndRateSum(int32 Rate);
-
-	UFUNCTION(BlueprintCallable)
-	float GetTotalAvgRate();
+	void UpdateRating(int32 Satisfaction);
 
 	ADiningTable* GetDiningTable(int32 SeatIdx);
 };
