@@ -31,15 +31,15 @@ void UNewsEffectComponent::TickComponent(float DeltaTime, ELevelTick TickType, F
 
 }
 
-TArray<float> UNewsEffectComponent::GetDecSpawnCustPercent(TArray<FString> CustName)
+TArray<float> UNewsEffectComponent::GetDecSpawnCustProb(TArray<FString> CustName)
 {
 	TArray<float> SpawnCustPercent;
 
-	float NotDecreasedCustPercent = (1 - DecreasedSpawnCustPercent) / (CustName.Num() - 1);
+	float NotDecreasedCustPercent = (1 - DecreasedSpawnCustProb) / (CustName.Num() - 1);
 
 	for (int i = 0; i < CustName.Num(); i++) {
 		if (CustName[i] == CurNewsKeyWord) {
-			SpawnCustPercent.Add(DecreasedSpawnCustPercent);
+			SpawnCustPercent.Add(DecreasedSpawnCustProb);
 		}
 		else {
 			SpawnCustPercent.Add(NotDecreasedCustPercent);
@@ -49,15 +49,15 @@ TArray<float> UNewsEffectComponent::GetDecSpawnCustPercent(TArray<FString> CustN
 	return SpawnCustPercent;
 }
 
-TArray<float> UNewsEffectComponent::GetIncSpawnCustPercent(TArray<FString> CustName)
+TArray<float> UNewsEffectComponent::GetIncSpawnCustProb(TArray<FString> CustName)
 {
 	TArray<float> SpawnCustPercent;
 
-	float NotIncreasedCustPercent = (1 - IncreasedSpwanCustPercent) / (CustName.Num() - 1);
+	float NotIncreasedCustPercent = (1 - IncreasedSpwanCustProb) / (CustName.Num() - 1);
 
 	for (int i = 0; i < CustName.Num(); i++) {
 		if (CustName[i] == CurNewsKeyWord) {
-			SpawnCustPercent.Add(IncreasedSpwanCustPercent);
+			SpawnCustPercent.Add(IncreasedSpwanCustProb);
 		}
 		else {
 			SpawnCustPercent.Add(NotIncreasedCustPercent);

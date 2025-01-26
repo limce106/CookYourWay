@@ -27,14 +27,14 @@ public:
 	FString CurNewsKeyWord;
 
 	// 감소된 손님 생성 확률
-	const float DecreasedSpawnCustPercent = 0.2;
+	const float DecreasedSpawnCustProb = 0.2;
 	// 증가된 손님 생성 확률
-	const float IncreasedSpwanCustPercent = 0.7;
+	const float IncreasedSpwanCustProb = 0.7;
 
 	// 감소된 손님 생성 확률을 반영한 전체 손님 생성 확률
-	TArray<float> GetDecSpawnCustPercent(TArray<FString> CustName);
+	TArray<float> GetDecSpawnCustProb(TArray<FString> CustName);
 	// 증가된 손님 생성 확률을 반영한 전체 손님 생성 확률
-	TArray<float> GetIncSpawnCustPercent(TArray<FString> CustName);
+	TArray<float> GetIncSpawnCustProb(TArray<FString> CustName);
 
 	// 증가된 손님 최소 스폰 주기
 	const int32 IncreaseSpawnCustMin = 3;

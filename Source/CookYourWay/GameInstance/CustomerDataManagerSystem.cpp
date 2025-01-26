@@ -58,8 +58,6 @@ void UCustomerDataManagerSystem::Init()
 			}
 		}
 	}
-
-	SetAllCustTastes();
 }
 
 FCustomerBistroKey UCustomerDataManagerSystem::GetCustomerBistroKey(FString CustomerName, int32 BistroAreaID)

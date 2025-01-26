@@ -26,6 +26,8 @@ AVillageManager::AVillageManager()
 
 void AVillageManager::Init()
 {
+	CustomerDataManagerSystem->SetAllCustTastes();
+	VillageManagerSystem->Day++;
 	DayToWeekString(VillageManagerSystem->Day);
 
 	// 월요일이면
@@ -34,6 +36,7 @@ void AVillageManager::Init()
 	}
 
 	DecreaseStorePeriod();
+	TryCreateNewStore();
 	SpawnBistrosAndStore();
 	VillageManagerSystem->ElapseCompetitorOpenPromoDay();
 }
@@ -77,8 +80,6 @@ void AVillageManager::DecreaseStorePeriod()
 	for (int i = 0; i < VillageManagerSystem->StoreDataArr.Num(); i++) {
 		VillageManagerSystem->StoreDataArr[i].StoreTableData.StorePeriod--;
 	}
-
-	TryCreateNewStore();
 }
 
 void AVillageManager::BeginPlay()
@@ -237,7 +238,6 @@ void AVillageManager::EndDay()
 	}
 
 	CookYourWayGameState->SaveCookYourWayData();
-	CustomerDataManagerSystem->SetAllCustTastes();
 
 	StartFadeOutAnim();
 	StartSubtractAnim();

@@ -114,18 +114,18 @@ FString AStore::GetRandomCustName()
 	bool IsNewsRelative = StoreCustName.Contains(NewsEffectComponent->CurNewsKeyWord);
 	int32 CustNum = StoreCustName.Num();
 
-	TArray<float> SpawnCustPercent;
+	TArray<float> SpawnCustProb;
 	if (NewsEffectComponent->CurNewsEffect == "CustDec" && IsNewsRelative) {
-		SpawnCustPercent = NewsEffectComponent->GetDecSpawnCustPercent(StoreCustName);
+		SpawnCustProb = NewsEffectComponent->GetDecSpawnCustProb(StoreCustName);
 	}
 	else if (NewsEffectComponent->CurNewsEffect == "CustInc" && IsNewsRelative) {
-		SpawnCustPercent = NewsEffectComponent->GetIncSpawnCustPercent(StoreCustName);
+		SpawnCustProb = NewsEffectComponent->GetIncSpawnCustProb(StoreCustName);
 	}
 	else {
-		float CustPercent = 1 / CustNum;
+		float CustPercent = 1.0f / (float)CustNum;
 
 		for (int i = 0; i < CustNum; i++) {
-			SpawnCustPercent.Add(CustPercent);
+			SpawnCustProb.Add(CustPercent);
 		}
 	}
 
@@ -134,7 +134,7 @@ FString AStore::GetRandomCustName()
 	FString SpwanCustName;
 
 	for (int i = 0; i < CustNum; i++) {
-		ProbRange += SpawnCustPercent[i];
+		ProbRange += SpawnCustProb[i];
 		if (Probability > ProbRange) {
 			continue;
 		}
