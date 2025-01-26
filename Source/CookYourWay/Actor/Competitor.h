@@ -15,6 +15,7 @@ class COOKYOURWAY_API ACompetitor : public AActor
 	GENERATED_BODY()
 
 	ACompetitor();
+	class UNewsEffectComponent* NewsEffectComponent;
 	
 	class UVillageManagerSystem* VillageManagerSystem;
 	class UCustomerDataManagerSystem* CustomerDataManagerSystem;

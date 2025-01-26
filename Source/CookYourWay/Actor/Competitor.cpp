@@ -3,11 +3,13 @@
 #include "Actor/Competitor.h"
 #include <Kismet/GameplayStatics.h>
 #include <Kismet/KismetMathLibrary.h>
+#include <Component/NewsEffectComponent.h>
 
 ACompetitor::ACompetitor()
 {
 	PrimaryActorTick.bCanEverTick = true;
 
+	NewsEffectComponent = CreateDefaultSubobject<UNewsEffectComponent>(TEXT("NewsEffectComponent"));
 }
 
 void ACompetitor::BeginPlay()

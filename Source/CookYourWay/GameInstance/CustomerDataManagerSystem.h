@@ -116,10 +116,6 @@ public:
 	TMap<FCustomerBistroKey, float> LoyaltyMap;
 	// <손님 이름/가게, 충성도>
 	TMap<FCustomerBistroKey, int32> MaxSatisfactionMap;
-	//// <손님 이름/가게, 평점평균>
-	//TMap<FCustomerBistroKey, float> AvgRateMap;
-	//// <손님 이름/가게, 해당 유형 손님이 방문한 횟수>
-	//TMap<FCustomerBistroKey, int32> VisitedNumMap;
 
 	// 최대 평점 
 	const float MaxRate = 5.0;

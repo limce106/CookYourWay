@@ -29,7 +29,7 @@ void AVillageManager::Init()
 	StartNewDay();
 	DecreaseStorePeriod();
 	SpawnBistrosAndStore();
-	VillageManagerSystem->DecreaseCompetitorOpenPromoDay();
+	VillageManagerSystem->ElapseCompetitorOpenPromoDay();
 }
 
 void AVillageManager::RunDayTimer()

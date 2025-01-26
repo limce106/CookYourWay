@@ -13,17 +13,26 @@ class COOKYOURWAY_API AStore : public AActor
 	GENERATED_BODY()
 
 	UStaticMeshComponent* StaticMesh;
+	class UNewsEffectComponent* NewsEffectComponent;
 
 	class UVillageManagerSystem* VillageManagerSystem;
 
+	TArray<FString> StoreCustName;
+
 	float TempDelayTime;
+
+	// 손님 최소 최대 스폰 주기
+	int32 SpawnCustMin;
+	int32 SpawnCustMax;
+
 	// 스폰 주기(초)
-	int32 SpawnDelayTime = 5.0f;
+	int32 SpawnDelayTime;
 
 	void SetStoreMesh();
 	bool DelayWithDeltaTime(float DelayTime, float DeltaSeconds);
 
-	TArray<FString> GetStoreCustNames();
+	void SetStoreCustName();
+	void SetSpawnCustDelayTime();
 
 public:
 	AStore();
@@ -46,6 +55,7 @@ public:
 	void Init();
 	void InitializeStoreTableData(int32 StoreAreaID, FStoreTable StoreTableData);
 	void CreateCustomer();
+	FString GetRandomCustName();
 };
 
 class StoreSpawnFactory

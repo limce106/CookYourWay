@@ -36,12 +36,12 @@ FString UNewsWidget::RedefineNewsString(FString News)
 	for (int idx = 0; idx < Redefined.Len(); idx++) {
 		if (Redefined[idx] == '{') {
 			FString Number = Redefined.Mid(idx + 1, 1);
-			FString KeyWord = GetKeyWordByNum(FCString::Atoi(*Number));
+			VillageManagerSystem->NewsKeyWord = GetKeyWordByNum(FCString::Atoi(*Number));
 
 			tmp1 = Redefined.Mid(0, idx);
 			tmp2 = Redefined.Mid(idx + 3, Redefined.Len() - (idx + 3));
 
-			Redefined = (tmp1.Append(KeyWord)).Append(tmp2);
+			Redefined = (tmp1.Append(VillageManagerSystem->NewsKeyWord)).Append(tmp2);
 		}
 	}
 
@@ -67,6 +67,7 @@ FString UNewsWidget::GetRandomOriginalNewsStr()
 		}
 		else {
 			OriginalNewsStr = VillageManagerSystem->NewsTableRows[i]->NewsString;
+			VillageManagerSystem->NewsEffectCode = VillageManagerSystem->NewsTableRows[i]->NewsCode;
 			break;
 		}
 	}

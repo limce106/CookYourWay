@@ -169,10 +169,15 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	int32 DestroyedCompetitor = 0;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	FString NewsKeyWord;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	FString NewsEffectCode;
+
 	void Init();
 
 	bool DelayWithDeltaTime(float DelayTime, float DeltaSeconds);
-	void DecreaseCompetitorOpenPromoDay();
+	void ElapseCompetitorOpenPromoDay();
 
 	int32 FindCompetitorDataArrIdx(int32 AreaID);
 

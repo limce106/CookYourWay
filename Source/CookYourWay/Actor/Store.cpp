@@ -5,11 +5,13 @@
 #include <Kismet/GameplayStatics.h>
 #include "GameInstance/VillageManagerSystem.h"
 #include <Kismet/KismetMathLibrary.h>
+#include <Component/NewsEffectComponent.h>
 
 AStore::AStore()
 {
 	PrimaryActorTick.bCanEverTick = true;
 
+	NewsEffectComponent = CreateDefaultSubobject<UNewsEffectComponent>(TEXT("NewsEffectComponent"));
 }
 
 void AStore::Init()
@@ -26,6 +28,8 @@ void AStore::Init()
 	}
 
 	SetStoreMesh();
+	SetStoreCustName();
+	SetSpawnCustDelayTime();
 	CreateCustomer();
 }
 
@@ -36,19 +40,31 @@ void AStore::BeginPlay()
 	VillageManagerSystem = UGameplayStatics::GetGameInstance(GetWorld())->GetSubsystem<UVillageManagerSystem>();
 }
 
-TArray<FString> AStore::GetStoreCustNames()
+void AStore::SetStoreCustName()
 {
-	TArray<FString> CustNames;
 	if (CurStoreTableData.StoreCust1 != "-1") {
-		CustNames.Add(CurStoreTableData.StoreCust1);
+		StoreCustName.Add(CurStoreTableData.StoreCust1);
 	}
 	if (CurStoreTableData.StoreCust2 != "-1") {
-		CustNames.Add(CurStoreTableData.StoreCust2);
+		StoreCustName.Add(CurStoreTableData.StoreCust2);
 	}
 	if (CurStoreTableData.StoreCust3 != "-1") {
-		CustNames.Add(CurStoreTableData.StoreCust3);
+		StoreCustName.Add(CurStoreTableData.StoreCust3);
 	}
-	return CustNames;
+}
+
+void AStore::SetSpawnCustDelayTime()
+{
+	bool IsNewsRelative = NewsEffectComponent->CurNewsKeyWord == CurStoreTableData.StoreName;
+	if (IsNewsRelative) {
+		SpawnCustMin = NewsEffectComponent->IncreaseSpawnCustMin;
+		SpawnCustMax = NewsEffectComponent->IncreaseSpawnCustMax;
+	}
+	else {
+		SpawnCustMin = 5;
+		SpawnCustMax = 7;
+	}
+	SpawnDelayTime = SpawnCustMin;
 }
 
 void AStore::InitializeStoreTableData(int32 StoreAreaID, FStoreTable StoreTableData)
@@ -63,7 +79,7 @@ void AStore::Tick(float DeltaTime)
 
 	if (DelayWithDeltaTime(SpawnDelayTime, DeltaTime)) {
 		CreateCustomer();
-		SpawnDelayTime = UKismetMathLibrary::RandomIntegerInRange(5, 7);
+		SpawnDelayTime = UKismetMathLibrary::RandomIntegerInRange(SpawnCustMin, SpawnCustMax);
 	}
 }
 
@@ -87,9 +103,42 @@ void AStore::SetStoreMesh()
 
 void AStore::CreateCustomer()
 {
-	int32 CustNameIdx = UKismetMathLibrary::RandomIntegerInRange(0, GetStoreCustNames().Num() - 1);
-	FString SpawnCustName = GetStoreCustNames()[CustNameIdx];
+	FString SpawnCustName = GetRandomCustName();
 
 	FVector CustomerLocation = FVector(GetActorLocation().X, GetActorLocation().Y + 250.0, 95.0f);
 	ACustomer* Customer = CustomerSpawnFactory::SpawnCustomer(GetWorld(), BP_Customer, CustomerLocation, FRotator(0.0f, 90.0f, 0.0f), SpawnCustName);
+}
+
+FString AStore::GetRandomCustName()
+{
+	bool IsNewsRelative = StoreCustName.Contains(NewsEffectComponent->CurNewsKeyWord);
+	int32 CustNum = StoreCustName.Num();
+
+	TArray<float> SpawnCustPercent;
+	if (NewsEffectComponent->CurNewsEffect == "CustDec" && IsNewsRelative) {
+		SpawnCustPercent = NewsEffectComponent->GetDecSpawnCustPercent(StoreCustName);
+	}
+	else if (NewsEffectComponent->CurNewsEffect == "CustInc" && IsNewsRelative) {
+		SpawnCustPercent = NewsEffectComponent->GetIncSpawnCustPercent(StoreCustName);
+	}
+	else {
+		float CustPercent = 1 / CustNum;
+
+		for (int i = 0; i < CustNum; i++) {
+			SpawnCustPercent.Add(CustPercent);
+		}
+	}
+
+	float Probability = FMath::FRand();
+	float ProbRange = 0.0f;
+
+	for (int i = 0; i < CustNum; i++) {
+		ProbRange += SpawnCustPercent[i];
+		if (Probability > ProbRange) {
+			continue;
+		}
+		else {
+			return StoreCustName[i];
+		}
+	}
 }

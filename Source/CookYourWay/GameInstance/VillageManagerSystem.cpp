@@ -91,7 +91,7 @@ bool UVillageManagerSystem::DelayWithDeltaTime(float DelayTime, float DeltaSecon
 	}
 }
 
-void UVillageManagerSystem::DecreaseCompetitorOpenPromoDay()
+void UVillageManagerSystem::ElapseCompetitorOpenPromoDay()
 {
 	for (int i = 0; i < CompetitorDataArr.Num(); i++) {
 		if (CompetitorDataArr[i].OpenPromoDay == 0) {
