@@ -71,6 +71,11 @@ FString UNewsWidget::GetRandomOriginalNewsStr()
 			break;
 		}
 	}
+
+	// 테스트
+	OriginalNewsStr = VillageManagerSystem->NewsTableRows[7]->NewsString;
+	//
+
 	return OriginalNewsStr;
 }
 
@@ -111,6 +116,14 @@ FString UNewsWidget::GetKeyWordByNum(int32 Num)
 			if (StoreData.StoreTableData.StorePeriod != 1) {
 				KeyWordArr.Add(StoreData.StoreTableData.StoreName);
 			}
+		}
+	}
+	else if (Num == 5) {
+		int32 RandomCustIdx = UKismetMathLibrary::RandomIntegerInRange(0, CustomerDataManagerSystem->CustomerNames.Num() - 1);
+		TArray<int32> CustTasteArr = CustomerDataManagerSystem->CustNameToTasteMap[CustomerDataManagerSystem->CustomerNames[RandomCustIdx]];
+		
+		for (int i = 0; i < CustTasteArr.Num(); i++) {
+			KeyWordArr.Add(IngredientManagerSystem->IngredientRows[CustTasteArr[i]]->IngrName);
 		}
 	}
 

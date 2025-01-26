@@ -26,8 +26,6 @@ AVillageManager::AVillageManager()
 
 void AVillageManager::Init()
 {
-	CustomerDataManagerSystem->SetAllCustTastes();
-	VillageManagerSystem->Day++;
 	DayToWeekString(VillageManagerSystem->Day);
 
 	// 월요일이면
