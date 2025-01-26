@@ -328,7 +328,6 @@ void ACustomer::EatSandwich()
 {
 	Eat(7.0f);
 
-
 	VillageManagerSystem->UpdatePlayerBistroRating(Satisfaction);
 
 	// Å×½ºÆ®

@@ -84,7 +84,7 @@ struct FCompetitorData
 
 	FCompetitorData(int32 AreaID, float Rating) {
 		this->AreaID = AreaID;
-		this->TotalCust = 0;
+		this->TotalCust = 3;
 		this->Rating = Rating;
 		OpenPromoDay = 3;
 	}
@@ -130,11 +130,14 @@ public:
 	class UDataTable* CompetitorReviewTable;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Table")
 	class UDataTable* StoreTable;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Table")
+	class UDataTable* NewsTable;
 
 	TArray<FCompetitorReviewData*> CompetitorReviewTableRows;
 	TArray<FName> CompetitorReviewTableRowNames;
 
 	TArray<FStoreTable*> StoreTableRows;
+	TArray<FNewsData*> NewsTableRows;
 
 	TArray<FCompetitorReviewData> GetCompetitorReviewDataOnTable(FString DataType);
 
@@ -143,7 +146,7 @@ public:
 
 	// 플레이어 가게 누적 손님 수
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	int32 PlayerBistroTotalCust = 0;
+	int32 PlayerBistroTotalCust = 3;
 
 	// 플레이어 가게 평균 평점
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)

@@ -142,8 +142,8 @@ void AVillageManager::TryCreateNewCompetitor()
 			VillageManagerSystem->DestroyedCompetitor++;
 
 			int32 NewCompetitorAreaID = GetRandomAreaId();
-			FCompetitorData NewCompetitorData = FCompetitorData(NewCompetitorAreaID, 3.5);
-			VillageManagerSystem->CompetitorDataArr.Add(NewCompetitorData);
+			FCompetitorData* NewCompetitorData = new FCompetitorData(NewCompetitorAreaID, 3.5);
+			VillageManagerSystem->CompetitorDataArr.Add(*NewCompetitorData);
 			
 			for (auto CustName : CustomerDataManagerSystem->CustomerNames) {
 				FCustomerBistroKey CurKey = CustomerDataManagerSystem->GetCustomerBistroKey(CustName, CustomerData.AreaID);
