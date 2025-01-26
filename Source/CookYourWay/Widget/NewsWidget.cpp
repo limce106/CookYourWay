@@ -94,11 +94,23 @@ FString UNewsWidget::GetKeyWordByNum(int32 Num)
 		}
 	}
 	else if (Num == 3) {
-		KeyWordArr.Add(TEXT("경쟁사"));
+		for (auto& CompetitorData : VillageManagerSystem->CompetitorDataArr) {
+			if (!(VillageManagerSystem->IsMonday() && !CustomerDataManagerSystem->HasRegularCust(CompetitorData.AreaID))) {
+				KeyWordArr.Add(FString(TEXT("%d구역 경쟁사"), CompetitorData.AreaID));
+			}
+		}
+
+		int32 RandomIdx = UKismetMathLibrary::RandomIntegerInRange(0, KeyWordArr.Num() - 1);
+		FString KeyWord = KeyWordArr[RandomIdx];
+		int32 CmptDataArrIdx = VillageManagerSystem->FindCompetitorDataArrIdx(FCString::Atoi(*KeyWord));
+		VillageManagerSystem->CompetitorDataArr[CmptDataArrIdx].IsComptFestival = true;
+		return KeyWord;
 	}
 	else if (Num == 4) {
 		for (auto StoreData : VillageManagerSystem->StoreDataArr) {
-			KeyWordArr.Add(StoreData.StoreTableData.StoreName);
+			if (StoreData.StoreTableData.StorePeriod != 1) {
+				KeyWordArr.Add(StoreData.StoreTableData.StoreName);
+			}
 		}
 	}
 

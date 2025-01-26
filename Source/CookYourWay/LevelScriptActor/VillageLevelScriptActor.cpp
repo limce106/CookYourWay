@@ -11,13 +11,11 @@ void AVillageLevelScriptActor::Init()
 		PlayerBistroHUD->AddToViewport();
 	}
 
-	CustomerDataManagerSystem->SetAllCustTastes();
 	CustomerDataManagerSystem->AddCompetitorRegularCust();
 }
 
 void AVillageLevelScriptActor::BeginPlay()
 {
-	VillageManagerSystem = UGameplayStatics::GetGameInstance(GetWorld())->GetSubsystem<UVillageManagerSystem>();
 	CustomerDataManagerSystem = UGameplayStatics::GetGameInstance(GetWorld())->GetSubsystem<UCustomerDataManagerSystem>();
 
 	Init();

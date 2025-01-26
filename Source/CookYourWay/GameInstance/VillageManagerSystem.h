@@ -71,7 +71,7 @@ USTRUCT(BlueprintType)
 struct FCompetitorData
 {
 	GENERATED_BODY() 
-	FCompetitorData() : AreaID(-1), TotalCust(0), Rating(0), OpenPromoDay(3) {}
+	FCompetitorData() : AreaID(-1), TotalCust(0), Rating(0), OpenPromoDay(3), IsComptFestival(false) {}
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int32 AreaID;	// 부지 번호
@@ -81,12 +81,15 @@ struct FCompetitorData
 	float Rating;	// 평균평점
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int32 OpenPromoDay;	// 오픈 프로모션 남은 기한
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool IsComptFestival;
 
 	FCompetitorData(int32 AreaID, float Rating) {
 		this->AreaID = AreaID;
 		this->TotalCust = 3;
 		this->Rating = Rating;
 		OpenPromoDay = 3;
+		IsComptFestival = false;
 	}
 
 	bool operator==(const FCompetitorData& Other) const {
@@ -158,7 +161,7 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	TArray<FStoreData> StoreDataArr;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	int32 Day = 0;
 
 	// 전체 자산
@@ -175,8 +178,9 @@ public:
 	FString NewsEffectCode;
 
 	void Init();
-
 	bool DelayWithDeltaTime(float DelayTime, float DeltaSeconds);
+
+	bool IsMonday();
 	void ElapseCompetitorOpenPromoDay();
 
 	int32 FindCompetitorDataArrIdx(int32 AreaID);

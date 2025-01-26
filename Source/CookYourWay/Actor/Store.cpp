@@ -131,6 +131,7 @@ FString AStore::GetRandomCustName()
 
 	float Probability = FMath::FRand();
 	float ProbRange = 0.0f;
+	FString SpwanCustName;
 
 	for (int i = 0; i < CustNum; i++) {
 		ProbRange += SpawnCustPercent[i];
@@ -138,7 +139,9 @@ FString AStore::GetRandomCustName()
 			continue;
 		}
 		else {
-			return StoreCustName[i];
+			SpwanCustName = StoreCustName[i];
 		}
 	}
+
+	return SpwanCustName;
 }

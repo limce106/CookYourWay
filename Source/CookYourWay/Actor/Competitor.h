@@ -6,6 +6,7 @@
 #include "GameFramework/Actor.h"
 #include "GameInstance/VillageManagerSystem.h"
 #include "GameInstance/CustomerDataManagerSystem.h"
+#include "GameInstance/IngredientManagerSystem.h"
 #include "Customer.h"
 #include "Competitor.generated.h"
 
@@ -19,9 +20,12 @@ class COOKYOURWAY_API ACompetitor : public AActor
 	
 	class UVillageManagerSystem* VillageManagerSystem;
 	class UCustomerDataManagerSystem* CustomerDataManagerSystem;
+	class UIngredientManagerSystem* IngredientManagerSystem;
 
+	void SetIsCmptFestival();
 	void SetDefaultReviewRate();
 	void UpdateTotalCustAndRateSum();
+	void TryAddCmptFestivalSatisfaction(ACustomer* Customer, int32 Satisfaction);
 
 protected:
 	virtual void BeginPlay() override;

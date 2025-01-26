@@ -18,6 +18,7 @@ void ACompetitor::BeginPlay()
 	
 	VillageManagerSystem = UGameplayStatics::GetGameInstance(GetWorld())->GetSubsystem<UVillageManagerSystem>();
 	CustomerDataManagerSystem = UGameplayStatics::GetGameInstance(GetWorld())->GetSubsystem<UCustomerDataManagerSystem>();
+	IngredientManagerSystem = UGameplayStatics::GetGameInstance(GetWorld())->GetSubsystem<UIngredientManagerSystem>();
 	
 	SetDefaultReviewRate();
 }
@@ -26,6 +27,10 @@ void ACompetitor::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+}
+
+void ACompetitor::SetIsCmptFestival()
+{
 }
 
 void ACompetitor::SetDefaultReviewRate()
@@ -71,7 +76,10 @@ int32 ACompetitor::GetCustomerSatisfaction()
 void ACompetitor::CustomerVisited(ACustomer* Customer)
 {
 	UpdateTotalCustAndRateSum();
-	CustomerDataManagerSystem->UpdateMaxSatisfaction(Customer->CustName, AreaID, GetCustomerSatisfaction());
+
+	int32 Satisfaction = GetCustomerSatisfaction();
+	TryAddCmptFestivalSatisfaction(Customer, Satisfaction);
+	CustomerDataManagerSystem->UpdateMaxSatisfaction(Customer->CustName, AreaID, Satisfaction);
 	Customer->Destroy();
 }
 
@@ -82,4 +90,24 @@ void ACompetitor::UpdateTotalCustAndRateSum()
 
 	float UpdatedRating = ((VillageManagerSystem->CompetitorDataArr[Idx].Rating / 5 * 100) + GetCustomerSatisfaction()) / VillageManagerSystem->CompetitorDataArr[Idx].TotalCust;
 	VillageManagerSystem->CompetitorDataArr[Idx].Rating += UpdatedRating;
+}
+
+void ACompetitor::TryAddCmptFestivalSatisfaction(ACustomer* Customer, int32 Satisfaction)
+{
+	int32 CmptDataArrIdx = VillageManagerSystem->FindCompetitorDataArrIdx(AreaID);
+	if (NewsEffectComponent->CurNewsEffect == "CmptFestival" && VillageManagerSystem->CompetitorDataArr[CmptDataArrIdx].IsComptFestival == true) {
+		bool IsSatisfyCustTaste = false;
+		TArray<int32> CustTasteArr = CustomerDataManagerSystem->CustNameToTasteMap[Customer->CustName];
+		for (int i = 0; i < CustTasteArr.Num(); i++) {
+			FString IngrName = IngredientManagerSystem->IngredientRows[CustTasteArr[i]]->IngrName;
+			if (NewsEffectComponent->CurNewsKeyWord == IngrName) {
+				IsSatisfyCustTaste = true;
+				break;
+			}
+		}
+
+		if (IsSatisfyCustTaste) {
+			Satisfaction += 20;
+		}
+	}
 }

@@ -91,6 +91,12 @@ bool UVillageManagerSystem::DelayWithDeltaTime(float DelayTime, float DeltaSecon
 	}
 }
 
+bool UVillageManagerSystem::IsMonday()
+{
+	bool IsMonday = Day != 1 && Day % 7 == 1;
+	return IsMonday;
+}
+
 void UVillageManagerSystem::ElapseCompetitorOpenPromoDay()
 {
 	for (int i = 0; i < CompetitorDataArr.Num(); i++) {

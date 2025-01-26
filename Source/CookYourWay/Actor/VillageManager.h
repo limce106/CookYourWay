@@ -27,7 +27,6 @@ class COOKYOURWAY_API AVillageManager : public AActor
 	void Init();
 	void RunDayTimer();
 
-	void StartNewDay();
 	void SpawnBistrosAndStore();
 	void DecreaseStorePeriod();
 
