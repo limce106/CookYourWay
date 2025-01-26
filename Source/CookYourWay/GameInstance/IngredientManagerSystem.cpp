@@ -30,12 +30,15 @@ UIngredientManagerSystem::UIngredientManagerSystem()
 		}
 		else if (Row->IngrType == "Filling") {
 			FillingRows.Add(Row);
+			FillingIdxs.Add(index);
 		}
 		else if (Row->IngrType == "Meat") {
 			MeatRows.Add(Row);
+			MeatIdxs.Add(index);
 		}
 		else {
 			SauceRows.Add(Row);
+			SauceIdxs.Add(index);
 		}
 
 		if (Row->IngrClass == "S") {

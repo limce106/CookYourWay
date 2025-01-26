@@ -72,16 +72,22 @@ FString UNewsWidget::GetRandomOriginalNewsStr()
 		}
 	}
 
-	// 테스트
-	OriginalNewsStr = VillageManagerSystem->NewsTableRows[7]->NewsString;
-	//
-
 	return OriginalNewsStr;
 }
 
 FString UNewsWidget::GetRedefinedNewsString()
 {
-	FString RedefinedNews = RedefineNewsString(GetRandomOriginalNewsStr());
+	FString RedefinedNews;
+	ContinueIngrSeasonDay = IsContinueIngrSeasonDay();
+
+	if (ContinueIngrSeasonDay) {
+		int32 TodayNewsIdx = GetYesterDayNewsIdx() + 1;
+		RedefinedNews = VillageManagerSystem->NewsTableRows[TodayNewsIdx]->NewsString;
+	}
+	else {
+		RedefinedNews = RedefineNewsString(GetRandomOriginalNewsStr());
+	}
+
 	return RedefinedNews;
 }
 
@@ -94,8 +100,18 @@ FString UNewsWidget::GetKeyWordByNum(int32 Num)
 		}
 	}
 	else if (Num == 2) {
-		for (auto IngrData : IngredientManagerSystem->IngredientRows) {
-			KeyWordArr.Add(IngrData->IngrName);
+		if (ContinueIngrSeasonDay) {
+			KeyWordArr.Add(VillageManagerSystem->NewsKeyWord);
+		}
+		else {
+			if (VillageManagerSystem->NewsEffectCode.Contains("IngrSeasonDay")) {
+				KeyWordArr.Add(VillageManagerSystem->NewsKeyWord);
+			}
+			else {
+				for (auto IngrData : IngredientManagerSystem->IngredientRows) {
+					KeyWordArr.Add(IngrData->IngrName);
+				}
+			}
 		}
 	}
 	else if (Num == 3) {
@@ -129,4 +145,27 @@ FString UNewsWidget::GetKeyWordByNum(int32 Num)
 
 	int32 RandomIdx = UKismetMathLibrary::RandomIntegerInRange(0, KeyWordArr.Num() - 1);
 	return KeyWordArr[RandomIdx];
+}
+
+bool UNewsWidget::IsContinueIngrSeasonDay()
+{
+	if (VillageManagerSystem->NewsEffectCode.Contains("IngrSeasonDay")) {
+		int32 YesterDayNewsIdx = GetYesterDayNewsIdx();
+		if (VillageManagerSystem->NewsTableRows[YesterDayNewsIdx + 1]->NewsCode.Contains("IngrSeasonDay")) {
+			return true;
+		}
+	}
+	return false;
+}
+
+int32 UNewsWidget::GetYesterDayNewsIdx()
+{
+	int32 idx = -1;
+	for (int i = 0; i < VillageManagerSystem->NewsTableRows.Num(); i++) {
+		if (VillageManagerSystem->NewsTableRows[i]->NewsString == VillageManagerSystem->NewsEffectCode) {
+			idx = i;
+		}
+	}
+
+	return idx;
 }

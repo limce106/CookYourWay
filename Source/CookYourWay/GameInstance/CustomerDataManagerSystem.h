@@ -128,9 +128,18 @@ public:
 	// 랜덤 취향 배열 반환
 	UFUNCTION(BlueprintCallable)
 	TArray<int32> GetRandomTaste();
+	// 랜덤으로 모든 손님 취향 설정
+	UFUNCTION(BlueprintCallable)
+	void SetRandomCustTastes();
+	// 식재료 페스티벝 진행 중 모든 손님 취향 설정
+	UFUNCTION(BlueprintCallable)
+	void SetIngrSeasonCustTastes();
+	// 인기있는 재료로 모든 손님 취향 설정
+	UFUNCTION(BlueprintCallable)
+	void SetPopularIngrCustTastes();
 	// 모든 손님 유형의 취향 설정
 	UFUNCTION(BlueprintCallable)
-	void SetAllCustTastes();
+	void SetCustTastes();
 	// 특정 손님의 취향 가져오기
 	TArray<int32> GetCustTaste(FString CustName);
 

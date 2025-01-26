@@ -81,32 +81,123 @@ TArray<int32> UCustomerDataManagerSystem::GetRandomTaste()
 	IngredientManagerSystem = UGameplayStatics::GetGameInstance(GetWorld())->GetSubsystem<UIngredientManagerSystem>();
 	TArray<int32> Taste;
 
-	// 임의로 "레벨 상관없이" 속재료는 항상 3개를 선택하도록 함
-	/*for (int i = 0; i < 3; i++) {
-		int FillingIndex = UKismetMathLibrary::RandomIntegerInRange(0, IngredientManagerSystem->FillingRows.Num() - 1);
-		Taste.Add(FillingIndex);
+	TArray<int32> CanAddFillings = IngredientManagerSystem->FillingIdxs;
+	// 속재료는 항상 3개를 선택하도록 함
+	for (int i = 0; i < 3; i++) {
+		int FillingIndex = UKismetMathLibrary::RandomIntegerInRange(0, CanAddFillings.Num() - 1);
+		Taste.Add(CanAddFillings[FillingIndex]);
+		CanAddFillings.RemoveAt(FillingIndex);
 	}
 
-	int MeatIndex = UKismetMathLibrary::RandomIntegerInRange(0, IngredientManagerSystem->MeatRows.Num() - 1);
-	Taste.Add(MeatIndex);
+	int MeatIndex = UKismetMathLibrary::RandomIntegerInRange(0, IngredientManagerSystem->MeatIdxs.Num() - 1);
+	Taste.Add(IngredientManagerSystem->MeatIdxs[MeatIndex]);
 
-	int SauceIndex = UKismetMathLibrary::RandomIntegerInRange(0, IngredientManagerSystem->SauceRows.Num() - 1);
-	Taste.Add(SauceIndex);*/
+	int SauceIndex = UKismetMathLibrary::RandomIntegerInRange(0, IngredientManagerSystem->SauceIdxs.Num() - 1);
+	Taste.Add(IngredientManagerSystem->SauceIdxs[SauceIndex]);
 
-	// 테스트
-	Taste.Add(12);
-	Taste.Add(12);
-	//
+	//// 테스트
+	//Taste.Add(12);
+	//Taste.Add(12);
+	////
 
 	return Taste;
 }
 
-void UCustomerDataManagerSystem::SetAllCustTastes()
+void UCustomerDataManagerSystem::SetRandomCustTastes()
 {
-	CustNameToTasteMap.Empty();
 	for (int i = 0; i < CustomerNames.Num(); i++) {
 		CustNameToTasteMap.Add(CustomerNames[i], GetRandomTaste());
 	}
+}
+
+void UCustomerDataManagerSystem::SetIngrSeasonCustTastes()
+{
+	FString SeasonIngr = VillageManagerSystem->NewsKeyWord;
+	int32 SeasonIngrIdx;
+	for (int i = 0; i < IngredientManagerSystem->IngredientRows.Num(); i++) {
+		if (IngredientManagerSystem->IngredientRows[i]->IngrName == SeasonIngr) {
+			SeasonIngrIdx = i;
+			break;
+		}
+	}
+
+	for (int i = 0; i < CustomerNames.Num(); i++) {
+		TArray<int32> Taste = GetRandomTaste();
+		Taste.Add(SeasonIngrIdx);
+
+		if (IngredientManagerSystem->IngredientRows[SeasonIngrIdx]->IngrType == "Filling") {
+			int32 TasteArrIdx = UKismetMathLibrary::RandomIntegerInRange(0, 2);
+			Taste.RemoveAt(TasteArrIdx);
+		}
+		else if (IngredientManagerSystem->IngredientRows[SeasonIngrIdx]->IngrType == "Meat") {
+			Taste.RemoveAt(3);
+		}
+		else if (IngredientManagerSystem->IngredientRows[SeasonIngrIdx]->IngrType == "Sauce") {
+			Taste.RemoveAt(4);
+		}
+
+		CustNameToTasteMap.Add(CustomerNames[i], Taste);
+	}
+}
+
+void UCustomerDataManagerSystem::SetPopularIngrCustTastes()
+{
+	FString PopularIngr = VillageManagerSystem->NewsKeyWord;
+	int32 PopularIngrIdx;
+	for (int i = 0; i < IngredientManagerSystem->IngredientRows.Num(); i++) {
+		if (IngredientManagerSystem->IngredientRows[i]->IngrName == PopularIngr) {
+			PopularIngrIdx = i;
+			break;
+		}
+	}
+
+	for (int i = 0; i < CustomerNames.Num(); i++) {
+		TArray<int32> Taste = GetRandomTaste();
+
+		float Probability = FMath::FRand();
+		if (Probability > 0.5f) {
+			Taste.Add(PopularIngrIdx);
+
+			if (IngredientManagerSystem->IngredientRows[PopularIngrIdx]->IngrType == "Filling") {
+				int32 TasteArrIdx = UKismetMathLibrary::RandomIntegerInRange(0, 2);
+				Taste.RemoveAt(TasteArrIdx);
+			}
+			else if (IngredientManagerSystem->IngredientRows[PopularIngrIdx]->IngrType == "Meat") {
+				Taste.RemoveAt(3);
+			}
+			else if (IngredientManagerSystem->IngredientRows[PopularIngrIdx]->IngrType == "Sauce") {
+				Taste.RemoveAt(4);
+			}
+		}
+
+		CustNameToTasteMap.Add(CustomerNames[i], Taste);
+	}
+}
+
+void UCustomerDataManagerSystem::SetCustTastes()
+{
+	CustNameToTasteMap.Empty();
+
+	if (VillageManagerSystem->NewsEffectCode != "" && VillageManagerSystem->NewsEffectCode.Contains("IngrSeasonDay")) {
+		SetIngrSeasonCustTastes();
+	}
+	else if (VillageManagerSystem->NewsEffectCode != "" && VillageManagerSystem->NewsEffectCode.Contains("PopularTaste")) {
+		SetPopularIngrCustTastes();
+	}
+	else {
+		SetRandomCustTastes();
+	}
+
+	// 테스트
+	TMap<FString, TArray<FString>> Test;
+	for (int i = 0; i < CustomerNames.Num(); i++) {
+		TArray<int32> Taste = CustNameToTasteMap[CustomerNames[i]];
+		TArray<FString> Str;
+		for (int j = 0; j < Taste.Num(); j++) {
+			UE_LOG(LogTemp, Warning, TEXT("%s: %s"), *CustomerNames[i], *IngredientManagerSystem->IngredientRows[Taste[j]]->IngrName);
+		}
+	}
+	//
 }
 
 TArray<int32> UCustomerDataManagerSystem::GetCustTaste(FString CustName)

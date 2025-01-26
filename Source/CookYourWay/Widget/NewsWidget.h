@@ -16,6 +16,8 @@ class COOKYOURWAY_API UNewsWidget : public UUserWidget
 	class UIngredientManagerSystem* IngredientManagerSystem;
 	class UCustomerDataManagerSystem* CustomerDataManagerSystem;
 	class UVillageManagerSystem* VillageManagerSystem;
+
+	bool ContinueIngrSeasonDay = false;
 	
 	void NativeConstruct();
 	virtual void NativeTick(const FGeometry& Geometry, float DeltaSeconds) override;
@@ -31,4 +33,6 @@ public:
 	UFUNCTION(BlueprintCallable)
 	FString GetRedefinedNewsString();
 
+	bool IsContinueIngrSeasonDay();
+	int32 GetYesterDayNewsIdx();
 };

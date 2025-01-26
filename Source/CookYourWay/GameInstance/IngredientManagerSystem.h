@@ -73,6 +73,10 @@ public:
 	TArray<FIngrData*> MeatRows;
 	TArray<FIngrData*> SauceRows;
 
+	TArray<int32> FillingIdxs;
+	TArray<int32> MeatIdxs;
+	TArray<int32> SauceIdxs;
+
 	TArray<int32> SClassIngrRows;
 	TArray<int32> AClassIngrRows;
 	TArray<int32> BClassIngrRows;
