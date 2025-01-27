@@ -30,8 +30,8 @@ public:
 	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
 	class URichTextBlock* RichTextBlock_News;
 
-	UFUNCTION(BlueprintCallable)
 	FString GetRedefinedNewsString();
+	FString GetSeasonNewsNextString();
 
 	bool IsContinueIngrSeasonDay();
 	int32 GetYesterDayNewsIdx();

@@ -123,17 +123,22 @@ void UCustomerDataManagerSystem::SetIngrSeasonCustTastes()
 
 	for (int i = 0; i < CustomerNames.Num(); i++) {
 		TArray<int32> Taste = GetRandomTaste();
-		Taste.Add(SeasonIngrIdx);
+		bool IsAlreadyHaveSeasonIngr = Taste.Contains(SeasonIngrIdx);
+		if (!IsAlreadyHaveSeasonIngr) {
+			Taste.Add(SeasonIngrIdx);
 
-		if (IngredientManagerSystem->IngredientRows[SeasonIngrIdx]->IngrType == "Filling") {
-			int32 TasteArrIdx = UKismetMathLibrary::RandomIntegerInRange(0, 2);
-			Taste.RemoveAt(TasteArrIdx);
-		}
-		else if (IngredientManagerSystem->IngredientRows[SeasonIngrIdx]->IngrType == "Meat") {
-			Taste.RemoveAt(3);
-		}
-		else if (IngredientManagerSystem->IngredientRows[SeasonIngrIdx]->IngrType == "Sauce") {
-			Taste.RemoveAt(4);
+			// 시즌 재료가 속재료라면
+			if (IngredientManagerSystem->IngredientRows[SeasonIngrIdx]->IngrType == "Filling") {
+				// 랜덤으로 취향 식재료 하나 제외
+				int32 TasteArrIdx = UKismetMathLibrary::RandomIntegerInRange(0, 2);
+				Taste.RemoveAt(TasteArrIdx);
+			}
+			else if (IngredientManagerSystem->IngredientRows[SeasonIngrIdx]->IngrType == "Meat") {
+				Taste.RemoveAt(3);
+			}
+			else if (IngredientManagerSystem->IngredientRows[SeasonIngrIdx]->IngrType == "Sauce") {
+				Taste.RemoveAt(4);
+			}
 		}
 
 		CustNameToTasteMap.Add(CustomerNames[i], Taste);
@@ -156,17 +161,20 @@ void UCustomerDataManagerSystem::SetPopularIngrCustTastes()
 
 		float Probability = FMath::FRand();
 		if (Probability > 0.5f) {
-			Taste.Add(PopularIngrIdx);
+			bool IsAlreadyHavePopularIngr = Taste.Contains(PopularIngrIdx);
+			if (!IsAlreadyHavePopularIngr) {
+				Taste.Add(PopularIngrIdx);
 
-			if (IngredientManagerSystem->IngredientRows[PopularIngrIdx]->IngrType == "Filling") {
-				int32 TasteArrIdx = UKismetMathLibrary::RandomIntegerInRange(0, 2);
-				Taste.RemoveAt(TasteArrIdx);
-			}
-			else if (IngredientManagerSystem->IngredientRows[PopularIngrIdx]->IngrType == "Meat") {
-				Taste.RemoveAt(3);
-			}
-			else if (IngredientManagerSystem->IngredientRows[PopularIngrIdx]->IngrType == "Sauce") {
-				Taste.RemoveAt(4);
+				if (IngredientManagerSystem->IngredientRows[PopularIngrIdx]->IngrType == "Filling") {
+					int32 TasteArrIdx = UKismetMathLibrary::RandomIntegerInRange(0, 2);
+					Taste.RemoveAt(TasteArrIdx);
+				}
+				else if (IngredientManagerSystem->IngredientRows[PopularIngrIdx]->IngrType == "Meat") {
+					Taste.RemoveAt(3);
+				}
+				else if (IngredientManagerSystem->IngredientRows[PopularIngrIdx]->IngrType == "Sauce") {
+					Taste.RemoveAt(4);
+				}
 			}
 		}
 

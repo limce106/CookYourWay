@@ -33,10 +33,18 @@ FString UNewsWidget::RedefineNewsString(FString News)
 	FString tmp1;
 	FString tmp2;
 
+	bool IsSameNumInOneStr = false;
+	FString PreNumber = "-1";
+
 	for (int idx = 0; idx < Redefined.Len(); idx++) {
 		if (Redefined[idx] == '{') {
-			FString Number = Redefined.Mid(idx + 1, 1);
-			VillageManagerSystem->NewsKeyWord = GetKeyWordByNum(FCString::Atoi(*Number));
+			FString CurNumber = Redefined.Mid(idx + 1, 1);
+
+			// 하나의 뉴스 스트링 안에서 번호가 이전에 나왔던 번호와 같은 번호이면 값이 동일하다.
+			if (CurNumber != PreNumber) {
+				PreNumber = CurNumber;
+				VillageManagerSystem->NewsKeyWord = GetKeyWordByNum(FCString::Atoi(*PreNumber));
+			}
 
 			tmp1 = Redefined.Mid(0, idx);
 			tmp2 = Redefined.Mid(idx + 3, Redefined.Len() - (idx + 3));
@@ -75,14 +83,22 @@ FString UNewsWidget::GetRandomOriginalNewsStr()
 	return OriginalNewsStr;
 }
 
+FString UNewsWidget::GetSeasonNewsNextString()
+{
+	int32 TodayNewsIdx = GetYesterDayNewsIdx() + 1;
+	FString OriginalNewsStr = VillageManagerSystem->NewsTableRows[TodayNewsIdx]->NewsString;
+	VillageManagerSystem->NewsEffectCode = VillageManagerSystem->NewsTableRows[TodayNewsIdx]->NewsCode;
+
+	return OriginalNewsStr;
+}
+
 FString UNewsWidget::GetRedefinedNewsString()
 {
 	FString RedefinedNews;
 	ContinueIngrSeasonDay = IsContinueIngrSeasonDay();
 
 	if (ContinueIngrSeasonDay) {
-		int32 TodayNewsIdx = GetYesterDayNewsIdx() + 1;
-		RedefinedNews = VillageManagerSystem->NewsTableRows[TodayNewsIdx]->NewsString;
+		RedefinedNews = RedefineNewsString(GetSeasonNewsNextString());
 	}
 	else {
 		RedefinedNews = RedefineNewsString(GetRandomOriginalNewsStr());
@@ -104,11 +120,8 @@ FString UNewsWidget::GetKeyWordByNum(int32 Num)
 			KeyWordArr.Add(VillageManagerSystem->NewsKeyWord);
 		}
 		else {
-			if (VillageManagerSystem->NewsEffectCode.Contains("IngrSeasonDay")) {
-				KeyWordArr.Add(VillageManagerSystem->NewsKeyWord);
-			}
-			else {
-				for (auto IngrData : IngredientManagerSystem->IngredientRows) {
+			for (auto IngrData : IngredientManagerSystem->IngredientRows) {
+				if (IngrData->IngrClass != "Bread") {
 					KeyWordArr.Add(IngrData->IngrName);
 				}
 			}
@@ -151,7 +164,8 @@ bool UNewsWidget::IsContinueIngrSeasonDay()
 {
 	if (VillageManagerSystem->NewsEffectCode.Contains("IngrSeasonDay")) {
 		int32 YesterDayNewsIdx = GetYesterDayNewsIdx();
-		if (VillageManagerSystem->NewsTableRows[YesterDayNewsIdx + 1]->NewsCode.Contains("IngrSeasonDay")) {
+		bool IsLastRow = YesterDayNewsIdx == VillageManagerSystem->NewsTableRows.Num() - 1;
+		if (!IsLastRow && VillageManagerSystem->NewsTableRows[YesterDayNewsIdx + 1]->NewsCode.Contains("IngrSeasonDay")) {
 			return true;
 		}
 	}
@@ -162,7 +176,7 @@ int32 UNewsWidget::GetYesterDayNewsIdx()
 {
 	int32 idx = -1;
 	for (int i = 0; i < VillageManagerSystem->NewsTableRows.Num(); i++) {
-		if (VillageManagerSystem->NewsTableRows[i]->NewsString == VillageManagerSystem->NewsEffectCode) {
+		if (VillageManagerSystem->NewsTableRows[i]->NewsCode == VillageManagerSystem->NewsEffectCode) {
 			idx = i;
 		}
 	}
