@@ -12,7 +12,6 @@ UVillageManagerSystem::UVillageManagerSystem()
 	static ConstructorHelpers::FObjectFinder<UDataTable> DT_COMPETITORREVIEWTABLE(*CompetitorReviewTablePath);
 	CompetitorReviewTable = DT_COMPETITORREVIEWTABLE.Object;
 	CompetitorReviewTable->GetAllRows<FCompetitorReviewData>("Get All Rows Of CompetitorReviewData", CompetitorReviewTableRows);
-	CompetitorReviewTableRowNames = CompetitorReviewTable->GetRowNames();
 
 	FString StoreTablePath = TEXT("/Game/Assets/Table/Store.Store");
 	static ConstructorHelpers::FObjectFinder<UDataTable> DT_STORETABLE(*StoreTablePath);
@@ -60,23 +59,6 @@ void UVillageManagerSystem::Init()
 			StoreDataArr.Add(StoreData);
 		}
 	}
-}
-
-TArray<FCompetitorReviewData> UVillageManagerSystem::GetCompetitorReviewDataOnTable(FString DataType)
-{
-	TArray<FCompetitorReviewData> CompetitorReviewData;
-
-	for (int i = 0; i < CompetitorReviewTableRowNames.Num(); i++) {
-		if (CompetitorReviewTableRowNames[i].ToString().Contains(DataType)) {
-			CompetitorReviewData.Add(*CompetitorReviewTableRows[i]);
-		}
-	}
-
-	if (CompetitorReviewData.Num() == 0) {
-		UE_LOG(LogTemp, Error, TEXT("Load Fail %s CompetitorReviewData"), *DataType);
-		CompetitorReviewData.Add(FCompetitorReviewData::FCompetitorReviewData());
-	}
-	return CompetitorReviewData;
 }
 
 bool UVillageManagerSystem::DelayWithDeltaTime(float DelayTime, float DeltaSeconds)

@@ -12,8 +12,10 @@ struct FCompetitorReviewData : public FTableRowBase {
 	GENERATED_BODY()
 
 public:
-	FCompetitorReviewData() : RatingMin(-1), RatingMax(-1), RatingProb(0) {}
+	FCompetitorReviewData() : CmptState("-1"), RatingMin(-1), RatingMax(-1), RatingProb(0) {}
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Data")
+	FString CmptState;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Data")
 	int32 RatingMin;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Data")
@@ -137,12 +139,8 @@ public:
 	class UDataTable* NewsTable;
 
 	TArray<FCompetitorReviewData*> CompetitorReviewTableRows;
-	TArray<FName> CompetitorReviewTableRowNames;
-
 	TArray<FStoreTable*> StoreTableRows;
 	TArray<FNewsData*> NewsTableRows;
-
-	TArray<FCompetitorReviewData> GetCompetitorReviewDataOnTable(FString DataType);
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	int32 PlayerBistroAreaID = 16;

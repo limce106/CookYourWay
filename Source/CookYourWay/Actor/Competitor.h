@@ -22,10 +22,9 @@ class COOKYOURWAY_API ACompetitor : public AActor
 	class UCustomerDataManagerSystem* CustomerDataManagerSystem;
 	class UIngredientManagerSystem* IngredientManagerSystem;
 
-	void SetIsCmptFestival();
+	TArray<FCompetitorReviewData> GetCompetitorReviewDataOnTable(FString DataType);
 	void SetDefaultReviewRate();
 	void UpdateTotalCustAndRateSum();
-	void TryAddCmptFestivalSatisfaction(ACustomer* Customer, int32 Satisfaction);
 
 protected:
 	virtual void BeginPlay() override;
@@ -49,4 +48,6 @@ public:
 
 	// 새로운 손님의 평점 평균 가져오기
 	int32 GetCustomerSatisfaction();
+
+	FCompetitorData GetCurComptitorData();
 };
