@@ -26,11 +26,11 @@ int32 UAuctionItemWidget::GetHavingIngrNum(int32 TableIdx)
 
 void UAuctionItemWidget::SetItemUI(int32 TableIdx)
 {
-	FIngrData* IngrData = IngredientManagerSystem->IngredientRows[TableIdx];
+	FIngrData IngrData = IngredientManagerSystem->IngredientRows[TableIdx];
 
-	TextBlock_Class->SetText(FText::FromString(IngrData->IngrClass));
-	Image_Item_Icon->SetBrushFromTexture(IngrData->IngrIcon);
-	TextBlock_Name->SetText(FText::FromString(IngrData->IngrName));
+	TextBlock_Class->SetText(FText::FromString(IngrData.IngrClass));
+	Image_Item_Icon->SetBrushFromTexture(IngrData.IngrIcon);
+	TextBlock_Name->SetText(FText::FromString(IngrData.IngrName));
 
 	SetHavingNumText(TableIdx);
 	SetSellingAuctionPrice(TableIdx);

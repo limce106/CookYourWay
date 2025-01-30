@@ -22,7 +22,7 @@ class COOKYOURWAY_API UNewsWidget : public UUserWidget
 	void NativeConstruct();
 	virtual void NativeTick(const FGeometry& Geometry, float DeltaSeconds) override;
 
-	FString GetKeyWordByNum(int32 Num);
+	FString GetKeyWordByNum(FString Num);
 	FString RedefineNewsString(FString News);
 	FString GetRandomOriginalNewsStr();
 

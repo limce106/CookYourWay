@@ -67,15 +67,18 @@ public:
 	TArray<FIngrClassData*> IngrClassTableRows;
 	TArray<FName> IngrClassTableRowNames;
 
-	TArray<FIngrData*> IngredientRows;
-	TArray<FIngrData*> BreadRows;
-	TArray<FIngrData*> FillingRows;
-	TArray<FIngrData*> MeatRows;
-	TArray<FIngrData*> SauceRows;
+	TArray<FIngrData> IngredientRows;
+	TArray<FIngrData> BreadRows;
+	TArray<FIngrData> FillingRows;
+	TArray<FIngrData> MeatRows;
+	TArray<FIngrData> SauceRows;
+	TArray<FIngrData> DessertRows;
 
+	TArray<int32> BreadIdxs;
 	TArray<int32> FillingIdxs;
 	TArray<int32> MeatIdxs;
 	TArray<int32> SauceIdxs;
+	TArray<int32> DessertIdxs;
 
 	TArray<int32> SClassIngrRows;
 	TArray<int32> AClassIngrRows;

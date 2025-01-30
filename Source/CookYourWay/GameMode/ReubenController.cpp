@@ -3,7 +3,7 @@
 
 #include "GameMode/ReubenController.h"
 #include <Kismet/GameplayStatics.h>
-#include <Widget/IngredientBoardWidget.h>
+#include <Widget/FridgeWidget.h>
 
 AReubenController::AReubenController()
 {
@@ -85,10 +85,8 @@ void AReubenController::CookInteraction()
 
 void AReubenController::FridgeInteraction()
 {
-	UIngredientBoardWidget* BP_IngredientBoard = CreateWidget<UIngredientBoardWidget>(GetWorld(), BP_IngredientBoardClass);
-	if (BP_IngredientBoard) {
-		BP_IngredientBoard->AddToViewport();
-	}
+	UFridgeWidget* FridgeWidget = CreateWidget<UFridgeWidget>(GetWorld(), BP_FridgeWidget);
+	FridgeWidget->AddToViewport();
 }
 
 void AReubenController::PlatesInteraction()

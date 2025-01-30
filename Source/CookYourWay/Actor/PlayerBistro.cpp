@@ -67,11 +67,11 @@ void APlayerBistro::SitCust(ACustomer* Customer, int32 SeatIdx)
 	SeatedDiningTable->SeatedCustomer = Customer;
 
 	// Å×½ºÆ®
-	TArray<int32> Arr = CustomerDataManagerSystem->GetCustTaste(Customer->CustName);
+	/*TArray<int32> Arr = CustomerDataManagerSystem->GetCustTaste(Customer->CustName);
 	for (int i = 0; i < Arr.Num(); i++) {
 		FString name = IngredientManagerSystem->IngredientTableRowNames[Arr[i]].ToString();
 		UE_LOG(LogTemp, Warning, TEXT("Taste: %s"), *name)
-	}
+	}*/
 	//
 }
 

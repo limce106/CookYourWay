@@ -49,7 +49,7 @@ class COOKYOURWAY_API AReubenController : public APlayerController
 	TSubclassOf<AActor> BP_TrashBin;
 
 	UPROPERTY(EditDefaultsOnly)
-	TSubclassOf<UUserWidget> BP_IngredientBoardClass;
+	TSubclassOf<UUserWidget> BP_FridgeWidget;
 
 protected:
 	virtual void BeginPlay() override;

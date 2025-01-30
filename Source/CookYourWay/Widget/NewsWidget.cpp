@@ -43,7 +43,7 @@ FString UNewsWidget::RedefineNewsString(FString News)
 			// 하나의 뉴스 스트링 안에서 번호가 이전에 나왔던 번호와 같은 번호이면 값이 동일하다.
 			if (CurNumber != PreNumber) {
 				PreNumber = CurNumber;
-				VillageManagerSystem->NewsKeyWord = GetKeyWordByNum(FCString::Atoi(*PreNumber));
+				VillageManagerSystem->NewsKeyWord = GetKeyWordByNum(CurNumber);
 			}
 
 			tmp1 = Redefined.Mid(0, idx);
@@ -107,27 +107,27 @@ FString UNewsWidget::GetRedefinedNewsString()
 	return RedefinedNews;
 }
 
-FString UNewsWidget::GetKeyWordByNum(int32 Num)
+FString UNewsWidget::GetKeyWordByNum(FString Num)
 {
 	TArray<FString> KeyWordArr;
-	if (Num == 1) {
+	if (Num == "1") {
 		for (auto CustomerData : CustomerDataManagerSystem->CustomerTableRows) {
 			KeyWordArr.Add(CustomerData->CustName);
 		}
 	}
-	else if (Num == 2) {
+	else if (Num == "2") {
 		if (ContinueIngrSeasonDay) {
 			KeyWordArr.Add(VillageManagerSystem->NewsKeyWord);
 		}
 		else {
 			for (auto IngrData : IngredientManagerSystem->IngredientRows) {
-				if (IngrData->IngrClass != "Bread") {
-					KeyWordArr.Add(IngrData->IngrName);
+				if (IngrData.IngrClass != "Bread") {
+					KeyWordArr.Add(IngrData.IngrName);
 				}
 			}
 		}
 	}
-	else if (Num == 3) {
+	else if (Num == "3") {
 		for (auto& CompetitorData : VillageManagerSystem->CompetitorDataArr) {
 			if (!(VillageManagerSystem->IsMonday() && !CustomerDataManagerSystem->HasRegularCust(CompetitorData.AreaID))) {
 				KeyWordArr.Add(FString(TEXT("%d구역 경쟁사"), CompetitorData.AreaID));
@@ -140,19 +140,19 @@ FString UNewsWidget::GetKeyWordByNum(int32 Num)
 		VillageManagerSystem->CompetitorDataArr[CmptDataArrIdx].IsComptFestival = true;
 		return KeyWord;
 	}
-	else if (Num == 4) {
+	else if (Num == "4") {
 		for (auto StoreData : VillageManagerSystem->StoreDataArr) {
 			if (StoreData.StoreTableData.StorePeriod != 1) {
 				KeyWordArr.Add(StoreData.StoreTableData.StoreName);
 			}
 		}
 	}
-	else if (Num == 5) {
+	else if (Num == "5") {
 		int32 RandomCustIdx = UKismetMathLibrary::RandomIntegerInRange(0, CustomerDataManagerSystem->CustomerNames.Num() - 1);
 		TArray<int32> CustTasteArr = CustomerDataManagerSystem->CustNameToTasteMap[CustomerDataManagerSystem->CustomerNames[RandomCustIdx]];
 		
 		for (int i = 0; i < CustTasteArr.Num(); i++) {
-			KeyWordArr.Add(IngredientManagerSystem->IngredientRows[CustTasteArr[i]]->IngrName);
+			KeyWordArr.Add(IngredientManagerSystem->IngredientRows[CustTasteArr[i]].IngrName);
 		}
 	}
 

@@ -22,23 +22,28 @@ UIngredientManagerSystem::UIngredientManagerSystem()
 	int index = 0;
 	// 재료 타입별 배열 추가
 	for (auto Row : IngredientTableRows) {
-		IngredientRows.Add(Row);
+		IngredientRows.Add(*Row);
 		IngrNameIndexMap.Add(Row->IngrName, index);
 
 		if (Row->IngrType == "Bread") {
-			BreadRows.Add(Row);
+			BreadRows.Add(*Row);
+			BreadIdxs.Add(index);
 		}
 		else if (Row->IngrType == "Filling") {
-			FillingRows.Add(Row);
+			FillingRows.Add(*Row);
 			FillingIdxs.Add(index);
 		}
 		else if (Row->IngrType == "Meat") {
-			MeatRows.Add(Row);
+			MeatRows.Add(*Row);
 			MeatIdxs.Add(index);
 		}
-		else {
-			SauceRows.Add(Row);
+		else if (Row->IngrType == "Sauce") {
+			SauceRows.Add(*Row);
 			SauceIdxs.Add(index);
+		}
+		else {
+			DessertRows.Add(*Row);
+			DessertIdxs.Add(index);
 		}
 
 		if (Row->IngrClass == "S") {
@@ -105,12 +110,12 @@ int32 UIngredientManagerSystem::GetIngrSalePrice(FString Class)
 
 int32 UIngredientManagerSystem::GetSellingPriceByIndex(int32 Index)
 {
-	int32 Price = GetIngrSellingPrice(IngredientRows[Index]->IngrClass);
+	int32 Price = GetIngrSellingPrice(IngredientRows[Index].IngrClass);
 	return Price;
 }
 
 int32 UIngredientManagerSystem::GetIngrBinMinByIndex(int32 Index)
 {
-	int32 Price = GetIngrBidMin(IngredientRows[Index]->IngrClass);
+	int32 Price = GetIngrBidMin(IngredientRows[Index].IngrClass);
 	return Price;
 }

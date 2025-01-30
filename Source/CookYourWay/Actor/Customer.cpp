@@ -424,7 +424,7 @@ FString ACustomer::RedefineTasteHintComment(FString Comment)
 
 	TArray<int32> Tastes = CustomerDataManagerSystem->CustNameToTasteMap[CustName];
 	int32 OneTasteIdx = UKismetMathLibrary::RandomIntegerInRange(0, Tastes.Num() - 1);
-	FString OneTasteKor = IngredientManagerSystem->IngredientRows[OneTasteIdx]->IngrName;
+	FString OneTasteKor = IngredientManagerSystem->IngredientRows[OneTasteIdx].IngrName;
 
 	for (int idx = 0; idx < Redefined.Len(); idx++) {
 		if (Redefined[idx] == '{') {
