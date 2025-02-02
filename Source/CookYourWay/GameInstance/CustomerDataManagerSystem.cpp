@@ -332,3 +332,36 @@ FString UCustomerDataManagerSystem::GetCustReviewDialogue(FString CustName, int3
 	}
 	return FString();
 }
+
+bool UCustomerDataManagerSystem::GetIsRegularCustMapValue(FCustomerBistroKey Key)
+{
+	if (IsRegularCustMap.Find(Key)) {
+		return IsRegularCustMap[Key];
+	}
+	else {
+		UE_LOG(LogTemp, Warning, TEXT("Can't Get IsRegularCustMap Value!"));
+		return false;
+	}
+}
+
+float UCustomerDataManagerSystem::GetLoyaltyMapValue(FCustomerBistroKey Key)
+{
+	if (LoyaltyMap.Find(Key)) {
+		return LoyaltyMap[Key];
+	}
+	else {
+		UE_LOG(LogTemp, Warning, TEXT("Can't Get LoyaltyMap Value!"));
+		return 0.0f;
+	}
+}
+
+int32 UCustomerDataManagerSystem::GetMaxSatisfactionMapValue(FCustomerBistroKey Key)
+{
+	if (MaxSatisfactionMap.Find(Key)) {
+		return MaxSatisfactionMap[Key];
+	}
+	else {
+		UE_LOG(LogTemp, Warning, TEXT("Can't Get MaxSatisfactionMap Value!"));
+		return 0;
+	}
+}

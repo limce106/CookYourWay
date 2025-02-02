@@ -114,7 +114,7 @@ public:
 	TMap<FCustomerBistroKey, bool> IsRegularCustMap;
 	// <손님 이름/가게, 충성도>
 	TMap<FCustomerBistroKey, float> LoyaltyMap;
-	// <손님 이름/가게, 충성도>
+	// <손님 이름/가게, 최대만족도>
 	TMap<FCustomerBistroKey, int32> MaxSatisfactionMap;
 
 	// 최대 평점 
@@ -162,4 +162,10 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	FString GetCustReviewDialogue(FString CustName, int32 TasteScore);
+	UFUNCTION(BlueprintCallable)
+	bool GetIsRegularCustMapValue(FCustomerBistroKey Key);
+	UFUNCTION(BlueprintCallable)
+	float GetLoyaltyMapValue(FCustomerBistroKey Key);
+	UFUNCTION(BlueprintCallable)
+	int32 GetMaxSatisfactionMapValue(FCustomerBistroKey Key);
 };

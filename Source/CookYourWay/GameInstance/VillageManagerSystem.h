@@ -203,6 +203,7 @@ public:
 	bool IsMonday();
 	void ElapseCompetitorOpenPromoDay();
 
+	UFUNCTION(BlueprintCallable)
 	int32 FindCompetitorDataArrIdx(int32 AreaID);
 
 	void UpdatePlayerBistroRating(int32 Satisfaction);
