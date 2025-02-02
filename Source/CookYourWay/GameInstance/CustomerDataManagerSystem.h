@@ -120,6 +120,7 @@ public:
 	// 최대 평점 
 	const float MaxRate = 5.0;
 
+	UFUNCTION(BlueprintCallable)
 	FCustomerBistroKey GetCustomerBistroKey(FString CustomerName, int32 BistroAreaID);
 	
 	// 랜덤 손님 이름 가져오기

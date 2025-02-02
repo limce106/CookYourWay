@@ -112,3 +112,10 @@ void UVillageManagerSystem::UpdatePlayerBistroRating(int32 Satisfaction)
 {
 	PlayerBistroRating = ((PlayerBistroRating / 5 * 100) + Satisfaction) / PlayerBistroTotalCust;
 }
+
+void UVillageManagerSystem::InitCompetitorRatingDataArr()
+{
+	for (auto CompetitorData : CompetitorDataArr) {
+		CompetitorData.RatingDataArr.Empty();
+	}
+}

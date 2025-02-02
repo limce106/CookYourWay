@@ -4,6 +4,7 @@
 #include <Kismet/GameplayStatics.h>
 #include <Kismet/KismetMathLibrary.h>
 #include <Component/NewsEffectComponent.h>
+#include "VillageManager.h"
 
 ACompetitor::ACompetitor()
 {
@@ -19,6 +20,7 @@ void ACompetitor::BeginPlay()
 	VillageManagerSystem = UGameplayStatics::GetGameInstance(GetWorld())->GetSubsystem<UVillageManagerSystem>();
 	CustomerDataManagerSystem = UGameplayStatics::GetGameInstance(GetWorld())->GetSubsystem<UCustomerDataManagerSystem>();
 	IngredientManagerSystem = UGameplayStatics::GetGameInstance(GetWorld())->GetSubsystem<UIngredientManagerSystem>();
+	VillageManager = Cast<AVillageManager>(UGameplayStatics::GetActorOfClass(GetWorld(), AVillageManager::StaticClass()));
 	
 	SetDefaultReviewRate();
 }
@@ -102,18 +104,28 @@ FCompetitorData ACompetitor::GetCurComptitorData()
 
 void ACompetitor::CustomerVisited(ACustomer* Customer)
 {
-	UpdateTotalCustAndRateSum();
+	UpdateCompetitorReview();
 
 	int32 Satisfaction = GetCustomerSatisfaction();
 	CustomerDataManagerSystem->UpdateMaxSatisfaction(Customer->CustName, AreaID, Satisfaction);
+	AddRatingData(Customer->CustName, Satisfaction * 5 / 100);
 	Customer->Destroy();
 }
 
-void ACompetitor::UpdateTotalCustAndRateSum()
+void ACompetitor::UpdateCompetitorReview()
 {
 	int32 Idx = VillageManagerSystem->FindCompetitorDataArrIdx(AreaID);
 	VillageManagerSystem->CompetitorDataArr[Idx].TotalCust += 1;
 
-	float UpdatedRating = ((VillageManagerSystem->CompetitorDataArr[Idx].Rating / 5 * 100) + GetCustomerSatisfaction()) / VillageManagerSystem->CompetitorDataArr[Idx].TotalCust;
-	VillageManagerSystem->CompetitorDataArr[Idx].Rating += UpdatedRating;
+	float UpdatedRating = (((VillageManagerSystem->CompetitorDataArr[Idx].RatingAvg / 5 * 100) + GetCustomerSatisfaction()) / VillageManagerSystem->CompetitorDataArr[Idx].TotalCust) * 5 / 100;
+	VillageManagerSystem->CompetitorDataArr[Idx].RatingAvg = UpdatedRating;
+}
+
+void ACompetitor::AddRatingData(FString CustName, float Rating)
+{
+	FCompetitorData CurCompetitorData = GetCurComptitorData();
+
+	FString WeekDay = VillageManager->DayToWeekString(VillageManagerSystem->Day);
+	FCompetitorRatingData* RatingData = new FCompetitorRatingData(CustName, WeekDay, Rating);
+	CurCompetitorData.RatingDataArr.Add(*RatingData);
 }

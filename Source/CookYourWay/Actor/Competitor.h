@@ -21,10 +21,12 @@ class COOKYOURWAY_API ACompetitor : public AActor
 	class UVillageManagerSystem* VillageManagerSystem;
 	class UCustomerDataManagerSystem* CustomerDataManagerSystem;
 	class UIngredientManagerSystem* IngredientManagerSystem;
+	class AVillageManager* VillageManager;
 
 	TArray<FCompetitorReviewData> GetCompetitorReviewDataOnTable(FString DataType);
 	void SetDefaultReviewRate();
-	void UpdateTotalCustAndRateSum();
+	void UpdateCompetitorReview();
+	void AddRatingData(FString CustName, float Rating);
 
 protected:
 	virtual void BeginPlay() override;

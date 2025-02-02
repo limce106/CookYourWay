@@ -70,26 +70,48 @@ public:
 };
 
 USTRUCT(BlueprintType)
+struct FCompetitorRatingData
+{
+	GENERATED_BODY()
+	FCompetitorRatingData() : CustName("-1"), WeekDay("-1"), Rating(0) {}
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FString CustName;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FString WeekDay;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float Rating;
+
+	FCompetitorRatingData(FString CustName, FString WeekDay, float Rating) {
+		this->CustName = CustName;
+		this->WeekDay = WeekDay;
+		this->Rating = Rating;
+	}
+};
+
+USTRUCT(BlueprintType)
 struct FCompetitorData
 {
 	GENERATED_BODY() 
-	FCompetitorData() : AreaID(-1), TotalCust(0), Rating(0), OpenPromoDay(3), IsComptFestival(false) {}
+	FCompetitorData() : AreaID(-1), TotalCust(0), RatingAvg(0), OpenPromoDay(3), IsComptFestival(false) {}
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int32 AreaID;	// 부지 번호
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int32 TotalCust;	// 누적 손님 수 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	float Rating;	// 평균평점
+	float RatingAvg;	// 평균평점
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int32 OpenPromoDay;	// 오픈 프로모션 남은 기한
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	bool IsComptFestival;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TArray<FCompetitorRatingData> RatingDataArr;
 
-	FCompetitorData(int32 AreaID, float Rating) {
+	FCompetitorData(int32 AreaID, float RatingAvg) {
 		this->AreaID = AreaID;
 		this->TotalCust = 3;
-		this->Rating = Rating;
+		this->RatingAvg = RatingAvg;
 		OpenPromoDay = 3;
 		IsComptFestival = false;
 	}
@@ -184,4 +206,5 @@ public:
 	int32 FindCompetitorDataArrIdx(int32 AreaID);
 
 	void UpdatePlayerBistroRating(int32 Satisfaction);
+	void InitCompetitorRatingDataArr();
 };

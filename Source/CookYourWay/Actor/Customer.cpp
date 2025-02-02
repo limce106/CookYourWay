@@ -127,7 +127,7 @@ float ACustomer::CalcVisitRank(AActor* Bistro)
 		ACompetitor* Competitor = Cast<ACompetitor>(Bistro);
 		BistroAreaID = Competitor->AreaID;
 		int32 CompetitorDataArrIdx = VillageManagerSystem->FindCompetitorDataArrIdx(Competitor->AreaID);
-		AvgRate = VillageManagerSystem->CompetitorDataArr[CompetitorDataArrIdx].Rating;
+		AvgRate = VillageManagerSystem->CompetitorDataArr[CompetitorDataArrIdx].RatingAvg;
 	}
 
 	// '평점평균 * 맨해튼거리' 값이 가장 작은 가게를 방문해야 하므로 (최대 평점평균 - 실제 평점평균) 값을 곱하도록 한다.
@@ -329,6 +329,7 @@ void ACustomer::EatSandwich()
 	Eat(7.0f);
 
 	VillageManagerSystem->UpdatePlayerBistroRating(Satisfaction);
+	CustomerDataManagerSystem->UpdateMaxSatisfaction(CustName, PlayerBistro->AreaID, Satisfaction);
 
 	// 테스트
 	UE_LOG(LogTemp, Warning, TEXT("Satisfaction: %d"), Satisfaction);

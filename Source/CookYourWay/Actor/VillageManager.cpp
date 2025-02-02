@@ -26,11 +26,10 @@ AVillageManager::AVillageManager()
 
 void AVillageManager::Init()
 {
-	DayToWeekString(VillageManagerSystem->Day);
-
 	// 월요일이면
 	if (VillageManagerSystem->IsMonday()) {
 		TryCreateNewCompetitor();
+		VillageManagerSystem->InitCompetitorRatingDataArr();
 	}
 
 	DecreaseStorePeriod();
