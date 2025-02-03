@@ -40,4 +40,6 @@ public:
 	int32 PlayerBistroRating = 0;
 	UPROPERTY()
 	int32 DestroyedCompetitor = 0;
+	UPROPERTY()
+	TArray<bool> IsCommentTalked;
 };

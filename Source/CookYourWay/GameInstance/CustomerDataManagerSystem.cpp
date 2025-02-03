@@ -58,6 +58,8 @@ void UCustomerDataManagerSystem::Init()
 			}
 		}
 	}
+
+	IsCommentTalked.Init(false, CustomerCommentTableRows.Num());
 }
 
 FCustomerBistroKey UCustomerDataManagerSystem::GetCustomerBistroKey(FString CustomerName, int32 BistroAreaID)
@@ -323,6 +325,17 @@ FString UCustomerDataManagerSystem::GetCustReviewDialogue(FString CustName, int3
 		}
 	}
 	return FString();
+}
+
+TArray<int32> UCustomerDataManagerSystem::GetCustNameToTasteMapValue(FString CustName)
+{
+	if (CustNameToTasteMap.Find(CustName)) {
+		return CustNameToTasteMap[CustName];
+	}
+	else {
+		UE_LOG(LogTemp, Warning, TEXT("Can't Get CustNameToTasteMap Value!"));
+		return TArray<int32>();
+	}
 }
 
 bool UCustomerDataManagerSystem::GetIsRegularCustMapValue(FCustomerBistroKey Key)

@@ -28,8 +28,9 @@ void AVillageManager::Init()
 {
 	// 월요일이면
 	if (VillageManagerSystem->IsMonday()) {
-		TryCreateNewCompetitor();
+		VillageManagerSystem->PlayerBistroRatingDataArr.Empty();
 		VillageManagerSystem->InitCompetitorRatingDataArr();
+		TryCreateNewCompetitor();
 		CustomerDataManagerSystem->MaxSatisfactionMap.Empty();
 	}
 

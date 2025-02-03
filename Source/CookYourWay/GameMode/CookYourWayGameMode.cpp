@@ -15,7 +15,7 @@ void ACookYourWayGameMode::InitGame(const FString& MapName, const FString& Optio
 	VillageManagerSystem->Init();
 	VillageManagerSystem->Day++;
 	CustomerDataManagerSystem->Init();
-	//CustomerDataManagerSystem->SetCustTastes();
+	CustomerDataManagerSystem->SetCustTastes();
 }
 
 void ACookYourWayGameMode::BeginPlay()

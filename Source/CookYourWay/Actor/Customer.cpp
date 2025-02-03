@@ -402,15 +402,19 @@ void ACustomer::AddTotalSellingPriceAndTip()
 FString ACustomer::GetComment()
 {
 	int32 CommentType = UKismetMathLibrary::RandomIntegerInRange(1, 2);
+	int32 index = 0;
 
 	for (auto CustCommentData : CustomerDataManagerSystem->CustomerCommentTableRows) {
 		if (CommentType == 1 && CustCommentData->CustCode == CustName && CustCommentData->CustCommentType == CommentType) {
 			Satisfaction += 20;
+			CustomerDataManagerSystem->IsCommentTalked[index] = true;
 			return CustCommentData->CustCommentString;
 		}
 		else if (CommentType == 2 && CustCommentData->CustCode == CustName && CustCommentData->CustCommentType == CommentType) {
+			CustomerDataManagerSystem->IsCommentTalked[index] = true;
 			return RedefineTasteHintComment(CustCommentData->CustCommentString);
 		}
+		index++;
 	}
 
 	UE_LOG(LogTemp, Error, TEXT("Can't Get Comment!"));

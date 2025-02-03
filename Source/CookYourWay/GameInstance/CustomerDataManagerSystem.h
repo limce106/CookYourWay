@@ -117,6 +117,9 @@ public:
 	// <손님 이름/가게, 최대만족도>
 	TMap<FCustomerBistroKey, int32> MaxSatisfactionMap;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	TArray<bool>IsCommentTalked;
+
 	// 최대 평점 
 	const float MaxRate = 5.0;
 
@@ -161,6 +164,8 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	FString GetCustReviewDialogue(FString CustName, int32 TasteScore);
+	UFUNCTION(BlueprintCallable)
+	TArray<int32> GetCustNameToTasteMapValue(FString CustName);
 	UFUNCTION(BlueprintCallable)
 	bool GetIsRegularCustMapValue(FCustomerBistroKey Key);
 	UFUNCTION(BlueprintCallable)
