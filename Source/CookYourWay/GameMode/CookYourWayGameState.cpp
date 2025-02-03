@@ -29,6 +29,7 @@ void ACookYourWayGameState::LoadCookYourWayData()
 	VillageManagerSystem->Day = CookYourWaySaveGame->Day;
 	VillageManagerSystem->PlayerBistroAreaID = CookYourWaySaveGame->PlayerBistroAreaID;
 	VillageManagerSystem->CompetitorDataArr = CookYourWaySaveGame->CompetitorDataArr;
+	CustomerDataManagerSystem->PlayerBistroRatingDataArr = CookYourWaySaveGame->PlayerBistroRatingDataArr;
 	VillageManagerSystem->StoreDataArr = CookYourWaySaveGame->StoreDataArr;
 	VillageManagerSystem->TotalAsset = CookYourWaySaveGame->TotalAsset;
 	VillageManagerSystem->PlayerBistroTotalCust = CookYourWaySaveGame->PlayerBistroTotalCust;
@@ -47,6 +48,7 @@ void ACookYourWayGameState::SaveCookYourWayData()
 	NewCookYourWayData->Day = VillageManagerSystem->Day;
 	NewCookYourWayData->PlayerBistroAreaID = VillageManagerSystem->PlayerBistroAreaID;
 	NewCookYourWayData->CompetitorDataArr = VillageManagerSystem->CompetitorDataArr;
+	NewCookYourWayData->PlayerBistroRatingDataArr = CustomerDataManagerSystem->PlayerBistroRatingDataArr;
 	NewCookYourWayData->StoreDataArr = VillageManagerSystem->StoreDataArr;
 	NewCookYourWayData->TotalAsset = VillageManagerSystem->TotalAsset;
 	NewCookYourWayData->PlayerBistroTotalCust = VillageManagerSystem->PlayerBistroTotalCust;

@@ -4,6 +4,7 @@
 #include "GameInstance/CustomerDataManagerSystem.h"
 #include <Kismet/KismetMathLibrary.h>
 #include <Kismet/GameplayStatics.h>
+#include "VillageManagerSystem.h"
 
 UCustomerDataManagerSystem::UCustomerDataManagerSystem()
 {
@@ -369,4 +370,15 @@ int32 UCustomerDataManagerSystem::GetMaxSatisfactionMapValue(FCustomerBistroKey 
 		UE_LOG(LogTemp, Warning, TEXT("Can't Get MaxSatisfactionMap Value!"));
 		return 0;
 	}
+}
+
+TArray<FPlayerBistroRatingData> UCustomerDataManagerSystem::GetGreaterSortedPlayerBistroRating(TArray<FPlayerBistroRatingData> RatingArr)
+{
+	TArray<FPlayerBistroRatingData> CopyRatingArr = PlayerBistroRatingDataArr;
+
+	CopyRatingArr.Sort([](const FPlayerBistroRatingData& A, const FPlayerBistroRatingData& B)
+		{
+			return A.Rating > B.Rating;
+		});
+	return CopyRatingArr;
 }

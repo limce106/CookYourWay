@@ -126,6 +126,6 @@ void ACompetitor::AddRatingData(FString CustName, float Rating)
 	FCompetitorData CurCompetitorData = GetCurComptitorData();
 
 	FString WeekDay = VillageManager->DayToWeekString(VillageManagerSystem->Day);
-	FCompetitorRatingData* RatingData = new FCompetitorRatingData(CustName, WeekDay, Rating);
-	CurCompetitorData.RatingDataArr.Add(*RatingData);
+	FCompetitorRatingData RatingData = FCompetitorRatingData(CustName, WeekDay, Rating);
+	CurCompetitorData.RatingDataArr.Add(RatingData);
 }

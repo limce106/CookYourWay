@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "Subsystems/GameInstanceSubsystem.h"
-#include "VillageManagerSystem.h"
 #include "IngredientManagerSystem.h"
 #include "CustomerDataManagerSystem.generated.h"
 
@@ -55,6 +54,54 @@ public:
 	int32 CustCommentType;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Data")
 	FString CustCommentString;
+};
+
+USTRUCT(BlueprintType)
+struct FCompetitorRatingData
+{
+	GENERATED_BODY()
+	FCompetitorRatingData() : CustName("-1"), WeekDay("-1"), Rating(0) {}
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FString CustName;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FString WeekDay;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float Rating;
+
+	FCompetitorRatingData(FString CustName, FString WeekDay, float Rating) {
+		this->CustName = CustName;
+		this->WeekDay = WeekDay;
+		this->Rating = Rating;
+	}
+};
+
+USTRUCT(BlueprintType)
+struct FPlayerBistroRatingData
+{
+	GENERATED_BODY()
+	FPlayerBistroRatingData() : CustName("-1"), WeekDay("-1"), Rating(0), Price(0), Review("-1"), GivenIngr(), IsEatDessert(false), IsFastCook(false), IsSlowCook(false), IsTalk(false) {}
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FString CustName;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FString WeekDay;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float Rating;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int32 Price;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FString Review;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TArray<int32> GivenIngr;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool IsEatDessert;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool IsFastCook;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool IsSlowCook;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool IsTalk;
 };
 
 USTRUCT(BlueprintType)
@@ -120,6 +167,10 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	TArray<bool>IsCommentTalked;
 
+	// 플레이어 가게 리뷰 데이터
+	UPROPERTY(VisibleAnywhere)
+	TArray<FPlayerBistroRatingData> PlayerBistroRatingDataArr;
+
 	// 최대 평점 
 	const float MaxRate = 5.0;
 
@@ -173,6 +224,6 @@ public:
 	UFUNCTION(BlueprintCallable)
 	int32 GetMaxSatisfactionMapValue(FCustomerBistroKey Key);
 
-	/*UFUNCTION(BlueprintCallable)
-	TArray<FCompetitorRatingData> GetSortedArrByGreaterRating(TArray<FCompetitorRatingData> RatingArr);*/
+	UFUNCTION(BlueprintCallable)
+	TArray<FPlayerBistroRatingData> GetGreaterSortedPlayerBistroRating(TArray<FPlayerBistroRatingData> RatingArr);
 };

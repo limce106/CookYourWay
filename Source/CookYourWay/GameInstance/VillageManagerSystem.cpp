@@ -3,7 +3,6 @@
 
 #include "GameInstance/VillageManagerSystem.h"
 #include <Kismet/KismetMathLibrary.h>
-#include "CustomerDataManagerSystem.h"
 #include <Kismet/GameplayStatics.h>
 
 UVillageManagerSystem::UVillageManagerSystem()

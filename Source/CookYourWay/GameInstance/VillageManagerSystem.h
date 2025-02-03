@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Engine/DataTable.h"
 #include "Subsystems/GameInstanceSubsystem.h"
+#include "CustomerDataManagerSystem.h"
 #include "VillageManagerSystem.generated.h"
 
 USTRUCT(BlueprintType)
@@ -67,26 +68,6 @@ public:
 	float NewsProb;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Data")
 	FString NewsString;
-};
-
-USTRUCT(BlueprintType)
-struct FCompetitorRatingData
-{
-	GENERATED_BODY()
-	FCompetitorRatingData() : CustName("-1"), WeekDay("-1"), Rating(0) {}
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	FString CustName;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	FString WeekDay;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	float Rating;
-
-	FCompetitorRatingData(FString CustName, FString WeekDay, float Rating) {
-		this->CustName = CustName;
-		this->WeekDay = WeekDay;
-		this->Rating = Rating;
-	}
 };
 
 USTRUCT(BlueprintType)
@@ -175,9 +156,11 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	float PlayerBistroRating = 2.5;
 
+	// 현재 존재하는 경쟁사 데이터
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	TArray<FCompetitorData> CompetitorDataArr;
 
+	// 현재 존재하는 상점 데이터
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	TArray<FStoreData> StoreDataArr;
 

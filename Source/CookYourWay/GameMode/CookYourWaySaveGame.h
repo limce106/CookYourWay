@@ -27,6 +27,8 @@ public:
 	UPROPERTY()
 	TArray<FCompetitorData> CompetitorDataArr;
 	UPROPERTY()
+	TArray<FPlayerBistroRatingData> PlayerBistroRatingDataArr;
+	UPROPERTY()
 	TArray<FStoreData> StoreDataArr;
 	UPROPERTY()
 	int32 TotalAsset = 0;
