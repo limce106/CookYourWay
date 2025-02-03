@@ -33,7 +33,7 @@ public:
 	UPROPERTY()
 	TMap<FCustomerBistroKey, bool> IsRegularCustMap;
 	UPROPERTY()
-	TMap<FCustomerBistroKey, float> LoyaltyMap;
+	TMap<FCustomerBistroKey, int32> LoyaltyMap;
 	UPROPERTY()
 	int32 PlayerBistroTotalCust = 0;
 	UPROPERTY()

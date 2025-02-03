@@ -44,7 +44,7 @@ void UCustomerDataManagerSystem::Init()
 			FCustomerBistroKey CustomerBistroKey = GetCustomerBistroKey(CustomerNames[CustNameIdx], VillageManagerSystem->PlayerBistroAreaID);
 
 			IsRegularCustMap.Add(CustomerBistroKey, false);
-			LoyaltyMap.Add(CustomerBistroKey, 0.0f);
+			LoyaltyMap.Add(CustomerBistroKey, 0);
 			MaxSatisfactionMap.Add(CustomerBistroKey, 0.0f);
 		}
 
@@ -53,7 +53,7 @@ void UCustomerDataManagerSystem::Init()
 				FCustomerBistroKey CustomerBistroKey = GetCustomerBistroKey(CustomerNames[CustNameIdx], VillageManagerSystem->CompetitorDataArr[AreaIDIdx].AreaID);
 
 				IsRegularCustMap.Add(CustomerBistroKey, false);
-				LoyaltyMap.Add(CustomerBistroKey, 0.0f);
+				LoyaltyMap.Add(CustomerBistroKey, 0);
 				MaxSatisfactionMap.Add(CustomerBistroKey, 0.0f);
 			}
 		}
@@ -214,14 +214,6 @@ TArray<int32> UCustomerDataManagerSystem::GetCustTaste(FString CustName)
 	return Taste;
 }
 
-float UCustomerDataManagerSystem::GetLoyalty(FString CustomerName, int32 BistroAreaID)
-{
-	FCustomerBistroKey Key = GetCustomerBistroKey(CustomerName, BistroAreaID);
-	float Loyalty = *LoyaltyMap.Find(Key);
-
-	return Loyalty;
-}
-
 bool UCustomerDataManagerSystem::IsRegularCust(FString CustomerName, int32 BistroAreaID)
 {
 	FCustomerBistroKey Key = GetCustomerBistroKey(CustomerName, BistroAreaID);
@@ -244,7 +236,7 @@ void UCustomerDataManagerSystem::AddRegularCust(FString CustomerName, int32 Bist
 void UCustomerDataManagerSystem::DecreaseLoyalty(FString CustomerName, int32 BistroAreaID, float Decreasement)
 {
 	FCustomerBistroKey Key = GetCustomerBistroKey(CustomerName, BistroAreaID);
-	float CurLoyalty = *LoyaltyMap.Find(Key);
+	int32 CurLoyalty = *LoyaltyMap.Find(Key);
 
 	CurLoyalty -= Decreasement;
 	if (CurLoyalty <= 0) {
@@ -344,14 +336,14 @@ bool UCustomerDataManagerSystem::GetIsRegularCustMapValue(FCustomerBistroKey Key
 	}
 }
 
-float UCustomerDataManagerSystem::GetLoyaltyMapValue(FCustomerBistroKey Key)
+int32 UCustomerDataManagerSystem::GetLoyaltyMapValue(FCustomerBistroKey Key)
 {
 	if (LoyaltyMap.Find(Key)) {
 		return LoyaltyMap[Key];
 	}
 	else {
 		UE_LOG(LogTemp, Warning, TEXT("Can't Get LoyaltyMap Value!"));
-		return 0.0f;
+		return 0;
 	}
 }
 

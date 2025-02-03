@@ -169,7 +169,7 @@ bool ACustomer::GetDestByLoyalty()
 	FCustomerBistroKey PlayerBistroKey = CustomerDataManagerSystem->GetCustomerBistroKey(CustName, VillageManagerSystem->PlayerBistroAreaID);
 	if (CustomerDataManagerSystem->IsRegularCustMap.Find(PlayerBistroKey)) {
 		int32 Rand = UKismetMathLibrary::RandomIntegerInRange(1, 100);
-		float Loyalty = *CustomerDataManagerSystem->LoyaltyMap.Find(PlayerBistroKey);
+		int32 Loyalty = *CustomerDataManagerSystem->LoyaltyMap.Find(PlayerBistroKey);
 
 		if (Rand <= Loyalty) {
 			VisitDest = *VillageManager->AreaLocMap.Find(VillageManagerSystem->PlayerBistroAreaID);
@@ -182,7 +182,7 @@ bool ACustomer::GetDestByLoyalty()
 		FCustomerBistroKey CompetitorKey = CustomerDataManagerSystem->GetCustomerBistroKey(CustName, CompetitorData.AreaID);
 
 		if (CustomerDataManagerSystem->IsRegularCustMap.Find(CompetitorKey)) {
-			float Loyalty = *CustomerDataManagerSystem->LoyaltyMap.Find(CompetitorKey);
+			int32 Loyalty = *CustomerDataManagerSystem->LoyaltyMap.Find(CompetitorKey);
 
 			if (Rand <= Loyalty) {
 				VisitDest = *VillageManager->AreaLocMap.Find(CompetitorData.AreaID);

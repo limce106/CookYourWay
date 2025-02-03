@@ -30,6 +30,7 @@ void AVillageManager::Init()
 	if (VillageManagerSystem->IsMonday()) {
 		TryCreateNewCompetitor();
 		VillageManagerSystem->InitCompetitorRatingDataArr();
+		CustomerDataManagerSystem->MaxSatisfactionMap.Empty();
 	}
 
 	DecreaseStorePeriod();
@@ -147,7 +148,7 @@ void AVillageManager::TryCreateNewCompetitor()
 				CustomerDataManagerSystem->MaxSatisfactionMap.Remove(CurKey);
 
 				CustomerDataManagerSystem->IsRegularCustMap.Add(NewKey, false);
-				CustomerDataManagerSystem->LoyaltyMap.Add(NewKey, 0.0f);
+				CustomerDataManagerSystem->LoyaltyMap.Add(NewKey, 0);
 				CustomerDataManagerSystem->MaxSatisfactionMap.Add(NewKey, 0.0f);
 
 				// 오픈 프로모션: 전체 손님 유형 중 랜덤으로 2개의 유형을 초기 단골 손님으로 만든다.

@@ -113,7 +113,7 @@ public:
 	// <손님 이름/가게, 단골여부>
 	TMap<FCustomerBistroKey, bool> IsRegularCustMap;
 	// <손님 이름/가게, 충성도>
-	TMap<FCustomerBistroKey, float> LoyaltyMap;
+	TMap<FCustomerBistroKey, int32> LoyaltyMap;
 	// <손님 이름/가게, 최대만족도>
 	TMap<FCustomerBistroKey, int32> MaxSatisfactionMap;
 
@@ -144,7 +144,6 @@ public:
 	// 특정 손님의 취향 가져오기
 	TArray<int32> GetCustTaste(FString CustName);
 
-	float GetLoyalty(FString CustomerName, int32 BistroAreaID);
 	void UpdateMaxSatisfaction(FString CustName, int32 BistroAreaID, int32 Satisfaction);
 
 	// 단골 손님 여부 반환
@@ -165,7 +164,10 @@ public:
 	UFUNCTION(BlueprintCallable)
 	bool GetIsRegularCustMapValue(FCustomerBistroKey Key);
 	UFUNCTION(BlueprintCallable)
-	float GetLoyaltyMapValue(FCustomerBistroKey Key);
+	int32 GetLoyaltyMapValue(FCustomerBistroKey Key);
 	UFUNCTION(BlueprintCallable)
 	int32 GetMaxSatisfactionMapValue(FCustomerBistroKey Key);
+
+	/*UFUNCTION(BlueprintCallable)
+	TArray<FCompetitorRatingData> GetSortedArrByGreaterRating(TArray<FCompetitorRatingData> RatingArr);*/
 };
