@@ -18,7 +18,7 @@ class COOKYOURWAY_API AVillageManager : public AActor
 	class APlayerBistro* PlayerBistro;
 
 	FTimerHandle LeftDayTimeHandler;
-	int32 LeftMinute = 0;
+	int32 LeftMinute = 2;
 	int32 LeftSecond = 30;
 
 	// 남은 하루 시간 계산하기
@@ -56,6 +56,11 @@ public:
 	ACookYourWayGameState* CookYourWayGameState;
 
 	TMap<int32, FVector> AreaLocMap;
+
+	TArray<FCustomerCommentData*> RedefinedCustomerCommentTableRows;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	TArray<bool>IsCommentTalked;
 
 	UFUNCTION(BlueprintCallable)
 	int32 GetLeftMinute();

@@ -5,6 +5,8 @@
 #include <Kismet/KismetMathLibrary.h>
 #include <Kismet/GameplayStatics.h>
 #include "VillageManagerSystem.h"
+#include <Widget/FridgeIngrWidget.h>
+#include <Actor/VillageManager.h>
 
 UCustomerDataManagerSystem::UCustomerDataManagerSystem()
 {
@@ -59,8 +61,18 @@ void UCustomerDataManagerSystem::Init()
 			}
 		}
 	}
+}
 
-	IsCommentTalked.Init(false, CustomerCommentTableRows.Num());
+void UCustomerDataManagerSystem::RedefineCustomerComment() {
+	AVillageManager* VillageManager = Cast<AVillageManager>(UGameplayStatics::GetActorOfClass(GetWorld(), AVillageManager::StaticClass()));
+	VillageManager->RedefinedCustomerCommentTableRows = CustomerCommentTableRows;
+
+	for (int i = 0; i < CustomerCommentTableRows.Num(); i++) {
+		if (CustomerCommentTableRows[i]->CustCommentType == 2) {
+			FString RedefinedStr = RedefineTasteHintComment(CustomerCommentTableRows[i]->CustCode, CustomerCommentTableRows[i]->CustCommentString);
+			VillageManager->RedefinedCustomerCommentTableRows[i]->CustCommentString = RedefinedStr;
+		}
+	}
 }
 
 FCustomerBistroKey UCustomerDataManagerSystem::GetCustomerBistroKey(FString CustomerName, int32 BistroAreaID)
@@ -199,11 +211,11 @@ void UCustomerDataManagerSystem::SetCustTastes()
 		SetRandomCustTastes();
 	}
 
+	RedefineCustomerComment();
+
 	// Å×½ºÆ®
-	TMap<FString, TArray<FString>> Test;
 	for (int i = 0; i < CustomerNames.Num(); i++) {
 		TArray<int32> Taste = CustNameToTasteMap[CustomerNames[i]];
-		TArray<FString> Str;
 		for (int j = 0; j < Taste.Num(); j++) {
 			UE_LOG(LogTemp, Warning, TEXT("%s: %s"), *CustomerNames[i], *IngredientManagerSystem->IngredientRows[Taste[j]].IngrName);
 		}
@@ -372,7 +384,33 @@ int32 UCustomerDataManagerSystem::GetMaxSatisfactionMapValue(FCustomerBistroKey 
 	}
 }
 
-TArray<FPlayerBistroRatingData> UCustomerDataManagerSystem::GetGreaterSortedPlayerBistroRating(TArray<FPlayerBistroRatingData> RatingArr)
+FString UCustomerDataManagerSystem::RedefineTasteHintComment(FString CustName, FString Comment)
+{
+	FString Redefined = Comment;
+	FString tmp1;
+	FString tmp2;
+
+	TArray<int32> Tastes = CustNameToTasteMap[CustName];
+	int32 OneTasteIdx = UKismetMathLibrary::RandomIntegerInRange(0, Tastes.Num() - 1);
+	FString OneTasteKor = IngredientManagerSystem->IngredientRows[Tastes[OneTasteIdx]].IngrName;
+
+	for (int idx = 0; idx < Redefined.Len(); idx++) {
+		if (Redefined[idx] == '{') {
+			tmp1 = Redefined.Mid(0, idx);
+			tmp2 = Redefined.Mid(idx + 3, Redefined.Len() - (idx + 3));
+
+			Redefined = (tmp1.Append(OneTasteKor)).Append(tmp2);
+		}
+	}
+
+	UE_LOG(LogTemp, Warning, TEXT("Original %s: %s"), *CustName, *Comment);
+	UE_LOG(LogTemp, Warning, TEXT("Comment %s: %s"), *CustName, *OneTasteKor);
+	UE_LOG(LogTemp, Warning, TEXT("Redefined %s: %s"), *CustName, *Redefined);
+
+	return Redefined;
+}
+
+TArray<FPlayerBistroRatingData> UCustomerDataManagerSystem::GetGreaterSortedPlayerBistroRating()
 {
 	TArray<FPlayerBistroRatingData> CopyRatingArr = PlayerBistroRatingDataArr;
 

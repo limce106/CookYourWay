@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/SaveGame.h"
 #include <GameInstance/CustomerDataManagerSystem.h>
+#include <GameInstance/VillageManagerSystem.h>
 #include "CookYourWaySaveGame.generated.h"
 
 /**
@@ -42,6 +43,4 @@ public:
 	int32 PlayerBistroRating = 0;
 	UPROPERTY()
 	int32 DestroyedCompetitor = 0;
-	UPROPERTY()
-	TArray<bool> IsCommentTalked;
 };

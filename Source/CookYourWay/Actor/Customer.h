@@ -7,6 +7,7 @@
 #include "AIController.h"
 #include "Ingredient.h"
 #include "Sandwich.h"
+#include "GameInstance/CustomerDataManagerSystem.h"
 #include "Customer.generated.h"
 
 UCLASS()
@@ -33,6 +34,9 @@ class COOKYOURWAY_API ACustomer : public ACharacter
 	// 판 전체 가격
 	int32 TotalSellingPrice = 0;
 
+	// 손님의 플레이어 가게에 대한 평가
+	FPlayerBistroRatingData PlayerBistroRatingData;
+
 	void SetSkeletalMesh();
 
 	// 멘해튼 거리 구하기
@@ -49,8 +53,6 @@ class COOKYOURWAY_API ACustomer : public ACharacter
 	float TempDelayTime;
 	bool DelayWithDeltaTime(float DelayTime, float DeltaSeconds);
 
-	FString RedefineTasteHintComment(FString Comment);
-
 public:
 	ACustomer();
 
@@ -64,8 +66,6 @@ protected:
 	UPROPERTY(BlueprintReadOnly)
 	float Patience = 100.0f;
 
-	// 먹는 중인지
-	bool IsEat = false;
 	// 먹기 시작한 시간
 	float StartEatTime = 0.0f;
 	// 손님의 평점
@@ -84,6 +84,9 @@ public:
 
 	UPROPERTY(BlueprintReadOnly)
 	FString CustName;
+	// 먹는 중인지
+	UPROPERTY(BlueprintReadOnly)
+	bool IsEat = false;
 	UPROPERTY(BlueprintReadWrite)
 	bool IsWalk = true;
 	UPROPERTY(BlueprintReadWrite)
@@ -124,11 +127,17 @@ public:
 	void AddTotalSellingPriceAndTip();
 
 	UFUNCTION(BlueprintImplementableEvent)
+	void SetReviewDialogueText(int32 TasteScore);
+	UFUNCTION()
 	void StartReviewDialogue(int32 TasteScore);
+
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 	void TrySetComment();
 	UFUNCTION(BlueprintCallable)
 	FString GetComment();
+
+	void UpdatePlayerBistroSatisfaction();
+	void AddPlayerBistroRatingDataInManager();
 };
 
 class CustomerSpawnFactory

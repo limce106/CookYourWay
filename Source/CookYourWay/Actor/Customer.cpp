@@ -233,6 +233,8 @@ int32 ACustomer::CountNotTasteNum(ASandwich* Sandwich)
 	}
 
 	TArray<int32> IngrNumArr = Sandwich->IngrActorToNum();
+	PlayerBistroRatingData.GivenIngr = IngrNumArr;
+
 	TArray<int32> Taste = CustomerDataManagerSystem->GetCustTaste(CustName);
 
 	for (int i = 0; i < IngrNumArr.Num(); i++) {
@@ -297,9 +299,11 @@ void ACustomer::AddSandwichReview(ASandwich* Sandwich)
 	// 인내심에 따라 점수 증감
 	if (Patience <= 30) {
 		Satisfaction -= 10;
+		PlayerBistroRatingData.IsSlowCook = true;
 	}
 	else if (Patience >= 70 ) {
 		Satisfaction += 5;
+		PlayerBistroRatingData.IsFastCook = true;
 	}
 
 	// 고기가 탔다면 점수 감소
@@ -328,8 +332,7 @@ void ACustomer::EatSandwich()
 {
 	Eat(7.0f);
 
-	VillageManagerSystem->UpdatePlayerBistroRating(Satisfaction);
-	CustomerDataManagerSystem->UpdateMaxSatisfaction(CustName, PlayerBistro->AreaID, Satisfaction);
+	
 
 	// 테스트
 	UE_LOG(LogTemp, Warning, TEXT("Satisfaction: %d"), Satisfaction);
@@ -356,7 +359,10 @@ void ACustomer::EatDessert()
 {
 	ClearDestroyTimer();
 	Eat(2.0f);
+
 	Satisfaction += 10;
+	PlayerBistroRatingData.IsEatDessert = true;
+
 	UE_LOG(LogTemp, Warning, TEXT("Dessert Bonus"));
 }
 
@@ -397,22 +403,32 @@ void ACustomer::AddTotalSellingPriceAndTip()
 {
 	TotalSellingPrice += GetTip(TotalSellingPrice);
 	VillageManager->UpdateProfitsValue(TotalSellingPrice);
+	PlayerBistroRatingData.Price = TotalSellingPrice;
+}
+
+void ACustomer::StartReviewDialogue(int32 TasteScore)
+{
+	FString ReviewDialogue = CustomerDataManagerSystem->GetCustReviewDialogue(CustName, TasteScore);
+	SetReviewDialogueText(TasteScore);
+	PlayerBistroRatingData.Review = ReviewDialogue;
 }
 
 FString ACustomer::GetComment()
 {
+	PlayerBistroRatingData.IsTalk = true;
+
 	int32 CommentType = UKismetMathLibrary::RandomIntegerInRange(1, 2);
 	int32 index = 0;
 
-	for (auto CustCommentData : CustomerDataManagerSystem->CustomerCommentTableRows) {
+	for (auto CustCommentData : VillageManager->RedefinedCustomerCommentTableRows) {
 		if (CommentType == 1 && CustCommentData->CustCode == CustName && CustCommentData->CustCommentType == CommentType) {
 			Satisfaction += 20;
-			CustomerDataManagerSystem->IsCommentTalked[index] = true;
+			VillageManager->IsCommentTalked[index] = true;
 			return CustCommentData->CustCommentString;
 		}
 		else if (CommentType == 2 && CustCommentData->CustCode == CustName && CustCommentData->CustCommentType == CommentType) {
-			CustomerDataManagerSystem->IsCommentTalked[index] = true;
-			return RedefineTasteHintComment(CustCommentData->CustCommentString);
+			VillageManager->IsCommentTalked[index] = true;
+			return CustCommentData->CustCommentString;
 		}
 		index++;
 	}
@@ -421,24 +437,17 @@ FString ACustomer::GetComment()
 	return FString();
 }
 
-FString ACustomer::RedefineTasteHintComment(FString Comment)
+void ACustomer::UpdatePlayerBistroSatisfaction()
 {
-	FString Redefined = Comment;
-	FString tmp1;
-	FString tmp2;
+	VillageManagerSystem->UpdatePlayerBistroRating(Satisfaction);
+	CustomerDataManagerSystem->UpdateMaxSatisfaction(CustName, PlayerBistro->AreaID, Satisfaction);
 
-	TArray<int32> Tastes = CustomerDataManagerSystem->CustNameToTasteMap[CustName];
-	int32 OneTasteIdx = UKismetMathLibrary::RandomIntegerInRange(0, Tastes.Num() - 1);
-	FString OneTasteKor = IngredientManagerSystem->IngredientRows[OneTasteIdx].IngrName;
+	PlayerBistroRatingData.CustName = CustName;
+	PlayerBistroRatingData.WeekDay = VillageManager->DayToWeekString(VillageManagerSystem->Day);
+	PlayerBistroRatingData.Rating = Satisfaction * 5 / 100;
+}
 
-	for (int idx = 0; idx < Redefined.Len(); idx++) {
-		if (Redefined[idx] == '{') {
-			tmp1 = Redefined.Mid(0, idx);
-			tmp2 = Redefined.Mid(idx + 3, Redefined.Len() - (idx + 3));
-
-			Redefined = (tmp1.Append(OneTasteKor)).Append(tmp2);
-		}
-	}
-
-	return Redefined;
+void ACustomer::AddPlayerBistroRatingDataInManager()
+{
+	CustomerDataManagerSystem->PlayerBistroRatingDataArr.Add(PlayerBistroRatingData);
 }

@@ -148,6 +148,11 @@ void APlayerBistro::SitNextCust(int32 SeatIdx)
 
 void APlayerBistro::LeaveAndSitNextCust(ACustomer* LeftCustomer)
 {
+	if (LeftCustomer->IsEat) {
+		LeftCustomer->UpdatePlayerBistroSatisfaction();
+		LeftCustomer->AddPlayerBistroRatingDataInManager();
+	}
+
 	int32 LeftCustSeatIdx = LeftCustomer->CurSeatNum;
 	ADiningTable* LeftCustDiningTable = GetDiningTable(LeftCustSeatIdx);
 	LeftCustDiningTable->DestroyFoodOnDiningTable();

@@ -134,6 +134,8 @@ class COOKYOURWAY_API UCustomerDataManagerSystem : public UGameInstanceSubsystem
 	class UVillageManagerSystem* VillageManagerSystem;
 	class UIngredientManagerSystem* IngredientManagerSystem;
 
+	void RedefineCustomerComment();
+
 protected:
 	virtual void Initialize(FSubsystemCollectionBase& Collection) override;
 
@@ -163,9 +165,6 @@ public:
 	TMap<FCustomerBistroKey, int32> LoyaltyMap;
 	// <손님 이름/가게, 최대만족도>
 	TMap<FCustomerBistroKey, int32> MaxSatisfactionMap;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	TArray<bool>IsCommentTalked;
 
 	// 플레이어 가게 리뷰 데이터
 	UPROPERTY(VisibleAnywhere)
@@ -213,6 +212,9 @@ public:
 	// 단골 손님 보유 여부
 	bool HasRegularCust(int32 BistroAreaID);
 
+	// 손님의 취향 힌트 대사 재정의
+	UFUNCTION(BlueprintCallable)
+	FString RedefineTasteHintComment(FString CustName, FString Comment);
 	UFUNCTION(BlueprintCallable)
 	FString GetCustReviewDialogue(FString CustName, int32 TasteScore);
 	UFUNCTION(BlueprintCallable)
@@ -225,5 +227,5 @@ public:
 	int32 GetMaxSatisfactionMapValue(FCustomerBistroKey Key);
 
 	UFUNCTION(BlueprintCallable)
-	TArray<FPlayerBistroRatingData> GetGreaterSortedPlayerBistroRating(TArray<FPlayerBistroRatingData> RatingArr);
+	TArray<FPlayerBistroRatingData> GetGreaterSortedPlayerBistroRating();
 };
