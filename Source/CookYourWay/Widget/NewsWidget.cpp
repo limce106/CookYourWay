@@ -8,6 +8,8 @@
 #include "GameInstance/VillageManagerSystem.h"
 #include <Kismet/KismetMathLibrary.h>
 #include "Components/RichTextBlock.h"
+#include "Components/Image.h"
+#include "Components/BackgroundBlur.h"
 
 void UNewsWidget::NativeConstruct()
 {
@@ -18,6 +20,9 @@ void UNewsWidget::NativeConstruct()
 	VillageManagerSystem = UGameplayStatics::GetGameInstance(GetWorld())->GetSubsystem<UVillageManagerSystem>();
 
 	RichTextBlock_News = (URichTextBlock*)GetWidgetFromName(TEXT("RichTextBlock_News"));
+	Image_News = (UImage*)GetWidgetFromName(TEXT("Image_News"));
+	BackgroundBlur_CustBlur = (UBackgroundBlur*)GetWidgetFromName(TEXT("BackgroundBlur_CustBlur"));
+
 	FString News = GetRedefinedNewsString();
 	RichTextBlock_News->SetText(FText::FromString(News));
 }
@@ -44,6 +49,8 @@ FString UNewsWidget::RedefineNewsString(FString News)
 			if (CurNumber != PreNumber) {
 				PreNumber = CurNumber;
 				VillageManagerSystem->NewsKeyWord = GetKeyWordByNum(CurNumber);
+
+				SetNewsImg(CurNumber, VillageManagerSystem->NewsKeyWord);
 			}
 
 			tmp1 = Redefined.Mid(0, idx);
@@ -81,6 +88,38 @@ FString UNewsWidget::GetRandomOriginalNewsStr()
 	}
 
 	return OriginalNewsStr;
+}
+
+void UNewsWidget::SetNewsImg(FString Num, FString CurNewsKeyWord)
+{
+	if (Num == "1") {
+		for (auto Row : CustomerDataManagerSystem->CustomerTableRows) {
+			if (Row->CustName == CurNewsKeyWord) {
+				Image_News->SetBrushFromTexture(Row->CustIcon);
+				break;
+			}
+		}
+	}
+	else if (Num == "2" || Num == "5") {
+		for (auto Row : IngredientManagerSystem->IngredientTableRows) {
+			if (Row->IngrName == CurNewsKeyWord) {
+				Image_News->SetBrushFromTexture(Row->IngrIcon);
+				break;
+			}
+		}
+
+		if (Num == "5") {
+			BackgroundBlur_CustBlur->SetVisibility(ESlateVisibility::Visible);
+		}
+	}
+	else if (Num == "4") {
+		for (auto Row : VillageManagerSystem->StoreTableRows) {
+			if (Row->StoreName == CurNewsKeyWord) {
+				Image_News->SetBrushFromTexture(Row->StoreIcon);
+				break;
+			}
+		}
+	}
 }
 
 FString UNewsWidget::GetSeasonNewsNextString()
@@ -130,7 +169,7 @@ FString UNewsWidget::GetKeyWordByNum(FString Num)
 	else if (Num == "3") {
 		for (auto& CompetitorData : VillageManagerSystem->CompetitorDataArr) {
 			if (!(VillageManagerSystem->IsMonday() && !CustomerDataManagerSystem->HasRegularCust(CompetitorData.AreaID))) {
-				KeyWordArr.Add(FString(TEXT("%d구역 경쟁사"), CompetitorData.AreaID));
+				KeyWordArr.Add(CompetitorData.ComptName);
 			}
 		}
 
