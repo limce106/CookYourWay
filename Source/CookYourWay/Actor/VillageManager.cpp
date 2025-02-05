@@ -34,6 +34,7 @@ void AVillageManager::Init()
 		CustomerDataManagerSystem->MaxSatisfactionMap.Empty();
 	}
 
+	CustomerDataManagerSystem->RedefineCustomerComment();
 	IsCommentTalked.Init(false, RedefinedCustomerCommentTableRows.Num());
 	DecreaseStorePeriod();
 	TryCreateNewStore();

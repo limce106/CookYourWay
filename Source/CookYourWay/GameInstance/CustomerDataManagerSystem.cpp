@@ -65,12 +65,19 @@ void UCustomerDataManagerSystem::Init()
 
 void UCustomerDataManagerSystem::RedefineCustomerComment() {
 	AVillageManager* VillageManager = Cast<AVillageManager>(UGameplayStatics::GetActorOfClass(GetWorld(), AVillageManager::StaticClass()));
-	VillageManager->RedefinedCustomerCommentTableRows = CustomerCommentTableRows;
+
+	for (FCustomerCommentData* Ptr : CustomerCommentTableRows)
+	{
+		if (Ptr)
+		{
+			VillageManager->RedefinedCustomerCommentTableRows.Add(*Ptr);
+		}
+	}
 
 	for (int i = 0; i < CustomerCommentTableRows.Num(); i++) {
 		if (CustomerCommentTableRows[i]->CustCommentType == 2) {
 			FString RedefinedStr = RedefineTasteHintComment(CustomerCommentTableRows[i]->CustCode, CustomerCommentTableRows[i]->CustCommentString);
-			VillageManager->RedefinedCustomerCommentTableRows[i]->CustCommentString = RedefinedStr;
+			VillageManager->RedefinedCustomerCommentTableRows[i].CustCommentString = RedefinedStr;
 		}
 	}
 }
@@ -210,8 +217,6 @@ void UCustomerDataManagerSystem::SetCustTastes()
 	else {
 		SetRandomCustTastes();
 	}
-
-	RedefineCustomerComment();
 
 	// Å×½ºÆ®
 	for (int i = 0; i < CustomerNames.Num(); i++) {

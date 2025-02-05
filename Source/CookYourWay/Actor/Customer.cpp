@@ -421,14 +421,14 @@ FString ACustomer::GetComment()
 	int32 index = 0;
 
 	for (auto CustCommentData : VillageManager->RedefinedCustomerCommentTableRows) {
-		if (CommentType == 1 && CustCommentData->CustCode == CustName && CustCommentData->CustCommentType == CommentType) {
+		if (CommentType == 1 && CustCommentData.CustCode == CustName && CustCommentData.CustCommentType == CommentType) {
 			Satisfaction += 20;
 			VillageManager->IsCommentTalked[index] = true;
-			return CustCommentData->CustCommentString;
+			return CustCommentData.CustCommentString;
 		}
-		else if (CommentType == 2 && CustCommentData->CustCode == CustName && CustCommentData->CustCommentType == CommentType) {
+		else if (CommentType == 2 && CustCommentData.CustCode == CustName && CustCommentData.CustCommentType == CommentType) {
 			VillageManager->IsCommentTalked[index] = true;
-			return CustCommentData->CustCommentString;
+			return CustCommentData.CustCommentString;
 		}
 		index++;
 	}

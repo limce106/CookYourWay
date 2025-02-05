@@ -134,8 +134,6 @@ class COOKYOURWAY_API UCustomerDataManagerSystem : public UGameInstanceSubsystem
 	class UVillageManagerSystem* VillageManagerSystem;
 	class UIngredientManagerSystem* IngredientManagerSystem;
 
-	void RedefineCustomerComment();
-
 protected:
 	virtual void Initialize(FSubsystemCollectionBase& Collection) override;
 
@@ -214,9 +212,12 @@ public:
 
 	// 손님의 취향 힌트 대사 재정의
 	UFUNCTION(BlueprintCallable)
+	void RedefineCustomerComment();
+	UFUNCTION(BlueprintCallable)
 	FString RedefineTasteHintComment(FString CustName, FString Comment);
 	UFUNCTION(BlueprintCallable)
 	FString GetCustReviewDialogue(FString CustName, int32 TasteScore);
+
 	UFUNCTION(BlueprintCallable)
 	TArray<int32> GetCustNameToTasteMapValue(FString CustName);
 	UFUNCTION(BlueprintCallable)

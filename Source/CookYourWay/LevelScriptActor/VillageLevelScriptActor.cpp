@@ -6,6 +6,8 @@
 
 void AVillageLevelScriptActor::Init()
 {
+	GetWorld()->SpawnActor<AActor>(BP_VillageManager, FVector::ZeroVector, FRotator::ZeroRotator);
+
 	if (BP_PlayerBistroHUDClass) {
 		UUserWidget* PlayerBistroHUD = CreateWidget<UUserWidget>(GetWorld(), BP_PlayerBistroHUDClass);
 		PlayerBistroHUD->AddToViewport();

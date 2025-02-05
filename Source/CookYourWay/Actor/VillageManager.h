@@ -57,7 +57,8 @@ public:
 
 	TMap<int32, FVector> AreaLocMap;
 
-	TArray<FCustomerCommentData*> RedefinedCustomerCommentTableRows;
+	UPROPERTY()
+	TArray<FCustomerCommentData> RedefinedCustomerCommentTableRows;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	TArray<bool>IsCommentTalked;

@@ -28,5 +28,7 @@ protected:
 
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	TSubclassOf<AActor> BP_VillageManager;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	TSubclassOf<UUserWidget> BP_PlayerBistroHUDClass;
 };
