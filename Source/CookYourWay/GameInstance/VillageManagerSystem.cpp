@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 
 #include "GameInstance/VillageManagerSystem.h"
@@ -31,8 +31,10 @@ void UVillageManagerSystem::Initialize(FSubsystemCollectionBase& Collection)
 
 void UVillageManagerSystem::Init()
 {
+	TArray<FString> CopyRandomComptName = RandomComptName;
 	TArray<int32> CompetitorAreaIDArr = { 5, 18 };
 	bool IsCompetitorDataEmpty = CompetitorDataArr.IsEmpty();
+
 	if (IsCompetitorDataEmpty) {
 		float InitCompetitorRating;
 
@@ -45,6 +47,11 @@ void UVillageManagerSystem::Init()
 			}
 
 			FCompetitorData CompetitorData(CompetitorAreaIDArr[i], InitCompetitorRating);
+
+			int32 ComptNameIdx = UKismetMathLibrary::RandomIntegerInRange(0, CopyRandomComptName.Num() - 1);
+			CompetitorData.ComptName = CopyRandomComptName[ComptNameIdx];
+			CopyRandomComptName.RemoveAt(ComptNameIdx);
+
 			CompetitorDataArr.Add(CompetitorData);
 		}
 	}

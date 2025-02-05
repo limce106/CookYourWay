@@ -43,4 +43,6 @@ public:
 	int32 PlayerBistroRating = 0;
 	UPROPERTY()
 	int32 DestroyedCompetitor = 0;
+	UPROPERTY()
+	FString PlayerBistroName = "매장 이름";
 };

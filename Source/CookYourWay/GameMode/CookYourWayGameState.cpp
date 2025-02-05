@@ -37,6 +37,7 @@ void ACookYourWayGameState::LoadCookYourWayData()
 	CustomerDataManagerSystem->IsRegularCustMap = CookYourWaySaveGame->IsRegularCustMap;
 	CustomerDataManagerSystem->LoyaltyMap = CookYourWaySaveGame->LoyaltyMap;
 	VillageManagerSystem->DestroyedCompetitor = CookYourWaySaveGame->DestroyedCompetitor;
+	VillageManagerSystem->PlayerBistroName = CookYourWaySaveGame->PlayerBistroName;
 }
 
 void ACookYourWayGameState::SaveCookYourWayData()
@@ -55,6 +56,7 @@ void ACookYourWayGameState::SaveCookYourWayData()
 	NewCookYourWayData->IsRegularCustMap = CustomerDataManagerSystem->IsRegularCustMap;
 	NewCookYourWayData->LoyaltyMap = CustomerDataManagerSystem->LoyaltyMap;
 	NewCookYourWayData->DestroyedCompetitor = VillageManagerSystem->DestroyedCompetitor;
+	NewCookYourWayData->PlayerBistroName = VillageManagerSystem->PlayerBistroName;
 
 	if (!UGameplayStatics::SaveGameToSlot(NewCookYourWayData, SaveSlotName, UserIndex)) {
 		UE_LOG(LogTemp, Error, TEXT("SaveGame Error!"));

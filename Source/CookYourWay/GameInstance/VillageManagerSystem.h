@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+ï»¿// Fill out your copyright notice in the Description page of Project Settings.
 
 #pragma once
 
@@ -74,16 +74,18 @@ USTRUCT(BlueprintType)
 struct FCompetitorData
 {
 	GENERATED_BODY() 
-	FCompetitorData() : AreaID(-1), TotalCust(0), RatingAvg(0), OpenPromoDay(3), IsComptFestival(false) {}
+	FCompetitorData() : AreaID(-1), ComptName("-1"), TotalCust(0), RatingAvg(0), OpenPromoDay(3), IsComptFestival(false) {}
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	int32 AreaID;	// ºÎÁö ¹øÈ£
+	int32 AreaID;	// ë¶€ì§€ ë²ˆí˜¸
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	int32 TotalCust;	// ´©Àû ¼Õ´Ô ¼ö 
+	FString ComptName;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	float RatingAvg;	// Æò±ÕÆòÁ¡
+	int32 TotalCust;	// ëˆ„ì  ì†ë‹˜ ìˆ˜ 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	int32 OpenPromoDay;	// ¿ÀÇÂ ÇÁ·Î¸ğ¼Ç ³²Àº ±âÇÑ
+	float RatingAvg;	// í‰ê· í‰ì 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int32 OpenPromoDay;	// ì˜¤í”ˆ í”„ë¡œëª¨ì…˜ ë‚¨ì€ ê¸°í•œ
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	bool IsComptFestival;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
@@ -91,7 +93,8 @@ struct FCompetitorData
 
 	FCompetitorData(int32 AreaID, float RatingAvg) {
 		this->AreaID = AreaID;
-		this->TotalCust = 3;
+		ComptName = "-1";
+		TotalCust = 3;
 		this->RatingAvg = RatingAvg;
 		OpenPromoDay = 3;
 		IsComptFestival = false;
@@ -129,6 +132,13 @@ class COOKYOURWAY_API UVillageManagerSystem : public UGameInstanceSubsystem
 	GENERATED_BODY()
 	UVillageManagerSystem();
 
+	TArray<FString> RandomComptName = { 
+		TEXT("ì˜ˆì€ì´ë„¤ ë»”ë»”ìƒŒë“œ"),
+		TEXT("ìƒŒë””ë„¤ ìƒŒë“œìœ„ì¹˜"),
+		TEXT("ì„œë¸Œì›¨ì´"),
+		TEXT("í™ë£¨ì´ì  ")
+	};
+
 	float TempDelayTime;
 
 	virtual void Initialize(FSubsystemCollectionBase& Collection) override;
@@ -148,30 +158,33 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	int32 PlayerBistroAreaID = 16;
 
-	// ÇÃ·¹ÀÌ¾î °¡°Ô ´©Àû ¼Õ´Ô ¼ö
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	FString PlayerBistroName = TEXT("ë§¤ì¥ ì´ë¦„");
+
+	// í”Œë ˆì´ì–´ ê°€ê²Œ ëˆ„ì  ì†ë‹˜ ìˆ˜
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	int32 PlayerBistroTotalCust = 3;
 
-	// ÇÃ·¹ÀÌ¾î °¡°Ô Æò±Õ ÆòÁ¡
+	// í”Œë ˆì´ì–´ ê°€ê²Œ í‰ê·  í‰ì 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	float PlayerBistroRating = 2.5;
 
-	// ÇöÀç Á¸ÀçÇÏ´Â °æÀï»ç µ¥ÀÌÅÍ
+	// í˜„ì¬ ì¡´ì¬í•˜ëŠ” ê²½ìŸì‚¬ ë°ì´í„°
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	TArray<FCompetitorData> CompetitorDataArr;
 
-	// ÇöÀç Á¸ÀçÇÏ´Â »óÁ¡ µ¥ÀÌÅÍ
+	// í˜„ì¬ ì¡´ì¬í•˜ëŠ” ìƒì  ë°ì´í„°
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	TArray<FStoreData> StoreDataArr;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	int32 Day = 0;
 
-	// ÀüÃ¼ ÀÚ»ê
+	// ì „ì²´ ìì‚°
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	int32 TotalAsset = 1000;
 
-	// ÀüÃ¼ ÀÚ»ê
+	// ì „ì²´ ìì‚°
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	int32 DestroyedCompetitor = 0;
 
