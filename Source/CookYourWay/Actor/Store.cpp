@@ -107,6 +107,7 @@ void AStore::CreateCustomer()
 
 	FVector CustomerLocation = FVector(GetActorLocation().X, GetActorLocation().Y + 250.0, 95.0f);
 	ACustomer* Customer = CustomerSpawnFactory::SpawnCustomer(GetWorld(), BP_Customer, CustomerLocation, FRotator(0.0f, 90.0f, 0.0f), SpawnCustName);
+	Customer->GoToDestination();
 }
 
 FString AStore::GetRandomCustName()

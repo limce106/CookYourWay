@@ -25,7 +25,7 @@ class COOKYOURWAY_API ACompetitor : public AActor
 
 	TArray<FCompetitorReviewData> GetCompetitorReviewDataOnTable(FString DataType);
 	void SetDefaultReviewRate();
-	void UpdateCompetitorReview();
+	void UpdateCompetitorRating();
 	void AddRatingData(FString CustName, float Rating);
 
 protected:

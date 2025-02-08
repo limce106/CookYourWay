@@ -36,10 +36,6 @@ void ACustomer::BeginPlay()
 void ACustomer::Init()
 {
 	SetSkeletalMesh();
-	SetVisitDest();
-
-	AAIController* AINpcController = Cast<AAIController>(GetController());
-	AINpcController->MoveToLocation(VisitDest, 1.0f);
 }
 
 void ACustomer::SetSkeletalMesh()
@@ -69,7 +65,7 @@ void ACustomer::Tick(float DeltaTime)
 		}
 	}
 
-	if (!IsEat && DelayWithDeltaTime(1.0f, DeltaTime)) {
+	if (!IsWalk && !IsEat && DelayWithDeltaTime(1.0f, DeltaTime)) {
 		// 대기 시간 * 3(초에 한 번씩 감소)
 		Patience -= (100 / MaxWaitingTime);
 
@@ -196,6 +192,15 @@ void ACustomer::SetVisitDest()
 	VisitDest.Z = 95.0f;
 }
 
+void ACustomer::GoToDestination()
+{
+	SetVisitDest();
+
+	IsWalk = true;
+	AAIController* AINpcController = Cast<AAIController>(GetController());
+	AINpcController->MoveToLocation(VisitDest, 1.0f);
+}
+
 int32 ACustomer::CountNotTasteNum(ASandwich* Sandwich)
 {
 	// 취향이 아닌 재료 개수
@@ -209,7 +214,7 @@ int32 ACustomer::CountNotTasteNum(ASandwich* Sandwich)
 	}
 	else {
 		int32 Price = IngredientManagerSystem->GetIngrSellingPrice(Sandwich->Ingredients[0]->CurIngrData.IngrClass);
-		TotalSellingPrice += Price;
+		TotalPaidPrice += Price;
 		Sandwich->Ingredients.RemoveAt(0);
 	}
 
@@ -219,7 +224,7 @@ int32 ACustomer::CountNotTasteNum(ASandwich* Sandwich)
 	}
 	else {
 		int32 Price = IngredientManagerSystem->GetIngrSellingPrice(Sandwich->Ingredients[Sandwich->Ingredients.Num() - 1]->CurIngrData.IngrClass);
-		TotalSellingPrice += Price;
+		TotalPaidPrice += Price;
 		Sandwich->Ingredients.RemoveAt(Sandwich->Ingredients.Num() - 1);
 	}
 
@@ -238,7 +243,7 @@ int32 ACustomer::CountNotTasteNum(ASandwich* Sandwich)
 		else {
 			int32 Ingr = IngrNumArr[i];
 			int32 Price = IngredientManagerSystem->GetSellingPriceByIndex(Ingr);
-			TotalSellingPrice += Price;
+			TotalPaidPrice += Price;
 			// 손님이 한 종류의 재료를 두 개 이상 선택했을 가능성을 고려하여, 같은 재료가 여러 개 있어도 하나만 삭제
 			Taste.RemoveSingle(Ingr);
 		}
@@ -309,8 +314,6 @@ void ACustomer::AddSandwichReview(ASandwich* Sandwich)
 	else if (Satisfaction > 100) {
 		Satisfaction = 100;
 	}
-
-	AddTotalSellingPriceAndTip();
 }
 
 void ACustomer::AddDessertReview()
@@ -385,11 +388,13 @@ float ACustomer::GetTip(int32 SandwichPrice)
 	}
 }
 
-void ACustomer::AddTotalSellingPriceAndTip()
+void ACustomer::AddTotalPaidPriceAndTip()
 {
-	TotalSellingPrice += GetTip(TotalSellingPrice);
-	VillageManager->UpdateProfitsValue(TotalSellingPrice);
-	PlayerBistroRatingData.Price = TotalSellingPrice;
+	TotalPaidPrice += GetTip(TotalPaidPrice);
+	VillageManager->UpdateProfitsValue(TotalPaidPrice);
+	PlayerBistroRatingData.Price = TotalPaidPrice;
+
+	ShowTotalPaidPrice();
 }
 
 void ACustomer::StartReviewDialogue(int32 TasteScore)
@@ -436,4 +441,9 @@ void ACustomer::UpdatePlayerBistroSatisfaction()
 void ACustomer::AddPlayerBistroRatingDataInManager()
 {
 	CustomerDataManagerSystem->PlayerBistroRatingDataArr.Add(PlayerBistroRatingData);
+}
+
+int32 ACustomer::GetTotalPaidPrice()
+{
+	return TotalPaidPrice;
 }

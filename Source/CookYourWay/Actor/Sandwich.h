@@ -14,6 +14,7 @@ class COOKYOURWAY_API ASandwich : public AActor
 
 	class UIngredientManagerSystem* IngredientManagerSystem;
 	USceneComponent* DefaultRootComponent;
+	
 
 	// 현재 제일 위에 있는 재료의 위치
 	float LastIngrLocZ;
@@ -46,4 +47,6 @@ public:
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void AddIngredientImg();
+	UFUNCTION(BlueprintImplementableEvent)
+	void SetIngrWidgetVisibility(ESlateVisibility Visibility);
 };

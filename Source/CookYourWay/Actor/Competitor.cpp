@@ -112,7 +112,7 @@ void ACompetitor::CustomerVisited(ACustomer* Customer)
 	Customer->Destroy();
 }
 
-void ACompetitor::UpdateCompetitorReview()
+void ACompetitor::UpdateCompetitorRating()
 {
 	int32 Idx = VillageManagerSystem->FindCompetitorDataArrIdx(AreaID);
 	VillageManagerSystem->CompetitorDataArr[Idx].TotalCust += 1;

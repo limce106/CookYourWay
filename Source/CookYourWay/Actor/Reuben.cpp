@@ -162,6 +162,7 @@ void AReuben::GiveSandwich(ACustomer* Customer)
 	if (Sandwich->Ingredients.Num() == 0) {
 		return;
 	}
+	Sandwich->SetIngrWidgetVisibility(ESlateVisibility::Hidden);
 
 	ADiningTable* DiningTable = PlayerBistro->GetDiningTable(Customer->CurSeatNum);
 	DiningTable->PutFoodOn(Sandwich);

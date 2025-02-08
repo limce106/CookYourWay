@@ -61,11 +61,6 @@ void APlayerBistro::SitCust(ACustomer* Customer, int32 SeatIdx)
 	TodayCust++;
 	VillageManagerSystem->PlayerBistroTotalCust++;
 
-	AAIController* AINpcController = Cast<AAIController>(Customer->GetController());
-	if (AINpcController) {
-		AINpcController->StopMovement();
-	}
-	Customer->IsWalk = false;
 	Customer->SetActorRotation(FRotator(0.0f, 90.0f, 0.0f));
 
 	IsSeated[SeatIdx] = true;
@@ -118,6 +113,11 @@ int32 APlayerBistro::FindEmptySeatIdx()
 
 void APlayerBistro::CustomerVisited(ACustomer* Customer)
 {
+	AAIController* AINpcController = Cast<AAIController>(Customer->GetController());
+	AINpcController->StopMovement();
+	Customer->IsWalk = false;
+	Customer->SetActorRotation(FRotator(0.0f, 90.0f, 0.0f));
+
 	SitOrWaitCust(Customer);
 }
 
@@ -157,10 +157,9 @@ void APlayerBistro::SitNextCust(int32 SeatIdx)
 	WaitingCustNum--;
 
 	ACustomer* NextCustomer = CustomerSpawnFactory::SpawnCustomer(GetWorld(), BP_Customer, FVector::ZeroVector, FRotator(0.0f, 90.0f, 0.0f), WaitingCustName);
-	NextCustomer->IsWalk = false;
 	NextCustomer->Patience = WaitingCustPatience[0];
 	WaitingCustPatience.RemoveAt(0);
-	NextCustomer += 40;
+	NextCustomer->Patience += 30;
 
 	SitCust(NextCustomer, SeatIdx);
 }
@@ -168,27 +167,32 @@ void APlayerBistro::SitNextCust(int32 SeatIdx)
 void APlayerBistro::LeaveAndSitNextCust(ACustomer* LeftCustomer)
 {
 	if (LeftCustomer->IsEat) {
+		LeftCustomer->AddTotalPaidPriceAndTip();
 		LeftCustomer->UpdatePlayerBistroSatisfaction();
 		LeftCustomer->AddPlayerBistroRatingDataInManager();
 	}
 
-	int32 LeftCustSeatIdx = LeftCustomer->CurSeatNum;
-	ADiningTable* LeftCustDiningTable = GetDiningTable(LeftCustSeatIdx);
-	LeftCustDiningTable->DestroyFoodOnDiningTable();
-	LeftCustomer->Destroy();
+	FTimerHandle PayPriceAnimTimerHandler;
+	GetWorld()->GetTimerManager().SetTimer(PayPriceAnimTimerHandler, FTimerDelegate::CreateLambda([=]()
+		{
+			int32 LeftCustSeatIdx = LeftCustomer->CurSeatNum;
+			ADiningTable* LeftCustDiningTable = GetDiningTable(LeftCustSeatIdx);
+			LeftCustDiningTable->DestroyFoodOnDiningTable();
+			LeftCustomer->Destroy();
 
-	if (!WaitingCustQueue.IsEmpty()) {
-		const float NextCustDelayTime = 0.5f;
-		FTimerHandle DestroyCustTimerHandler;
-		GetWorld()->GetTimerManager().SetTimer(DestroyCustTimerHandler, FTimerDelegate::CreateLambda([=]()
-			{
-				SitNextCust(LeftCustSeatIdx);
-			}), NextCustDelayTime, false);
-	}
-	else {
-		IsSeated[LeftCustSeatIdx] = false;
-		GetDiningTable(LeftCustSeatIdx)->SeatedCustomer = nullptr;
-	}
+			if (!WaitingCustQueue.IsEmpty()) {
+				const float NextCustDelayTime = 0.5f;
+				FTimerHandle SitNextCustTimerHandler;
+				GetWorld()->GetTimerManager().SetTimer(SitNextCustTimerHandler, FTimerDelegate::CreateLambda([=]()
+					{
+						SitNextCust(LeftCustSeatIdx);
+					}), NextCustDelayTime, false);
+			}
+			else {
+				IsSeated[LeftCustSeatIdx] = false;
+				GetDiningTable(LeftCustSeatIdx)->SeatedCustomer = nullptr;
+			}
+		}), 0.5f, false);
 }
 
 void APlayerBistro::LeaveWaitingCust()

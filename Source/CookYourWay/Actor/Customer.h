@@ -31,7 +31,7 @@ class COOKYOURWAY_API ACustomer : public ACharacter
 	const float MaxWaitingTime = 40;
 
 	// 판 전체 가격
-	int32 TotalSellingPrice = 0;
+	int32 TotalPaidPrice = 0;
 
 	// 손님의 플레이어 가게에 대한 평가
 	FPlayerBistroRatingData PlayerBistroRatingData;
@@ -83,7 +83,7 @@ public:
 	UPROPERTY(BlueprintReadOnly)
 	bool IsEat = false;
 	UPROPERTY(BlueprintReadWrite)
-	bool IsWalk = true;
+	bool IsWalk = false;
 	UPROPERTY(BlueprintReadWrite)
 	bool IsComment = false;
 
@@ -101,6 +101,8 @@ public:
 
 	float LeaveDelayTime;
 
+	void GoToDestination();
+
 	// 손님의 취향이 아닌 재료 개수 세기
 	int32 CountNotTasteNum(ASandwich* Sandwich);
 	// 손님의 샌드위치 평점 계산하기
@@ -117,7 +119,7 @@ public:
 	void Eat(float EatingTime);
 
 	float GetTip(int32 SandwichPrice);
-	void AddTotalSellingPriceAndTip();
+	void AddTotalPaidPriceAndTip();
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void SetReviewDialogueText(int32 TasteScore);
@@ -131,6 +133,11 @@ public:
 
 	void UpdatePlayerBistroSatisfaction();
 	void AddPlayerBistroRatingDataInManager();
+
+	UFUNCTION(BlueprintCallable)
+	int32 GetTotalPaidPrice();
+	UFUNCTION(BlueprintImplementableEvent)
+	void ShowTotalPaidPrice();
 };
 
 class CustomerSpawnFactory
