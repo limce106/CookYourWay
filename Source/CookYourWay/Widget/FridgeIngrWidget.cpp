@@ -48,7 +48,9 @@ void UFridgeIngrWidget::SetIngrUI()
 	TextBlock_IngrName->SetText(FText::FromString(CurIngrData.IngrName));
 
 	if (CurIngrData.IngrClass == "C") {
-		TextBlock_IngrNum->SetVisibility(ESlateVisibility::Hidden);
+		FString IngrPrice = TEXT("$ ");
+		IngrPrice.Append(FString::FromInt(IngredientManagerSystem->GetIngrBidMin("C")));
+		TextBlock_IngrNum->SetText(FText::FromString(IngrPrice));
 	}
 	else {
 		FString HavingNum = FString::FromInt(IngredientManagerSystem->HavingIngrNum[IngrTableIdx]);

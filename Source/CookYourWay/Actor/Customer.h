@@ -25,11 +25,10 @@ class COOKYOURWAY_API ACustomer : public ACharacter
 
 	TMap <FVector, float> BistroLocRankMap;	// 가게 도착 위치와 계산된 점수
 
-	// 최대 대기 시간(초)
-	const float MaxWaitingTime = 40;
-
 	// 식사 시간이 3초가 지난 시점부터 디저트를 받을 수 있다.
 	const float CanGetDessertTime = 3.0f;
+	// 최대 대기 시간(초)
+	const float MaxWaitingTime = 40;
 
 	// 판 전체 가격
 	int32 TotalSellingPrice = 0;
@@ -62,10 +61,6 @@ protected:
 	// 손님 제거 타이머
 	bool DestroyTimer = false;
 
-	// 인내심
-	UPROPERTY(BlueprintReadOnly)
-	float Patience = 100.0f;
-
 	// 먹기 시작한 시간
 	float StartEatTime = 0.0f;
 	// 손님의 평점
@@ -92,6 +87,10 @@ public:
 	UPROPERTY(BlueprintReadWrite)
 	bool IsComment = false;
 
+	// 인내심
+	UPROPERTY(BlueprintReadOnly)
+	float Patience = 100.0f;
+
 	// 방문할 가게
 	UPROPERTY(BlueprintReadOnly)
 	FVector VisitDest;
@@ -99,10 +98,6 @@ public:
 	// 손님이 앉은 좌석 번호
 	UPROPERTY(BlueprintReadOnly)
 	int32 CurSeatNum = -1;
-
-	// 대기 중인지
-	bool IsWaiting = false;
-	bool IsSit = false;
 
 	float LeaveDelayTime;
 
@@ -118,8 +113,6 @@ public:
 
 	bool CanGetDessert();
 	void EatDessert();
-
-	void IncreasePatience(float Increasement);
 
 	void Eat(float EatingTime);
 

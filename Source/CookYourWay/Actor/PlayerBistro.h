@@ -35,10 +35,14 @@ class COOKYOURWAY_API APlayerBistro : public AActor
 	// 자리에 손님이 앉았는지
 	TArray<bool> IsSeated;
 	// 대기 손님
-	TQueue<AActor*> WaitingCustQueue;
+	TQueue<FString> WaitingCustQueue;
 	int32 WaitingCustNum = 0;
+	// 대기 손님 인내심
+	TArray<float> WaitingCustPatience;
 	// 다음 손님이 앉기까지의 시간
 	const float NextCustDelay = 1.5f;
+	// 최대 대기 시간(초)
+	const float MaxWaitingTime = 40;
 
 	void SpawnDiningTable();
 
@@ -50,6 +54,10 @@ class COOKYOURWAY_API APlayerBistro : public AActor
 	void SitOrWaitCust(ACustomer* Customer);
 	// 빈자리 찾기
 	int32 FindEmptySeatIdx();
+
+	float TempDelayTime;
+	bool DelayWithDeltaTime(float DelayTime, float DeltaSeconds);
+	void DecreaseWaitingCustPatience();
 	
 public:	
 	APlayerBistro();
@@ -59,6 +67,9 @@ protected:
 
 public:	
 	virtual void Tick(float DeltaTime) override;
+
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<ACustomer> BP_Customer;
 
 	// 부지 번호
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
@@ -87,7 +98,7 @@ public:
 
 	void SitNextCust(int32 SeatIdx);
 
-	void LeaveWaitingCust(ACustomer* Customer);
+	void LeaveWaitingCust();
 
 	ADiningTable* GetDiningTable(int32 SeatIdx);
 };

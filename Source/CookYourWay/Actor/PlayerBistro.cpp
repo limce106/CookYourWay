@@ -50,6 +50,10 @@ void APlayerBistro::BeginPlay()
 void APlayerBistro::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	if (DelayWithDeltaTime(1.0f, DeltaTime)) {
+		DecreaseWaitingCustPatience();
+	}
 }
 
 void APlayerBistro::SitCust(ACustomer* Customer, int32 SeatIdx)
@@ -57,32 +61,27 @@ void APlayerBistro::SitCust(ACustomer* Customer, int32 SeatIdx)
 	TodayCust++;
 	VillageManagerSystem->PlayerBistroTotalCust++;
 
+	AAIController* AINpcController = Cast<AAIController>(Customer->GetController());
+	AINpcController->StopMovement();
+	Customer->IsWalk = false;
+	Customer->SetActorRotation(FRotator(0.0f, 90.0f, 0.0f));
+
 	IsSeated[SeatIdx] = true;
 	Customer->CurSeatNum = SeatIdx;
-	Customer->IsSit = true;
 
 	Customer->SetActorLocation(CustSeatLocArr[SeatIdx]);
 
 	ADiningTable* SeatedDiningTable = GetDiningTable(SeatIdx);
 	SeatedDiningTable->SeatedCustomer = Customer;
-
-	// 테스트
-	/*TArray<int32> Arr = CustomerDataManagerSystem->GetCustTaste(Customer->CustName);
-	for (int i = 0; i < Arr.Num(); i++) {
-		FString name = IngredientManagerSystem->IngredientTableRowNames[Arr[i]].ToString();
-		UE_LOG(LogTemp, Warning, TEXT("Taste: %s"), *name)
-	}*/
-	//
 }
 
 void APlayerBistro::WaitCust(ACustomer* Customer)
 {
-	WaitingCustQueue.Enqueue(Customer);
+	WaitingCustQueue.Enqueue(Customer->CustName);
 	WaitingCustNum++;
+	WaitingCustPatience.Add(100.0);
 
-	Customer->SetHidden(true);
-	Customer->SetActorEnableCollision(false);
-	Customer->IsWaiting = true;
+	Customer->Destroy();
 }
 
 void APlayerBistro::SitOrWaitCust(ACustomer* Customer)
@@ -117,12 +116,31 @@ int32 APlayerBistro::FindEmptySeatIdx()
 
 void APlayerBistro::CustomerVisited(ACustomer* Customer)
 {
-	AAIController* AINpcController = Cast<AAIController>(Customer->GetController());
-	AINpcController->StopMovement();
-	Customer->IsWalk = false;
-	Customer->SetActorRotation(FRotator(0.0f, 90.0f, 0.0f));
-
 	SitOrWaitCust(Customer);
+}
+
+bool APlayerBistro::DelayWithDeltaTime(float DelayTime, float DeltaSeconds)
+{
+	if (TempDelayTime > DelayTime) {
+		TempDelayTime = 0;
+		return true;
+	}
+	else {
+		TempDelayTime += DeltaSeconds;
+		return false;
+	}
+}
+
+void APlayerBistro::DecreaseWaitingCustPatience()
+{
+	// 40초 후 인내심은 0이 된다.
+	for (auto Patience : WaitingCustPatience) {
+		Patience -= (100 / MaxWaitingTime);
+
+		if (Patience <= 0) {
+			LeaveWaitingCust();
+		}
+	}
 }
 
 int32 APlayerBistro::GetWaitingCustNum()
@@ -132,18 +150,17 @@ int32 APlayerBistro::GetWaitingCustNum()
 
 void APlayerBistro::SitNextCust(int32 SeatIdx)
 {
-	AActor* WaitingCust;
-	WaitingCustQueue.Dequeue(WaitingCust);
+	FString WaitingCustName;
+	WaitingCustQueue.Dequeue(WaitingCustName);
 	WaitingCustNum--;
 
-	ACustomer* NextCustomer = Cast<ACustomer>(WaitingCust);
-	NextCustomer->IsWaiting = false;
-	NextCustomer->IncreasePatience(40);
+	ACustomer* NextCustomer = CustomerSpawnFactory::SpawnCustomer(GetWorld(), BP_Customer, FVector::ZeroVector, FRotator(0.0f, 90.0f, 0.0f), WaitingCustName);
+	NextCustomer->IsWalk = false;
+	NextCustomer->Patience = WaitingCustPatience[0];
+	WaitingCustPatience.RemoveAt(0);
+	NextCustomer += 40;
 
 	SitCust(NextCustomer, SeatIdx);
-
-	NextCustomer->SetHidden(false);
-	NextCustomer->SetActorEnableCollision(true);
 }
 
 void APlayerBistro::LeaveAndSitNextCust(ACustomer* LeftCustomer)
@@ -172,10 +189,10 @@ void APlayerBistro::LeaveAndSitNextCust(ACustomer* LeftCustomer)
 	}
 }
 
-void APlayerBistro::LeaveWaitingCust(ACustomer* Customer)
+void APlayerBistro::LeaveWaitingCust()
 {
 	// 대기열에 있는 모든 손님들 중 인내심이 0이 된 손님은 맨 앞에 있는 손님이므로
 	WaitingCustQueue.Pop();
 	WaitingCustNum--;
-	Customer->Destroy();
+	WaitingCustPatience.RemoveAt(0);
 }
