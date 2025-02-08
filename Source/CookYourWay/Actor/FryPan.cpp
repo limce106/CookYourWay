@@ -69,7 +69,7 @@ void AFryPan::FryPanInteraction()
 
 	if (Reuben->GetHeldActorClass()->IsChildOf(AIngredient::StaticClass())) {
 		AIngredient* HoldingIngr = Cast<AIngredient>(Reuben->HeldActor);
-		if (HoldingIngr->CurIngrData->IngrType == "Meat" && !this->IsIngredientOn) {
+		if (HoldingIngr->CurIngrData.IngrType == "Meat" && !this->IsIngredientOn) {
 			PutIngrOn(HoldingIngr);
 		}
 	}

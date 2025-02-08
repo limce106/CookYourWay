@@ -34,24 +34,26 @@ void ASandwich::AddIngredient(AIngredient* Ingr)
 	float IngrHeight = IngrBounds.Z * 2;
 
 	FVector CurIngrLoc;
+	FRotator CurIngrRot;
 	if (Ingredients.Num() == 0) {
 		CurIngrLoc = GetActorLocation();
+		CurIngrLoc.Z += 2.0f;
+		CurIngrRot = GetActorRotation();
 	}
 	else {
-		CurIngrLoc = Ingredients[Ingredients.Num() - 1]->GetActorLocation();
+		FVector LastIngrLoc = Ingredients[Ingredients.Num() - 1]->GetActorLocation();
+		CurIngrLoc = FVector(LastIngrLoc.X, LastIngrLoc.Y, LastIngrLoc.Z + IngrHeight + 2.0f);
+		CurIngrRot = Ingredients[Ingredients.Num() - 1]->GetActorRotation();
 	}
-	CurIngrLoc.Z += IngrHeight;
 
 	// Àç·á ºÎÂø
-	// Ingr->SetActorEnableCollision(false);
+	Ingr->SetActorEnableCollision(false);
 	Ingr->AttachToComponent(DefaultRootComponent, FAttachmentTransformRules::KeepRelativeTransform);
-
 	Ingr->SetActorLocation(CurIngrLoc);
-
-	FRotator IngrRotation = UGameplayStatics::GetPlayerPawn(this, 0)->GetActorRotation();
-	Ingr->SetActorRotation(IngrRotation);
+	Ingr->SetActorRotation(CurIngrRot);
 
 	Ingredients.Add(Ingr);
+	AddIngredientImg();
 }
 
 void ASandwich::DestroySandwich()
@@ -71,7 +73,7 @@ TArray<int32> ASandwich::IngrActorToNum()
 	TArray<int32> IngrNum;
 
 	for (int i = 0; i < Ingredients.Num(); i++) {
-		int32 IngrIndex = *IngredientManagerSystem->IngrNameIndexMap.Find(Ingredients[i]->CurIngrData->IngrName);
+		int32 IngrIndex = *IngredientManagerSystem->IngrNameIndexMap.Find(Ingredients[i]->CurIngrData.IngrName);
 		IngrNum.Add(IngrIndex);
 	}
 
@@ -80,7 +82,7 @@ TArray<int32> ASandwich::IngrActorToNum()
 
 bool ASandwich::IsMeatBurn() {
 	for (auto OneIngredient : Ingredients) {
-		if (OneIngredient->CurIngrData->IngrType == "Meat") {
+		if (OneIngredient->CurIngrData.IngrType == "Meat") {
 			if (OneIngredient->IsBurn) {
 				return true;
 			}
@@ -117,7 +119,7 @@ void ASandwich::SandwichInteraction()
 }
 
 bool ASandwich::IsFirstIngrBread() {
-	if (Ingredients[0]->CurIngrData->IngrType == "Bread") {
+	if (Ingredients[0]->CurIngrData.IngrType == "Bread") {
 		return true;
 	}
 	else {
@@ -127,7 +129,7 @@ bool ASandwich::IsFirstIngrBread() {
 
 bool ASandwich::IsLastIngrBread() {
 	if (Ingredients.Num() > 0) {
-		if (Ingredients[Ingredients.Num() - 1]->CurIngrData->IngrType == "Bread") {
+		if (Ingredients[Ingredients.Num() - 1]->CurIngrData.IngrType == "Bread") {
 			return true;
 		}
 		else {

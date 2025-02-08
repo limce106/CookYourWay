@@ -62,7 +62,9 @@ void APlayerBistro::SitCust(ACustomer* Customer, int32 SeatIdx)
 	VillageManagerSystem->PlayerBistroTotalCust++;
 
 	AAIController* AINpcController = Cast<AAIController>(Customer->GetController());
-	AINpcController->StopMovement();
+	if (AINpcController) {
+		AINpcController->StopMovement();
+	}
 	Customer->IsWalk = false;
 	Customer->SetActorRotation(FRotator(0.0f, 90.0f, 0.0f));
 

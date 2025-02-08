@@ -16,6 +16,7 @@ AIngredient::AIngredient()
 	StaticMesh->SetupAttachment(MeshPivot);
 
 	StaticMesh->SetCollisionProfileName(TEXT("NoCollision"));
+	StaticMesh->SetWorldScale3D(FVector(1.0, 1.0, 1.5));
 
 	FString BurntMeatMaterialPath = TEXT("/Game/Material/M_BurntMeat.M_BurntMeat");
 	static ConstructorHelpers::FObjectFinder<UMaterialInterface> MaterialFinder(*BurntMeatMaterialPath);
@@ -27,7 +28,7 @@ void AIngredient::Init(FString IngrName, bool IsSliced)
 	for (int i = 0; i < IngredientManagerSystem->IngredientTableRowNames.Num(); i++) {
 		FString IngredientTableRowName = IngredientManagerSystem->IngredientTableRowNames[i].ToString();
 		if (IngrName == IngredientTableRowName) {
-			CurIngrData = IngredientManagerSystem->IngredientTableRows[i];
+			CurIngrData = *IngredientManagerSystem->IngredientTableRows[i];
 			break;
 		}
 	}

@@ -43,4 +43,7 @@ public:
 
 	bool IsFirstIngrBread();
 	bool IsLastIngrBread();
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void AddIngredientImg();
 };

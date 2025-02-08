@@ -33,7 +33,8 @@ protected:
 public:	
 	virtual void Tick(float DeltaTime) override;
 
-	FIngrData* CurIngrData;
+	UPROPERTY(BlueprintReadOnly)
+	FIngrData CurIngrData;
 
 	// 고기 재료 탔는지
 	bool IsBurn = false;

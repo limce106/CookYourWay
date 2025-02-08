@@ -208,7 +208,7 @@ int32 ACustomer::CountNotTasteNum(ASandwich* Sandwich)
 		NotTasteNum++;
 	}
 	else {
-		int32 Price = IngredientManagerSystem->GetIngrSellingPrice(Sandwich->Ingredients[0]->CurIngrData->IngrClass);
+		int32 Price = IngredientManagerSystem->GetIngrSellingPrice(Sandwich->Ingredients[0]->CurIngrData.IngrClass);
 		TotalSellingPrice += Price;
 		Sandwich->Ingredients.RemoveAt(0);
 	}
@@ -218,7 +218,7 @@ int32 ACustomer::CountNotTasteNum(ASandwich* Sandwich)
 		NotTasteNum++;
 	}
 	else {
-		int32 Price = IngredientManagerSystem->GetIngrSellingPrice(Sandwich->Ingredients[Sandwich->Ingredients.Num() - 1]->CurIngrData->IngrClass);
+		int32 Price = IngredientManagerSystem->GetIngrSellingPrice(Sandwich->Ingredients[Sandwich->Ingredients.Num() - 1]->CurIngrData.IngrClass);
 		TotalSellingPrice += Price;
 		Sandwich->Ingredients.RemoveAt(Sandwich->Ingredients.Num() - 1);
 	}
