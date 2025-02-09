@@ -16,8 +16,7 @@ class COOKYOURWAY_API UCompetitorBookWidget : public UUserWidget
 
 	class UCustomerDataManagerSystem* CustomerDataManagerSystem;
 	class UVillageManagerSystem* VillageManagerSystem;
-	
-	void NativePreConstruct();
+
 	void NativeConstruct();
 
 public:

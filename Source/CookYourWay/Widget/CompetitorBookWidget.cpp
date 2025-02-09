@@ -7,13 +7,10 @@
 #include "GameInstance/CustomerDataManagerSystem.h"
 #include "GameInstance/VillageManagerSystem.h"
 
-
-void UCompetitorBookWidget::NativePreConstruct()
-{
-}
-
 void UCompetitorBookWidget::NativeConstruct()
 {
+	Super::NativeConstruct();
+
 	CustomerDataManagerSystem = UGameplayStatics::GetGameInstance(GetWorld())->GetSubsystem<UCustomerDataManagerSystem>();
 	VillageManagerSystem = UGameplayStatics::GetGameInstance(GetWorld())->GetSubsystem<UVillageManagerSystem>();
 }

@@ -116,7 +116,8 @@ int32 UVillageManagerSystem::FindCompetitorDataArrIdx(int32 AreaID)
 
 void UVillageManagerSystem::UpdatePlayerBistroRating(int32 Satisfaction)
 {
-	PlayerBistroRating = ((PlayerBistroRating / 5 * 100) + Satisfaction) / PlayerBistroTotalCust;
+	float UpdatedRating = (((PlayerBistroRating / 5 * 100) + Satisfaction) / PlayerBistroTotalCust) * 5 / 100;
+	PlayerBistroRating = FMath::RoundToFloat((UpdatedRating * 10.0f) / 10.0f);
 }
 
 void UVillageManagerSystem::InitCompetitorRatingDataArr()

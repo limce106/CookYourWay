@@ -108,7 +108,10 @@ void ACompetitor::CustomerVisited(ACustomer* Customer)
 
 	int32 Satisfaction = GetCustomerSatisfaction();
 	CustomerDataManagerSystem->UpdateMaxSatisfaction(Customer->CustName, AreaID, Satisfaction);
-	AddRatingData(Customer->CustName, Satisfaction * 5 / 100);
+
+	float Rating = Satisfaction * 5 / 100;
+	// 소수점 첫째 자리까지 반올림
+	AddRatingData(Customer->CustName, FMath::RoundToFloat(Rating * 10.0f) / 10.0f);
 	Customer->Destroy();
 }
 
@@ -118,7 +121,7 @@ void ACompetitor::UpdateCompetitorRating()
 	VillageManagerSystem->CompetitorDataArr[Idx].TotalCust += 1;
 
 	float UpdatedRating = (((VillageManagerSystem->CompetitorDataArr[Idx].RatingAvg / 5 * 100) + GetCustomerSatisfaction()) / VillageManagerSystem->CompetitorDataArr[Idx].TotalCust) * 5 / 100;
-	VillageManagerSystem->CompetitorDataArr[Idx].RatingAvg = UpdatedRating;
+	VillageManagerSystem->CompetitorDataArr[Idx].RatingAvg = FMath::RoundToFloat((UpdatedRating * 10.0f) / 10.0f);
 }
 
 void ACompetitor::AddRatingData(FString CustName, float Rating)

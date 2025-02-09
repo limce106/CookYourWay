@@ -58,9 +58,6 @@ void APlayerBistro::Tick(float DeltaTime)
 
 void APlayerBistro::SitCust(ACustomer* Customer, int32 SeatIdx)
 {
-	TodayCust++;
-	VillageManagerSystem->PlayerBistroTotalCust++;
-
 	Customer->SetActorRotation(FRotator(0.0f, 90.0f, 0.0f));
 
 	IsSeated[SeatIdx] = true;
@@ -166,6 +163,8 @@ void APlayerBistro::SitNextCust(int32 SeatIdx)
 
 void APlayerBistro::LeaveAndSitNextCust(ACustomer* LeftCustomer)
 {
+	VillageManagerSystem->PlayerBistroTotalCust++;
+
 	if (LeftCustomer->IsEat) {
 		LeftCustomer->AddTotalPaidPriceAndTip();
 		LeftCustomer->UpdatePlayerBistroSatisfaction();

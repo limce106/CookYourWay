@@ -435,7 +435,10 @@ void ACustomer::UpdatePlayerBistroSatisfaction()
 
 	PlayerBistroRatingData.CustName = CustName;
 	PlayerBistroRatingData.WeekDay = VillageManager->DayToWeekString(VillageManagerSystem->Day);
-	PlayerBistroRatingData.Rating = Satisfaction * 5 / 100;
+
+	float Rating = Satisfaction * 5 / 100;
+	Rating = FMath::RoundToFloat(Rating * 10.0f) / 10.0f;
+	PlayerBistroRatingData.Rating = Rating;
 }
 
 void ACustomer::AddPlayerBistroRatingDataInManager()

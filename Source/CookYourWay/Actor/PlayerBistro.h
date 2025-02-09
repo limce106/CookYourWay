@@ -74,9 +74,6 @@ public:
 	// 부지 번호
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	int32 AreaID;
-	// 오늘 방문한 손님 수
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	int32 TodayCust = 0;
 	// 오늘 순 수익
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	int32 TodayNetIncome = 0;
