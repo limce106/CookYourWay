@@ -158,8 +158,8 @@ void AReuben::GiveSandwich(ACustomer* Customer)
 {
 	GivenSandwichNum++;
 	ASandwich* Sandwich = Cast<ASandwich>(HeldActor);
-	// 샌드위치가 없는 빈 접시라면 
-	if (Sandwich->Ingredients.Num() == 0) {
+	// 샌드위치가 없는 빈 접시이거나 손님이 먹는 중이라면
+	if (Sandwich->Ingredients.Num() == 0 || Customer->IsEat) {
 		return;
 	}
 	Sandwich->SetIngrWidgetVisibility(ESlateVisibility::Hidden);

@@ -118,7 +118,7 @@ TArray<int32> UCustomerDataManagerSystem::GetRandomTaste()
 	//Taste.Add(IngredientManagerSystem->SauceIdxs[SauceIndex]);
 
 	// Å×½ºÆ®
-	Taste.Add(12);
+	Taste.Add(13);
 	//
 
 	return Taste;

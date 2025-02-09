@@ -120,7 +120,11 @@ void ACompetitor::UpdateCompetitorRating()
 	int32 Idx = VillageManagerSystem->FindCompetitorDataArrIdx(AreaID);
 	VillageManagerSystem->CompetitorDataArr[Idx].TotalCust += 1;
 
-	float UpdatedRating = (((VillageManagerSystem->CompetitorDataArr[Idx].RatingAvg / 5 * 100) + GetCustomerSatisfaction()) / VillageManagerSystem->CompetitorDataArr[Idx].TotalCust) * 5 / 100;
+	int32 TotalCust = VillageManagerSystem->CompetitorDataArr[Idx].TotalCust;
+	float CurRatingAvg = VillageManagerSystem->CompetitorDataArr[Idx].RatingAvg;
+	float CurRating = GetCustomerSatisfaction() / 5 * 100;
+
+	float UpdatedRating = ((CurRatingAvg * (TotalCust - 1)) + CurRating) / TotalCust;
 	VillageManagerSystem->CompetitorDataArr[Idx].RatingAvg = FMath::RoundToFloat((UpdatedRating * 10.0f) / 10.0f);
 }
 

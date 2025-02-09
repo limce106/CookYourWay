@@ -226,6 +226,17 @@ void AVillageManager::EndDay()
 
 	VillageManagerSystem->StoreDataArr.Empty();
 
+	// 플레이어 가게에서 아직 나가지 않고 음식을 먹던 손님도 평점, 방문한 손님 수에 포함
+	TArray<AActor*> AllDiningTableActorArr;
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), PlayerBistro->BP_DiningTable, AllDiningTableActorArr);
+	for (auto Actor : AllDiningTableActorArr) {
+		ADiningTable* DiningTable = Cast<ADiningTable>(Actor);
+
+		if (DiningTable->SeatedCustomer && DiningTable->SeatedCustomer->IsEat) {
+			PlayerBistro->LeaveCustomerInBistro(DiningTable->SeatedCustomer);
+		}
+	}
+
 	TArray<AActor*> AllStoreActorArr;
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), BP_Store, AllStoreActorArr);
 	for (auto Actor : AllStoreActorArr) {

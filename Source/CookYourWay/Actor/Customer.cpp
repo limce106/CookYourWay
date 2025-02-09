@@ -325,12 +325,6 @@ void ACustomer::AddDessertReview()
 void ACustomer::EatSandwich()
 {
 	Eat(7.0f);
-
-	
-
-	// 테스트
-	UE_LOG(LogTemp, Warning, TEXT("Satisfaction: %d"), Satisfaction);
-	//
 }
 
 void ACustomer::ClearDestroyTimer()
@@ -395,6 +389,8 @@ void ACustomer::AddTotalPaidPriceAndTip()
 	PlayerBistroRatingData.Price = TotalPaidPrice;
 
 	ShowTotalPaidPrice();
+
+	UE_LOG(LogTemp, Warning, TEXT("TotalPaidPrice: %d"), TotalPaidPrice);
 }
 
 void ACustomer::StartReviewDialogue(int32 TasteScore)
@@ -430,15 +426,19 @@ FString ACustomer::GetComment()
 
 void ACustomer::UpdatePlayerBistroSatisfaction()
 {
-	VillageManagerSystem->UpdatePlayerBistroRating(Satisfaction);
-	CustomerDataManagerSystem->UpdateMaxSatisfaction(CustName, PlayerBistro->AreaID, Satisfaction);
-
 	PlayerBistroRatingData.CustName = CustName;
 	PlayerBistroRatingData.WeekDay = VillageManager->DayToWeekString(VillageManagerSystem->Day);
 
 	float Rating = Satisfaction * 5 / 100;
 	Rating = FMath::RoundToFloat(Rating * 10.0f) / 10.0f;
 	PlayerBistroRatingData.Rating = Rating;
+
+	VillageManagerSystem->UpdatePlayerBistroRating(Rating);
+	CustomerDataManagerSystem->UpdateMaxSatisfaction(CustName, PlayerBistro->AreaID, Satisfaction);
+
+	// 테스트
+	UE_LOG(LogTemp, Warning, TEXT("Rating: %f"), Rating);
+	//
 }
 
 void ACustomer::AddPlayerBistroRatingDataInManager()

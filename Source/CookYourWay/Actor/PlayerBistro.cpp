@@ -163,13 +163,7 @@ void APlayerBistro::SitNextCust(int32 SeatIdx)
 
 void APlayerBistro::LeaveAndSitNextCust(ACustomer* LeftCustomer)
 {
-	VillageManagerSystem->PlayerBistroTotalCust++;
-
-	if (LeftCustomer->IsEat) {
-		LeftCustomer->AddTotalPaidPriceAndTip();
-		LeftCustomer->UpdatePlayerBistroSatisfaction();
-		LeftCustomer->AddPlayerBistroRatingDataInManager();
-	}
+	LeaveCustomerInBistro(LeftCustomer);
 
 	FTimerHandle PayPriceAnimTimerHandler;
 	GetWorld()->GetTimerManager().SetTimer(PayPriceAnimTimerHandler, FTimerDelegate::CreateLambda([=]()
@@ -200,4 +194,16 @@ void APlayerBistro::LeaveWaitingCust()
 	WaitingCustQueue.Pop();
 	WaitingCustNum--;
 	WaitingCustPatience.RemoveAt(0);
+}
+
+void APlayerBistro::LeaveCustomerInBistro(ACustomer* Customer) 
+{
+	TodayCust++;
+	VillageManagerSystem->PlayerBistroTotalCust++;
+
+	if (Customer->IsEat) {
+		Customer->AddTotalPaidPriceAndTip();
+		Customer->UpdatePlayerBistroSatisfaction();
+		Customer->AddPlayerBistroRatingDataInManager();
+	}
 }

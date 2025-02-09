@@ -202,6 +202,6 @@ public:
 	UFUNCTION(BlueprintCallable)
 	int32 FindCompetitorDataArrIdx(int32 AreaID);
 
-	void UpdatePlayerBistroRating(int32 Satisfaction);
+	void UpdatePlayerBistroRating(float Rating);
 	void InitCompetitorRatingDataArr();
 };
