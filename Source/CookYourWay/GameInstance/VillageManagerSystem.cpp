@@ -26,7 +26,6 @@ UVillageManagerSystem::UVillageManagerSystem()
 void UVillageManagerSystem::Initialize(FSubsystemCollectionBase& Collection)
 {
 	Super::Initialize(Collection);
-
 }
 
 void UVillageManagerSystem::Init()

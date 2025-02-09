@@ -153,7 +153,7 @@ void APlayerBistro::SitNextCust(int32 SeatIdx)
 	WaitingCustQueue.Dequeue(WaitingCustName);
 	WaitingCustNum--;
 
-	ACustomer* NextCustomer = CustomerSpawnFactory::SpawnCustomer(GetWorld(), BP_Customer, FVector::ZeroVector, FRotator(0.0f, 90.0f, 0.0f), WaitingCustName);
+	ACustomer* NextCustomer = CustomerSpawnFactory::SpawnCustomer(GetWorld(), BP_Customer, FVector::ZeroVector, FRotator(0.0f, 90.0f, 0.0f), WaitingCustName, false);
 	NextCustomer->Patience = WaitingCustPatience[0];
 	WaitingCustPatience.RemoveAt(0);
 	NextCustomer->Patience += 30;
@@ -203,7 +203,7 @@ void APlayerBistro::LeaveCustomerInBistro(ACustomer* Customer)
 
 	if (Customer->IsEat) {
 		Customer->AddTotalPaidPriceAndTip();
-		Customer->UpdatePlayerBistroSatisfaction();
+		Customer->UpdatePlayerBistroRatingSatisfaction();
 		Customer->AddPlayerBistroRatingDataInManager();
 	}
 }

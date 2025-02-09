@@ -80,7 +80,7 @@ USTRUCT(BlueprintType)
 struct FPlayerBistroRatingData
 {
 	GENERATED_BODY()
-	FPlayerBistroRatingData() : CustName("-1"), WeekDay("-1"), Rating(0), Price(0), Review("-1"), GivenIngr(), IsEatDessert(false), IsFastCook(false), IsSlowCook(false), IsTalk(false) {}
+	FPlayerBistroRatingData() : CustName("-1"), WeekDay("-1"), Rating(0), Price(0), Review(" "), GivenIngr(), IsEatDessert(false), IsFastCook(false), IsSlowCook(false), IsTalk(false) {}
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FString CustName;
@@ -139,6 +139,7 @@ protected:
 
 public:
 
+	UFUNCTION(BlueprintCallable)
 	void Init();
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Table")

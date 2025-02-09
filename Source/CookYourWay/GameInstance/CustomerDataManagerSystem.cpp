@@ -35,13 +35,15 @@ void UCustomerDataManagerSystem::Initialize(FSubsystemCollectionBase& Collection
 {
 	Super::Initialize(Collection);
 	
+	Collection.InitializeDependency<UVillageManagerSystem>();
+	Collection.InitializeDependency<UIngredientManagerSystem>();
+
+	VillageManagerSystem = UGameplayStatics::GetGameInstance(GetWorld())->GetSubsystem<UVillageManagerSystem>();
+	IngredientManagerSystem = UGameplayStatics::GetGameInstance(GetWorld())->GetSubsystem<UIngredientManagerSystem>();
 }
 
 void UCustomerDataManagerSystem::Init()
 {
-	VillageManagerSystem = UGameplayStatics::GetGameInstance(GetWorld())->GetSubsystem<UVillageManagerSystem>();
-	IngredientManagerSystem = UGameplayStatics::GetGameInstance(GetWorld())->GetSubsystem<UIngredientManagerSystem>();
-
 	if (VillageManagerSystem) {
 		for (int CustNameIdx = 0; CustNameIdx < CustomerNames.Num(); CustNameIdx++) {
 			FCustomerBistroKey CustomerBistroKey = GetCustomerBistroKey(CustomerNames[CustNameIdx], VillageManagerSystem->PlayerBistroAreaID);

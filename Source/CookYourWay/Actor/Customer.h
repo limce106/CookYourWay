@@ -69,7 +69,7 @@ protected:
 public:	
 	virtual void Tick(float DeltaTime) override;
 	
-	void InitializeCustName(const FString& Name);
+	void Initialize(const FString& Name, const bool& bWalk);
 	void Init();
 
 	UPROPERTY(EditDefaultsOnly)
@@ -131,7 +131,7 @@ public:
 	UFUNCTION(BlueprintCallable)
 	FString GetComment();
 
-	void UpdatePlayerBistroSatisfaction();
+	void UpdatePlayerBistroRatingSatisfaction();
 	void AddPlayerBistroRatingDataInManager();
 
 	UFUNCTION(BlueprintCallable)
@@ -143,10 +143,10 @@ public:
 class CustomerSpawnFactory
 {
 public:
-	static ACustomer* SpawnCustomer(UWorld* World, TSubclassOf<ACustomer> CustomerClass, const FVector& Location, const FRotator& Rotation, FString CustName)
+	static ACustomer* SpawnCustomer(UWorld* World, TSubclassOf<ACustomer> CustomerClass, const FVector& Location, const FRotator& Rotation, FString CustName, bool IsWalk)
 	{
 		ACustomer* Customer = World->SpawnActor<ACustomer>(CustomerClass, Location, Rotation);
-		Customer->InitializeCustName(CustName);
+		Customer->Initialize(CustName, IsWalk);
 		Customer->Init();
 		return Customer;
 	}

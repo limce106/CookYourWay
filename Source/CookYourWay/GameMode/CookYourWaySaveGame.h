@@ -38,6 +38,8 @@ public:
 	UPROPERTY()
 	TMap<FCustomerBistroKey, int32> LoyaltyMap;
 	UPROPERTY()
+	TMap<FCustomerBistroKey, int32> MaxSatisfactionMap;
+	UPROPERTY()
 	int32 PlayerBistroTotalCust = 0;
 	UPROPERTY()
 	int32 PlayerBistroRating = 0;

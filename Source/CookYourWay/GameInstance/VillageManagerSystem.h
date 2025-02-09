@@ -193,6 +193,7 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	FString NewsEffectCode;
 
+	UFUNCTION(BlueprintCallable)
 	void Init();
 	bool DelayWithDeltaTime(float DelayTime, float DeltaSeconds);
 

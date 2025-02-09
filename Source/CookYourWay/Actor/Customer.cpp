@@ -75,9 +75,10 @@ void ACustomer::Tick(float DeltaTime)
 	}
 }
 
-void ACustomer::InitializeCustName(const FString& Name)
+void ACustomer::Initialize(const FString& Name, const bool& bWalk)
 {
-	CustName = Name;
+	this->CustName = Name;
+	this->IsWalk = bWalk;
 }
 
 bool ACustomer::DelayWithDeltaTime(float DelayTime, float DeltaSeconds)
@@ -196,7 +197,6 @@ void ACustomer::GoToDestination()
 {
 	SetVisitDest();
 
-	IsWalk = true;
 	AAIController* AINpcController = Cast<AAIController>(GetController());
 	AINpcController->MoveToLocation(VisitDest, 1.0f);
 }
@@ -424,7 +424,7 @@ FString ACustomer::GetComment()
 	return FString();
 }
 
-void ACustomer::UpdatePlayerBistroSatisfaction()
+void ACustomer::UpdatePlayerBistroRatingSatisfaction()
 {
 	PlayerBistroRatingData.CustName = CustName;
 	PlayerBistroRatingData.WeekDay = VillageManager->DayToWeekString(VillageManagerSystem->Day);

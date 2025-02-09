@@ -34,12 +34,16 @@ void AVillageManager::Init()
 		CustomerDataManagerSystem->MaxSatisfactionMap.Empty();
 	}
 
-	CustomerDataManagerSystem->RedefineCustomerComment();
-	IsCommentTalked.Init(false, RedefinedCustomerCommentTableRows.Num());
 	DecreaseStorePeriod();
 	TryCreateNewStore();
 	SpawnBistrosAndStore();
 	VillageManagerSystem->ElapseCompetitorOpenPromoDay();
+
+	// 테스트
+	CustomerDataManagerSystem->SetCustTastes();
+	//
+	CustomerDataManagerSystem->RedefineCustomerComment();
+	IsCommentTalked.Init(false, RedefinedCustomerCommentTableRows.Num());
 }
 
 void AVillageManager::RunDayTimer()
@@ -87,8 +91,8 @@ void AVillageManager::BeginPlay()
 {
 	Super::BeginPlay();
 
-	VillageManagerSystem = UGameplayStatics::GetGameInstance(GetWorld())->GetSubsystem<UVillageManagerSystem>();
 	CustomerDataManagerSystem = UGameplayStatics::GetGameInstance(GetWorld())->GetSubsystem<UCustomerDataManagerSystem>();
+	VillageManagerSystem = UGameplayStatics::GetGameInstance(GetWorld())->GetSubsystem<UVillageManagerSystem>();
 	CookYourWayGameState = Cast<ACookYourWayGameState>(UGameplayStatics::GetGameState(GetWorld()));
 
 	Init();

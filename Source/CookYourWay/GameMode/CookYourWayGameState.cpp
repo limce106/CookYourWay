@@ -36,6 +36,7 @@ void ACookYourWayGameState::LoadCookYourWayData()
 	VillageManagerSystem->PlayerBistroRating = CookYourWaySaveGame->PlayerBistroRating;
 	CustomerDataManagerSystem->IsRegularCustMap = CookYourWaySaveGame->IsRegularCustMap;
 	CustomerDataManagerSystem->LoyaltyMap = CookYourWaySaveGame->LoyaltyMap;
+	CustomerDataManagerSystem->MaxSatisfactionMap = CookYourWaySaveGame->MaxSatisfactionMap;
 	VillageManagerSystem->DestroyedCompetitor = CookYourWaySaveGame->DestroyedCompetitor;
 	VillageManagerSystem->PlayerBistroName = CookYourWaySaveGame->PlayerBistroName;
 }
@@ -55,6 +56,7 @@ void ACookYourWayGameState::SaveCookYourWayData()
 	NewCookYourWayData->PlayerBistroRating = VillageManagerSystem->PlayerBistroRating;
 	NewCookYourWayData->IsRegularCustMap = CustomerDataManagerSystem->IsRegularCustMap;
 	NewCookYourWayData->LoyaltyMap = CustomerDataManagerSystem->LoyaltyMap;
+	NewCookYourWayData->MaxSatisfactionMap = CustomerDataManagerSystem->MaxSatisfactionMap;
 	NewCookYourWayData->DestroyedCompetitor = VillageManagerSystem->DestroyedCompetitor;
 	NewCookYourWayData->PlayerBistroName = VillageManagerSystem->PlayerBistroName;
 
