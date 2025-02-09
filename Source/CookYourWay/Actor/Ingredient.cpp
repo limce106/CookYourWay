@@ -10,7 +10,7 @@ AIngredient::AIngredient()
 	PrimaryActorTick.bCanEverTick = true;
 
 	MeshPivot = CreateDefaultSubobject<USceneComponent>(TEXT("MeshPivot"));
-	MeshPivot->SetupAttachment(RootComponent);
+	SetRootComponent(MeshPivot);
 
 	StaticMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("StaticMesh"));
 	StaticMesh->SetupAttachment(MeshPivot);

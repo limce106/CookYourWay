@@ -104,7 +104,7 @@ FCompetitorData ACompetitor::GetCurComptitorData()
 
 void ACompetitor::CustomerVisited(ACustomer* Customer)
 {
-	UpdateCompetitorReview();
+	UpdateCompetitorRating();
 
 	int32 Satisfaction = GetCustomerSatisfaction();
 	CustomerDataManagerSystem->UpdateMaxSatisfaction(Customer->CustName, AreaID, Satisfaction);
