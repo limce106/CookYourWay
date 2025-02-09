@@ -57,5 +57,8 @@ public:
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<UUserWidget> BP_FridgeClassGroup;
 
+	UPROPERTY(BlueprintReadWrite)
+	bool CanBuyIngr = true;
+
 	ETabType CurTabType = ETabType::BreadTab;
 };

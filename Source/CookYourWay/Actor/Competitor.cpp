@@ -111,7 +111,8 @@ void ACompetitor::CustomerVisited(ACustomer* Customer)
 
 	float Rating = Satisfaction * 5 / 100;
 	// 소수점 첫째 자리까지 반올림
-	AddRatingData(Customer->CustName, FMath::RoundToFloat(Rating * 10.0f) / 10.0f);
+	float RoundRating = FMath::RoundToFloat(Rating * 10.0f) / 10.0f;
+	AddRatingData(Customer->CustName, RoundRating);
 	Customer->Destroy();
 }
 
@@ -125,14 +126,14 @@ void ACompetitor::UpdateCompetitorRating()
 	float CurRating = GetCustomerSatisfaction() * 5 / 100;
 
 	float UpdatedRating = ((CurRatingAvg * (TotalCust - 1)) + CurRating) / TotalCust;
-	VillageManagerSystem->CompetitorDataArr[Idx].RatingAvg = FMath::RoundToFloat((UpdatedRating * 10.0f) / 10.0f);
+	VillageManagerSystem->CompetitorDataArr[Idx].RatingAvg = FMath::RoundToFloat(UpdatedRating * 10.0f) / 10.0f;
 }
 
 void ACompetitor::AddRatingData(FString CustName, float Rating)
 {
-	FCompetitorData CurCompetitorData = GetCurComptitorData();
-
 	FString WeekDay = VillageManager->DayToWeekString(VillageManagerSystem->Day);
 	FCompetitorRatingData RatingData = FCompetitorRatingData(CustName, WeekDay, Rating);
-	CurCompetitorData.RatingDataArr.Add(RatingData);
+
+	int32 Idx = VillageManagerSystem->FindCompetitorDataArrIdx(AreaID);
+	VillageManagerSystem->CompetitorDataArr[Idx].RatingDataArr.Add(RatingData);
 }

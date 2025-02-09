@@ -26,15 +26,15 @@ AVillageManager::AVillageManager()
 
 void AVillageManager::Init()
 {
+	DecreaseStorePeriod();
+
 	// 월요일이면
 	if (VillageManagerSystem->IsMonday()) {
 		CustomerDataManagerSystem->PlayerBistroRatingDataArr.Empty();
 		VillageManagerSystem->InitCompetitorRatingDataArr();
 		TryCreateNewCompetitor();
-		CustomerDataManagerSystem->MaxSatisfactionMap.Empty();
 	}
 
-	DecreaseStorePeriod();
 	TryCreateNewStore();
 	SpawnBistrosAndStore();
 	VillageManagerSystem->ElapseCompetitorOpenPromoDay();
@@ -134,20 +134,23 @@ void AVillageManager::DecreaseDayTime()
 }
 void AVillageManager::TryCreateNewCompetitor()
 {
-	for (auto CustomerData : VillageManagerSystem->CompetitorDataArr) {
+	for (int i = VillageManagerSystem->CompetitorDataArr.Num() - 1; i >= 0; i--) {
+		FCompetitorData ComptData = VillageManagerSystem->CompetitorDataArr[i];
+
 		// 단골 손님 보유 여부
-		bool HasRegularCust = CustomerDataManagerSystem->HasRegularCust(CustomerData.AreaID);
+		bool HasRegularCust = CustomerDataManagerSystem->HasRegularCust(ComptData.AreaID);
 
 		if (!HasRegularCust) {
-			VillageManagerSystem->CompetitorDataArr.Remove(CustomerData);
+			VillageManagerSystem->CompetitorDataArr.Remove(ComptData);
 			VillageManagerSystem->DestroyedCompetitor++;
 
 			int32 NewCompetitorAreaID = GetRandomAreaId();
 			FCompetitorData* NewCompetitorData = new FCompetitorData(NewCompetitorAreaID, 3.5);
+			NewCompetitorData->ComptName = VillageManagerSystem->GetRandomComptName();
 			VillageManagerSystem->CompetitorDataArr.Add(*NewCompetitorData);
 			
 			for (auto CustName : CustomerDataManagerSystem->CustomerNames) {
-				FCustomerBistroKey CurKey = CustomerDataManagerSystem->GetCustomerBistroKey(CustName, CustomerData.AreaID);
+				FCustomerBistroKey CurKey = CustomerDataManagerSystem->GetCustomerBistroKey(CustName, ComptData.AreaID);
 				FCustomerBistroKey NewKey = CustomerDataManagerSystem->GetCustomerBistroKey(CustName, NewCompetitorAreaID);
 
 				CustomerDataManagerSystem->IsRegularCustMap.Remove(CurKey);
@@ -157,13 +160,13 @@ void AVillageManager::TryCreateNewCompetitor()
 				CustomerDataManagerSystem->IsRegularCustMap.Add(NewKey, false);
 				CustomerDataManagerSystem->LoyaltyMap.Add(NewKey, 0);
 				CustomerDataManagerSystem->MaxSatisfactionMap.Add(NewKey, 0.0f);
+			}
 
-				// 오픈 프로모션: 전체 손님 유형 중 랜덤으로 2개의 유형을 초기 단골 손님으로 만든다.
-				AddRandomRegularCust(NewCompetitorAreaID, 2);
+			// 오픈 프로모션: 전체 손님 유형 중 랜덤으로 2개의 유형을 초기 단골 손님으로 만든다.
+			AddRandomRegularCust(NewCompetitorAreaID, 2);
 
-				if (VillageManagerSystem->DestroyedCompetitor <= 8) {
-					CreateNewStore();
-				}
+			if (VillageManagerSystem->DestroyedCompetitor <= 8) {
+				CreateNewStore();
 			}
 		}
 	}
@@ -171,10 +174,9 @@ void AVillageManager::TryCreateNewCompetitor()
 
 void AVillageManager::TryCreateNewStore()
 {
-	for (int i = 0; i < VillageManagerSystem->StoreDataArr.Num(); i++) {
+	for (int i = VillageManagerSystem->StoreDataArr.Num() - 1; i >= 0; i--) {
 		if (VillageManagerSystem->StoreDataArr[i].StoreTableData.StorePeriod == 0) {
-
-			VillageManagerSystem->StoreDataArr.Remove(VillageManagerSystem->StoreDataArr[i]);
+			VillageManagerSystem->StoreDataArr.RemoveAt(i);
 			CreateNewStore();
 		}
 	}
@@ -213,9 +215,8 @@ int32 AVillageManager::GetRandomAreaId()
 
 	TArray<int32> BlankAreaID;
 	// 기존 경쟁사, 상점과 플레이어 가게와 중복되지 않는 부지
-	for (int i = 0; i < AreaLocMap.Num(); i++) {
-		if (i != VillageManagerSystem->PlayerBistroAreaID || !CompetitorAreaID.Contains(i) ||
-			VillageManagerSystem->StoreDataArr[i].AreaID != i) {
+	for (int i = 1; i <= AreaLocMap.Num(); i++) {
+		if (i != VillageManagerSystem->PlayerBistroAreaID || !CompetitorAreaID.Contains(i) || !StoreAreaID.Contains(i)) {
 			BlankAreaID.Add(i);
 		}
 	}
@@ -228,8 +229,6 @@ void AVillageManager::EndDay()
 {
 	UGameplayStatics::SetGamePaused(GetWorld(), true);
 
-	VillageManagerSystem->StoreDataArr.Empty();
-
 	// 플레이어 가게에서 아직 나가지 않고 음식을 먹던 손님도 평점, 방문한 손님 수에 포함
 	TArray<AActor*> AllDiningTableActorArr;
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), PlayerBistro->BP_DiningTable, AllDiningTableActorArr);
@@ -241,6 +240,7 @@ void AVillageManager::EndDay()
 		}
 	}
 
+	VillageManagerSystem->StoreDataArr.Empty();
 	TArray<AActor*> AllStoreActorArr;
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), BP_Store, AllStoreActorArr);
 	for (auto Actor : AllStoreActorArr) {
@@ -263,7 +263,7 @@ FString AVillageManager::DayToWeekString(int32 Day)
 {
 	FString WeekString;
 	// 주차
-	int32 Week = Day / 7 + 1;
+	int32 Week = (Day - 1) / 7 + 1;
 	WeekString = FString::Printf(TEXT("%d주차 "), Week);
 
 	// 요일

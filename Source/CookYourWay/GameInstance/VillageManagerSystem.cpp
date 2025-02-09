@@ -116,7 +116,7 @@ int32 UVillageManagerSystem::FindCompetitorDataArrIdx(int32 AreaID)
 void UVillageManagerSystem::UpdatePlayerBistroRating(float Rating)
 {
 	float UpdatedRating = ((PlayerBistroRating * (PlayerBistroTotalCust - 1)) + Rating) / PlayerBistroTotalCust;
-	PlayerBistroRating = FMath::RoundToFloat((UpdatedRating * 10.0f) / 10.0f);
+	PlayerBistroRating = FMath::RoundToFloat(UpdatedRating * 10.0f) / 10.0f;
 }
 
 void UVillageManagerSystem::InitCompetitorRatingDataArr()
@@ -124,4 +124,10 @@ void UVillageManagerSystem::InitCompetitorRatingDataArr()
 	for (auto CompetitorData : CompetitorDataArr) {
 		CompetitorData.RatingDataArr.Empty();
 	}
+}
+
+FString UVillageManagerSystem::GetRandomComptName()
+{
+	int32 ComptNameIdx = UKismetMathLibrary::RandomIntegerInRange(0, RandomComptName.Num() - 1);
+	return RandomComptName[ComptNameIdx];
 }

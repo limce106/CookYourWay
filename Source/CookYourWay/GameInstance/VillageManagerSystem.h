@@ -205,4 +205,6 @@ public:
 
 	void UpdatePlayerBistroRating(float Rating);
 	void InitCompetitorRatingDataArr();
+
+	FString GetRandomComptName();
 };

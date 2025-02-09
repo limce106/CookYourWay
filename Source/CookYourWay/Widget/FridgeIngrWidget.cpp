@@ -71,6 +71,10 @@ void UFridgeIngrWidget::OnClick_ButtonIngredient()
 	UWidgetBlueprintLibrary::GetAllWidgetsOfClass(this, AllFridgeWidgetArr, BP_FrideWidget);
 	UFridgeWidget* FridgeWidget = Cast<UFridgeWidget>(AllFridgeWidgetArr[0]);
 
+	if (!FridgeWidget->CanBuyIngr) {
+		return;
+	}
+
 	if (!Reuben->IsHold) {
 		if (FridgeWidget->CurTabType == ETabType::DessertTab) {
 			ADessert* Dessert = GetWorld()->SpawnActor<ADessert>(BP_Dessert, Reuben->GetActorLocation(), Reuben->GetActorRotation());
