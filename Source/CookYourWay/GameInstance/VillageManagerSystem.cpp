@@ -84,6 +84,12 @@ bool UVillageManagerSystem::IsMonday()
 	return IsMonday;
 }
 
+bool UVillageManagerSystem::IsSunday()
+{
+	bool IsSunday =  Day % 7 == 0;
+	return IsSunday;
+}
+
 void UVillageManagerSystem::ElapseCompetitorOpenPromoDay()
 {
 	for (int i = 0; i < CompetitorDataArr.Num(); i++) {

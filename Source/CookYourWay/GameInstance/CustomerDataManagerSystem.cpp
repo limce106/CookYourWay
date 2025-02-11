@@ -105,22 +105,22 @@ TArray<int32> UCustomerDataManagerSystem::GetRandomTaste()
 	IngredientManagerSystem = UGameplayStatics::GetGameInstance(GetWorld())->GetSubsystem<UIngredientManagerSystem>();
 	TArray<int32> Taste;
 
-	//TArray<int32> CanAddFillings = IngredientManagerSystem->FillingIdxs;
-	//// 속재료는 항상 3개를 선택하도록 함
-	//for (int i = 0; i < 3; i++) {
-	//	int FillingIndex = UKismetMathLibrary::RandomIntegerInRange(0, CanAddFillings.Num() - 1);
-	//	Taste.Add(CanAddFillings[FillingIndex]);
-	//	CanAddFillings.RemoveAt(FillingIndex);
-	//}
+	TArray<int32> CanAddFillings = IngredientManagerSystem->FillingIdxs;
+	// 속재료는 항상 3개를 선택하도록 함
+	for (int i = 0; i < 3; i++) {
+		int FillingIndex = UKismetMathLibrary::RandomIntegerInRange(0, CanAddFillings.Num() - 1);
+		Taste.Add(CanAddFillings[FillingIndex]);
+		CanAddFillings.RemoveAt(FillingIndex);
+	}
 
-	//int MeatIndex = UKismetMathLibrary::RandomIntegerInRange(0, IngredientManagerSystem->MeatIdxs.Num() - 1);
-	//Taste.Add(IngredientManagerSystem->MeatIdxs[MeatIndex]);
+	int MeatIndex = UKismetMathLibrary::RandomIntegerInRange(0, IngredientManagerSystem->MeatIdxs.Num() - 1);
+	Taste.Add(IngredientManagerSystem->MeatIdxs[MeatIndex]);
 
-	//int SauceIndex = UKismetMathLibrary::RandomIntegerInRange(0, IngredientManagerSystem->SauceIdxs.Num() - 1);
-	//Taste.Add(IngredientManagerSystem->SauceIdxs[SauceIndex]);
+	int SauceIndex = UKismetMathLibrary::RandomIntegerInRange(0, IngredientManagerSystem->SauceIdxs.Num() - 1);
+	Taste.Add(IngredientManagerSystem->SauceIdxs[SauceIndex]);
 
 	// 테스트
-	Taste.Add(13);
+	//Taste.Add(13);
 	//
 
 	return Taste;

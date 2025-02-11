@@ -40,4 +40,6 @@ public:
 	const int32 IncreaseSpawnCustMin = 3;
 	// 증가된 손님 최대 스폰 주기
 	const int32 IncreaseSpawnCustMax = 5;
+
+	void CustNameKorToEng();
 };

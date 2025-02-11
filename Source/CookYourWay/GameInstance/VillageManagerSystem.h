@@ -198,6 +198,7 @@ public:
 	bool DelayWithDeltaTime(float DelayTime, float DeltaSeconds);
 
 	bool IsMonday();
+	bool IsSunday();
 	void ElapseCompetitorOpenPromoDay();
 
 	UFUNCTION(BlueprintCallable)

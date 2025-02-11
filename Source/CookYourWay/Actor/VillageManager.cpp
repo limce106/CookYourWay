@@ -26,16 +26,16 @@ AVillageManager::AVillageManager()
 
 void AVillageManager::Init()
 {
-	DecreaseStorePeriod();
+	//DecreaseStorePeriod();
 
-	// 월요일이면
-	if (VillageManagerSystem->IsMonday()) {
-		CustomerDataManagerSystem->PlayerBistroRatingDataArr.Empty();
-		VillageManagerSystem->InitCompetitorRatingDataArr();
-		TryCreateNewCompetitor();
-	}
+	//// 월요일이면
+	//if (VillageManagerSystem->IsMonday()) {
+	//	CustomerDataManagerSystem->PlayerBistroRatingDataArr.Empty();
+	//	VillageManagerSystem->InitCompetitorRatingDataArr();
+	//	TryCreateNewCompetitor();
+	//}
 
-	TryCreateNewStore();
+	//// TryCreateNewStore();
 	SpawnBistrosAndStore();
 	VillageManagerSystem->ElapseCompetitorOpenPromoDay();
 
@@ -252,6 +252,17 @@ void AVillageManager::EndDay()
 	for (auto CompetitorData : VillageManagerSystem->CompetitorDataArr) {
 		CompetitorData.IsComptFestival = false;
 	}
+
+	DecreaseStorePeriod();
+
+	// 일요일 저녁이라면
+	if (VillageManagerSystem->IsSunday()) {
+		CustomerDataManagerSystem->PlayerBistroRatingDataArr.Empty();
+		VillageManagerSystem->InitCompetitorRatingDataArr();
+		TryCreateNewCompetitor();
+	}
+
+	TryCreateNewStore();
 
 	CookYourWayGameState->SaveCookYourWayData();
 

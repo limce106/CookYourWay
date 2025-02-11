@@ -100,16 +100,12 @@ void UNewsWidget::SetNewsImg(FString Num, FString CurNewsKeyWord)
 			}
 		}
 	}
-	else if (Num == "2" || Num == "5") {
+	else if (Num == "2") {
 		for (auto Row : IngredientManagerSystem->IngredientTableRows) {
 			if (Row->IngrName == CurNewsKeyWord) {
 				Image_News->SetBrushFromTexture(Row->IngrIcon);
 				break;
 			}
-		}
-
-		if (Num == "5") {
-			BackgroundBlur_CustBlur->SetVisibility(ESlateVisibility::Visible);
 		}
 	}
 	else if (Num == "4") {
@@ -167,28 +163,37 @@ FString UNewsWidget::GetKeyWordByNum(FString Num)
 		}
 	}
 	else if (Num == "3") {
+		TArray<int32> ComptAreaIDIdxs;
+
 		for (auto& CompetitorData : VillageManagerSystem->CompetitorDataArr) {
-			if (!(VillageManagerSystem->IsMonday() && !CustomerDataManagerSystem->HasRegularCust(CompetitorData.AreaID))) {
-				KeyWordArr.Add(CompetitorData.ComptName);
-			}
+			KeyWordArr.Add(CompetitorData.ComptName);
+			ComptAreaIDIdxs.Add(CompetitorData.AreaID);
 		}
 
 		int32 RandomIdx = UKismetMathLibrary::RandomIntegerInRange(0, KeyWordArr.Num() - 1);
 		FString KeyWord = KeyWordArr[RandomIdx];
-		int32 CmptDataArrIdx = VillageManagerSystem->FindCompetitorDataArrIdx(FCString::Atoi(*KeyWord));
+		int32 CmptDataArrIdx = VillageManagerSystem->FindCompetitorDataArrIdx(ComptAreaIDIdxs[RandomIdx]);
 		VillageManagerSystem->CompetitorDataArr[CmptDataArrIdx].IsComptFestival = true;
 		return KeyWord;
 	}
 	else if (Num == "4") {
 		for (auto StoreData : VillageManagerSystem->StoreDataArr) {
-			if (StoreData.StoreTableData.StorePeriod != 1) {
+			if (StoreData.StoreTableData.StorePeriod != 0) {
 				KeyWordArr.Add(StoreData.StoreTableData.StoreName);
 			}
 		}
 	}
 	else if (Num == "5") {
+		CustomerDataManagerSystem->SetCustTastes();
+
 		int32 RandomCustIdx = UKismetMathLibrary::RandomIntegerInRange(0, CustomerDataManagerSystem->CustomerNames.Num() - 1);
-		TArray<int32> CustTasteArr = CustomerDataManagerSystem->CustNameToTasteMap[CustomerDataManagerSystem->CustomerNames[RandomCustIdx]];
+		FString RandomCustName = CustomerDataManagerSystem->CustomerNames[RandomCustIdx];
+		TArray<int32> CustTasteArr = CustomerDataManagerSystem->CustNameToTasteMap[RandomCustName];
+
+		// 예외적으로 뉴스 이미지를 여기서 설정
+		UTexture2D* CustIcon = CustomerDataManagerSystem->CustomerTableRows[RandomCustIdx]->CustIcon;
+		Image_News->SetBrushFromTexture(CustIcon);
+		BackgroundBlur_CustBlur->SetVisibility(ESlateVisibility::Visible);
 		
 		for (int i = 0; i < CustTasteArr.Num(); i++) {
 			KeyWordArr.Add(IngredientManagerSystem->IngredientRows[CustTasteArr[i]].IngrName);

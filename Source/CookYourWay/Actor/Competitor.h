@@ -25,8 +25,10 @@ class COOKYOURWAY_API ACompetitor : public AActor
 
 	TArray<FCompetitorReviewData> GetCompetitorReviewDataOnTable(FString DataType);
 	void SetDefaultReviewRate();
-	void UpdateCompetitorRating();
+	void UpdateCompetitorRating(float Rating);
 	void AddRatingData(FString CustName, float Rating);
+
+	bool IsCustTasteContainFestivalIngr(FString CustName);
 
 protected:
 	virtual void BeginPlay() override;
@@ -49,7 +51,7 @@ public:
 	int32 AreaID;
 
 	// 새로운 손님의 평점 평균 가져오기
-	int32 GetCustomerSatisfaction();
+	int32 GetCustomerSatisfaction(FString CustName);
 
 	FCompetitorData GetCurComptitorData();
 };

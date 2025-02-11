@@ -20,6 +20,7 @@ void UNewsEffectComponent::BeginPlay()
 	CustomerDataManagerSystem = UGameplayStatics::GetGameInstance(GetWorld())->GetSubsystem<UCustomerDataManagerSystem>();
 	VillageManagerSystem = UGameplayStatics::GetGameInstance(GetWorld())->GetSubsystem<UVillageManagerSystem>();
 
+	CustNameKorToEng();
 	CurNewsEffect = VillageManagerSystem->NewsEffectCode;
 	CurNewsKeyWord = VillageManagerSystem->NewsKeyWord;
 }
@@ -67,3 +68,18 @@ TArray<float> UNewsEffectComponent::GetIncSpawnCustProb(TArray<FString> CustName
 	return SpawnCustPercent;
 }
 
+void UNewsEffectComponent::CustNameKorToEng()
+{
+	if (VillageManagerSystem->NewsEffectCode == "CustDec" || VillageManagerSystem->NewsEffectCode == "CustInc") {
+		FString CustKorName = VillageManagerSystem->NewsKeyWord;
+		int32 index = 0;
+
+		for (auto CustData : CustomerDataManagerSystem->CustomerTableRows) {
+			if (CustKorName == CustData->CustName) {
+				VillageManagerSystem->NewsKeyWord = CustomerDataManagerSystem->CustomerNames[index];
+				break;
+			}
+			index++;
+		}
+	}
+}
