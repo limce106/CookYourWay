@@ -26,16 +26,6 @@ AVillageManager::AVillageManager()
 
 void AVillageManager::Init()
 {
-	//DecreaseStorePeriod();
-
-	//// 월요일이면
-	//if (VillageManagerSystem->IsMonday()) {
-	//	CustomerDataManagerSystem->PlayerBistroRatingDataArr.Empty();
-	//	VillageManagerSystem->InitCompetitorRatingDataArr();
-	//	TryCreateNewCompetitor();
-	//}
-
-	//// TryCreateNewStore();
 	SpawnBistrosAndStore();
 	VillageManagerSystem->ElapseCompetitorOpenPromoDay();
 
@@ -225,10 +215,8 @@ int32 AVillageManager::GetRandomAreaId()
 	return 	BlankAreaID[RandomAreaId];
 }
 
-void AVillageManager::EndDay()
+void AVillageManager::EndEatingCustomer()
 {
-	UGameplayStatics::SetGamePaused(GetWorld(), true);
-
 	// 플레이어 가게에서 아직 나가지 않고 음식을 먹던 손님도 평점, 방문한 손님 수에 포함
 	TArray<AActor*> AllDiningTableActorArr;
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), PlayerBistro->BP_DiningTable, AllDiningTableActorArr);
@@ -239,7 +227,10 @@ void AVillageManager::EndDay()
 			PlayerBistro->LeaveCustomerInBistro(DiningTable->SeatedCustomer);
 		}
 	}
+}
 
+void AVillageManager::SaveStoreDataInManager()
+{
 	VillageManagerSystem->StoreDataArr.Empty();
 	TArray<AActor*> AllStoreActorArr;
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), BP_Store, AllStoreActorArr);
@@ -252,7 +243,14 @@ void AVillageManager::EndDay()
 	for (auto CompetitorData : VillageManagerSystem->CompetitorDataArr) {
 		CompetitorData.IsComptFestival = false;
 	}
+}
 
+void AVillageManager::EndDay()
+{
+	UGameplayStatics::SetGamePaused(GetWorld(), true);
+
+	EndEatingCustomer();
+	SaveStoreDataInManager();
 	DecreaseStorePeriod();
 
 	// 일요일 저녁이라면
@@ -261,7 +259,6 @@ void AVillageManager::EndDay()
 		VillageManagerSystem->InitCompetitorRatingDataArr();
 		TryCreateNewCompetitor();
 	}
-
 	TryCreateNewStore();
 
 	CookYourWayGameState->SaveCookYourWayData();

@@ -156,7 +156,7 @@ FString UNewsWidget::GetKeyWordByNum(FString Num)
 		}
 		else {
 			for (auto IngrData : IngredientManagerSystem->IngredientRows) {
-				if (IngrData.IngrClass != "Bread") {
+				if (IngrData.IngrClass != "Bread" || IngrData.IngrClass != "Dessert") {
 					KeyWordArr.Add(IngrData.IngrName);
 				}
 			}
