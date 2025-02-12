@@ -13,7 +13,7 @@ UCLASS()
 class COOKYOURWAY_API UCustomerBook2Widget : public UUserWidget
 {
 	GENERATED_BODY()
-	class AVillageManager* VillageManager;
+	class UVillageManagerSystem* VillageManagerSystem;
 
 	void NativeConstruct();
 

@@ -9,7 +9,7 @@ void UCustomerBook2Widget::NativeConstruct()
 {
 	Super::NativeConstruct();
 
-	VillageManager = Cast<AVillageManager>(UGameplayStatics::GetActorOfClass(GetWorld(), AVillageManager::StaticClass()));
+	VillageManagerSystem = UGameplayStatics::GetGameInstance(GetWorld())->GetSubsystem<UVillageManagerSystem>();
 	Init();
 }
 
@@ -18,7 +18,7 @@ TArray<FString> UCustomerBook2Widget::GetSpawnedStoreName(FString CustName)
 {
 	TArray<FString> SpawnedStoreNameArr;
 
-	for (auto StoreData : VillageManager->VillageManagerSystem->StoreDataArr) {
+	for (auto StoreData : VillageManagerSystem->StoreDataArr) {
 
 		if (StoreData.StoreTableData.StoreCust1 == CustName ||
 			StoreData.StoreTableData.StoreCust2 == CustName ||

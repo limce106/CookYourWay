@@ -24,4 +24,14 @@ class COOKYOURWAY_API ACookYourWayGameMode : public AGameMode
 protected:
 	void InitGame(const FString& MapName, const FString& Option, FString& ErrorMessage) override;
 	virtual void BeginPlay() override;
+
+public:
+	UPROPERTY(VisibleAnyWhere, BlueprintReadWrite)
+	TArray<int32> BoughtIngrIdx;
+	UPROPERTY(VisibleAnyWhere, BlueprintReadWrite)
+	// 구매한 식재료 <테이블인덱스, 가격>
+	TMap<int32, int32> BoughtIngrIdxBidPriceMap;
+	UPROPERTY(VisibleAnyWhere, BlueprintReadWrite)
+	// 구매한 식재료 <테이블인덱스, 구매한 개수>
+	TMap<int32, int32> BoughtIngrIdxNumMap;
 };
