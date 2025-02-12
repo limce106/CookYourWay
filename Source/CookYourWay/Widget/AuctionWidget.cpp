@@ -142,13 +142,13 @@ void UAuctionWidget::SetSellingPricePos(float SellingPrice)
 	float SellingPricePosX = ProgressBarPos.X + ProgressBarSize.X * Percent;
 
 	UCanvasPanelSlot* ImageSellingPriceBarCanvasSlot = Cast<UCanvasPanelSlot>(Image_SellingPriceBar->Slot);
-	ImageSellingPriceBarCanvasSlot->SetDesiredPosition(FVector2D(SellingPricePosX, 800.0f));
+	ImageSellingPriceBarCanvasSlot->SetPosition(FVector2D(SellingPricePosX - (ImageSellingPriceBarCanvasSlot->GetSize().X / 2), 800.0f));
 
 	UCanvasPanelSlot* TextSellingPriceKorCanvasSlot = Cast<UCanvasPanelSlot>(TextBlock_SellingPrice_Kor->Slot);
-	TextSellingPriceKorCanvasSlot->SetDesiredPosition(FVector2D(SellingPricePosX, 920.0f));
+	TextSellingPriceKorCanvasSlot->SetPosition(FVector2D(SellingPricePosX - (TextSellingPriceKorCanvasSlot->GetSize().X / 2), 920.0f));
 
 	UCanvasPanelSlot* TextSellingPriceCanvasSlot = Cast<UCanvasPanelSlot>(TextBlock_SellPrice->Slot);
-	TextSellingPriceCanvasSlot->SetDesiredPosition(FVector2D(SellingPricePosX, 954.5f));
+	TextSellingPriceCanvasSlot->SetPosition(FVector2D(SellingPricePosX - (TextSellingPriceCanvasSlot->GetSize().X / 2), 954.5f));
 }
 
 void UAuctionWidget::SetBidPriceTextPosByPercent()
