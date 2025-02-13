@@ -24,9 +24,22 @@ FReply UAuctionWidget::NativeOnMouseMove(const FGeometry& InGeometry, const FPoi
 
 	bool IsMouseOnUnfilled = IsMouseOnUnfilledProgressBar();
 
-	if (IsMouseOnUnfilled && !IsPlayerBidThisTurn) {
+	bool Equal;
+	HoverPriceEqualCurBid(Equal);
+
+	if (IsMouseOnUnfilled && !IsPlayerBidThisTurn && !Equal) {
 		if (BP_BidBar == nullptr || !IsValid(BP_BidBar)) {
 			CreateBidBar();
+		}
+		else {
+			if (BP_BidBar->GetVisibility() == ESlateVisibility::Hidden) {
+				BP_BidBar->SetVisibility(ESlateVisibility::HitTestInvisible);
+			}
+		}
+	}
+	else {
+		if (BP_BidBar) {
+			BP_BidBar->SetVisibility(ESlateVisibility::Hidden);
 		}
 	}
 
@@ -39,9 +52,8 @@ void UAuctionWidget::NativeOnMouseLeave(const FPointerEvent& InMouseEvent)
 		return;
 	}
 
-	if (IsValid(BP_BidBar) && BP_BidBar != nullptr && !BP_BidBar->IsHovered()) {
-		BP_BidBar->RemoveFromParent();
-		BP_BidBar = nullptr;
+	if (IsValid(BP_BidBar) && BP_BidBar->GetVisibility() != ESlateVisibility::Hidden) {
+		BP_BidBar->SetVisibility(ESlateVisibility::Hidden);
 	}
 }
 

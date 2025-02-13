@@ -79,6 +79,8 @@ public:
 	// 입찰 바 생성
 	UFUNCTION(BlueprintImplementableEvent)
 	void CreateBidBar();
+	UFUNCTION(BlueprintImplementableEvent)
+	void HoverPriceEqualCurBid(bool& Equal);
 	// 프로그래스바 퍼선트에 따라 입찰 바 가격 텍스트 설정
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 	void SetBidBarPrice(float Percent);
