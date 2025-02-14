@@ -18,7 +18,7 @@ class COOKYOURWAY_API AVillageManager : public AActor
 	class APlayerBistro* PlayerBistro;
 
 	FTimerHandle LeftDayTimeHandler;
-	int32 LeftMinute = 0;
+	int32 LeftMinute = 5;
 	int32 LeftSecond = 3;
 
 	// 남은 하루 시간 계산하기
@@ -44,6 +44,8 @@ class COOKYOURWAY_API AVillageManager : public AActor
 	TSubclassOf<AActor> BP_Competitor;
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<AStore> BP_Store;
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<ACustomerPool> BP_CustomerPool;
 
 public:
 	AVillageManager();
@@ -57,6 +59,7 @@ public:
 	class UVillageManagerSystem* VillageManagerSystem;
 	class UCustomerDataManagerSystem* CustomerDataManagerSystem;
 	ACookYourWayGameState* CookYourWayGameState;
+	ACustomerPool* CustomerPool;
 
 	TMap<int32, FVector> AreaLocMap;
 

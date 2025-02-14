@@ -170,7 +170,7 @@ void AReuben::GiveSandwich(ACustomer* Customer)
 
 	Customer->EatSandwich();
 
-	GetWorld()->GetTimerManager().SetTimer(CustSandwichTimerHandler, FTimerDelegate::CreateLambda([=]()
+	GetWorld()->GetTimerManager().SetTimer(Customer->CustSandwichTimerHandler, FTimerDelegate::CreateLambda([=]()
 		{
 			if (IsValid(Customer) && !Customer->IsActorBeingDestroyed())
 			{

@@ -38,6 +38,7 @@ void AStore::BeginPlay()
 	Super::BeginPlay();
 
 	VillageManagerSystem = UGameplayStatics::GetGameInstance(GetWorld())->GetSubsystem<UVillageManagerSystem>();
+	CustomerPool = Cast<ACustomerPool>(UGameplayStatics::GetActorOfClass(GetWorld(), BP_CustomerPool));
 }
 
 void AStore::SetStoreCustName()
@@ -103,11 +104,17 @@ void AStore::SetStoreMesh()
 
 void AStore::CreateCustomer()
 {
-	FString SpawnCustName = GetRandomCustName();
+	if (CustomerPool) {
+		FString SpawnCustName = GetRandomCustName();
+		FVector CustomerLocation = FVector(GetActorLocation().X, GetActorLocation().Y + 250.0, 95.0f);
+		ACustomer* Customer = CustomerPool->GetPooledCustomer(SpawnCustName, true);
 
-	FVector CustomerLocation = FVector(GetActorLocation().X, GetActorLocation().Y + 250.0, 95.0f);
-	ACustomer* Customer = CustomerSpawnFactory::SpawnCustomer(GetWorld(), BP_Customer, CustomerLocation, FRotator(0.0f, 90.0f, 0.0f), SpawnCustName, true);
-	Customer->GoToDestination();
+		if (Customer) {
+			Customer->SetActorLocation(CustomerLocation);
+			Customer->SetActorRotation(FRotator(0.0f, 90.0f, 0.0f));
+		}
+		Customer->MoveToDestination();
+	}
 }
 
 FString AStore::GetRandomCustName()

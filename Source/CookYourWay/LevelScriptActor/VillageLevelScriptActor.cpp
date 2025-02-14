@@ -3,6 +3,7 @@
 
 #include "LevelScriptActor/VillageLevelScriptActor.h"
 #include <Kismet/GameplayStatics.h>
+#include <Actor/CustomerPool.h>
 
 void AVillageLevelScriptActor::Init()
 {

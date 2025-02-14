@@ -12,7 +12,7 @@
 
 ACustomer::ACustomer()
 {
-	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bCanEverTick = false;
 
 	// 컨트롤러 회전 사용 안 함
 	bUseControllerRotationYaw = false;
@@ -31,11 +31,6 @@ void ACustomer::BeginPlay()
 
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), BP_Competitor, AllCompetitorActorArr);
 	PlayerBistro = Cast<APlayerBistro>(UGameplayStatics::GetActorOfClass(GetWorld(), BP_PlayerBistro));
-}
-
-void ACustomer::Init()
-{
-	SetSkeletalMesh();
 }
 
 void ACustomer::SetSkeletalMesh()
@@ -66,7 +61,6 @@ void ACustomer::Tick(float DeltaTime)
 	}
 
 	if (!IsWalk && !IsEat && DelayWithDeltaTime(1.0f, DeltaTime)) {
-		// 대기 시간 * 3(초에 한 번씩 감소)
 		Patience -= (100 / MaxWaitingTime);
 
 		if (Patience <= 0) {
@@ -75,10 +69,12 @@ void ACustomer::Tick(float DeltaTime)
 	}
 }
 
-void ACustomer::Initialize(const FString& Name, const bool& bWalk)
+void ACustomer::Init(FString Name, bool bWalk)
 {
 	this->CustName = Name;
 	this->IsWalk = bWalk;
+
+	SetSkeletalMesh();
 }
 
 bool ACustomer::DelayWithDeltaTime(float DelayTime, float DeltaSeconds)
@@ -193,7 +189,7 @@ void ACustomer::SetVisitDest()
 	VisitDest.Z = 95.0f;
 }
 
-void ACustomer::GoToDestination()
+void ACustomer::MoveToDestination()
 {
 	SetVisitDest();
 
@@ -449,4 +445,17 @@ void ACustomer::AddPlayerBistroRatingDataInManager()
 int32 ACustomer::GetTotalPaidPrice()
 {
 	return TotalPaidPrice;
+}
+
+void ACustomer::ClearCustomerValue()
+{
+	TotalPaidPrice = 0;
+	StartEatTime = 0.0f;
+	Satisfaction = 0;
+
+	IsEat = false;
+	IsWalk = false;
+	IsComment = false;
+
+	Patience = 100.0f;
 }

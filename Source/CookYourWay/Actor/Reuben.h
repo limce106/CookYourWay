@@ -29,8 +29,6 @@ class COOKYOURWAY_API AReuben : public ACharacter
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<AActor> BP_Dessert;
 
-	FTimerHandle CustSandwichTimerHandler;
-
 	// 플레이어 움직이기
 	void MoveForward(float Value);
 	void MoveRight(float Value);

@@ -143,7 +143,7 @@ void ACompetitor::CustomerVisited(ACustomer* Customer)
 
 	UpdateCompetitorRating(RoundRating);
 	AddRatingData(Customer->CustName, RoundRating);
-	Customer->Destroy();
+	VillageManager->CustomerPool->ReturnCustomer(Customer);
 }
 
 void ACompetitor::UpdateCompetitorRating(float Rating)

@@ -69,8 +69,7 @@ protected:
 public:	
 	virtual void Tick(float DeltaTime) override;
 	
-	void Initialize(const FString& Name, const bool& bWalk);
-	void Init();
+	void Init(FString Name, bool bWalk);
 
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<AActor> BP_Competitor;
@@ -99,9 +98,11 @@ public:
 	UPROPERTY(BlueprintReadOnly)
 	int32 CurSeatNum = -1;
 
+	FTimerHandle CustSandwichTimerHandler;
+
 	float LeaveDelayTime;
 
-	void GoToDestination();
+	void MoveToDestination();
 
 	// 손님의 취향이 아닌 재료 개수 세기
 	int32 CountNotTasteNum(ASandwich* Sandwich);
@@ -138,16 +139,18 @@ public:
 	int32 GetTotalPaidPrice();
 	UFUNCTION(BlueprintImplementableEvent)
 	void ShowTotalPaidPrice();
+
+	void ClearCustomerValue();
 };
 
-class CustomerSpawnFactory
-{
-public:
-	static ACustomer* SpawnCustomer(UWorld* World, TSubclassOf<ACustomer> CustomerClass, const FVector& Location, const FRotator& Rotation, FString CustName, bool IsWalk)
-	{
-		ACustomer* Customer = World->SpawnActor<ACustomer>(CustomerClass, Location, Rotation);
-		Customer->Initialize(CustName, IsWalk);
-		Customer->Init();
-		return Customer;
-	}
-};
+//class CustomerSpawnFactory
+//{
+//public:
+//	static ACustomer* SpawnCustomer(UWorld* World, TSubclassOf<ACustomer> CustomerClass, const FVector& Location, const FRotator& Rotation, FString CustName, bool IsWalk)
+//	{
+//		ACustomer* Customer = World->SpawnActor<ACustomer>(CustomerClass, Location, Rotation);
+//		Customer->Initialize(CustName, IsWalk);
+//		Customer->Init();
+//		return Customer;
+//	}
+//};

@@ -6,6 +6,7 @@
 #include "GameFramework/Actor.h"
 #include "DiningTable.h"
 #include "GameInstance/CustomerDataManagerSystem.h"
+#include "CustomerPool.h"
 #include "PlayerBistro.generated.h"
 
 UCLASS()
@@ -18,6 +19,7 @@ class COOKYOURWAY_API APlayerBistro : public AActor
 	class UIngredientManagerSystem* IngredientManagerSystem;
 	//
 	class UVillageManagerSystem* VillageManagerSystem;
+	ACustomerPool* CustomerPool;
 
 	// 손님 위치
 	TArray<FVector> CustSeatLocArr = {
@@ -69,6 +71,8 @@ public:
 	TSubclassOf<ADiningTable> BP_DiningTable;
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<ACustomer> BP_Customer;
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<ACustomerPool> BP_CustomerPool;
 
 	// 부지 번호
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)

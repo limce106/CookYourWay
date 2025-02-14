@@ -5,6 +5,7 @@
 #include "GameFramework/Actor.h"
 #include "Customer.h"
 #include "GameInstance/VillageManagerSystem.h"
+#include "CustomerPool.h"
 #include "Store.generated.h"
 
 UCLASS()
@@ -16,6 +17,7 @@ class COOKYOURWAY_API AStore : public AActor
 	class UNewsEffectComponent* NewsEffectComponent;
 
 	class UVillageManagerSystem* VillageManagerSystem;
+	ACustomerPool* CustomerPool;
 
 	TArray<FString> StoreCustName;
 
@@ -43,6 +45,8 @@ protected:
 public:
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<ACustomer> BP_Customer;
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<ACustomerPool> BP_CustomerPool;
 
 	// 부지 번호
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
@@ -58,14 +62,14 @@ public:
 	FString GetRandomCustName();
 };
 
-class StoreSpawnFactory
-{
-public:
-	static AStore* SpawnStore(UWorld* World, TSubclassOf<AStore> StoreClass, const FVector& Location, const FRotator& Rotation, int32 StoreAreaID, FStoreTable StoreTableData)
-	{
-		AStore* Store = World->SpawnActor<AStore>(StoreClass, Location, Rotation);
-		Store->InitializeStoreTableData(StoreAreaID, StoreTableData);
-		Store->Init();
-		return Store;
-	}
-};
+//class StoreSpawnFactory
+//{
+//public:
+//	static AStore* SpawnStore(UWorld* World, TSubclassOf<AStore> StoreClass, const FVector& Location, const FRotator& Rotation, int32 StoreAreaID, FStoreTable StoreTableData)
+//	{
+//		AStore* Store = World->SpawnActor<AStore>(StoreClass, Location, Rotation);
+//		Store->InitializeStoreTableData(StoreAreaID, StoreTableData);
+//		Store->Init();
+//		return Store;
+//	}
+//};

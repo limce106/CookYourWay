@@ -59,10 +59,13 @@ void AVillageManager::SpawnBistrosAndStore()
 		}
 	}
 
+	CustomerPool->InitCustomerPool();
+
 	for (int i = 0; i < VillageManagerSystem->StoreDataArr.Num(); i++) {
 		FStoreTable StoreTableData = VillageManagerSystem->StoreDataArr[i].StoreTableData;
-		AStore* Store = StoreSpawnFactory::SpawnStore(GetWorld(), BP_Store, *AreaLocMap.Find(VillageManagerSystem->StoreDataArr[i].AreaID), FRotator::ZeroRotator, 
-														VillageManagerSystem->StoreDataArr[i].AreaID, StoreTableData);
+		AStore* Store = GetWorld()->SpawnActor<AStore>(BP_Store, *AreaLocMap.Find(VillageManagerSystem->StoreDataArr[i].AreaID), FRotator::ZeroRotator);
+		Store->InitializeStoreTableData(VillageManagerSystem->StoreDataArr[i].AreaID, StoreTableData);
+		Store->Init();
 	}
 }
 
@@ -84,6 +87,7 @@ void AVillageManager::BeginPlay()
 	CustomerDataManagerSystem = UGameplayStatics::GetGameInstance(GetWorld())->GetSubsystem<UCustomerDataManagerSystem>();
 	VillageManagerSystem = UGameplayStatics::GetGameInstance(GetWorld())->GetSubsystem<UVillageManagerSystem>();
 	CookYourWayGameState = Cast<ACookYourWayGameState>(UGameplayStatics::GetGameState(GetWorld()));
+	CustomerPool = Cast<ACustomerPool>(UGameplayStatics::GetActorOfClass(GetWorld(), BP_CustomerPool));
 
 	Init();
 	RunDayTimer();
