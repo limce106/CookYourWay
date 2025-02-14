@@ -154,8 +154,6 @@ void APlayerBistro::SitNextCust(int32 SeatIdx)
 	WaitingCustNum--;
 
 	ACustomer* NextCustomer = CustomerPool->GetPooledCustomer(WaitingCustName, false);
-	UE_LOG(LogTemp, Warning, TEXT("IsEat: %s"), NextCustomer->IsEat ? TEXT("true") : TEXT("false"));
-
 	if (NextCustomer) {
 		NextCustomer->SetActorLocation(FVector::ZeroVector);
 		NextCustomer->SetActorRotation(FRotator(0.0f, 90.0f, 0.0f));

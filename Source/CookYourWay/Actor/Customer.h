@@ -142,15 +142,3 @@ public:
 
 	void ClearCustomerValue();
 };
-
-//class CustomerSpawnFactory
-//{
-//public:
-//	static ACustomer* SpawnCustomer(UWorld* World, TSubclassOf<ACustomer> CustomerClass, const FVector& Location, const FRotator& Rotation, FString CustName, bool IsWalk)
-//	{
-//		ACustomer* Customer = World->SpawnActor<ACustomer>(CustomerClass, Location, Rotation);
-//		Customer->Initialize(CustName, IsWalk);
-//		Customer->Init();
-//		return Customer;
-//	}
-//};
