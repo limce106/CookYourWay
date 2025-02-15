@@ -42,6 +42,7 @@ ACustomer* ACustomerPool::GetPooledCustomer(FString CustName, bool IsWalk)
 			Customer->SetActorHiddenInGame(false);
 			Customer->SetActorEnableCollision(true);
 
+			Customer->ClearCustomerValue();
 			Customer->Init(CustName, IsWalk);
 
 			CustomerPool.Remove(Customer);

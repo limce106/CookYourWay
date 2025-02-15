@@ -42,9 +42,15 @@ void ACustomer::SetSkeletalMesh()
 
 	// 애니메이션 블루프린트 클래스 적용
 	// 에디터에서만 적용되고 빌드 시 안 될 수 있으니 꼭 확인!!
-	FString AnimBPPath = (FString("/Game/Blueprint/AnimBP/").Append(CustName).Append("_AnimBP.").Append(CustName).Append("_AnimBP"));
-	UAnimBlueprint* AnimBP = LoadObject<UAnimBlueprint>(NULL, *AnimBPPath, NULL, LOAD_None, NULL);
-	GetMesh()->SetAnimInstanceClass(AnimBP->GeneratedClass);
+	FString AnimBPPath = (FString("/Game/Blueprint/AnimBP/").Append(CustName).Append("_AnimBP.").Append(CustName).Append("_AnimBP_C"));
+	// UAnimBlueprint* AnimBP = LoadObject<UAnimBlueprint>(NULL, *AnimBPPath, NULL, LOAD_None, NULL);
+	UClass* AnimBPClass = LoadClass<UAnimInstance>(NULL, *AnimBPPath, NULL, LOAD_None, NULL);
+	if (AnimBPClass) {
+		GetMesh()->SetAnimInstanceClass(AnimBPClass);
+	}
+	else {
+		UE_LOG(LogTemp, Error, TEXT("Failed to load AnimBP for %s"), *CustName);
+	}
 }
 
 void ACustomer::Tick(float DeltaTime)
@@ -380,8 +386,6 @@ void ACustomer::AddTotalPaidPriceAndTip()
 	PlayerBistroRatingData.Price = TotalPaidPrice;
 
 	ShowTotalPaidPrice();
-
-	UE_LOG(LogTemp, Warning, TEXT("TotalPaidPrice: %d"), TotalPaidPrice);
 }
 
 void ACustomer::StartReviewDialogue(int32 TasteScore)
@@ -426,10 +430,6 @@ void ACustomer::UpdatePlayerBistroRatingSatisfaction()
 
 	VillageManagerSystem->UpdatePlayerBistroRating(Rating);
 	CustomerDataManagerSystem->UpdateMaxSatisfaction(CustName, PlayerBistro->AreaID, Satisfaction);
-
-	// 테스트
-	UE_LOG(LogTemp, Warning, TEXT("Rating: %f"), Rating);
-	//
 }
 
 void ACustomer::AddPlayerBistroRatingDataInManager()
@@ -453,4 +453,7 @@ void ACustomer::ClearCustomerValue()
 	IsComment = false;
 
 	Patience = 100.0f;
+
+	GetMesh()->SetSkeletalMesh(nullptr);
+	GetMesh()->SetAnimInstanceClass(nullptr);
 }

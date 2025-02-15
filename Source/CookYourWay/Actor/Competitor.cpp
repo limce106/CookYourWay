@@ -204,12 +204,9 @@ void ACompetitor::CustomerVisited(ACustomer* Customer)
 				CustomerDataManagerSystem->UpdateCmptBestRatedCombos(Customer->CustName, AreaID, SandwichIngr);
 			}
 
-			UE_LOG(LogTemp, Warning, TEXT("Satisfaction: %d"), Satisfaction);
 			float Rating = Satisfaction * 5 / 100.0f;
-			UE_LOG(LogTemp, Warning, TEXT("Rating: %f"), Rating);
 			// 소수점 첫째 자리까지 반올림
 			float RoundRating = FMath::RoundToFloat(Rating * 10.0f) / 10.0f;
-			UE_LOG(LogTemp, Warning, TEXT("RoundRating: %f"), RoundRating);
 
 			UpdateCompetitorRating(RoundRating);
 			AddRatingData(Customer->CustName, RoundRating);

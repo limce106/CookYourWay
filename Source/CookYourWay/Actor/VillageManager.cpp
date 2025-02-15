@@ -228,7 +228,8 @@ void AVillageManager::EndEatingCustomer()
 		ADiningTable* DiningTable = Cast<ADiningTable>(Actor);
 
 		if (DiningTable->SeatedCustomer && DiningTable->SeatedCustomer->IsEat) {
-			PlayerBistro->LeaveCustomerInBistro(DiningTable->SeatedCustomer);
+			PlayerBistro->TodayCust++;
+			VillageManagerSystem->PlayerBistroTotalCust++;
 		}
 	}
 }

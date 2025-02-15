@@ -207,9 +207,7 @@ void APlayerBistro::LeaveCustomerInBistro(ACustomer* Customer)
 	TodayCust++;
 	VillageManagerSystem->PlayerBistroTotalCust++;
 
-	if (Customer->IsEat) {
-		Customer->AddTotalPaidPriceAndTip();
-		Customer->UpdatePlayerBistroRatingSatisfaction();
-		Customer->AddPlayerBistroRatingDataInManager();
-	}
+	Customer->AddTotalPaidPriceAndTip();
+	Customer->UpdatePlayerBistroRatingSatisfaction();
+	Customer->AddPlayerBistroRatingDataInManager();
 }
