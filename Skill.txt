@@ -4,3 +4,4 @@
 오브젝트 풀링
 소켓 부착
 해시
+Epsilon-Greedy Algorithm (경쟁사 자동 운영, 탐색 + 학습 방식)

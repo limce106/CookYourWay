@@ -30,6 +30,9 @@ class COOKYOURWAY_API ACompetitor : public AActor
 
 	bool IsCustTasteContainFestivalIngr(FString CustName);
 
+	TArray<int32> GenerateSandwich(ACustomer* Customer);
+	int32 GetCustomerSatisfaction(ACustomer* Customer, TArray<int32> Ingr);
+
 protected:
 	virtual void BeginPlay() override;
 
@@ -51,7 +54,7 @@ public:
 	int32 AreaID;
 
 	// 새로운 손님의 평점 평균 가져오기
-	int32 GetCustomerSatisfaction(FString CustName);
+	//int32 GetCustomerSatisfaction(FString CustName);
 
 	FCompetitorData GetCurComptitorData();
 };

@@ -197,12 +197,10 @@ void ACustomer::MoveToDestination()
 	AINpcController->MoveToLocation(VisitDest, 1.0f);
 }
 
-int32 ACustomer::CountNotTasteNum(ASandwich* Sandwich)
+int32 ACustomer::GetTotalMismatch(ASandwich* Sandwich)
 {
 	// 취향이 아닌 재료 개수
 	int32 NotTasteNum = 0;
-	// 빵 가격
-	int32 BreadSellPrice = 0;
 
 	// 첫 번째 재료가 빵이 아닐 때
 	if (!Sandwich->IsFirstIngrBread()) {
@@ -226,18 +224,21 @@ int32 ACustomer::CountNotTasteNum(ASandwich* Sandwich)
 
 	TArray<int32> IngrNumArr = Sandwich->IngrActorToNum();
 	PlayerBistroRatingData.GivenIngr = IngrNumArr;
+	NotTasteNum += CountUnpreferredIngr(IngrNumArr);
+
+	return NotTasteNum;
+}
+
+int32 ACustomer::CountUnpreferredIngr(TArray<int32> IngrArr)
+{
+	int32 UnPreferredNum = 0;
 
 	TArray<int32> Taste = CustomerDataManagerSystem->GetCustTaste(CustName);
 
-	for (int i = 0; i < IngrNumArr.Num(); i++) {
-
-		// 샌드위치 재료가 손님의 취향이 아니라면
-		if ((Taste.Contains(IngrNumArr[i])) == false) {
-			NotTasteNum++;
-		}
+	for (int i = 0; i < IngrArr.Num(); i++) {
 		// 샌드위치 재료가 손님의 취향이라면
-		else {
-			int32 Ingr = IngrNumArr[i];
+		if ((Taste.Contains(IngrArr[i])) == true) {
+			int32 Ingr = IngrArr[i];
 			int32 Price = IngredientManagerSystem->GetSellingPriceByIndex(Ingr);
 			TotalPaidPrice += Price;
 			// 손님이 한 종류의 재료를 두 개 이상 선택했을 가능성을 고려하여, 같은 재료가 여러 개 있어도 하나만 삭제
@@ -246,15 +247,14 @@ int32 ACustomer::CountNotTasteNum(ASandwich* Sandwich)
 	}
 
 	// 포함되지 않은 취향 개수만큼 더한다.
-	NotTasteNum += Taste.Num();
-
-	return NotTasteNum;
+	UnPreferredNum += Taste.Num();
+	return UnPreferredNum;
 }
 
-void ACustomer::AddSandwichReview(ASandwich* Sandwich)
+void ACustomer::AddPlayerSandwichReview(ASandwich* Sandwich)
 {
 	int TasteScore = 0;
-	int NotTasteNum = CountNotTasteNum(Sandwich);
+	int NotTasteNum = GetTotalMismatch(Sandwich);
 	
 	// 맞추지 못한 재료 개수에 따른 점수
 	if (NotTasteNum == 0) {
@@ -266,13 +266,13 @@ void ACustomer::AddSandwichReview(ASandwich* Sandwich)
 			TasteScore = 90;
 		}
 		else if (NotTasteNum == 2) {
-			TasteScore = 70;
+			TasteScore = 75;
 		}
 		else if (NotTasteNum == 3) {
 			TasteScore = 50;
 		}
 		else if (NotTasteNum == 4) {
-			TasteScore = 30;
+			TasteScore = 25;
 		}
 		else if (NotTasteNum == 5) {
 			TasteScore = 10;
@@ -304,12 +304,7 @@ void ACustomer::AddSandwichReview(ASandwich* Sandwich)
 		Satisfaction -= MeatBurnScoreDeduction;
 	}
 
-	if (Satisfaction < 0) {
-		Satisfaction = 0;
-	}
-	else if (Satisfaction > 100) {
-		Satisfaction = 100;
-	}
+	Satisfaction = FMath::Clamp(Satisfaction, 0, 100);
 }
 
 void ACustomer::AddDessertReview()
@@ -425,7 +420,7 @@ void ACustomer::UpdatePlayerBistroRatingSatisfaction()
 	PlayerBistroRatingData.CustName = CustName;
 	PlayerBistroRatingData.WeekDay = VillageManager->DayToWeekString(VillageManagerSystem->Day);
 
-	float Rating = Satisfaction * 5 / 100;
+	float Rating = Satisfaction * 5 / 100.0f;
 	Rating = FMath::RoundToFloat(Rating * 10.0f) / 10.0f;
 	PlayerBistroRatingData.Rating = Rating;
 

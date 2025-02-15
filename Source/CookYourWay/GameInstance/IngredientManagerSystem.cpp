@@ -2,6 +2,7 @@
 
 
 #include "GameInstance/IngredientManagerSystem.h"
+#include <Kismet/KismetMathLibrary.h>
 
 UIngredientManagerSystem::UIngredientManagerSystem()
 {
@@ -118,4 +119,29 @@ int32 UIngredientManagerSystem::GetIngrBinMinByIndex(int32 Index)
 {
 	int32 Price = GetIngrBidMin(IngredientRows[Index].IngrClass);
 	return Price;
+}
+
+TArray<int32> UIngredientManagerSystem::GenerateRandomTaste()
+{
+	TArray<int32> Taste;
+
+	TArray<int32> CanAddFillings = FillingIdxs;
+	// 속재료는 항상 3개를 선택하도록 함
+	for (int i = 0; i < 3; i++) {
+		int FillingIndex = UKismetMathLibrary::RandomIntegerInRange(0, CanAddFillings.Num() - 1);
+		Taste.Add(CanAddFillings[FillingIndex]);
+		CanAddFillings.RemoveAt(FillingIndex);
+	}
+
+	int MeatIndex = UKismetMathLibrary::RandomIntegerInRange(0, MeatIdxs.Num() - 1);
+	Taste.Add(MeatIdxs[MeatIndex]);
+
+	int SauceIndex = UKismetMathLibrary::RandomIntegerInRange(0, SauceIdxs.Num() - 1);
+	Taste.Add(SauceIdxs[SauceIndex]);
+
+	// 테스트
+	//Taste.Add(13);
+	//
+
+	return Taste;
 }

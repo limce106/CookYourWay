@@ -13,16 +13,14 @@ struct FCompetitorReviewData : public FTableRowBase {
 	GENERATED_BODY()
 
 public:
-	FCompetitorReviewData() : CmptState("-1"), RatingMin(-1), RatingMax(-1), RatingProb(0) {}
+	FCompetitorReviewData() : CmptState("-1"), UnPreferredNum(-1), Rating(-1) {}
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Data")
 	FString CmptState;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Data")
-	int32 RatingMin;
+	int32 UnPreferredNum;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Data")
-	int32 RatingMax;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Data")
-	float RatingProb;
+	int32 Rating;
 };
 
 USTRUCT(BlueprintType)

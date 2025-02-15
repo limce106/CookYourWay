@@ -100,36 +100,10 @@ FString UCustomerDataManagerSystem::GetRandomCustName()
 	return RandomCustName;
 }
 
-TArray<int32> UCustomerDataManagerSystem::GetRandomTaste()
-{
-	IngredientManagerSystem = UGameplayStatics::GetGameInstance(GetWorld())->GetSubsystem<UIngredientManagerSystem>();
-	TArray<int32> Taste;
-
-	TArray<int32> CanAddFillings = IngredientManagerSystem->FillingIdxs;
-	// 속재료는 항상 3개를 선택하도록 함
-	for (int i = 0; i < 3; i++) {
-		int FillingIndex = UKismetMathLibrary::RandomIntegerInRange(0, CanAddFillings.Num() - 1);
-		Taste.Add(CanAddFillings[FillingIndex]);
-		CanAddFillings.RemoveAt(FillingIndex);
-	}
-
-	int MeatIndex = UKismetMathLibrary::RandomIntegerInRange(0, IngredientManagerSystem->MeatIdxs.Num() - 1);
-	Taste.Add(IngredientManagerSystem->MeatIdxs[MeatIndex]);
-
-	int SauceIndex = UKismetMathLibrary::RandomIntegerInRange(0, IngredientManagerSystem->SauceIdxs.Num() - 1);
-	Taste.Add(IngredientManagerSystem->SauceIdxs[SauceIndex]);
-
-	// 테스트
-	//Taste.Add(13);
-	//
-
-	return Taste;
-}
-
 void UCustomerDataManagerSystem::SetRandomCustTastes()
 {
 	for (int i = 0; i < CustomerNames.Num(); i++) {
-		CustNameToTasteMap.Add(CustomerNames[i], GetRandomTaste());
+		CustNameToTasteMap.Add(CustomerNames[i], IngredientManagerSystem->GenerateRandomTaste());
 	}
 }
 
@@ -145,7 +119,7 @@ void UCustomerDataManagerSystem::SetIngrSeasonCustTastes()
 	}
 
 	for (int i = 0; i < CustomerNames.Num(); i++) {
-		TArray<int32> Taste = GetRandomTaste();
+		TArray<int32> Taste = IngredientManagerSystem->GenerateRandomTaste();
 		bool IsAlreadyHaveSeasonIngr = Taste.Contains(SeasonIngrIdx);
 		if (!IsAlreadyHaveSeasonIngr) {
 			Taste.Add(SeasonIngrIdx);
@@ -180,7 +154,7 @@ void UCustomerDataManagerSystem::SetPopularIngrCustTastes()
 	}
 
 	for (int i = 0; i < CustomerNames.Num(); i++) {
-		TArray<int32> Taste = GetRandomTaste();
+		TArray<int32> Taste = IngredientManagerSystem->GenerateRandomTaste();
 
 		float Probability = FMath::FRand();
 		if (Probability > 0.5f) {
@@ -312,14 +286,23 @@ void UCustomerDataManagerSystem::AddCompetitorRegularCust()
 	}
 }
 
-void UCustomerDataManagerSystem::UpdateMaxSatisfaction(FString CustName, int32 BistroAreaID, int32 Satisfaction)
+bool UCustomerDataManagerSystem::UpdateMaxSatisfaction(FString CustName, int32 BistroAreaID, int32 Satisfaction)
 {
 	FCustomerBistroKey Key = GetCustomerBistroKey(CustName, BistroAreaID);
 	int32 CurMaxSatisfaction = *MaxSatisfactionMap.Find(Key);
 
 	if (Satisfaction > CurMaxSatisfaction) {
 		MaxSatisfactionMap.Add(Key, Satisfaction);
+		return true;
 	}
+
+	return false;
+}
+
+void UCustomerDataManagerSystem::UpdateCmptBestRatedCombos(FString CustName, int32 BistroAreaID, TArray<int32> Ingr)
+{
+	FCustomerBistroKey Key = GetCustomerBistroKey(CustName, BistroAreaID);
+	CmptBestRatedCombos.Add(Key, Ingr);
 }
 
 bool UCustomerDataManagerSystem::HasRegularCust(int32 BistroAreaID)
@@ -388,6 +371,18 @@ int32 UCustomerDataManagerSystem::GetMaxSatisfactionMapValue(FCustomerBistroKey 
 		UE_LOG(LogTemp, Warning, TEXT("Can't Get MaxSatisfactionMap Value!"));
 		return 0;
 	}
+}
+
+TArray<int32> UCustomerDataManagerSystem::GetCmptBestRatedCombos(FCustomerBistroKey Key)
+{
+	if (Key.BistroAreaID == VillageManagerSystem->PlayerBistroAreaID) {
+		return TArray<int32>();
+	}
+	if (!CmptBestRatedCombos.Contains(Key)) {
+		return TArray<int32>();
+	}
+
+	return CmptBestRatedCombos[Key];
 }
 
 FString UCustomerDataManagerSystem::RedefineTasteHintComment(FString CustName, FString Comment)

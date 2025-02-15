@@ -12,14 +12,10 @@ struct FCustomerData : public FTableRowBase {
 	GENERATED_BODY()
 
 public:
-	FCustomerData() : CustName("-1"), CustTasteCount(-1), CustUnqTaste(-1) {}
+	FCustomerData() : CustName("-1") {}
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Data")
 	FString CustName;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Data")
-	int32 CustTasteCount;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Data")
-	int32 CustUnqTaste;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Data")
 	UTexture2D* CustIcon;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Data")
@@ -164,6 +160,8 @@ public:
 	TMap<FCustomerBistroKey, int32> LoyaltyMap;
 	// <손님 이름/가게, 최대만족도>
 	TMap<FCustomerBistroKey, int32> MaxSatisfactionMap;
+	// <손님 이름/경쟁사, 최대만족도를 얻었던 조합> 
+	TMap<FCustomerBistroKey, TArray<int32>> CmptBestRatedCombos;
 
 	// 플레이어 가게 리뷰 데이터
 	UPROPERTY(VisibleAnywhere)
@@ -178,9 +176,6 @@ public:
 	// 랜덤 손님 이름 가져오기
 	FString GetRandomCustName();
 
-	// 랜덤 취향 배열 반환
-	UFUNCTION(BlueprintCallable)
-	TArray<int32> GetRandomTaste();
 	// 랜덤으로 모든 손님 취향 설정
 	UFUNCTION(BlueprintCallable)
 	void SetRandomCustTastes();
@@ -196,7 +191,8 @@ public:
 	// 특정 손님의 취향 가져오기
 	TArray<int32> GetCustTaste(FString CustName);
 
-	void UpdateMaxSatisfaction(FString CustName, int32 BistroAreaID, int32 Satisfaction);
+	bool UpdateMaxSatisfaction(FString CustName, int32 BistroAreaID, int32 Satisfaction);
+	void UpdateCmptBestRatedCombos(FString CustName, int32 BistroAreaID, TArray<int32> Ingr);
 
 	// 단골 손님 여부 반환
 	bool IsRegularCust(FString CustomerName, int32 BistroAreaID);
@@ -227,6 +223,8 @@ public:
 	int32 GetLoyaltyMapValue(FCustomerBistroKey Key);
 	UFUNCTION(BlueprintCallable)
 	int32 GetMaxSatisfactionMapValue(FCustomerBistroKey Key);
+	UFUNCTION(BlueprintCallable)
+	TArray<int32> GetCmptBestRatedCombos(FCustomerBistroKey Key);
 
 	UFUNCTION(BlueprintCallable)
 	TArray<FPlayerBistroRatingData> GetGreaterSortedPlayerBistroRating();

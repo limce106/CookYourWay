@@ -166,7 +166,7 @@ void AReuben::GiveSandwich(ACustomer* Customer)
 
 	ADiningTable* DiningTable = PlayerBistro->GetDiningTable(Customer->CurSeatNum);
 	DiningTable->PutFoodOn(Sandwich);
-	Customer->AddSandwichReview(Sandwich);
+	Customer->AddPlayerSandwichReview(Sandwich);
 
 	Customer->EatSandwich();
 

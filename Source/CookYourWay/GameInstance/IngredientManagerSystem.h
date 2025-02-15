@@ -102,4 +102,8 @@ public:
 
 	int32 GetSellingPriceByIndex(int32 Index);
 	int32 GetIngrBinMinByIndex(int32 Index);
+
+	// 랜덤 취향 배열 반환
+	UFUNCTION(BlueprintCallable)
+	TArray<int32> GenerateRandomTaste();
 };

@@ -105,9 +105,10 @@ public:
 	void MoveToDestination();
 
 	// 손님의 취향이 아닌 재료 개수 세기
-	int32 CountNotTasteNum(ASandwich* Sandwich);
+	int32 GetTotalMismatch(ASandwich* Sandwich);
+	int32 CountUnpreferredIngr(TArray<int32> IngrArr);
 	// 손님의 샌드위치 평점 계산하기
-	void AddSandwichReview(ASandwich* Sandwich);
+	void AddPlayerSandwichReview(ASandwich* Sandwich);
 	// 손님의 디저트 평점 더하기
 	void AddDessertReview();
 

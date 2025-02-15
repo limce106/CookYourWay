@@ -25,6 +25,63 @@ void ACompetitor::BeginPlay()
 	SetDefaultReviewRate();
 }
 
+TArray<int32> ACompetitor::GenerateSandwich(ACustomer* Customer)
+{
+	TArray<int32> SandwichIngr;
+
+	FCustomerBistroKey Key = CustomerDataManagerSystem->GetCustomerBistroKey(Customer->CustName, AreaID);
+	float Rand = FMath::RandRange(0.0f, 1.0f);
+
+	if (Rand < 0.7f) {
+		SandwichIngr = CustomerDataManagerSystem->GetCmptBestRatedCombos(Key);
+		if (SandwichIngr.Num() == 0) {
+			SandwichIngr = IngredientManagerSystem->GenerateRandomTaste();
+		}
+	}
+	else {
+		SandwichIngr = IngredientManagerSystem->GenerateRandomTaste();
+	}
+
+	return SandwichIngr;
+}
+
+int32 ACompetitor::GetCustomerSatisfaction(ACustomer* Customer, TArray<int32> Ingr)
+{
+	int32 UnPreferredIngrNum = Customer->CountUnpreferredIngr(Ingr);
+
+	TArray<FCompetitorReviewData> ReviewData;
+	FCompetitorData CurCompetitorData = GetCurComptitorData();
+	
+	if (CurCompetitorData.IsComptFestival) {	// 오픈 프로모션보다 식재료 페스티벌을 우선으로 한다.
+		bool IsCustLikeIngr = IsCustTasteContainFestivalIngr(Customer->CustName);
+	
+		if (IsCustLikeIngr) {
+			ReviewData = IngrFestReviewData;
+		}
+		else if (IsOpenPromo) {
+			ReviewData = OpenPromoReviewData;
+		}
+		else {
+			ReviewData = NormalReviewData;
+		}
+	}
+	else if (IsOpenPromo) {
+		ReviewData = OpenPromoReviewData;
+	}
+	else {
+		ReviewData = NormalReviewData;
+	}
+
+	for (auto Data : ReviewData) {
+		if (Data.UnPreferredNum == UnPreferredIngrNum) {
+			return Data.Rating;
+		}
+	}
+
+	UE_LOG(LogTemp, Error, TEXT("Can't Get Customer Satisfaction In Competitior!"));
+	return -1;
+}
+
 void ACompetitor::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
@@ -76,53 +133,53 @@ bool ACompetitor::IsCustTasteContainFestivalIngr(FString CustName)
 	}
 }
 
-int32 ACompetitor::GetCustomerSatisfaction(FString CustName)
-{
-	TArray<FCompetitorReviewData> ReviewData;
-	FCompetitorData CurCompetitorData = GetCurComptitorData();
-
-	if (CurCompetitorData.IsComptFestival) {	// 오픈 프로모션보다 식재료 페스티벌을 우선으로 한다.
-		bool IsCustLikeIngr = IsCustTasteContainFestivalIngr(CustName);
-
-		if (IsCustLikeIngr) {
-			ReviewData = IngrFestReviewData;
-		}
-		else if (IsOpenPromo) {
-			ReviewData = OpenPromoReviewData;
-		}
-		else {
-			ReviewData = NormalReviewData;
-		}
-	}
-	else if (IsOpenPromo) {
-		ReviewData = OpenPromoReviewData;
-	}
-	else {
-		ReviewData = NormalReviewData;
-	}
-
-	int Satisfaction = 0;
-	float Probability = FMath::FRand();
-
-	float ProbRange = 0.0f;
-
-	for (int i = 0; i < ReviewData.Num(); i++) {
-		ProbRange += ReviewData[i].RatingProb;
-		if (Probability > ProbRange) {
-			continue;
-		}
-		else {
-			Satisfaction = UKismetMathLibrary::RandomIntegerInRange(ReviewData[i].RatingMin, ReviewData[i].RatingMax);
-			break;
-		}
-	}
-
-	if (Satisfaction == 0) {
-		UE_LOG(LogTemp, Error, TEXT("Competitor: Get Customer Review Fail"));
-	}
-
-	return Satisfaction;
-}
+//int32 ACompetitor::GetCustomerSatisfaction(FString CustName)
+//{
+//	TArray<FCompetitorReviewData> ReviewData;
+//	FCompetitorData CurCompetitorData = GetCurComptitorData();
+//
+//	if (CurCompetitorData.IsComptFestival) {	// 오픈 프로모션보다 식재료 페스티벌을 우선으로 한다.
+//		bool IsCustLikeIngr = IsCustTasteContainFestivalIngr(CustName);
+//
+//		if (IsCustLikeIngr) {
+//			ReviewData = IngrFestReviewData;
+//		}
+//		else if (IsOpenPromo) {
+//			ReviewData = OpenPromoReviewData;
+//		}
+//		else {
+//			ReviewData = NormalReviewData;
+//		}
+//	}
+//	else if (IsOpenPromo) {
+//		ReviewData = OpenPromoReviewData;
+//	}
+//	else {
+//		ReviewData = NormalReviewData;
+//	}
+//
+//	int Satisfaction = 0;
+//	float Probability = FMath::FRand();
+//
+//	float ProbRange = 0.0f;
+//
+//	for (int i = 0; i < ReviewData.Num(); i++) {
+//		ProbRange += ReviewData[i].RatingProb;
+//		if (Probability > ProbRange) {
+//			continue;
+//		}
+//		else {
+//			Satisfaction = UKismetMathLibrary::RandomIntegerInRange(ReviewData[i].RatingMin, ReviewData[i].RatingMax);
+//			break;
+//		}
+//	}
+//
+//	if (Satisfaction == 0) {
+//		UE_LOG(LogTemp, Error, TEXT("Competitor: Get Customer Review Fail"));
+//	}
+//
+//	return Satisfaction;
+//}
 
 FCompetitorData ACompetitor::GetCurComptitorData()
 {
@@ -134,16 +191,29 @@ FCompetitorData ACompetitor::GetCurComptitorData()
 
 void ACompetitor::CustomerVisited(ACustomer* Customer)
 {
-	int32 Satisfaction = GetCustomerSatisfaction(Customer->CustName);
-	CustomerDataManagerSystem->UpdateMaxSatisfaction(Customer->CustName, AreaID, Satisfaction);
-
-	float Rating = Satisfaction * 5 / 100;
-	// 소수점 첫째 자리까지 반올림
-	float RoundRating = FMath::RoundToFloat(Rating * 10.0f) / 10.0f;
-
-	UpdateCompetitorRating(RoundRating);
-	AddRatingData(Customer->CustName, RoundRating);
 	VillageManager->CustomerPool->ReturnCustomer(Customer);
+
+	FTimerHandle CustRatingTimerHandler;
+	GetWorld()->GetTimerManager().SetTimer(CustRatingTimerHandler, FTimerDelegate::CreateLambda([=]()
+		{
+			TArray<int32> SandwichIngr = GenerateSandwich(Customer);
+			int32 Satisfaction = GetCustomerSatisfaction(Customer, SandwichIngr);
+
+			bool MaxSatisfactionUpdated = CustomerDataManagerSystem->UpdateMaxSatisfaction(Customer->CustName, AreaID, Satisfaction);
+			if (MaxSatisfactionUpdated) {
+				CustomerDataManagerSystem->UpdateCmptBestRatedCombos(Customer->CustName, AreaID, SandwichIngr);
+			}
+
+			UE_LOG(LogTemp, Warning, TEXT("Satisfaction: %d"), Satisfaction);
+			float Rating = Satisfaction * 5 / 100.0f;
+			UE_LOG(LogTemp, Warning, TEXT("Rating: %f"), Rating);
+			// 소수점 첫째 자리까지 반올림
+			float RoundRating = FMath::RoundToFloat(Rating * 10.0f) / 10.0f;
+			UE_LOG(LogTemp, Warning, TEXT("RoundRating: %f"), RoundRating);
+
+			UpdateCompetitorRating(RoundRating);
+			AddRatingData(Customer->CustName, RoundRating);
+		}), 10.0f, false);
 }
 
 void ACompetitor::UpdateCompetitorRating(float Rating)
@@ -154,7 +224,7 @@ void ACompetitor::UpdateCompetitorRating(float Rating)
 	int32 TotalCust = VillageManagerSystem->CompetitorDataArr[Idx].TotalCust;
 	float CurRatingAvg = VillageManagerSystem->CompetitorDataArr[Idx].RatingAvg;
 
-	float UpdatedRating = ((CurRatingAvg * (TotalCust - 1)) + Rating) / TotalCust;
+	float UpdatedRating = ((CurRatingAvg * (TotalCust - 1)) + Rating) / (float)TotalCust;
 	VillageManagerSystem->CompetitorDataArr[Idx].RatingAvg = FMath::RoundToFloat(UpdatedRating * 10.0f) / 10.0f;
 }
 
