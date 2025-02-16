@@ -148,6 +148,7 @@ FString AStore::GetRandomCustName()
 		}
 		else {
 			SpwanCustName = StoreCustName[i];
+			break;
 		}
 	}
 
