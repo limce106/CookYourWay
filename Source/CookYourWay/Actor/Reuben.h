@@ -64,6 +64,8 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	int32 GivenSandwichNum = 0;
 
+	UFUNCTION(BlueprintCallable)
+	void UpdateClosestOverlappingActor();
 	UClass* GetHeldActorClass();
 
 	// 家南俊 咀磐 何馒/都扁

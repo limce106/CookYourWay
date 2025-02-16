@@ -60,6 +60,27 @@ void AReuben::MoveRight(float Value)
 	}
 }
 
+void AReuben::UpdateClosestOverlappingActor()
+{
+	TArray<AActor*> OverlappingActors;
+	GetOverlappingActors(OverlappingActors);
+
+	float ClosestDistance = 999;
+	AActor* ClosestActor = nullptr;
+
+	for (auto Actor : OverlappingActors) {
+		float Distance = GetDistanceTo(Actor);
+		if (ClosestDistance > Distance) {
+			ClosestDistance = Distance;
+			ClosestActor = Actor;
+		}
+	}
+
+	if (ClosestActor != nullptr) {
+		OverlappedActor = ClosestActor;
+	}
+}
+
 UClass* AReuben::GetHeldActorClass()
 {
 	return (HeldActor->GetClass());
