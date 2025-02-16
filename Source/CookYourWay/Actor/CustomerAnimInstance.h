@@ -22,9 +22,13 @@ class COOKYOURWAY_API UCustomerAnimInstance : public UAnimInstance
 public:
 	UPROPERTY(BlueprintReadOnly)
 	bool IsWalk;
+	UPROPERTY(BlueprintReadOnly)
+	bool IsSit;
 
 	UPROPERTY(BlueprintReadOnly)
 	UAnimSequence* WalkSeq;
 	UPROPERTY(BlueprintReadOnly)
 	UAnimSequence* IdleSeq;
+	UPROPERTY(BlueprintReadOnly)
+	UAnimSequence* SitSeq;
 };

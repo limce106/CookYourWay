@@ -59,6 +59,7 @@ void APlayerBistro::Tick(float DeltaTime)
 
 void APlayerBistro::SitCust(ACustomer* Customer, int32 SeatIdx)
 {
+	Customer->IsSit = true;
 	Customer->SetActorRotation(FRotator(0.0f, 90.0f, 0.0f));
 
 	IsSeated[SeatIdx] = true;

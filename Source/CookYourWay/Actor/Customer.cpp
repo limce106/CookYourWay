@@ -450,6 +450,7 @@ void ACustomer::ClearCustomerValue()
 
 	IsEat = false;
 	IsWalk = false;
+	IsSit = false;
 	IsComment = false;
 
 	Patience = 100.0f;

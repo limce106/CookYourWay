@@ -84,6 +84,8 @@ public:
 	UPROPERTY(BlueprintReadWrite)
 	bool IsWalk = false;
 	UPROPERTY(BlueprintReadWrite)
+	bool IsSit = false;
+	UPROPERTY(BlueprintReadWrite)
 	bool IsComment = false;
 
 	// ¿Œ≥ªΩ…
