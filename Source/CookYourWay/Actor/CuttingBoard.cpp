@@ -14,10 +14,10 @@ void ACuttingBoard::BeginPlay()
 
 float ACuttingBoard::GetOneCookIncreasement()
 {
-	// return (1.0f / 15.0f);
+	return (1.0f / 15.0f);
 
 	// Å×½ºÆ®
-	return (1.0f / 1.0f);
+	// return (1.0f / 1.0f);
 	//
 }
 

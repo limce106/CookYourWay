@@ -36,14 +36,18 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void DestroySandwich();
-
+	UFUNCTION(BlueprintCallable)
 	TArray<int32> IngrActorToNum();
-
+	UFUNCTION(BlueprintCallable)
 	bool IsMeatBurn();
+	UFUNCTION(BlueprintCallable)
 	void SandwichInteraction();
-
+	UFUNCTION(BlueprintCallable)
 	bool IsFirstIngrBread();
+	UFUNCTION(BlueprintCallable)
 	bool IsLastIngrBread();
+	UFUNCTION(BlueprintCallable)
+	bool IsCompleteSandwich();
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void AddIngredientImg();

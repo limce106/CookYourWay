@@ -80,7 +80,8 @@ TArray<int32> ASandwich::IngrActorToNum()
 	return IngrNum;
 }
 
-bool ASandwich::IsMeatBurn() {
+bool ASandwich::IsMeatBurn()
+{
 	for (auto OneIngredient : Ingredients) {
 		if (OneIngredient->CurIngrData.IngrType == "Meat") {
 			if (OneIngredient->IsBurn) {
@@ -118,7 +119,8 @@ void ASandwich::SandwichInteraction()
 	}
 }
 
-bool ASandwich::IsFirstIngrBread() {
+bool ASandwich::IsFirstIngrBread()
+{
 	if (Ingredients[0]->CurIngrData.IngrType == "Bread") {
 		return true;
 	}
@@ -127,7 +129,8 @@ bool ASandwich::IsFirstIngrBread() {
 	}
 }
 
-bool ASandwich::IsLastIngrBread() {
+bool ASandwich::IsLastIngrBread()
+{
 	if (Ingredients.Num() > 0) {
 		if (Ingredients[Ingredients.Num() - 1]->CurIngrData.IngrType == "Bread") {
 			return true;
@@ -139,4 +142,9 @@ bool ASandwich::IsLastIngrBread() {
 	else {
 		return false;
 	}
+}
+
+bool ASandwich::IsCompleteSandwich()
+{
+	return IsFirstIngrBread() && IsLastIngrBread();
 }

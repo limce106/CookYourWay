@@ -5,3 +5,4 @@
 소켓 부착
 해시
 Epsilon-Greedy Algorithm (경쟁사 자동 운영, 탐색 + 학습 방식)
+블랙보드, 비헤이비어 트리
