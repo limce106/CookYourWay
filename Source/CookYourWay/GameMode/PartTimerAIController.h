@@ -5,6 +5,8 @@
 #include "CoreMinimal.h"
 #include "AIController.h"
 #include <Actor/CuttingBoard.h>
+#include <Actor/Table.h>
+#include "Actor/PartTimer.h"
 #include "PartTimerAIController.generated.h"
 
 /**
@@ -14,7 +16,7 @@ UCLASS()
 class COOKYOURWAY_API APartTimerAIController : public AAIController
 {
 	GENERATED_BODY()
-	
+
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI")
 	UBehaviorTree* BTAsset;
@@ -28,10 +30,8 @@ public:
 
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<ACuttingBoard> BP_CuttingBoard;
-
-	static const FName HasUncookedIngrOnCuttingBoard;
-	static const FName IsCompletedSandwichExist;
-	static const FName MovePos;
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<ATable> BP_Table;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	ACuttingBoard* HasUnCookedIngrCuttingBoard;
@@ -39,4 +39,9 @@ public:
 	bool CheckIfUncookedIngrOnCuttingBoard();
 	UFUNCTION(BlueprintCallable)
 	void ChopIngrOnCuttingBoard();
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	ATable* HasCompleteSandwichTable;
+	UFUNCTION(BlueprintCallable)
+	bool CheckIfCompleteSandwichOnTable();
 };

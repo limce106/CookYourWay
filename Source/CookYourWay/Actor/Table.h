@@ -29,8 +29,10 @@ public:
 	UPROPERTY(BlueprintReadWrite)
 	AActor* PlacedActor;
 
+	UFUNCTION(BlueprintCallable)
 	void PutActorOn(AActor* Actor);
-	void PickUpActor();
+	UFUNCTION(BlueprintCallable)
+	void PickUpActor(AActor* PickUpCharacter);
 
 	void TableInteraction();
 };

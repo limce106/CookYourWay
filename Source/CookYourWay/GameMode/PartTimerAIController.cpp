@@ -7,10 +7,7 @@
 #include "BehaviorTree//BlackboardData.h"
 #include <Kismet/GameplayStatics.h>
 #include "Actor/Ingredient.h"
-
-const FName APartTimerAIController::HasUncookedIngrOnCuttingBoard(TEXT("HasUncookedIngrOnCuttingBoard"));
-const FName APartTimerAIController::IsCompletedSandwichExist(TEXT("IsCompletedSandwichExist"));
-const FName APartTimerAIController::MovePos(TEXT("MovePos"));
+#include "Actor/Sandwich.h"
 
 APartTimerAIController::APartTimerAIController()
 {
@@ -53,4 +50,25 @@ void APartTimerAIController::ChopIngrOnCuttingBoard()
 				HasUnCookedIngrCuttingBoard->Chop();
 			}), 0.5f, false);
 	}*/
+}
+
+bool APartTimerAIController::CheckIfCompleteSandwichOnTable()
+{
+	TArray<AActor*> Tables;
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), BP_Table, Tables);
+
+	for (auto Actor : Tables) {
+		ATable* Table = Cast<ATable>(Actor);
+
+		if (Table->IsActorOn && Table->PlacedActor->GetClass()->IsChildOf(ASandwich::StaticClass())) {
+			ASandwich* Sandwich = Cast<ASandwich>(Table->PlacedActor);
+
+			if (Sandwich->IsCompleteSandwich()) {
+				HasCompleteSandwichTable = Table;
+				return true;
+			}
+		}
+	}
+
+	return false;
 }

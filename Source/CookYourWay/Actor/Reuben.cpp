@@ -103,7 +103,7 @@ void AReuben::HoldActor(AActor* Actor)
 
 void AReuben::PutDownActor()
 {
-	UPrimitiveComponent* ActorCollision = Cast<UPrimitiveComponent>(HeldActor->FindComponentByClass(UPrimitiveComponent::StaticClass()));
+	UShapeComponent* ActorCollision = Cast<UShapeComponent>(HeldActor->FindComponentByClass(UShapeComponent::StaticClass()));
 	if (ActorCollision) {
 		if ((HeldActor->GetClass() == BP_Ingredient) || (HeldActor->GetClass() == BP_Sandwich)) {
 			ActorCollision->SetCollisionProfileName(TEXT("OnSomething"));
@@ -186,28 +186,16 @@ void AReuben::GiveSandwich(ACustomer* Customer)
 	Sandwich->SetIngrWidgetVisibility(ESlateVisibility::Hidden);
 
 	ADiningTable* DiningTable = PlayerBistro->GetDiningTable(Customer->CurSeatNum);
-	DiningTable->PutFoodOn(Sandwich);
+	DiningTable->PutFoodOn(this, Sandwich);
 	Customer->AddPlayerSandwichReview(Sandwich);
 
 	Customer->EatSandwich();
-
-	GetWorld()->GetTimerManager().SetTimer(Customer->CustSandwichTimerHandler, FTimerDelegate::CreateLambda([=]()
-		{
-			if (IsValid(Customer) && !Customer->IsActorBeingDestroyed())
-			{
-				PlayerBistro->LeaveAndSitNextCust(Customer);
-			}
-			else
-			{
-				UE_LOG(LogTemp, Warning, TEXT("Customer is invalid or being destroyed."));
-			}
-		}), Customer->LeaveDelayTime, false);
 }
 
 void AReuben::GiveDessert(ACustomer* Customer)
 {
 	ADiningTable* DiningTable = PlayerBistro->GetDiningTable(Customer->CurSeatNum);
-	DiningTable->PutFoodOn(HeldActor);
+	DiningTable->PutFoodOn(this, HeldActor);
 
 	Customer->EatDessert();
 	Customer->AddDessertReview();

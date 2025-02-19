@@ -322,6 +322,18 @@ void ACustomer::AddDessertReview()
 void ACustomer::EatSandwich()
 {
 	Eat(7.0f);
+
+	GetWorld()->GetTimerManager().SetTimer(CustSandwichTimerHandler, FTimerDelegate::CreateLambda([=]()
+		{
+			if (IsValid(this) && !IsActorBeingDestroyed())
+			{
+				PlayerBistro->LeaveAndSitNextCust(this);
+			}
+			else
+			{
+				UE_LOG(LogTemp, Warning, TEXT("Customer is invalid or being destroyed."));
+			}
+		}), LeaveDelayTime, false);
 }
 
 void ACustomer::ClearDestroyTimer()

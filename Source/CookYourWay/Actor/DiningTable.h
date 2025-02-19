@@ -20,7 +20,7 @@ protected:
 public:	
 	virtual void Tick(float DeltaTime) override;
 
-	UPROPERTY()
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	ACustomer* SeatedCustomer;
 
 	// 테이블 위에 액터가 있는지
@@ -31,6 +31,6 @@ public:
 	AActor* PlacedActor;
 
 	void DiningTableInteraction();
-	void PutFoodOn(AActor* Food);
+	void PutFoodOn(AActor* HoldingCharacter, AActor* Food);
 	void DestroyFoodOnDiningTable();
 };
