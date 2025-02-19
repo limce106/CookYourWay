@@ -42,14 +42,24 @@ void APartTimerAIController::ChopIngrOnCuttingBoard()
 	AIngredient* IngrOnCuttingBoard = HasUnCookedIngrCuttingBoard->PlacedIngredient;
 	FTimerHandle ChopTimerHandler;
 
-	HasUnCookedIngrCuttingBoard->Chop();
+	bool IsIngrCooked = IngrOnCuttingBoard->IsCooked();
 
-	/*while (!IngrOnCuttingBoard->IsCooked()) {
-		GetWorld()->GetTimerManager().SetTimer(ChopTimerHandler, FTimerDelegate::CreateLambda([=]()
-			{
-				HasUnCookedIngrCuttingBoard->Chop();
-			}), 0.5f, false);
-	}*/
+	if (!IsIngrCooked) {
+		HasUnCookedIngrCuttingBoard->Chop();
+
+		if (!GetWorld()->GetTimerManager().IsTimerActive(ChopTimerHandler)) {
+			GetWorld()->GetTimerManager().SetTimer(
+				ChopTimerHandler,
+				this,
+				&APartTimerAIController::ChopIngrOnCuttingBoard,
+				0.5f,
+				false);
+		}
+	}
+	else {
+		GetWorld()->GetTimerManager().ClearTimer(ChopTimerHandler);
+		GetBlackboardComponent()->SetValueAsBool(TEXT("IsChopping"), false);
+	}
 }
 
 bool APartTimerAIController::CheckIfCompleteSandwichOnTable()
