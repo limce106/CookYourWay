@@ -36,6 +36,7 @@ void APartTimer::HoldActor(AActor* Actor)
 		ActorCollision->SetCollisionProfileName(TEXT("NoCollision"));
 	}
 
+	IsHold = true;
 	HeldActor = Actor;
 
 	FRotator HeldActorRotation = GetActorRotation();
@@ -50,6 +51,7 @@ void APartTimer::PutDownActor()
 		ActorCollision->SetCollisionProfileName(TEXT("OnSomething"));
 	}
 
+	IsHold = false;
 	HeldActor = nullptr;
 }
 

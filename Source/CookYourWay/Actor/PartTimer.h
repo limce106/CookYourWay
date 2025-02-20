@@ -26,6 +26,8 @@ public:
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<APlayerBistro> BP_PlayerBistro;
 
+	UPROPERTY(BlueprintReadWrite)
+	bool IsHold = false;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	AActor* HeldActor;
 	UFUNCTION(BlueprintCallable)
