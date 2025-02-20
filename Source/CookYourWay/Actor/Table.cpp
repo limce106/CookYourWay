@@ -47,7 +47,7 @@ void ATable::PutActorOn(AActor* Actor)
 
 void ATable::PickUpActor(AActor* PickUpCharacter)
 {
-	if (!IsActorOn || Reuben->IsHold) {
+	if (!IsActorOn) {
 		return;
 	}
 
