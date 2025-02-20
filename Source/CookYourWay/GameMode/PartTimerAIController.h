@@ -40,7 +40,7 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void ChopIngrOnCuttingBoard();
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	ATable* HasCompleteSandwichTable;
 	UFUNCTION(BlueprintCallable)
 	bool CheckIfCompleteSandwichOnTable();

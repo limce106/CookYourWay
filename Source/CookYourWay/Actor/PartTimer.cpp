@@ -102,7 +102,7 @@ void APartTimer::GiveSandwich()
 	Sandwich->SetIngrWidgetVisibility(ESlateVisibility::Hidden);
 
 	TargetDiningTable->PutFoodOn(this, Sandwich);
-	SeatedCustomer->AddPlayerSandwichReview(Sandwich);
 
 	SeatedCustomer->EatSandwich();
+	SeatedCustomer->AddPlayerSandwichReview(Sandwich);
 }
