@@ -113,7 +113,7 @@ void AStore::CreateCustomer()
 			Customer->SetActorLocation(CustomerLocation);
 			Customer->SetActorRotation(FRotator(0.0f, 90.0f, 0.0f));
 		}
-		Customer->MoveToDestination();
+		//Customer->MoveToDestination();
 	}
 }
 
