@@ -34,7 +34,7 @@ void ATable::PutActorOn(AActor* Actor)
 	Reuben->PutDownActor();
 
 	FVector ActorLocation = GetActorLocation();
-	ActorLocation.Z += 65.0f;
+	ActorLocation.Z += 78.0f;
 	Actor->SetActorLocation(ActorLocation);
 	Actor->SetActorRotation(GetActorRotation());
 
