@@ -46,7 +46,7 @@ void ACuttingBoard::CuttingBoardInteraction()
 		return;
 	}
 
-	if (Reuben->GetHeldActorClass()->IsChildOf(AIngredient::StaticClass())) {
+	if (Reuben->IsHold && Reuben->GetHeldActorClass()->IsChildOf(AIngredient::StaticClass())) {
 		AIngredient* HoldingIngr = Cast<AIngredient>(Reuben->HeldActor);
 		if (HoldingIngr->CurIngrData.IngrType == "Filling" && !this->IsIngredientOn) {
 			PutIngrOn(HoldingIngr);

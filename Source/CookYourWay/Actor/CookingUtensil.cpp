@@ -73,11 +73,11 @@ bool ACookingUtensil::CommonCookingUtensilInteraction()
 	if (!Reuben->IsHold) {
 		if (IsIngredientOn) {
 			PickUpIngr();
+			return true;
 		}
-		else {
+		/*else {
 			Reuben->HoldActor(this);
-		}
-		return true;
+		}*/
 	}
 	else if (Reuben->GetHeldActorClass()->IsChildOf(ASandwich::StaticClass())) {
 		if (IsIngredientOn && PlacedIngredient->IsCooked()) {
@@ -85,7 +85,6 @@ bool ACookingUtensil::CommonCookingUtensilInteraction()
 		}
 		return true;
 	}
-	else {
-		return false;
-	}
+	
+	return false;
 }
