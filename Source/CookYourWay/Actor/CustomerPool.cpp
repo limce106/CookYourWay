@@ -23,7 +23,7 @@ void ACustomerPool::Tick(float DeltaTime)
 void ACustomerPool::InitCustomerPool()
 {
 	for (int32 i = 0; i < PoolSize; i++) {
-		ACustomer* NewCustomer = GetWorld()->SpawnActor<ACustomer>(BP_Customer);
+		ACustomer* NewCustomer = GetWorld()->SpawnActor<ACustomer>(BP_Customer, FVector(0.0f, 0.0f, 10.f), FRotator::ZeroRotator);
 		if (NewCustomer) {
 			NewCustomer->SetActorHiddenInGame(true);
 			NewCustomer->SetActorEnableCollision(false);
