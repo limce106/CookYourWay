@@ -23,12 +23,13 @@ class COOKYOURWAY_API APlayerBistro : public AActor
 
 	// 손님 위치
 	TArray<FVector> CustSeatLocArr = {
-		/*추후 지정 필요*/
-		FVector(340.0f, -5500.0f, 120.0f),
-		FVector(440.0f, -5500.0f, 120.0f),
-		FVector(540.0f, -5500.0f, 120.0f),
-		FVector(640.0f, -5500.0f, 120.0f),
-		FVector(740.0f, -5500.0f, 120.0f)
+		//FVector(0.0f, -5600.0f, 120.0f),
+		FVector(150.0f, -5600.0f, 120.0f),
+		FVector(300.0f, -5600.0f, 120.0f),
+		FVector(450.0f, -5600.0f, 120.0f),
+		FVector(600.0f, -5600.0f, 120.0f),
+		FVector(750.0f, -5600.0f, 120.0f),
+		//FVector(900.0f, -5600.0f, 120.0f)
 	};
 
 	// 자리에 손님이 앉았는지

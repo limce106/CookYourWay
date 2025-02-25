@@ -23,7 +23,7 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	// 테이블 위에 액터가 있는지
-	UPROPERTY(BlueprintReadWrite)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	bool IsActorOn = false;
 	// 테이블 위에 올라간 액터
 	UPROPERTY(BlueprintReadWrite)

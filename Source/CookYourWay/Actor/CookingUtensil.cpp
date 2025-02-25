@@ -75,9 +75,6 @@ bool ACookingUtensil::CommonCookingUtensilInteraction()
 			PickUpIngr();
 			return true;
 		}
-		/*else {
-			Reuben->HoldActor(this);
-		}*/
 	}
 	else if (Reuben->GetHeldActorClass()->IsChildOf(ASandwich::StaticClass())) {
 		if (IsIngredientOn && PlacedIngredient->IsCooked()) {
