@@ -36,10 +36,6 @@ float ACookingUtensil::GetOneCookIncreasement()
 void ACookingUtensil::PutIngrOn(AIngredient* Ingr)
 {
 	Reuben->PutDownActor();
-
-	FVector IngrLocation = GetActorLocation();
-	IngrLocation.Z += 5.0f;
-	Ingr->SetActorLocation(IngrLocation);
 	Ingr->SetActorRotation(GetActorRotation());
 
 	IsIngredientOn = true;

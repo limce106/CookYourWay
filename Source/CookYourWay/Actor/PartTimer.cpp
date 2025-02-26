@@ -70,7 +70,7 @@ void APartTimer::SetHeldActorLoc()
 
 TArray<int32> APartTimer::GetHoldingSandwichIngr()
 {
-	if (HeldActor && HeldActor->GetClass()->IsChildOf(ASandwich::StaticClass())) {
+	if (IsHold && HeldActor->GetClass()->IsChildOf(ASandwich::StaticClass())) {
 		ASandwich* Sandwich = Cast<ASandwich>(HeldActor);
 		TArray<int32> Ingr = Sandwich->IngrActorToNum();
 		if (Sandwich->IsFirstIngrBread()) {

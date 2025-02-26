@@ -70,7 +70,7 @@ bool APartTimerAIController::CheckIfCompleteSandwichOnTable()
 	for (auto Actor : Tables) {
 		ATable* Table = Cast<ATable>(Actor);
 
-		if (Table->IsActorOn && Table->PlacedActor->GetClass()->IsChildOf(ASandwich::StaticClass())) {
+		if (Table->PlacedActor && Table->PlacedActor->GetClass()->IsChildOf(ASandwich::StaticClass())) {
 			ASandwich* Sandwich = Cast<ASandwich>(Table->PlacedActor);
 
 			if (Sandwich->IsCompleteSandwich()) {

@@ -65,7 +65,9 @@ void APlayerBistro::SitCust(ACustomer* Customer, int32 SeatIdx)
 	IsSeated[SeatIdx] = true;
 	Customer->CurSeatNum = SeatIdx;
 
-	Customer->SetActorLocation(CustSeatLocArr[SeatIdx]);
+	FVector CustLocation = CustSeatLocArr[SeatIdx];
+	CustLocation.Z -= 40.0f;
+	Customer->SetActorLocation(CustLocation);
 
 	ADiningTable* SeatedDiningTable = GetDiningTable(SeatIdx);
 	SeatedDiningTable->SeatedCustomer = Customer;

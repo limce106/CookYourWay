@@ -67,7 +67,7 @@ void ADiningTable::PutFoodOn(AActor* HoldingCharacter, AActor* Food)
 void ADiningTable::DestroyFoodOnDiningTable()
 {
 	if (IsActorOn) {
-		if (PlacedActor->GetClass()->IsChildOf(ASandwich::StaticClass())) {
+		if (PlacedActor && PlacedActor->GetClass()->IsChildOf(ASandwich::StaticClass())) {
 			ASandwich* Sandwich = Cast<ASandwich>(PlacedActor);
 			Sandwich->DestroySandwich();
 		}

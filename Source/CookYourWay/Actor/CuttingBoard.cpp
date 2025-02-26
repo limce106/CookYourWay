@@ -29,6 +29,11 @@ void ACuttingBoard::Tick(float DeltaTime)
 void ACuttingBoard::PutIngrOn(AIngredient* Ingr)
 {
 	Super::PutIngrOn(Ingr);
+
+	FVector IngrLocation = GetActorLocation();
+	IngrLocation.X -= 15.0f;
+	IngrLocation.Z += 110.0f;
+	Ingr->SetActorLocation(IngrLocation);
 }
 
 void ACuttingBoard::Chop()

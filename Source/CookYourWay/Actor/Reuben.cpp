@@ -88,7 +88,7 @@ UClass* AReuben::GetHeldActorClass()
 
 void AReuben::HoldActor(AActor* Actor)
 {
-	UShapeComponent* ActorCollision = Cast<UShapeComponent>(Actor->FindComponentByClass(UShapeComponent::StaticClass()));
+	UPrimitiveComponent* ActorCollision = Cast<UPrimitiveComponent>(Actor->FindComponentByClass(UShapeComponent::StaticClass()));
 	if (ActorCollision) {
 		ActorCollision->SetCollisionProfileName(TEXT("NoCollision"));
 	}
