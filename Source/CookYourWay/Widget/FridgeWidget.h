@@ -51,8 +51,6 @@ public:
 	class UButton* Button_Dessert;
 	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
 	class UScrollBox* ScrollBox_Ingredients;
-	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
-	class UTextBlock* TextBlock_Error;
 
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<UUserWidget> BP_FridgeClassGroup;
@@ -61,4 +59,7 @@ public:
 	bool CanBuyIngr = true;
 
 	ETabType CurTabType = ETabType::BreadTab;
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void PlayWarningAnim();
 };

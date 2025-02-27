@@ -47,7 +47,7 @@ void ATable::PutActorOn(AActor* Actor)
 
 void ATable::PickUpActor(AActor* PickUpCharacter)
 {
-	if (!IsActorOn) {
+	if (!IsActorOn || PlacedActor == nullptr) {
 		return;
 	}
 

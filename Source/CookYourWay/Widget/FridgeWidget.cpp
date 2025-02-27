@@ -18,7 +18,6 @@ void UFridgeWidget::NativePreConstruct()
 	Button_Sauce = (UButton*)GetWidgetFromName(TEXT("Button_Sauce"));
 	Button_Dessert = (UButton*)GetWidgetFromName(TEXT("Button_Dessert"));
 	ScrollBox_Ingredients = (UScrollBox*)GetWidgetFromName(TEXT("ScrollBox_Ingredients"));
-	TextBlock_Error = (UTextBlock*)GetWidgetFromName(TEXT("TextBlock_Error"));
 }
 
 void UFridgeWidget::NativeConstruct()

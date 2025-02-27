@@ -90,7 +90,6 @@ void UFridgeIngrWidget::OnClick_ButtonIngredient()
 	else if (Reuben->IsHold && Reuben->HeldActor->GetClass() == BP_Sandwich) {
 		// 소스를 골랐다면
 		if (FridgeWidget->CurTabType == ETabType::BreadTab || FridgeWidget->CurTabType == ETabType::SauceTab) {
-			FridgeWidget->TextBlock_Error->SetVisibility(ESlateVisibility::Hidden);
 
 			/*나중에 false로 바꿀 것!!*/
 			AIngredient* ClickedIngredient = IngredientSpawnFactory::SpawnIngredient(GetWorld(), BP_IngredientClass, Reuben->GetActorLocation(), Reuben->GetActorRotation(), IngrEngName, true);
@@ -99,12 +98,12 @@ void UFridgeIngrWidget::OnClick_ButtonIngredient()
 			PayCClassIngr();
 		}
 		else {
-			FridgeWidget->TextBlock_Error->SetVisibility(ESlateVisibility::Visible);
+			FridgeWidget->PlayWarningAnim();
 		}
 		
 	}
 	else if (Reuben->IsHold && Reuben->HeldActor->GetClass() == BP_IngredientClass) {
-		FridgeWidget->TextBlock_Error->SetVisibility(ESlateVisibility::Visible);
+		FridgeWidget->PlayWarningAnim();
 	}
 }
 
