@@ -22,6 +22,10 @@ void APartTimerAIController::OnPossess(APawn* InPawn)
 
 bool APartTimerAIController::CheckIfUncookedIngrOnCuttingBoard()
 {
+	if (IsChopping) {
+		return true;
+	}
+
 	TArray<AActor*> CuttingBoards;
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), BP_CuttingBoard, CuttingBoards);
 
@@ -58,7 +62,7 @@ void APartTimerAIController::ChopIngrOnCuttingBoard()
 	}
 	else {
 		GetWorld()->GetTimerManager().ClearTimer(ChopTimerHandler);
-		GetBlackboardComponent()->SetValueAsBool(TEXT("IsChopping"), false);
+		IsChopping = false;
 	}
 }
 

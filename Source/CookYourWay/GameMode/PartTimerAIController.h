@@ -33,6 +33,9 @@ public:
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<ATable> BP_Table;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	bool IsChopping = false;
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	ACuttingBoard* HasUnCookedIngrCuttingBoard;
 	UFUNCTION(BlueprintCallable)

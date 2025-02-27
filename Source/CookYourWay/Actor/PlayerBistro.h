@@ -24,11 +24,11 @@ class COOKYOURWAY_API APlayerBistro : public AActor
 	// ¼Õ´Ô À§Ä¡
 	TArray<FVector> CustSeatLocArr = {
 		//FVector(0.0f, -5600.0f, 120.0f),
-		FVector(150.0f, -5600.0f, 120.0f),
-		FVector(300.0f, -5600.0f, 120.0f),
-		FVector(450.0f, -5600.0f, 120.0f),
-		FVector(600.0f, -5600.0f, 120.0f),
-		FVector(750.0f, -5600.0f, 120.0f),
+		FVector(120.0f, -5600.0f, 120.0f),
+		FVector(270.0f, -5600.0f, 120.0f),
+		FVector(420.0f, -5600.0f, 120.0f),
+		FVector(570.0f, -5600.0f, 120.0f),
+		FVector(720.0f, -5600.0f, 120.0f),
 		//FVector(900.0f, -5600.0f, 120.0f)
 	};
 
