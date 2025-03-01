@@ -66,6 +66,7 @@ void APlayerBistro::SitCust(ACustomer* Customer, int32 SeatIdx)
 	Customer->CurSeatNum = SeatIdx;
 
 	FVector CustLocation = CustSeatLocArr[SeatIdx];
+	CustLocation.Y -= 25.0f;
 	CustLocation.Z -= 40.0f;
 	Customer->SetActorLocation(CustLocation);
 
