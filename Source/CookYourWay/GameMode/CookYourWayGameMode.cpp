@@ -13,7 +13,7 @@ void ACookYourWayGameMode::InitGame(const FString& MapName, const FString& Optio
 	CustomerDataManagerSystem = GetGameInstance()->GetSubsystem<UCustomerDataManagerSystem>();
 
 	// Å×½ºÆ®
-	VillageManagerSystem->Day++;
+	//VillageManagerSystem->Day++;
 	//
 }
 
