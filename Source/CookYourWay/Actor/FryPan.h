@@ -13,6 +13,8 @@ UCLASS()
 class COOKYOURWAY_API AFryPan : public ACookingUtensil
 {
 	GENERATED_BODY()
+	
+	class UParticleSystemComponent* ParticleSystemComponent;
 
 	float TempDelayTime;
 	bool DelayWithDeltaTime(float DelayTime, float DeltaSeconds);

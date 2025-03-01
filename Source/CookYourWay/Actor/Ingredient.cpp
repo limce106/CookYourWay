@@ -38,11 +38,13 @@ void AIngredient::Init(FString IngrName, bool IsSliced)
 
 void AIngredient::SetPivotCenter()
 {
+	StaticMesh->SetWorldScale3D(FVector(1.5f, 1.5f, 1.5f));
+
 	FVector MinBound, MaxBound;
 	// 메시의 로컬 바운딩 박스에서 최소 좌표와 최대 좌표를 가져온다.
 	StaticMesh->GetLocalBounds(MinBound, MaxBound);
 	// 메시의 중심 위치 계산
-	FVector MeshCenter = (MinBound + MaxBound) / 2.0f;
+	FVector MeshCenter = ((MinBound + MaxBound) / 2.0f) * StaticMesh->GetComponentScale();
 	StaticMesh->SetRelativeLocation(-MeshCenter);
 }
 

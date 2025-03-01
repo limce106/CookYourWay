@@ -6,11 +6,16 @@
 #include <Kismet/GameplayStatics.h>
 #include "GameInstance/VillageManagerSystem.h"
 #include "Reuben.h"
+#include "Particles/ParticleSystemComponent.h"
 
 void AFryPan::BeginPlay()
 {
 	Super::BeginPlay();
 
+	ParticleSystemComponent = Cast<UParticleSystemComponent>(FindComponentByClass(UParticleSystemComponent::StaticClass()));
+	ParticleSystemComponent->SetRelativeLocation(FVector(0.0f, 0.0f, 150.0f));
+	ParticleSystemComponent->SetWorldScale3D(FVector(0.6f, 0.6f, 0.6f));
+	ParticleSystemComponent->bAutoActivate = false;
 }
 
 float AFryPan::GetOneCookIncreasement()
@@ -51,6 +56,10 @@ void AFryPan::PutIngrOn(AIngredient* Ingr)
 	Ingr->SetActorLocation(IngrLocation);
 
 	IsFrying = true;
+
+	UParticleSystem* SteamParticle = LoadObject<UParticleSystem>(nullptr, TEXT("/Game/Effect/P_Steam_Lit.P_Steam_Lit"));
+	ParticleSystemComponent->SetTemplate(SteamParticle);
+	ParticleSystemComponent->ActivateSystem();
 }
 
 void AFryPan::Fry()
@@ -59,7 +68,7 @@ void AFryPan::Fry()
 	BP_CookRateWidget->CookRate += GetOneCookIncreasement();
 
 	// 최대 조리 정도에서 5초 더 구워지면 태움 처리
-	if (PlacedIngredient->CurCookRate > PlacedIngredient->MaxCookRate + (GetOneCookIncreasement() * 5)) {
+	if (PlacedIngredient->CurCookRate > PlacedIngredient->MaxCookRate + (GetOneCookIncreasement() * 5) && !PlacedIngredient->IsBurn) {
 		IsFrying = false;
 		PlacedIngredientBurnt();
 	}
@@ -84,4 +93,7 @@ void AFryPan::PlacedIngredientBurnt()
 {
 	PlacedIngredient->IsBurn = true;
 	PlacedIngredient->ReplaceBurntMeatMaterial();
+
+	UParticleSystem* FireParticle = LoadObject<UParticleSystem>(nullptr, TEXT("/Game/Effect/P_Fire.P_Fire"));
+	ParticleSystemComponent->SetTemplate(FireParticle);
 }
