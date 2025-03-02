@@ -20,8 +20,6 @@ class COOKYOURWAY_API AIngredient : public AActor
 
 	class UIngredientManagerSystem* IngredientManagerSystem;
 
-	// 제각각인 재료들의 피봇을 맞추기 위한 함수
-	void SetPivotCenter();
 	void SetStaticMeshAndPivot(FString IngrName, bool IsSliced);
 	
 public:	
@@ -46,6 +44,10 @@ public:
 
 	// 스폰 시 필수로 호출
 	void Init(FString IngrName, bool IsSliced);
+	void SetScale();
+
+	// 제각각인 재료들의 피봇을 맞추기 위한 함수
+	void SetPivotCenter();
 
 	UFUNCTION(BlueprintCallable)
 	bool IsCooked();

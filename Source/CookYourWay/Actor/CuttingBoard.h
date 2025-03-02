@@ -13,6 +13,12 @@ UCLASS()
 class COOKYOURWAY_API ACuttingBoard : public ACookingUtensil
 {
 	GENERATED_BODY()
+
+	const int32 CutCount = 15;
+	float IngredientShrinkRate;
+	UStaticMeshComponent* IngrStaticMesh;
+
+	void SetIngredientShrinkRate();
 	
 protected:
 	virtual void BeginPlay() override;

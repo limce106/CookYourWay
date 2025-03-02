@@ -32,10 +32,18 @@ void AIngredient::Init(FString IngrName, bool IsSliced)
 	SetStaticMeshAndPivot(IngrName, IsSliced);
 }
 
+void AIngredient::SetScale()
+{
+	if (CurIngrData.IngrType == "Filling") {
+		StaticMesh->SetWorldScale3D(FVector(3.0f, 3.0f, 3.0f));
+	}
+	else {
+		StaticMesh->SetWorldScale3D(FVector(1.5f, 1.5f, 1.5f));
+	}
+}
+
 void AIngredient::SetPivotCenter()
 {
-	StaticMesh->SetWorldScale3D(FVector(1.5f, 1.5f, 1.5f));
-
 	FVector MinBound, MaxBound;
 	// 메시의 로컬 바운딩 박스에서 최소 좌표와 최대 좌표를 가져온다.
 	StaticMesh->GetLocalBounds(MinBound, MaxBound);
@@ -49,6 +57,7 @@ void AIngredient::SetStaticMeshAndPivot(FString IngrName, bool IsSliced)
 	UStaticMesh* IngredientMesh = IngredientManagerSystem->GetIngrModel(IngrName, IsSliced);
 	StaticMesh->SetStaticMesh(IngredientMesh);
 
+	SetScale();
 	SetPivotCenter();
 }
 

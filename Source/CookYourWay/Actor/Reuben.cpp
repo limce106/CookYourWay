@@ -143,8 +143,8 @@ void AReuben::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 void AReuben::Chop()
 {
-	ACuttingBoard* CuttingBoard = Cast<ACuttingBoard>(UGameplayStatics::GetActorOfClass(GetWorld(), BP_CuttingBoard));
-	if (IsOverlappingActor(CuttingBoard)) {
+	if (OverlappedActor->GetClass()->IsChildOf(ACuttingBoard::StaticClass())) {
+		ACuttingBoard* CuttingBoard = Cast<ACuttingBoard>(OverlappedActor);
 		CuttingBoard->Chop();
 	}
 }

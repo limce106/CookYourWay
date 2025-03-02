@@ -14,16 +14,18 @@ void ACuttingBoard::BeginPlay()
 
 float ACuttingBoard::GetOneCookIncreasement()
 {
-	return (1.0f / 15.0f);
-
-	// Å×½ºÆ®
-	// return (1.0f / 1.0f);
-	//
+	return (float)(1.0f / CutCount);
 }
 
 void ACuttingBoard::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+}
+
+void ACuttingBoard::SetIngredientShrinkRate()
+{
+	IngrStaticMesh = Cast<UStaticMeshComponent>(PlacedIngredient->FindComponentByClass(UStaticMeshComponent::StaticClass()));
+	IngredientShrinkRate = (float)((IngrStaticMesh->GetComponentScale().X - 1.5f) / CutCount);
 }
 
 void ACuttingBoard::PutIngrOn(AIngredient* Ingr)
@@ -34,6 +36,8 @@ void ACuttingBoard::PutIngrOn(AIngredient* Ingr)
 	IngrLocation.X -= 15.0f;
 	IngrLocation.Z += 110.0f;
 	Ingr->SetActorLocation(IngrLocation);
+
+	SetIngredientShrinkRate();
 }
 
 void ACuttingBoard::Chop()
@@ -41,6 +45,11 @@ void ACuttingBoard::Chop()
 	if (IsIngredientOn && PlacedIngredient->CurCookRate < PlacedIngredient->MaxCookRate) {
 		PlacedIngredient->CurCookRate += GetOneCookIncreasement();
 		BP_CookRateWidget->CookRate += GetOneCookIncreasement();
+
+		if (IngrStaticMesh) {
+			IngrStaticMesh->SetWorldScale3D(IngrStaticMesh->GetComponentScale() - IngredientShrinkRate);
+			PlacedIngredient->SetPivotCenter();
+		}
 	}
 }
 
