@@ -51,9 +51,6 @@ public:
 	bool IsCooked();
 
 	void IngredientInteraction();
-
-	// 탄 고기 머티리얼 변경
-	void ReplaceBurntMeatMaterial();
 };
 
 class IngredientSpawnFactory

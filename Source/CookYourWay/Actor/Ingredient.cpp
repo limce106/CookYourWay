@@ -17,10 +17,6 @@ AIngredient::AIngredient()
 
 	StaticMesh->SetCollisionProfileName(TEXT("NoCollision"));
 	StaticMesh->SetWorldScale3D(FVector(1.0, 1.0, 1.5));
-
-	FString BurntMeatMaterialPath = TEXT("/Game/Material/M_BurntMeat.M_BurntMeat");
-	static ConstructorHelpers::FObjectFinder<UMaterialInterface> MaterialFinder(*BurntMeatMaterialPath);
-	BurntMeatMaterial = MaterialFinder.Object;
 }
 
 void AIngredient::Init(FString IngrName, bool IsSliced)
@@ -100,13 +96,5 @@ void AIngredient::IngredientInteraction()
 		if (!HoldingCookingUtensil->IsIngredientOn) {
 			HoldingCookingUtensil->PutIngrOn(this);
 		}
-	}
-}
-
-void AIngredient::ReplaceBurntMeatMaterial()
-{
-	int32 MaterialNum = StaticMesh->GetNumMaterials();
-	for (int i = 0; i < MaterialNum; i++) {
-		StaticMesh->SetMaterial(i, BurntMeatMaterial);
 	}
 }

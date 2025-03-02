@@ -15,6 +15,9 @@ class COOKYOURWAY_API AFryPan : public ACookingUtensil
 	GENERATED_BODY()
 	
 	class UParticleSystemComponent* ParticleSystemComponent;
+	UStaticMeshComponent* OverlayMesh;
+
+	float OverCookedTime = 3.0f;
 
 	float TempDelayTime;
 	bool DelayWithDeltaTime(float DelayTime, float DeltaSeconds);
@@ -35,4 +38,5 @@ public:
 	void FryPanInteraction();
 
 	void PlacedIngredientBurnt();
+	void AddCookedMaterialOverlay(bool IsBurn);
 };

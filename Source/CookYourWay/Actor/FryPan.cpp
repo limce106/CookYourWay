@@ -64,13 +64,23 @@ void AFryPan::PutIngrOn(AIngredient* Ingr)
 
 void AFryPan::Fry()
 {
+	if (PlacedIngredient->IsBurn) {
+		return;
+	}
+
 	PlacedIngredient->CurCookRate += GetOneCookIncreasement();
 	BP_CookRateWidget->CookRate += GetOneCookIncreasement();
 
-	// 최대 조리 정도에서 5초 더 구워지면 태움 처리
-	if (PlacedIngredient->CurCookRate > PlacedIngredient->MaxCookRate + (GetOneCookIncreasement() * 5) && !PlacedIngredient->IsBurn) {
-		IsFrying = false;
-		PlacedIngredientBurnt();
+	if (PlacedIngredient->CurCookRate == PlacedIngredient->MaxCookRate) {
+		AddCookedMaterialOverlay(false);
+	}
+	else if (PlacedIngredient->CurCookRate > PlacedIngredient->MaxCookRate) {
+		OverCookedTime--;
+		// 최대 조리 정도에서 3초 더 구워지면 태움 처리
+		if (OverCookedTime == 0) {
+			IsFrying = false;
+			PlacedIngredientBurnt();
+		}
 	}
 }
 
@@ -78,6 +88,7 @@ void AFryPan::FryPanInteraction()
 {
 	bool InteractionSuccess = CommonCookingUtensilInteraction();
 	if (InteractionSuccess) {
+		ParticleSystemComponent->SetTemplate(nullptr);
 		return;
 	}
 
@@ -92,8 +103,46 @@ void AFryPan::FryPanInteraction()
 void AFryPan::PlacedIngredientBurnt()
 {
 	PlacedIngredient->IsBurn = true;
-	PlacedIngredient->ReplaceBurntMeatMaterial();
+	AddCookedMaterialOverlay(true);
 
 	UParticleSystem* FireParticle = LoadObject<UParticleSystem>(nullptr, TEXT("/Game/Effect/P_Fire.P_Fire"));
 	ParticleSystemComponent->SetTemplate(FireParticle);
+}
+
+void AFryPan::AddCookedMaterialOverlay(bool IsBurn)
+{
+	UMaterialInterface* OverlayMaterial;
+	if (IsBurn) {
+		OverlayMaterial = LoadObject<UMaterialInterface>(nullptr, TEXT("/Game/Material/M_BurntMeat.M_BurntMeat"));
+	}
+	else {
+		OverlayMaterial = LoadObject<UMaterialInterface>(nullptr, TEXT("/Game/Material/M_CookedMeat.M_CookedMeat"));
+	}
+
+	if (!OverlayMaterial)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Brown overlay material not found!"));
+		return;
+	}
+
+	UStaticMeshComponent* StaticMeshComponent = Cast<UStaticMeshComponent>(PlacedIngredient->FindComponentByClass(UStaticMeshComponent::StaticClass()));
+
+	// 새로운 StaticMeshComponent 생성
+	if (OverlayMesh == nullptr) {
+		OverlayMesh = NewObject<UStaticMeshComponent>(this);
+	}
+
+	OverlayMesh->SetStaticMesh(StaticMeshComponent->GetStaticMesh()); // 기존 메시 복제
+	OverlayMesh->SetMaterial(0, OverlayMaterial);
+	OverlayMesh->SetWorldTransform(StaticMeshComponent->GetComponentTransform()); // 기존 메시와 동일한 위치
+
+	// 기존 메시보다 약간 크게 설정해서 덮어씌우기
+	FVector NewScale = StaticMeshComponent->GetComponentScale() * 1.01f;
+	OverlayMesh->SetWorldScale3D(NewScale);
+
+	OverlayMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+
+	// 액터에 추가
+	OverlayMesh->RegisterComponent();
+	OverlayMesh->AttachToComponent(StaticMeshComponent, FAttachmentTransformRules::KeepWorldTransform);
 }
