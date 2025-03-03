@@ -75,3 +75,11 @@ bool ACookYourWayGameState::IsSaveDataExist()
 		return true;
 	}
 }
+
+void ACookYourWayGameState::DeleteCookYourWayData()
+{
+	UCookYourWaySaveGame* CookYourWaySaveGame = Cast<UCookYourWaySaveGame>(UGameplayStatics::LoadGameFromSlot(SaveSlotName, UserIndex));
+	if (CookYourWaySaveGame) {
+		UGameplayStatics::DeleteGameInSlot(SaveSlotName, UserIndex);
+	}
+}

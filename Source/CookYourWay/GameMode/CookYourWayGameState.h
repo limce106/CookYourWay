@@ -34,6 +34,8 @@ public:
 	void SaveCookYourWayData();
 	UFUNCTION(BlueprintCallable)
 	bool IsSaveDataExist();
+	UFUNCTION(BlueprintCallable)
+	void DeleteCookYourWayData();
 
 protected:
 	virtual void BeginPlay() override;
