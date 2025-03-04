@@ -5,6 +5,7 @@
 #include <Kismet/GameplayStatics.h>
 #include "GameInstance/CustomerDataManagerSystem.h"
 #include "GameInstance/VillageManagerSystem.h"
+#include <GameInstance/CookYourWayGameInstance.h>
 
 UNewsEffectComponent::UNewsEffectComponent()
 {
@@ -17,8 +18,8 @@ void UNewsEffectComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
-	CustomerDataManagerSystem = UGameplayStatics::GetGameInstance(GetWorld())->GetSubsystem<UCustomerDataManagerSystem>();
-	VillageManagerSystem = UGameplayStatics::GetGameInstance(GetWorld())->GetSubsystem<UVillageManagerSystem>();
+	VillageManagerSystem = UCookYourWayGameInstance::GetVillageManagerSystemStatic(this);
+	CustomerDataManagerSystem = UCookYourWayGameInstance::GetCustomerDataManagerSystemStatic(this);
 
 	CustNameKorToEng();
 	CurNewsEffect = VillageManagerSystem->NewsEffectCode;

@@ -5,6 +5,7 @@
 #include <Kismet/GameplayStatics.h>
 #include "GameInstance/VillageManagerSystem.h"
 #include "Dessert.h"
+#include <GameInstance/CookYourWayGameInstance.h>
 
 APlayerBistro::APlayerBistro()
 {
@@ -37,11 +38,11 @@ void APlayerBistro::BeginPlay()
 	Super::BeginPlay();
 
 	// Å×½ºÆ®
-	IngredientManagerSystem = UGameplayStatics::GetGameInstance(GetWorld())->GetSubsystem<UIngredientManagerSystem>();
+	IngredientManagerSystem = UCookYourWayGameInstance::GetIngredientManagerSystemStatic(this);
 	//
 
-	CustomerDataManagerSystem = UGameplayStatics::GetGameInstance(GetWorld())->GetSubsystem<UCustomerDataManagerSystem>();
-	VillageManagerSystem = UGameplayStatics::GetGameInstance(GetWorld())->GetSubsystem<UVillageManagerSystem>();
+	VillageManagerSystem = UCookYourWayGameInstance::GetVillageManagerSystemStatic(this);
+	CustomerDataManagerSystem = UCookYourWayGameInstance::GetCustomerDataManagerSystemStatic(this);
 	CustomerPool = Cast<ACustomerPool>(UGameplayStatics::GetActorOfClass(GetWorld(), BP_CustomerPool));
 
 	SpawnDiningTable();

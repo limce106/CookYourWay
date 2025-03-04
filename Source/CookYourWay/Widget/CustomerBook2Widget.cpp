@@ -4,12 +4,13 @@
 #include "Widget/CustomerBook2Widget.h"
 #include <Kismet/GameplayStatics.h>
 #include "Actor/VillageManager.h"
+#include <GameInstance/CookYourWayGameInstance.h>
 
 void UCustomerBook2Widget::NativeConstruct()
 {
 	Super::NativeConstruct();
 
-	VillageManagerSystem = UGameplayStatics::GetGameInstance(GetWorld())->GetSubsystem<UVillageManagerSystem>();
+	VillageManagerSystem = UCookYourWayGameInstance::GetVillageManagerSystemStatic(this);
 	Init();
 }
 

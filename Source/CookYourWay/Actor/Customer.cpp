@@ -9,6 +9,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include <Kismet/KismetMathLibrary.h>
 #include "VillageManager.h"
+#include <GameInstance/CookYourWayGameInstance.h>
 
 ACustomer::ACustomer()
 {
@@ -25,9 +26,9 @@ void ACustomer::BeginPlay()
 	Super::BeginPlay();
 
 	VillageManager = Cast<AVillageManager>(UGameplayStatics::GetActorOfClass(GetWorld(), AVillageManager::StaticClass()));
-	VillageManagerSystem = UGameplayStatics::GetGameInstance(GetWorld())->GetSubsystem<UVillageManagerSystem>();
-	IngredientManagerSystem = UGameplayStatics::GetGameInstance(GetWorld())->GetSubsystem<UIngredientManagerSystem>();
-	CustomerDataManagerSystem = UGameplayStatics::GetGameInstance(GetWorld())->GetSubsystem<UCustomerDataManagerSystem>();
+	VillageManagerSystem = UCookYourWayGameInstance::GetVillageManagerSystemStatic(this);
+	CustomerDataManagerSystem = UCookYourWayGameInstance::GetCustomerDataManagerSystemStatic(this);
+	IngredientManagerSystem = UCookYourWayGameInstance::GetIngredientManagerSystemStatic(this);
 
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), BP_Competitor, AllCompetitorActorArr);
 	PlayerBistro = Cast<APlayerBistro>(UGameplayStatics::GetActorOfClass(GetWorld(), BP_PlayerBistro));

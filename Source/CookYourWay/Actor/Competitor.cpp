@@ -5,6 +5,7 @@
 #include <Kismet/KismetMathLibrary.h>
 #include <Component/NewsEffectComponent.h>
 #include "VillageManager.h"
+#include "GameInstance/CookYourWayGameInstance.h"
 
 ACompetitor::ACompetitor()
 {
@@ -17,9 +18,9 @@ void ACompetitor::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	VillageManagerSystem = UGameplayStatics::GetGameInstance(GetWorld())->GetSubsystem<UVillageManagerSystem>();
-	CustomerDataManagerSystem = UGameplayStatics::GetGameInstance(GetWorld())->GetSubsystem<UCustomerDataManagerSystem>();
-	IngredientManagerSystem = UGameplayStatics::GetGameInstance(GetWorld())->GetSubsystem<UIngredientManagerSystem>();
+	VillageManagerSystem = UCookYourWayGameInstance::GetVillageManagerSystemStatic(this);
+	CustomerDataManagerSystem = UCookYourWayGameInstance::GetCustomerDataManagerSystemStatic(this);
+	IngredientManagerSystem = UCookYourWayGameInstance::GetIngredientManagerSystemStatic(this);
 	VillageManager = Cast<AVillageManager>(UGameplayStatics::GetActorOfClass(GetWorld(), AVillageManager::StaticClass()));
 	
 	SetDefaultReviewRate();

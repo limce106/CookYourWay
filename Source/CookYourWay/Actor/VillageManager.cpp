@@ -8,6 +8,7 @@
 #include <Kismet/KismetMathLibrary.h>
 #include <Kismet/GameplayStatics.h>
 #include "Blueprint/UserWidget.h"
+#include <GameInstance/CookYourWayGameInstance.h>
 
 AVillageManager::AVillageManager()
 {
@@ -84,8 +85,8 @@ void AVillageManager::BeginPlay()
 {
 	Super::BeginPlay();
 
-	CustomerDataManagerSystem = UGameplayStatics::GetGameInstance(GetWorld())->GetSubsystem<UCustomerDataManagerSystem>();
-	VillageManagerSystem = UGameplayStatics::GetGameInstance(GetWorld())->GetSubsystem<UVillageManagerSystem>();
+	VillageManagerSystem = UCookYourWayGameInstance::GetVillageManagerSystemStatic(this);
+	CustomerDataManagerSystem = UCookYourWayGameInstance::GetCustomerDataManagerSystemStatic(this);
 	CookYourWayGameState = Cast<ACookYourWayGameState>(UGameplayStatics::GetGameState(GetWorld()));
 	CustomerPool = Cast<ACustomerPool>(UGameplayStatics::GetActorOfClass(GetWorld(), BP_CustomerPool));
 

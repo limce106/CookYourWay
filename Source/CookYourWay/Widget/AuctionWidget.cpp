@@ -165,7 +165,7 @@ void UAuctionWidget::SetSellingPricePos(float SellingPrice)
 
 void UAuctionWidget::SetBidPriceTextPosByPercent()
 {
-	float CurProgressBarPercent = ProgressBar_Auction->Percent;
+	float CurProgressBarPercent = ProgressBar_Auction->GetPercent();
 	if (CurProgressBarPercent == 0.0f) {
 		TextBlock_CurBidPrice->SetVisibility(ESlateVisibility::Hidden);
 	}
@@ -187,7 +187,7 @@ float UAuctionWidget::GetFilledProgressBarPosX()
 {
 	FVector2D ProgressBarPos = GetProgressBarPos();
 	FVector2D ProgressBarSize = GetProgressBarSize();
-	float Percent = ProgressBar_Auction->Percent;
+	float Percent = ProgressBar_Auction->GetPercent();
 
 	float FilledPosX = ProgressBarPos.X + ProgressBarSize.X * Percent;
 	return FilledPosX;

@@ -4,12 +4,13 @@
 #include "GameMode/CookYourWayGameState.h"
 #include <Kismet/GameplayStatics.h>
 #include <Actor/Store.h>
+#include <GameInstance/CookYourWayGameInstance.h>
 
 void ACookYourWayGameState::BeginPlay()
 {
-	VillageManagerSystem = UGameplayStatics::GetGameInstance(GetWorld())->GetSubsystem<UVillageManagerSystem>();
-	IngredientManagerSystem = UGameplayStatics::GetGameInstance(GetWorld())->GetSubsystem<UIngredientManagerSystem>();
-	CustomerDataManagerSystem = UGameplayStatics::GetGameInstance(GetWorld())->GetSubsystem<UCustomerDataManagerSystem>();
+	VillageManagerSystem = UCookYourWayGameInstance::GetVillageManagerSystemStatic(this);
+	CustomerDataManagerSystem = UCookYourWayGameInstance::GetCustomerDataManagerSystemStatic(this);
+	IngredientManagerSystem = UCookYourWayGameInstance::GetIngredientManagerSystemStatic(this);
 }
 
 ACookYourWayGameState::ACookYourWayGameState()

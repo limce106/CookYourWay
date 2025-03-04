@@ -17,11 +17,20 @@ class COOKYOURWAY_API UCookYourWayGameInstance : public UGameInstance
 {
 	GENERATED_BODY()
 
-public:
-	UCustomerDataManagerSystem* CustomerDataManagerSystem;
 	class UVillageManagerSystem* VillageManagerSystem;
+	class UCustomerDataManagerSystem* CustomerDataManagerSystem;
 	class UIngredientManagerSystem* IngredientManagerSystem;
+
+public:
 	
 	virtual void Init() override;
 	void InitSubSystems();
+
+	UVillageManagerSystem* GetVillageManagerSystem() const;
+	UCustomerDataManagerSystem* GetCustomerDataManagerSystem() const;
+	UIngredientManagerSystem* GetIngredientManagerSystem() const;
+
+	static UVillageManagerSystem* GetVillageManagerSystemStatic(UObject* WorldContext);
+	static UCustomerDataManagerSystem* GetCustomerDataManagerSystemStatic(UObject* WorldContext);
+	static UIngredientManagerSystem* GetIngredientManagerSystemStatic(UObject* WorldContext);
 };

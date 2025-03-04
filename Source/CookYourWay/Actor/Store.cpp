@@ -6,6 +6,7 @@
 #include "GameInstance/VillageManagerSystem.h"
 #include <Kismet/KismetMathLibrary.h>
 #include <Component/NewsEffectComponent.h>
+#include <GameInstance/CookYourWayGameInstance.h>
 
 AStore::AStore()
 {
@@ -37,7 +38,7 @@ void AStore::BeginPlay()
 {
 	Super::BeginPlay();
 
-	VillageManagerSystem = UGameplayStatics::GetGameInstance(GetWorld())->GetSubsystem<UVillageManagerSystem>();
+	VillageManagerSystem = UCookYourWayGameInstance::GetVillageManagerSystemStatic(this);
 	CustomerPool = Cast<ACustomerPool>(UGameplayStatics::GetActorOfClass(GetWorld(), BP_CustomerPool));
 }
 

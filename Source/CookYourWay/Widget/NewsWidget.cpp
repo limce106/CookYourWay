@@ -10,14 +10,15 @@
 #include "Components/RichTextBlock.h"
 #include "Components/Image.h"
 #include "Components/BackgroundBlur.h"
+#include <GameInstance/CookYourWayGameInstance.h>
 
 void UNewsWidget::NativeConstruct()
 {
 	Super::NativeConstruct();
 
-	IngredientManagerSystem = UGameplayStatics::GetGameInstance(GetWorld())->GetSubsystem<UIngredientManagerSystem>();
-	CustomerDataManagerSystem = UGameplayStatics::GetGameInstance(GetWorld())->GetSubsystem<UCustomerDataManagerSystem>();
-	VillageManagerSystem = UGameplayStatics::GetGameInstance(GetWorld())->GetSubsystem<UVillageManagerSystem>();
+	VillageManagerSystem = UCookYourWayGameInstance::GetVillageManagerSystemStatic(this);
+	CustomerDataManagerSystem = UCookYourWayGameInstance::GetCustomerDataManagerSystemStatic(this);
+	IngredientManagerSystem = UCookYourWayGameInstance::GetIngredientManagerSystemStatic(this);
 
 	RichTextBlock_News = (URichTextBlock*)GetWidgetFromName(TEXT("RichTextBlock_News"));
 	Image_News = (UImage*)GetWidgetFromName(TEXT("Image_News"));

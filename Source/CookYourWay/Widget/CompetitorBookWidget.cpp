@@ -6,13 +6,14 @@
 #include <Kismet/GameplayStatics.h>
 #include "GameInstance/CustomerDataManagerSystem.h"
 #include "GameInstance/VillageManagerSystem.h"
+#include <GameInstance/CookYourWayGameInstance.h>
 
 void UCompetitorBookWidget::NativeConstruct()
 {
 	Super::NativeConstruct();
 
-	CustomerDataManagerSystem = UGameplayStatics::GetGameInstance(GetWorld())->GetSubsystem<UCustomerDataManagerSystem>();
-	VillageManagerSystem = UGameplayStatics::GetGameInstance(GetWorld())->GetSubsystem<UVillageManagerSystem>();
+	VillageManagerSystem = UCookYourWayGameInstance::GetVillageManagerSystemStatic(this);
+	CustomerDataManagerSystem = UCookYourWayGameInstance::GetCustomerDataManagerSystemStatic(this);
 }
 
 TArray<FCompetitorRatingData> UCompetitorBookWidget::GetSortedArrByGreaterRating(TArray<FCompetitorRatingData> RatingArr)
