@@ -366,8 +366,6 @@ void ACustomer::EatDessert()
 
 void ACustomer::Eat(float EatingTime)
 {
-	/*필요시 음식을 먹는 애니메이션 추가*/
-
 	IsEat = true;
 	DestroyTimer = true;
 	LeaveDelayTime = EatingTime;
