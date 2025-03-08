@@ -5,6 +5,11 @@
 #include <Kismet/GameplayStatics.h>
 #include <Actor/CustomerPool.h>
 
+AVillageLevelScriptActor::AVillageLevelScriptActor()
+{
+	PrimaryActorTick.bCanEverTick = true;
+}
+
 void AVillageLevelScriptActor::Init()
 {
 	GetWorld()->SpawnActor<AActor>(BP_VillageManager, FVector::ZeroVector, FRotator::ZeroRotator);
@@ -19,12 +24,13 @@ void AVillageLevelScriptActor::Init()
 
 void AVillageLevelScriptActor::BeginPlay()
 {
-	CustomerDataManagerSystem = UGameplayStatics::GetGameInstance(GetWorld())->GetSubsystem<UCustomerDataManagerSystem>();
+	Super::BeginPlay();
 
-	Init();
+	CustomerDataManagerSystem = UGameplayStatics::GetGameInstance(GetWorld())->GetSubsystem<UCustomerDataManagerSystem>();
 }
 
 void AVillageLevelScriptActor::Tick(float DeltaTime)
 {
+	Super::Tick(DeltaTime);
 
 }

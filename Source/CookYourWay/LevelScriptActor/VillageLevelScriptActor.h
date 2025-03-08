@@ -17,10 +17,10 @@ class COOKYOURWAY_API AVillageLevelScriptActor : public ALevelScriptActor
 {
 	GENERATED_BODY()
 
+	AVillageLevelScriptActor();
+
 	class UVillageManagerSystem* VillageManagerSystem;
 	class UCustomerDataManagerSystem* CustomerDataManagerSystem;
-
-	void Init();
 
 protected:
 	virtual void BeginPlay() override;
@@ -31,4 +31,7 @@ public:
 	TSubclassOf<AActor> BP_VillageManager;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	TSubclassOf<UUserWidget> BP_PlayerBistroHUDClass;
+
+	UFUNCTION(BlueprintCallable)
+	void Init();
 };
