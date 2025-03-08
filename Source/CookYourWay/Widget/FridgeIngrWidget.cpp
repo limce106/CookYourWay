@@ -60,10 +60,9 @@ void UFridgeIngrWidget::SetIngrUI()
 
 void UFridgeIngrWidget::OnClick_ButtonIngredient()
 {
-	// 테스트
-	/*if (IngredientManagerSystem->HavingIngrNum[IngrTableIdx] == 0) {
+	if (IngredientManagerSystem->HavingIngrNum[IngrTableIdx] == 0) {
 		return;
-	}*/
+	}
 
 	FString IngrEngName = IngredientManagerSystem->IngredientTableRowNames[IngrTableIdx].ToString();
 

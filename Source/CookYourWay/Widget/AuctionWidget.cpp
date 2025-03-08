@@ -63,10 +63,9 @@ FReply UAuctionWidget::NativeOnMouseButtonDown(const FGeometry& InGeometry, cons
 		return FReply::Handled();
 	}
 
-	// 테스트를 위해 임시로 주석 처리
-	/*if (!CanBuy) {
+	if (!CanBuy) {
 		return FReply::Handled();
-	}*/
+	}
 
 	if (IsValid(BP_BidBar) && BP_BidBar != nullptr) {
 		BP_BidBar->RemoveFromParent();

@@ -20,9 +20,9 @@ void AFryPan::BeginPlay()
 
 float AFryPan::GetOneCookIncreasement()
 {
-	// return (1.0f / 10.0f);
+	return (1.0f / 10.0f);
 	// Å×½ºÆ®
-	return (1.0f / 3.0f);
+	// return (1.0f / 3.0f);
 	//
 }
 
