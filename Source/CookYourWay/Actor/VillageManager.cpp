@@ -70,17 +70,6 @@ void AVillageManager::SpawnBistrosAndStore()
 	}
 }
 
-void AVillageManager::DecreaseStorePeriod()
-{
-	if (VillageManagerSystem->StoreDataArr.Num() == 0) {
-		return;
-	}
-
-	for (int i = 0; i < VillageManagerSystem->StoreDataArr.Num(); i++) {
-		VillageManagerSystem->StoreDataArr[i].StoreTableData.StorePeriod--;
-	}
-}
-
 void AVillageManager::BeginPlay()
 {
 	Super::BeginPlay();
@@ -235,19 +224,13 @@ void AVillageManager::EndEatingCustomer()
 	}
 }
 
-void AVillageManager::SaveStoreDataInManager()
+void AVillageManager::ClearAllCmptTimer()
 {
-	VillageManagerSystem->StoreDataArr.Empty();
-	TArray<AActor*> AllStoreActorArr;
-	UGameplayStatics::GetAllActorsOfClass(GetWorld(), BP_Store, AllStoreActorArr);
-	for (auto Actor : AllStoreActorArr) {
-		AStore* Store = Cast<AStore>(Actor);
-		FStoreData StoreData(Store->AreaID, &Store->CurStoreTableData);
-		VillageManagerSystem->StoreDataArr.Add(StoreData);
-	}
-
-	for (auto CompetitorData : VillageManagerSystem->CompetitorDataArr) {
-		CompetitorData.IsComptFestival = false;
+	TArray<AActor*> AllCompetitorArr;
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), BP_Competitor, AllCompetitorArr);
+	for (auto Actor : AllCompetitorArr) {
+		ACompetitor* Competitor = Cast<ACompetitor>(Actor);
+		GetWorld()->GetTimerManager().ClearTimer(Competitor->CustRatingTimerHandler);
 	}
 }
 
@@ -255,9 +238,13 @@ void AVillageManager::EndDay()
 {
 	UGameplayStatics::SetGamePaused(GetWorld(), true);
 
+	ClearAllCmptTimer();
+	for (auto CompetitorData : VillageManagerSystem->CompetitorDataArr) {
+		CompetitorData.IsComptFestival = false;
+	}
+
 	EndEatingCustomer();
-	SaveStoreDataInManager();
-	DecreaseStorePeriod();
+	VillageManagerSystem->ElapseStorePeriod();
 
 	// 일요일 저녁이라면
 	if (VillageManagerSystem->IsSunday()) {

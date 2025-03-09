@@ -102,6 +102,18 @@ void UVillageManagerSystem::ElapseCompetitorOpenPromoDay()
 	}
 }
 
+void UVillageManagerSystem::ElapseStorePeriod()
+{
+	for (int i = 0; i < StoreDataArr.Num(); i++) {
+		if (StoreDataArr[i].StoreTableData.StorePeriod == 0) {
+			continue;
+		}
+
+		int32 DecreasedRemainDay = StoreDataArr[i].StoreTableData.StorePeriod - 1;
+		StoreDataArr[i].StoreTableData.StorePeriod = DecreasedRemainDay;
+	}
+}
+
 int32 UVillageManagerSystem::FindCompetitorDataArrIdx(int32 AreaID)
 {
 	int32 Idx = -1;

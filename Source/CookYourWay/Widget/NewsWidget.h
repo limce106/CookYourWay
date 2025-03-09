@@ -36,6 +36,9 @@ public:
 	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
 	class UBackgroundBlur* BackgroundBlur_CustBlur;
 
+	UPROPERTY(BlueprintReadOnly)
+	bool IsCustBlur = false;
+
 	FString GetRedefinedNewsString();
 	FString GetSeasonNewsNextString();
 

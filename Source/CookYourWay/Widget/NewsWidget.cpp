@@ -157,7 +157,7 @@ FString UNewsWidget::GetKeyWordByNum(FString Num)
 		}
 		else {
 			for (auto IngrData : IngredientManagerSystem->IngredientRows) {
-				if (IngrData.IngrClass != "Bread" || IngrData.IngrClass != "Dessert") {
+				if (IngrData.IngrType != "Bread" || IngrData.IngrType != "Dessert") {
 					KeyWordArr.Add(IngrData.IngrName);
 				}
 			}
@@ -194,7 +194,7 @@ FString UNewsWidget::GetKeyWordByNum(FString Num)
 		// 예외적으로 뉴스 이미지를 여기서 설정
 		UTexture2D* CustIcon = CustomerDataManagerSystem->CustomerTableRows[RandomCustIdx]->CustIcon;
 		Image_News->SetBrushFromTexture(CustIcon);
-		BackgroundBlur_CustBlur->SetVisibility(ESlateVisibility::Visible);
+		IsCustBlur = true;
 		
 		for (int i = 0; i < CustTasteArr.Num(); i++) {
 			KeyWordArr.Add(IngredientManagerSystem->IngredientRows[CustTasteArr[i]].IngrName);

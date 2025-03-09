@@ -194,7 +194,6 @@ void ACompetitor::CustomerVisited(ACustomer* Customer)
 {
 	VillageManager->CustomerPool->ReturnCustomer(Customer);
 
-	FTimerHandle CustRatingTimerHandler;
 	GetWorld()->GetTimerManager().SetTimer(CustRatingTimerHandler, FTimerDelegate::CreateLambda([=]()
 		{
 			TArray<int32> SandwichIngr = GenerateSandwich(Customer);

@@ -198,6 +198,7 @@ public:
 	bool IsMonday();
 	bool IsSunday();
 	void ElapseCompetitorOpenPromoDay();
+	void ElapseStorePeriod();
 
 	UFUNCTION(BlueprintCallable)
 	int32 FindCompetitorDataArrIdx(int32 AreaID);

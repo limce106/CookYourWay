@@ -19,7 +19,7 @@ class COOKYOURWAY_API AVillageManager : public AActor
 
 	FTimerHandle LeftDayTimeHandler;
 	int32 LeftMinute = 0;
-	int32 LeftSecond = 20;
+	int32 LeftSecond = 35;
 
 	// 남은 하루 시간 계산하기
 	void DecreaseDayTime();
@@ -28,7 +28,6 @@ class COOKYOURWAY_API AVillageManager : public AActor
 	void RunDayTimer();
 
 	void SpawnBistrosAndStore();
-	void DecreaseStorePeriod();
 
 	void TryCreateNewCompetitor();
 	void TryCreateNewStore();
@@ -36,7 +35,7 @@ class COOKYOURWAY_API AVillageManager : public AActor
 	void AddRandomRegularCust(int32 AreaID, int32 RegularCustNum);
 
 	void EndEatingCustomer();
-	void SaveStoreDataInManager();
+	void ClearAllCmptTimer();
 
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<AActor> BP_PlayerBistro;
