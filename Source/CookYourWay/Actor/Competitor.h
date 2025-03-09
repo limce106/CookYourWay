@@ -26,9 +26,9 @@ class COOKYOURWAY_API ACompetitor : public AActor
 	TArray<FCompetitorReviewData> GetCompetitorReviewDataOnTable(FString DataType);
 	void SetDefaultReviewRate();
 	void UpdateCompetitorRating(float Rating);
-	void AddRatingData(FString CustName, float Rating);
+	void AddCustRatingData(FString CustName, float Rating);
 
-	bool IsCustTasteContainFestivalIngr(FString CustName);
+	bool IsCustLikeFestivalIngr(FString CustName);
 
 	TArray<int32> GenerateSandwich(ACustomer* Customer);
 	int32 GetCustomerSatisfaction(ACustomer* Customer, TArray<int32> Ingr);
@@ -43,17 +43,22 @@ protected:
 public:	
 	virtual void Tick(float DeltaTime) override;
 
+	UPROPERTY()
 	TArray<FCompetitorReviewData> NormalReviewData;
+	UPROPERTY()
 	TArray<FCompetitorReviewData> IngrFestReviewData;
+	UPROPERTY()
 	TArray<FCompetitorReviewData> OpenPromoReviewData;
 
+	// 오픈 프로모션 진행중인지
+	UPROPERTY()
 	bool IsOpenPromo;
-
 	// 부지 번호
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	int32 AreaID;
-
+	// 손님에게 샌드위치 제공 및 평가받기 타이머
+	UPROPERTY()
 	FTimerHandle CustRatingTimerHandler;
-
+	UFUNCTION()
 	FCompetitorData GetCurComptitorData();
 };

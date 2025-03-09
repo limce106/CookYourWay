@@ -60,7 +60,7 @@ void AReuben::MoveRight(float Value)
 	}
 }
 
-void AReuben::UpdateClosestOverlappingActor()
+void AReuben::UpdateOverlappingActor()
 {
 	TArray<AActor*> OverlappingActors;
 	GetOverlappingActors(OverlappingActors);
@@ -187,9 +187,8 @@ void AReuben::GiveSandwich(ACustomer* Customer)
 
 	ADiningTable* DiningTable = PlayerBistro->GetDiningTable(Customer->CurSeatNum);
 	DiningTable->PutFoodOn(this, Sandwich);
-	Customer->AddPlayerSandwichReview(Sandwich);
 
-	Customer->EatSandwich();
+	Customer->EatSandwich(Sandwich);
 }
 
 void AReuben::GiveDessert(ACustomer* Customer)
@@ -198,5 +197,4 @@ void AReuben::GiveDessert(ACustomer* Customer)
 	DiningTable->PutFoodOn(this, HeldActor);
 
 	Customer->EatDessert();
-	Customer->AddDessertReview();
 }

@@ -12,7 +12,7 @@ void ACuttingBoard::BeginPlay()
 
 }
 
-float ACuttingBoard::GetOneCookIncreasement()
+float ACuttingBoard::GetCookIncreasement()
 {
 	return (float)(1.0f / CutCount);
 }
@@ -43,8 +43,8 @@ void ACuttingBoard::PutIngrOn(AIngredient* Ingr)
 void ACuttingBoard::Chop()
 {
 	if (IsIngredientOn && PlacedIngredient->CurCookRate < PlacedIngredient->MaxCookRate) {
-		PlacedIngredient->CurCookRate += GetOneCookIncreasement();
-		BP_CookRateWidget->CookRate += GetOneCookIncreasement();
+		PlacedIngredient->CurCookRate += GetCookIncreasement();
+		BP_CookRateWidget->CookRate += GetCookIncreasement();
 
 		if (IngrStaticMesh) {
 			IngrStaticMesh->SetWorldScale3D(IngrStaticMesh->GetComponentScale() - IngredientShrinkRate);

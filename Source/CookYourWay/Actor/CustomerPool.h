@@ -30,7 +30,10 @@ protected:
 public:	
 	virtual void Tick(float DeltaTime) override;
 
+	UFUNCTION()
 	void InitCustomerPool();
+	UFUNCTION()
 	ACustomer* GetPooledCustomer(FString CustName, bool IsWalk);
+	UFUNCTION()
 	void ReturnCustomer(ACustomer* Customer);
 };

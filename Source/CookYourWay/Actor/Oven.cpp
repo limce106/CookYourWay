@@ -31,7 +31,7 @@ bool AOven::DelayWithDeltaTime(float DelayTime, float DeltaSeconds)
 	}
 }
 
-float AOven::GetOneCookIncreasement()
+float AOven::GetCookIncreasement()
 {
 	return (1.0f / 6.0f);
 }
@@ -47,7 +47,7 @@ void AOven::PutDessertIn(ADessert* Dessert)
 
 void AOven::Bake()
 {
-	BP_CookRateWidget->CookRate += GetOneCookIncreasement();
+	BP_CookRateWidget->CookRate += GetCookIncreasement();
 }
 
 bool AOven::IsCooked()

@@ -39,7 +39,7 @@ void AReubenController::Interaction()
 
 void AReubenController::CookInteraction()
 {
-	Reuben->UpdateClosestOverlappingActor();
+	Reuben->UpdateOverlappingActor();
 
 	if (!Reuben->OverlappedActor) {
 		return;

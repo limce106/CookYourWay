@@ -193,18 +193,24 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void Init();
+	UFUNCTION()
 	bool DelayWithDeltaTime(float DelayTime, float DeltaSeconds);
 
+	UFUNCTION()
 	bool IsMonday();
+	UFUNCTION()
 	bool IsSunday();
+	UFUNCTION()
 	void ElapseCompetitorOpenPromoDay();
+	UFUNCTION()
 	void ElapseStorePeriod();
 
 	UFUNCTION(BlueprintCallable)
 	int32 FindCompetitorDataArrIdx(int32 AreaID);
-
+	UFUNCTION()
 	void UpdatePlayerBistroRating(float Rating);
+	UFUNCTION()
 	void InitCompetitorRatingDataArr();
-
+	UFUNCTION()
 	FString GetRandomComptName();
 };

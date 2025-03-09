@@ -18,7 +18,7 @@ void AFryPan::BeginPlay()
 	ParticleSystemComponent->bAutoActivate = false;
 }
 
-float AFryPan::GetOneCookIncreasement()
+float AFryPan::GetCookIncreasement()
 {
 	return (1.0f / 10.0f);
 	// Å×½ºÆ®
@@ -68,8 +68,8 @@ void AFryPan::Fry()
 		return;
 	}
 
-	PlacedIngredient->CurCookRate += GetOneCookIncreasement();
-	BP_CookRateWidget->CookRate += GetOneCookIncreasement();
+	PlacedIngredient->CurCookRate += GetCookIncreasement();
+	BP_CookRateWidget->CookRate += GetCookIncreasement();
 
 	if (PlacedIngredient->CurCookRate == PlacedIngredient->MaxCookRate) {
 		AddCookedMaterialOverlay(false);

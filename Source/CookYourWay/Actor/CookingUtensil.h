@@ -35,8 +35,10 @@ public:
 	UPROPERTY(BlueprintReadWrite)
 	class AIngredient* PlacedIngredient;
 
-	virtual float GetOneCookIncreasement();
-
+	UFUNCTION()
+	virtual float GetCookIncreasement();
+	UFUNCTION()
 	virtual void PutIngrOn(AIngredient* Ingr);
+	UFUNCTION()
 	void PickUpIngr();
 };

@@ -30,7 +30,10 @@ public:
 	UPROPERTY(BlueprintReadWrite)
 	AActor* PlacedActor;
 
+	UFUNCTION()
 	void DiningTableInteraction();
+	UFUNCTION()
 	void PutFoodOn(AActor* HoldingCharacter, AActor* Food);
+	UFUNCTION()
 	void DestroyFoodOnDiningTable();
 };

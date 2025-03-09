@@ -48,13 +48,13 @@ TArray<int32> ACompetitor::GenerateSandwich(ACustomer* Customer)
 
 int32 ACompetitor::GetCustomerSatisfaction(ACustomer* Customer, TArray<int32> Ingr)
 {
-	int32 UnPreferredIngrNum = Customer->CountUnpreferredIngr(Ingr);
+	int32 UnPreferredIngrNum = Customer->GetUnpreferredIngrNum(Ingr);
 
 	TArray<FCompetitorReviewData> ReviewData;
 	FCompetitorData CurCompetitorData = GetCurComptitorData();
 	
 	if (CurCompetitorData.IsComptFestival) {	// 오픈 프로모션보다 식재료 페스티벌을 우선으로 한다.
-		bool IsCustLikeIngr = IsCustTasteContainFestivalIngr(Customer->CustName);
+		bool IsCustLikeIngr = IsCustLikeFestivalIngr(Customer->CustName);
 	
 		if (IsCustLikeIngr) {
 			ReviewData = IngrFestReviewData;
@@ -113,7 +113,7 @@ void ACompetitor::SetDefaultReviewRate()
 	OpenPromoReviewData = GetCompetitorReviewDataOnTable("OpenPromo");
 }
 
-bool ACompetitor::IsCustTasteContainFestivalIngr(FString CustName)
+bool ACompetitor::IsCustLikeFestivalIngr(FString CustName)
 {
 	TArray<int32> CustTaste = CustomerDataManagerSystem->CustNameToTasteMap[CustName];
 
@@ -140,7 +140,7 @@ bool ACompetitor::IsCustTasteContainFestivalIngr(FString CustName)
 //	FCompetitorData CurCompetitorData = GetCurComptitorData();
 //
 //	if (CurCompetitorData.IsComptFestival) {	// 오픈 프로모션보다 식재료 페스티벌을 우선으로 한다.
-//		bool IsCustLikeIngr = IsCustTasteContainFestivalIngr(CustName);
+//		bool IsCustLikeIngr = IsCustLikeFestivalIngr(CustName);
 //
 //		if (IsCustLikeIngr) {
 //			ReviewData = IngrFestReviewData;
@@ -209,7 +209,7 @@ void ACompetitor::CustomerVisited(ACustomer* Customer)
 			float RoundRating = FMath::RoundToFloat(Rating * 10.0f) / 10.0f;
 
 			UpdateCompetitorRating(RoundRating);
-			AddRatingData(Customer->CustName, RoundRating);
+			AddCustRatingData(Customer->CustName, RoundRating);
 		}), 10.0f, false);
 }
 
@@ -225,7 +225,7 @@ void ACompetitor::UpdateCompetitorRating(float Rating)
 	VillageManagerSystem->CompetitorDataArr[Idx].RatingAvg = FMath::RoundToFloat(UpdatedRating * 10.0f) / 10.0f;
 }
 
-void ACompetitor::AddRatingData(FString CustName, float Rating)
+void ACompetitor::AddCustRatingData(FString CustName, float Rating)
 {
 	FString WeekDay = VillageManager->DayToWeekString(VillageManagerSystem->Day);
 	FCompetitorRatingData RatingData = FCompetitorRatingData(CustName, WeekDay, Rating);

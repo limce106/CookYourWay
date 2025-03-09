@@ -71,6 +71,7 @@ TArray<float> UNewsEffectComponent::GetIncSpawnCustProb(TArray<FString> CustName
 
 void UNewsEffectComponent::CustNameKorToEng()
 {
+	// NewsEffectCode가 CustDec, CustInc라면 손님 이름이 한글로 저장되기 때문에 영어로 변환한다.
 	if (VillageManagerSystem->NewsEffectCode == "CustDec" || VillageManagerSystem->NewsEffectCode == "CustInc") {
 		FString CustKorName = VillageManagerSystem->NewsKeyWord;
 		int32 index = 0;

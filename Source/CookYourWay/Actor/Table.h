@@ -33,6 +33,6 @@ public:
 	void PutActorOn(AActor* Actor);
 	UFUNCTION(BlueprintCallable)
 	void PickUpActor(AActor* PickUpCharacter);
-
+	UFUNCTION()
 	void TableInteraction();
 };

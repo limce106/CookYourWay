@@ -46,6 +46,7 @@ public:
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<ADessert> BP_Dessert;
 
+	UPROPERTY()
 	FIngrData CurIngrData;
 	UPROPERTY(EditAnyWhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
 	int32 IngrTableIdx;

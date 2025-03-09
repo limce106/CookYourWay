@@ -79,6 +79,7 @@ public:
 	// 입찰 바 생성
 	UFUNCTION(BlueprintImplementableEvent)
 	void CreateBidBar();
+	// 마우스 호버 위치 가격과 현재 입찰가가 같은지
 	UFUNCTION(BlueprintImplementableEvent)
 	void HoverPriceEqualCurBid(bool& Equal);
 	// 프로그래스바 퍼선트에 따라 입찰 바 가격 텍스트 설정
@@ -91,8 +92,10 @@ public:
 	UFUNCTION(BlueprintImplementableEvent)
 	void FillProgressBarClickedPoint();
 
+	// 프로그래스바 퍼센트를 가격으로 환산
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 	void PercentToPrice(float Percent, int32& Price);
+	// 마우스 위치를 가격으로 환산
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 	void PosToPrice(FVector2D Pos, int32& Price);
 	// 가격을 프로그래스바 퍼센트로 변환

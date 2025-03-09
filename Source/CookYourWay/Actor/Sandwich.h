@@ -31,13 +31,15 @@ public:
 	UPROPERTY(BlueprintReadOnly)
 	TArray<AIngredient*> Ingredients;
 
+	// 재료 추가
 	UFUNCTION(BlueprintCallable)
 	void AddIngredient(AIngredient* Ingr);
-
+	// 샌드위치 제거
 	UFUNCTION(BlueprintCallable)
 	void DestroySandwich();
+	// 샌드위치 재료들 번호 배열 (참고: 정렬X)
 	UFUNCTION(BlueprintCallable)
-	TArray<int32> IngrActorToNum();
+	TArray<int32> GetIngrNum();
 	UFUNCTION(BlueprintCallable)
 	bool IsMeatBurn();
 	UFUNCTION(BlueprintCallable)
@@ -46,6 +48,7 @@ public:
 	bool IsFirstIngrBread();
 	UFUNCTION(BlueprintCallable)
 	bool IsLastIngrBread();
+	// 완성된 샌드위치인지(맨 처음과 마지막 재료가 빵인지)
 	UFUNCTION(BlueprintCallable)
 	bool IsCompleteSandwich();
 

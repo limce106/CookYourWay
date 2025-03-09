@@ -65,7 +65,7 @@ void ACustomer::Tick(float DeltaTime)
 	if (IsEat && DelayWithDeltaTime(1.0f, DeltaTime)) {
 		StartEatTime += 1;
 
-		if (StartEatTime == CanGetDessertTime) {
+		if (StartEatTime == CanEatDessertTime) {
 			ADiningTable* DiningTable = PlayerBistro->GetDiningTable(CurSeatNum);
 			DiningTable->DestroyFoodOnDiningTable();
 		}
@@ -100,14 +100,14 @@ bool ACustomer::DelayWithDeltaTime(float DelayTime, float DeltaSeconds)
 	}
 }
 
-float ACustomer::ManhattanDist(FVector Loc1, FVector Loc2)
+float ACustomer::GetManhattanDist(FVector Loc1, FVector Loc2)
 {
 	float absX = abs(Loc1.X - Loc2.X);
 	float absY = abs(Loc1.Y - Loc2.Y);
 	return (absX + absY) / 100;
 }
 
-float ACustomer::CalcVisitRank(AActor* Bistro)
+float ACustomer::UpdateVisitRank(AActor* Bistro)
 {
 	float AvgRate;
 	FVector CustomerLoc = GetActorLocation();
@@ -128,9 +128,9 @@ float ACustomer::CalcVisitRank(AActor* Bistro)
 	// '평점평균 * 맨해튼거리' 값이 가장 작은 가게를 방문해야 하므로 (최대 평점평균 - 실제 평점평균) 값을 곱하도록 한다.
 	// '최대 평점평균 == 실제 평점평균'일 때 BistroRateAvg 값이 0이 되어 ManhattanDist 함수 값에 상관없이 VisitRank이 0이 되는 것을 방지하기 위해 0.1을 더해주었다.
 	float BistroRateAvg = (CustomerDataManagerSystem->MaxRate + 0.1) - AvgRate;
-	float VisitRank = BistroRateAvg * (ManhattanDist(CustomerLoc, BistroLoc));
+	float VisitRank = BistroRateAvg * (GetManhattanDist(CustomerLoc, BistroLoc));
 
-	BistroLocRankMap.Add(BistroLoc, VisitRank);
+	BistroVisitRankMap.Add(BistroLoc, VisitRank);
 
 	return VisitRank;
 }
@@ -139,23 +139,22 @@ FVector ACustomer::GetDestByVisitRank()
 {
 	FVector CustomerLoc = GetActorLocation();
 
-	// BistroLocRankMap.Empty();
-	CalcVisitRank(PlayerBistro);
+	UpdateVisitRank(PlayerBistro);
 
 	for (auto Competitor : AllCompetitorActorArr) {
 		Competitor = Cast<ACompetitor>(Competitor);
-		CalcVisitRank(Competitor);
+		UpdateVisitRank(Competitor);
 	}
 
 	// 방문 점수들을 오름차순으로 정렬
-	BistroLocRankMap.ValueSort([](const float A, const float B)
+	BistroVisitRankMap.ValueSort([](const float A, const float B)
 		{
 			return A < B;
 		});
 
-	TArray<FVector> BistroLocRankMapKeys;
-	BistroLocRankMap.GenerateKeyArray(BistroLocRankMapKeys);
-	VisitDest = BistroLocRankMapKeys[0];
+	TArray<FVector> BistroVisitRankMapKeys;
+	BistroVisitRankMap.GenerateKeyArray(BistroVisitRankMapKeys);
+	VisitDest = BistroVisitRankMapKeys[0];
 	return VisitDest;		// 가장 점수가 낮은 가게를 목적지로 설정
 }
 
@@ -208,7 +207,7 @@ void ACustomer::MoveToDestination()
 	AINpcController->MoveToLocation(VisitDest, 1.0f);
 }
 
-int32 ACustomer::GetTotalMismatch(ASandwich* Sandwich)
+int32 ACustomer::GetTotalTasteMismatchNum(ASandwich* Sandwich)
 {
 	// 취향이 아닌 재료 개수
 	int32 NotTasteNum = 0;
@@ -233,14 +232,14 @@ int32 ACustomer::GetTotalMismatch(ASandwich* Sandwich)
 		Sandwich->Ingredients.RemoveAt(Sandwich->Ingredients.Num() - 1);
 	}
 
-	TArray<int32> IngrNumArr = Sandwich->IngrActorToNum();
+	TArray<int32> IngrNumArr = Sandwich->GetIngrNum();
 	PlayerBistroRatingData.GivenIngr = IngrNumArr;
-	NotTasteNum += CountUnpreferredIngr(IngrNumArr);
+	NotTasteNum += GetUnpreferredIngrNum(IngrNumArr);
 
 	return NotTasteNum;
 }
 
-int32 ACustomer::CountUnpreferredIngr(TArray<int32> IngrArr)
+int32 ACustomer::GetUnpreferredIngrNum(TArray<int32> IngrArr)
 {
 	int32 UnPreferredNum = 0;
 
@@ -262,10 +261,10 @@ int32 ACustomer::CountUnpreferredIngr(TArray<int32> IngrArr)
 	return UnPreferredNum;
 }
 
-void ACustomer::AddPlayerSandwichReview(ASandwich* Sandwich)
+void ACustomer::AddPlayerSandwichSatisfaction(ASandwich* Sandwich)
 {
 	int TasteScore = 0;
-	int NotTasteNum = GetTotalMismatch(Sandwich);
+	int NotTasteNum = GetTotalTasteMismatchNum(Sandwich);
 	
 	// 맞추지 못한 재료 개수에 따른 점수
 	if (NotTasteNum == 0) {
@@ -318,14 +317,15 @@ void ACustomer::AddPlayerSandwichReview(ASandwich* Sandwich)
 	Satisfaction = FMath::Clamp(Satisfaction, 0, 100);
 }
 
-void ACustomer::AddDessertReview()
+void ACustomer::AddDessertSatisfaction()
 {
 	const int32 DessertBonus = 10;
 	Satisfaction += DessertBonus;
 }
 
-void ACustomer::EatSandwich()
+void ACustomer::EatSandwich(ASandwich* Sandwich)
 {
+	AddPlayerSandwichSatisfaction(Sandwich);
 	Eat(7.0f);
 
 	GetWorld()->GetTimerManager().SetTimer(CustSandwichTimerHandler, FTimerDelegate::CreateLambda([=]()
@@ -349,7 +349,7 @@ void ACustomer::ClearDestroyTimer()
 
 bool ACustomer::CanGetDessert()
 {
-	if (StartEatTime >= CanGetDessertTime) {
+	if (StartEatTime >= CanEatDessertTime) {
 		return true;
 	}
 	else {
@@ -360,6 +360,7 @@ bool ACustomer::CanGetDessert()
 void ACustomer::EatDessert()
 {
 	ClearDestroyTimer();
+	AddDessertSatisfaction();
 	Eat(2.0f);
 
 	Satisfaction += 10;

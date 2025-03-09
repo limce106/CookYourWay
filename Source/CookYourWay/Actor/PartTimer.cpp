@@ -72,7 +72,7 @@ TArray<int32> APartTimer::GetHoldingSandwichIngr()
 {
 	if (IsHold && HeldActor->GetClass()->IsChildOf(ASandwich::StaticClass())) {
 		ASandwich* Sandwich = Cast<ASandwich>(HeldActor);
-		TArray<int32> Ingr = Sandwich->IngrActorToNum();
+		TArray<int32> Ingr = Sandwich->GetIngrNum();
 		if (Sandwich->IsFirstIngrBread()) {
 			Ingr.RemoveAt(0);
 		}
@@ -105,6 +105,5 @@ void APartTimer::GiveSandwich()
 
 	TargetDiningTable->PutFoodOn(this, Sandwich);
 
-	SeatedCustomer->EatSandwich();
-	SeatedCustomer->AddPlayerSandwichReview(Sandwich);
+	SeatedCustomer->EatSandwich(Sandwich);
 }

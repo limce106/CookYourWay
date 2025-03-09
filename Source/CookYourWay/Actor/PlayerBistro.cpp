@@ -152,7 +152,7 @@ int32 APlayerBistro::GetWaitingCustNum()
 	return WaitingCustNum;
 }
 
-void APlayerBistro::SitNextCust(int32 SeatIdx)
+void APlayerBistro::SitWaitingCust(int32 SeatIdx)
 {
 	FString WaitingCustName;
 	WaitingCustQueue.Dequeue(WaitingCustName);
@@ -189,7 +189,7 @@ void APlayerBistro::LeaveAndSitNextCust(ACustomer* LeftCustomer)
 				FTimerHandle SitNextCustTimerHandler;
 				GetWorld()->GetTimerManager().SetTimer(SitNextCustTimerHandler, FTimerDelegate::CreateLambda([=]()
 					{
-						SitNextCust(LeftCustSeatIdx);
+						SitWaitingCust(LeftCustSeatIdx);
 					}), NextCustDelayTime, false);
 			}
 			else {

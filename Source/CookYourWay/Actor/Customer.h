@@ -23,14 +23,14 @@ class COOKYOURWAY_API ACustomer : public ACharacter
 	TArray<AActor*> AllCompetitorActorArr;
 	class APlayerBistro* PlayerBistro;
 
-	TMap <FVector, float> BistroLocRankMap;	// 가게 도착 위치와 계산된 점수
+	TMap <FVector, float> BistroVisitRankMap;	// 가게 도착 위치와 계산된 점수
 
 	// 식사 시간이 3초가 지난 시점부터 디저트를 받을 수 있다.
-	const float CanGetDessertTime = 3.0f;
+	const float CanEatDessertTime = 3.0f;
 	// 최대 대기 시간(초)
 	const float MaxWaitingTime = 40;
 
-	// 판 전체 가격
+	// 지불한 전체 가격
 	int32 TotalPaidPrice = 0;
 
 	// 손님의 플레이어 가게에 대한 평가
@@ -39,9 +39,9 @@ class COOKYOURWAY_API ACustomer : public ACharacter
 	void SetSkeletalMesh();
 
 	// 멘해튼 거리 구하기
-	float ManhattanDist(FVector Loc1, FVector Loc2);
-	// 방문 우선순위 구하기
-	float CalcVisitRank(AActor* Bistro);
+	float GetManhattanDist(FVector Loc1, FVector Loc2);
+	// 방문 우선순위 구하고 저장하기
+	float UpdateVisitRank(AActor* Bistro);
 	// 방문 우선순위에 따라 목적지 설정
 	FVector GetDestByVisitRank();
 	// 충성도에 따라 목적지 설정
@@ -69,6 +69,7 @@ protected:
 public:	
 	virtual void Tick(float DeltaTime) override;
 	
+	UFUNCTION()
 	void Init(FString Name, bool bWalk);
 
 	UPROPERTY(EditDefaultsOnly)
@@ -100,29 +101,40 @@ public:
 	UPROPERTY(BlueprintReadOnly)
 	int32 CurSeatNum = -1;
 
+	UPROPERTY()
 	FTimerHandle CustSandwichTimerHandler;
-
+	UPROPERTY()
 	float LeaveDelayTime;
 
+	UFUNCTION()
 	void MoveToDestination();
 
 	// 손님의 취향이 아닌 재료 개수 세기
-	int32 GetTotalMismatch(ASandwich* Sandwich);
-	int32 CountUnpreferredIngr(TArray<int32> IngrArr);
+	UFUNCTION()
+	int32 GetTotalTasteMismatchNum(ASandwich* Sandwich);
+	UFUNCTION()
+	int32 GetUnpreferredIngrNum(TArray<int32> IngrArr);
 	// 손님의 샌드위치 평점 계산하기
-	void AddPlayerSandwichReview(ASandwich* Sandwich);
+	UFUNCTION()
+	void AddPlayerSandwichSatisfaction(ASandwich* Sandwich);
 	// 손님의 디저트 평점 더하기
-	void AddDessertReview();
+	UFUNCTION()
+	void AddDessertSatisfaction();
 
-	void EatSandwich();
+	UFUNCTION()
+	void EatSandwich(ASandwich* Sandwich);
+	UFUNCTION()
 	void ClearDestroyTimer();
-
+	UFUNCTION()
 	bool CanGetDessert();
+	UFUNCTION()
 	void EatDessert();
-
+	UFUNCTION()
 	void Eat(float EatingTime);
 
+	UFUNCTION()
 	float GetTip(int32 SandwichPrice);
+	UFUNCTION()
 	void AddTotalPaidPriceAndTip();
 
 	UFUNCTION(BlueprintImplementableEvent)
@@ -135,7 +147,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	FString GetComment();
 
+	UFUNCTION()
 	void UpdatePlayerBistroRatingSatisfaction();
+	UFUNCTION()
 	void AddPlayerBistroRatingDataInManager();
 
 	UFUNCTION(BlueprintCallable)
@@ -143,5 +157,6 @@ public:
 	UFUNCTION(BlueprintImplementableEvent)
 	void ShowTotalPaidPrice();
 
+	UFUNCTION()
 	void ClearCustomerValue();
 };

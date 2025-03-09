@@ -174,6 +174,7 @@ public:
 	FCustomerBistroKey GetCustomerBistroKey(FString CustomerName, int32 BistroAreaID);
 	
 	// 랜덤 손님 이름 가져오기
+	UFUNCTION()
 	FString GetRandomCustName();
 
 	// 랜덤으로 모든 손님 취향 설정
@@ -189,22 +190,31 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void SetCustTastes();
 	// 특정 손님의 취향 가져오기
+	UFUNCTION()
 	TArray<int32> GetCustTaste(FString CustName);
 
+	UFUNCTION()
 	bool UpdateMaxSatisfaction(FString CustName, int32 BistroAreaID, int32 Satisfaction);
+	UFUNCTION()
 	void UpdateCmptBestRatedCombos(FString CustName, int32 BistroAreaID, TArray<int32> Ingr);
 
 	// 단골 손님 여부 반환
+	UFUNCTION()
 	bool IsRegularCust(FString CustomerName, int32 BistroAreaID);
 	// 단골 손님 추가
+	UFUNCTION()
 	void AddRegularCust(FString CustomerName, int32 BistroAreaID);
 	// 충성도 감소
+	UFUNCTION()
 	void DecreaseLoyalty(FString CustomerName, int32 BistroAreaID, float Decreasement);
 	// 경쟁사의 단골 손님 충성도 감소
+	UFUNCTION()
 	void DecreaseCompetitorLoyalty(int32 CompetitorAreaID);
 	// 경쟁사의 단골 손님 랜덤으로 추가
+	UFUNCTION()
 	void AddCompetitorRegularCust();
 	// 단골 손님 보유 여부
+	UFUNCTION()
 	bool HasRegularCust(int32 BistroAreaID);
 
 	// 손님의 취향 힌트 대사 재정의

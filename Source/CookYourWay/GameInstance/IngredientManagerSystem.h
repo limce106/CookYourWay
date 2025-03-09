@@ -61,6 +61,7 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Table")
 	class UDataTable* IngrClassTable;
 
+
 	TArray<FIngrData*> IngredientTableRows;
 	TArray<FName> IngredientTableRowNames;
 
@@ -74,21 +75,31 @@ public:
 	TArray<FIngrData> SauceRows;
 	TArray<FIngrData> DessertRows;
 
+	UPROPERTY()
 	TArray<int32> BreadIdxs;
+	UPROPERTY()
 	TArray<int32> FillingIdxs;
+	UPROPERTY()
 	TArray<int32> MeatIdxs;
+	UPROPERTY()
 	TArray<int32> SauceIdxs;
+	UPROPERTY()
 	TArray<int32> DessertIdxs;
 
+	UPROPERTY()
 	TArray<int32> SClassIngrRows;
+	UPROPERTY()
 	TArray<int32> AClassIngrRows;
+	UPROPERTY()
 	TArray<int32> BClassIngrRows;
+	UPROPERTY()
 	TArray<int32> CClassIngrRows;
 
 	// 가지고 있는 재료 개수
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	TArray<int32> HavingIngrNum;
 
+	UFUNCTION()
 	UStaticMesh* GetIngrModel(FString Ingr, bool IsSliced);
 
 	UFUNCTION(BlueprintCallable)
@@ -100,7 +111,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	int32 GetIngrSalePrice(FString Class);
 
+	UFUNCTION()
 	int32 GetSellingPriceByIndex(int32 Index);
+	UFUNCTION()
 	int32 GetIngrBinMinByIndex(int32 Index);
 
 	// 랜덤 취향 배열 반환

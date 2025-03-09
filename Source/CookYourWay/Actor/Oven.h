@@ -24,14 +24,19 @@ class COOKYOURWAY_API AOven : public ACookingUtensil
 protected:
 	virtual void BeginPlay() override;
 
-	float GetOneCookIncreasement() override;
+	float GetCookIncreasement() override;
 
 public:
 	virtual void Tick(float DeltaTime) override;
+	UPROPERTY()
 	bool IsBaking = false;
 
+	UFUNCTION()
 	void PutDessertIn(ADessert* Dessert);
+	UFUNCTION()
 	void Bake();
+	UFUNCTION()
 	bool IsCooked();
+	UFUNCTION()
 	void OvenInteraction();
 };

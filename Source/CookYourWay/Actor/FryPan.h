@@ -25,18 +25,22 @@ class COOKYOURWAY_API AFryPan : public ACookingUtensil
 protected:
 	virtual void BeginPlay() override;
 
-	float GetOneCookIncreasement() override;
+	float GetCookIncreasement() override;
 
 public:
 	virtual void Tick(float DeltaTime) override;
 
+
 	bool IsFrying = false;
 
 	virtual void PutIngrOn(AIngredient* Ingr) override;
+	UFUNCTION()
 	void Fry();
-
+	UFUNCTION()
 	void FryPanInteraction();
 
+	UFUNCTION()
 	void PlacedIngredientBurnt();
+	UFUNCTION()
 	void AddCookedMaterialOverlay(bool IsBurn);
 };

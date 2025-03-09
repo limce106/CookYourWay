@@ -29,7 +29,7 @@ void AIngredient::Init(FString IngrName, bool IsSliced)
 		}
 	}
 
-	SetStaticMeshAndPivot(IngrName, IsSliced);
+	SetStaticMesh(IngrName, IsSliced);
 }
 
 void AIngredient::SetScale()
@@ -52,7 +52,7 @@ void AIngredient::SetPivotCenter()
 	StaticMesh->SetRelativeLocation(-MeshCenter);
 }
 
-void AIngredient::SetStaticMeshAndPivot(FString IngrName, bool IsSliced)
+void AIngredient::SetStaticMesh(FString IngrName, bool IsSliced)
 {
 	UStaticMesh* IngredientMesh = IngredientManagerSystem->GetIngrModel(IngrName, IsSliced);
 	StaticMesh->SetStaticMesh(IngredientMesh);

@@ -18,13 +18,14 @@ class COOKYOURWAY_API AVillageManager : public AActor
 	class APlayerBistro* PlayerBistro;
 
 	FTimerHandle LeftDayTimeHandler;
-	int32 LeftMinute = 0;
-	int32 LeftSecond = 35;
+	int32 LeftMinute = 5;
+	int32 LeftSecond = 0;
 
 	// 남은 하루 시간 계산하기
 	void DecreaseDayTime();
 
 	void Init();
+	// 하르 타이머
 	void RunDayTimer();
 
 	void SpawnBistrosAndStore();
@@ -55,16 +56,22 @@ protected:
 public:
 	virtual void Tick(float DeltaTime) override;
 
+	UPROPERTY()
 	class UVillageManagerSystem* VillageManagerSystem;
+	UPROPERTY()
 	class UCustomerDataManagerSystem* CustomerDataManagerSystem;
+	UPROPERTY()
 	ACookYourWayGameState* CookYourWayGameState;
+	UPROPERTY()
 	ACustomerPool* CustomerPool;
-
+	// 부지 번호-위치 맵
+	UPROPERTY()
 	TMap<int32, FVector> AreaLocMap;
 
 	UPROPERTY()
 	TArray<FCustomerCommentData> RedefinedCustomerCommentTableRows;
 
+	// 오늘 손님이 코멘트를 얘기했는지(인덱스 == 손님 테이블 행의 손님)
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	TArray<bool>IsCommentTalked;
 
@@ -72,10 +79,11 @@ public:
 	int32 GetLeftMinute();
 	UFUNCTION(BlueprintCallable)
 	int32 GetLeftSecond();
-
+	UFUNCTION()
 	int32 GetRandomAreaId();
 
 	// 하루가 끝났을 때
+	UFUNCTION()
 	void EndDay();
 
 	// 날 수를 주차, 요일 문자열로 변환
@@ -88,5 +96,6 @@ public:
 	UFUNCTION(BlueprintImplementableEvent)
 	void StartSubtractAnim();
 
+	UFUNCTION()
 	void UpdateProfitsValue(int32 Value);
 };

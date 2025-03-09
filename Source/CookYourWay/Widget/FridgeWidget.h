@@ -57,7 +57,7 @@ public:
 
 	UPROPERTY(BlueprintReadWrite)
 	bool CanBuyIngr = true;
-
+	UPROPERTY()
 	ETabType CurTabType = ETabType::BreadTab;
 
 	UFUNCTION(BlueprintImplementableEvent)

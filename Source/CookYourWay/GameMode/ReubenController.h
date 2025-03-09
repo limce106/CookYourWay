@@ -56,10 +56,14 @@ protected:
 	virtual void SetupInputComponent() override;
 
 public:
+	UFUNCTION()
 	void Interaction();
+	UFUNCTION()
 	void CookInteraction();
-
+	UFUNCTION()
 	void FridgeInteraction();
+	UFUNCTION()
 	void PlatesInteraction();
+	UFUNCTION()
 	void TrashBinInteraction();
 };

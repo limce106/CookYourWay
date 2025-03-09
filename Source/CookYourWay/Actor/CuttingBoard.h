@@ -23,13 +23,14 @@ class COOKYOURWAY_API ACuttingBoard : public ACookingUtensil
 protected:
 	virtual void BeginPlay() override;
 
-	float GetOneCookIncreasement() override;
+	float GetCookIncreasement() override;
 
 public:
 	virtual void Tick(float DeltaTime) override;
 
 	virtual void PutIngrOn(AIngredient* Ingr) override;
+	UFUNCTION()
 	void Chop();
-
+	UFUNCTION()
 	void CuttingBoardInteraction();
 };

@@ -20,5 +20,6 @@ protected:
 public:	
 	virtual void Tick(float DeltaTime) override;
 
+	UPROPERTY()
 	bool IsCooked = false;
 };

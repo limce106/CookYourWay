@@ -39,9 +39,12 @@ public:
 	UPROPERTY(BlueprintReadOnly)
 	bool IsCustBlur = false;
 
+	UFUNCTION()
 	FString GetRedefinedNewsString();
+	UFUNCTION()
 	FString GetSeasonNewsNextString();
-
+	UFUNCTION()
 	bool IsContinueIngrSeasonDay();
+	UFUNCTION()
 	int32 GetYesterDayNewsIdx();
 };

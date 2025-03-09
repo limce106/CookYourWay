@@ -68,7 +68,7 @@ void ASandwich::DestroySandwich()
 	Destroy();
 }
 
-TArray<int32> ASandwich::IngrActorToNum()
+TArray<int32> ASandwich::GetIngrNum()
 {
 	TArray<int32> IngrNum;
 

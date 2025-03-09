@@ -23,13 +23,11 @@ class COOKYOURWAY_API APlayerBistro : public AActor
 
 	// 손님 위치
 	TArray<FVector> CustSeatLocArr = {
-		//FVector(0.0f, -5600.0f, 120.0f),
 		FVector(120.0f, -5600.0f, 120.0f),
 		FVector(270.0f, -5600.0f, 120.0f),
 		FVector(420.0f, -5600.0f, 120.0f),
 		FVector(570.0f, -5600.0f, 120.0f),
 		FVector(720.0f, -5600.0f, 120.0f),
-		//FVector(900.0f, -5600.0f, 120.0f)
 	};
 
 	// 자리에 손님이 앉았는지
@@ -42,7 +40,7 @@ class COOKYOURWAY_API APlayerBistro : public AActor
 	// 다음 손님이 앉기까지의 시간
 	const float NextCustDelay = 1.5f;
 	// 최대 대기 시간(초)
-	const float MaxWaitingTime = 40;
+	const float MaxWaitingTime = 40.0f;
 
 	void SpawnDiningTable();
 
@@ -57,6 +55,7 @@ class COOKYOURWAY_API APlayerBistro : public AActor
 
 	float TempDelayTime;
 	bool DelayWithDeltaTime(float DelayTime, float DeltaSeconds);
+	// 대기 손님 인내심 감소
 	void DecreaseWaitingCustPatience();
 	
 public:	
@@ -91,19 +90,27 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	int32 UsedIngrPrice = 0;
 
+	// 방문한 손님 수
 	UFUNCTION(BlueprintCallable)
 	int32 GetWaitingCustNum();
 
 	// 손님이 방문했을 때
 	UFUNCTION(BlueprintCallable)
 	void CustomerVisited(ACustomer* Customer);
-
+	// 앉아있던 손님이 떠나고 다음 손님 앉히기
+	UFUNCTION()
 	void LeaveAndSitNextCust(ACustomer* LeftCustomer);
-
-	void SitNextCust(int32 SeatIdx);
-
+	// 대기 손님 앉히기
+	UFUNCTION()
+	void SitWaitingCust(int32 SeatIdx);
+	// 대기 손님 떠나기
+	UFUNCTION()
 	void LeaveWaitingCust();
 
+	// 좌석 번호로 식사 테이블 액터 가져오기
+	UFUNCTION()
 	ADiningTable* GetDiningTable(int32 SeatIdx);
+	// 가게 안 손님이 떠날 때
+	UFUNCTION()
 	void LeaveCustomerInBistro(ACustomer* Customer);
 };

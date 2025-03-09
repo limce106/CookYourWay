@@ -19,6 +19,7 @@ class COOKYOURWAY_API AStore : public AActor
 	class UVillageManagerSystem* VillageManagerSystem;
 	ACustomerPool* CustomerPool;
 
+	// 상점에서 스폰하는 손님 이름들
 	TArray<FString> StoreCustName;
 
 	float TempDelayTime;
@@ -33,7 +34,8 @@ class COOKYOURWAY_API AStore : public AActor
 	void SetStoreMesh();
 	bool DelayWithDeltaTime(float DelayTime, float DeltaSeconds);
 
-	void SetStoreCustName();
+	void SetStoreCustNameArr();
+	// 손님 스폰 주기 설정
 	void SetSpawnCustDelayTime();
 
 public:
@@ -51,14 +53,18 @@ public:
 	// 부지 번호
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	int32 AreaID;
-
+	UPROPERTY()
 	FStoreTable CurStoreTableData;
 
 	virtual void Tick(float DeltaTime) override;
 
+	UFUNCTION()
 	void Init();
+	UFUNCTION()
 	void InitializeStoreTableData(int32 StoreAreaID, FStoreTable StoreTableData);
+	UFUNCTION()
 	void CreateCustomer();
+	UFUNCTION()
 	FString GetRandomCustName();
 };
 

@@ -29,7 +29,7 @@ void AStore::Init()
 	}
 
 	SetStoreMesh();
-	SetStoreCustName();
+	SetStoreCustNameArr();
 	SetSpawnCustDelayTime();
 	CreateCustomer();
 }
@@ -42,7 +42,7 @@ void AStore::BeginPlay()
 	CustomerPool = Cast<ACustomerPool>(UGameplayStatics::GetActorOfClass(GetWorld(), BP_CustomerPool));
 }
 
-void AStore::SetStoreCustName()
+void AStore::SetStoreCustNameArr()
 {
 	if (CurStoreTableData.StoreCust1 != "-1") {
 		StoreCustName.Add(CurStoreTableData.StoreCust1);

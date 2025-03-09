@@ -20,7 +20,9 @@ class COOKYOURWAY_API AIngredient : public AActor
 
 	class UIngredientManagerSystem* IngredientManagerSystem;
 
-	void SetStaticMeshAndPivot(FString IngrName, bool IsSliced);
+	// 스태틱 메시 설정 및 피봇 맞추기
+	void SetStaticMesh(FString IngrName, bool IsSliced);
+	void SetScale();
 	
 public:	
 	AIngredient();
@@ -35,23 +37,22 @@ public:
 	FIngrData CurIngrData;
 
 	// 고기 재료 탔는지
+	UPROPERTY()
 	bool IsBurn = false;
-
 	// 조리 정도
 	UPROPERTY(BlueprintReadOnly)
 	float CurCookRate = 0.0f;
 	const float MaxCookRate = 1.0f;
 
 	// 스폰 시 필수로 호출
+	UFUNCTION()
 	void Init(FString IngrName, bool IsSliced);
-	void SetScale();
-
 	// 제각각인 재료들의 피봇을 맞추기 위한 함수
+	UFUNCTION()
 	void SetPivotCenter();
-
 	UFUNCTION(BlueprintCallable)
 	bool IsCooked();
-
+	UFUNCTION()
 	void IngredientInteraction();
 };
 
