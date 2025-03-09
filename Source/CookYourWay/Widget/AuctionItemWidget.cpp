@@ -24,6 +24,19 @@ int32 UAuctionItemWidget::GetHavingIngrNum(int32 TableIdx)
 	return HavingIngrNum;
 }
 
+void UAuctionItemWidget::SetClassTextColor()
+{
+	if (TextBlock_Class->GetText().ToString() == "S") {
+		TextBlock_Class->SetColorAndOpacity(FLinearColor(1.f, 0.346704f, 0.097587f, 1.f));
+	}
+	else if (TextBlock_Class->GetText().ToString() == "A") {
+		TextBlock_Class->SetColorAndOpacity(FLinearColor(1.f, 0.590619f, 0.097587f, 1.f));
+	}
+	else if (TextBlock_Class->GetText().ToString() == "B") {
+		TextBlock_Class->SetColorAndOpacity(FLinearColor(0.266356f, 0.266356f, 0.266356f, 1.f));
+	}
+}
+
 void UAuctionItemWidget::SetItemUI(int32 TableIdx)
 {
 	FIngrData IngrData = IngredientManagerSystem->IngredientRows[TableIdx];
@@ -31,6 +44,7 @@ void UAuctionItemWidget::SetItemUI(int32 TableIdx)
 	TextBlock_Class->SetText(FText::FromString(IngrData.IngrClass));
 	Image_Item_Icon->SetBrushFromTexture(IngrData.IngrIcon);
 	TextBlock_Name->SetText(FText::FromString(IngrData.IngrName));
+	SetClassTextColor();
 
 	SetHavingNumText(TableIdx);
 	SetSellingAuctionPrice(TableIdx);

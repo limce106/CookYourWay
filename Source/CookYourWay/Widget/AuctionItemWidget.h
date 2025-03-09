@@ -40,6 +40,8 @@ public:
 	void SetHavingNumText(int32 TableIdx);
 	UFUNCTION(BlueprintCallable)
 	int32 GetHavingIngrNum(int32 TableIdx);
+	UFUNCTION(BlueprintCallable)
+	void SetClassTextColor();
 
 	UFUNCTION(BlueprintCallable)
 	void SetItemUI(int32 TableIdx);
