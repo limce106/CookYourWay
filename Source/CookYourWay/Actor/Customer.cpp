@@ -45,7 +45,6 @@ void ACustomer::SetSkeletalMesh()
 		// 애니메이션 블루프린트 클래스 적용
 		// 에디터에서만 적용되고 빌드 시 안 될 수 있으니 꼭 확인!!
 		FString AnimBPPath = (FString("/Game/Blueprint/AnimBP/").Append(CustName).Append("_AnimBP.").Append(CustName).Append("_AnimBP_C"));
-		// UAnimBlueprint* AnimBP = LoadObject<UAnimBlueprint>(NULL, *AnimBPPath, NULL, LOAD_None, NULL);
 		UClass* AnimBPClass = LoadClass<UAnimInstance>(NULL, *AnimBPPath, NULL, LOAD_None, NULL);
 		if (AnimBPClass) {
 			GetMesh()->SetAnimInstanceClass(AnimBPClass);
