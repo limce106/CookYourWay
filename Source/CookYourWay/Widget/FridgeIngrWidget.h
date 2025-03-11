@@ -57,4 +57,6 @@ public:
 	void OnClick_ButtonIngredient();
 	UFUNCTION()
 	void PayCClassIngr();
+	UFUNCTION()
+	void MinusHavingIngrNum();
 };

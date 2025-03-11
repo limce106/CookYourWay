@@ -70,6 +70,12 @@ ACustomer* ACustomerPool::GetPooledCustomer(FString CustName, bool IsWalk)
 void ACustomerPool::ReturnCustomer(ACustomer* Customer)
 {
 	if (Customer) {
+		AAIController* AINpcController = Cast<AAIController>(Customer->GetController());
+		EPathFollowingStatus::Type MoveStatus = AINpcController->GetMoveStatus();
+		if (MoveStatus == EPathFollowingStatus::Moving) {
+			AINpcController->StopMovement();
+		}
+
 		Customer->SetActorTickEnabled(false);
 		Customer->SetActorHiddenInGame(true);
 		Customer->SetActorEnableCollision(false);

@@ -69,12 +69,15 @@ UIngredientManagerSystem::UIngredientManagerSystem()
 UStaticMesh* UIngredientManagerSystem::GetIngrModel(FString Ingr, bool IsSliced)
 {
 	FString ModelPath;
-	if (IsSliced) {
+	ModelPath = FString("/Game/Assets/Art_3D/Modelling/Sandwich/").Append(Ingr).Append("_Slice").Append(".").Append(Ingr).Append("_Slice");
+
+	// 추후 Slice 되지 않은 재료 모델링을 따로 구하게 된다면 적용. 현재는 계획 없음.
+	/*if (IsSliced) {
 		ModelPath = FString("/Game/Assets/Art_3D/Modelling/Sandwich/").Append(Ingr).Append("_Slice").Append(".").Append(Ingr).Append("_Slice");
 	}
 	else {
 		ModelPath = FString("/Game/Assets/Art_3D/Modelling/Sandwich/OriginalIngredient/").Append(Ingr).Append(".").Append(Ingr);
-	}
+	}*/
 
 	UStaticMesh* StaticMesh = LoadObject<UStaticMesh>(NULL, *ModelPath, NULL, LOAD_None, NULL);
 

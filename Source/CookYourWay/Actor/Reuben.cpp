@@ -23,8 +23,7 @@ AReuben::AReuben()
 void AReuben::BeginPlay()
 {
 	Super::BeginPlay();
-	
-	PlayerBistro = Cast<APlayerBistro>(UGameplayStatics::GetActorOfClass(GetWorld(), BP_PlayerBistro));
+
 }
 
 void AReuben::Tick(float DeltaTime)

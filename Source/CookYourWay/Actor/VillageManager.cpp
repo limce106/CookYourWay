@@ -5,6 +5,7 @@
 #include "PlayerBistro.h"
 #include "Competitor.h"
 #include "Store.h"
+#include "Reuben.h"
 #include <Kismet/KismetMathLibrary.h>
 #include <Kismet/GameplayStatics.h>
 #include "Blueprint/UserWidget.h"
@@ -83,6 +84,7 @@ void AVillageManager::BeginPlay()
 	RunDayTimer();
 
 	PlayerBistro = Cast<APlayerBistro>(UGameplayStatics::GetActorOfClass(GetWorld(), BP_PlayerBistro));
+	Cast<AReuben>(UGameplayStatics::GetPlayerPawn(this, 0))->PlayerBistro = this->PlayerBistro;
 }
 
 void AVillageManager::Tick(float DeltaTime)

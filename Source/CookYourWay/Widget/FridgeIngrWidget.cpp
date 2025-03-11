@@ -80,21 +80,21 @@ void UFridgeIngrWidget::OnClick_ButtonIngredient()
 			Reuben->HoldActor(Dessert);
 		}
 		else {
-			/*나중에 false로 바꿀 것!!*/
-			AIngredient* ClickedIngredient = IngredientSpawnFactory::SpawnIngredient(GetWorld(), BP_IngredientClass, Reuben->GetActorLocation(), Reuben->GetActorRotation(), IngrEngName, true);
+			AIngredient* ClickedIngredient = IngredientSpawnFactory::SpawnIngredient(GetWorld(), BP_IngredientClass, Reuben->GetActorLocation(), Reuben->GetActorRotation(), IngrEngName, false);
 			Reuben->HoldActor(ClickedIngredient);
 		}
 		PayCClassIngr();
+		MinusHavingIngrNum();
 	}
 	else if (Reuben->IsHold && Reuben->HeldActor->GetClass() == BP_Sandwich) {
 		// 소스를 골랐다면
 		if (FridgeWidget->CurTabType == ETabType::BreadTab || FridgeWidget->CurTabType == ETabType::SauceTab) {
 
-			/*나중에 false로 바꿀 것!!*/
-			AIngredient* ClickedIngredient = IngredientSpawnFactory::SpawnIngredient(GetWorld(), BP_IngredientClass, Reuben->GetActorLocation(), Reuben->GetActorRotation(), IngrEngName, true);
+			AIngredient* ClickedIngredient = IngredientSpawnFactory::SpawnIngredient(GetWorld(), BP_IngredientClass, Reuben->GetActorLocation(), Reuben->GetActorRotation(), IngrEngName, false);
 			ASandwich* HoldingSandwich = Cast<ASandwich>(Reuben->HeldActor);
 			HoldingSandwich->AddIngredient(ClickedIngredient);
 			PayCClassIngr();
+			MinusHavingIngrNum();
 		}
 		else {
 			FridgeWidget->PlayWarningAnim();
@@ -113,4 +113,11 @@ void UFridgeIngrWidget::PayCClassIngr()
 	if (CurIngrData.IngrClass == "C") {
 		VillageManager->VillageManagerSystem->TotalAsset -= IngrPrice;
 	}
+}
+
+void UFridgeIngrWidget::MinusHavingIngrNum()
+{
+	IngredientManagerSystem->HavingIngrNum[IngrTableIdx]--;
+	FString HavingNum = FString::FromInt(IngredientManagerSystem->HavingIngrNum[IngrTableIdx]);
+	TextBlock_IngrNum->SetText(FText::FromString(HavingNum));
 }

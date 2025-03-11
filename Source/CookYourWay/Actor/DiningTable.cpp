@@ -56,7 +56,7 @@ void ADiningTable::PutFoodOn(AActor* HoldingCharacter, AActor* Food)
 	}
 
 	FVector ActorLocation = GetActorLocation();
-	ActorLocation.Z += 65.0f;
+	ActorLocation.Z += 53.0f;
 	Food->SetActorLocation(ActorLocation);
 	Food->SetActorRotation(GetActorRotation());
 
