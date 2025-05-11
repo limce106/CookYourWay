@@ -29,9 +29,10 @@ void ASandwich::Tick(float DeltaTime)
 
 void ASandwich::AddIngredient(AIngredient* Ingr)
 {
+	Ingr->SetActorEnableCollision(false);
 	// 재료 높이 계산
 	FVector IngrBounds = Ingr->GetComponentsBoundingBox().GetExtent();
-	float IngrHeight = IngrBounds.Z * 2;
+	float IngrHeight = IngrBounds.Z ;
 
 	FVector CurIngrLoc;
 	FRotator CurIngrRot;
@@ -47,7 +48,6 @@ void ASandwich::AddIngredient(AIngredient* Ingr)
 	}
 
 	// 재료 부착
-	Ingr->SetActorEnableCollision(false);
 	Ingr->AttachToComponent(DefaultRootComponent, FAttachmentTransformRules::KeepRelativeTransform);
 	Ingr->SetActorLocation(CurIngrLoc);
 	Ingr->SetActorRotation(CurIngrRot);

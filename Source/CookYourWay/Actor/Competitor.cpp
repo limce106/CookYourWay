@@ -196,6 +196,7 @@ void ACompetitor::CustomerVisited(ACustomer* Customer)
 
 	GetWorld()->GetTimerManager().SetTimer(CustRatingTimerHandler, FTimerDelegate::CreateLambda([=]()
 		{
+			UE_LOG(LogTemp, Warning , TEXT("CustomerVisited"));
 			TArray<int32> SandwichIngr = GenerateSandwich(Customer);
 			int32 Satisfaction = GetCustomerSatisfaction(Customer, SandwichIngr);
 
@@ -227,6 +228,7 @@ void ACompetitor::UpdateCompetitorRating(float Rating)
 
 void ACompetitor::AddCustRatingData(FString CustName, float Rating)
 {
+	UE_LOG(LogTemp, Warning, TEXT("AddCustRatingData"));
 	FString WeekDay = VillageManager->DayToWeekString(VillageManagerSystem->Day);
 	FCompetitorRatingData RatingData = FCompetitorRatingData(CustName, WeekDay, Rating);
 
