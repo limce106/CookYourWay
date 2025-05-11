@@ -29,7 +29,7 @@ void AIngredient::Init(FString IngrName, bool IsSliced)
 		}
 	}
 
-	SetStaticMesh(IngrName, IsSliced);
+	SetMesh(IngrName, IsSliced);
 }
 
 void AIngredient::SetScale()
@@ -52,7 +52,7 @@ void AIngredient::SetPivotCenter()
 	StaticMesh->SetRelativeLocation(-MeshCenter);
 }
 
-void AIngredient::SetStaticMesh(FString IngrName, bool IsSliced)
+void AIngredient::SetMesh(FString IngrName, bool IsSliced)
 {
 	UStaticMesh* IngredientMesh = IngredientManagerSystem->GetIngrModel(IngrName, IsSliced);
 	StaticMesh->SetStaticMesh(IngredientMesh);
@@ -106,4 +106,49 @@ void AIngredient::IngredientInteraction()
 			HoldingCookingUtensil->PutIngrOn(this);
 		}
 	}
+}
+
+void AIngredient::AddBurntMaterialOverlay()
+{
+	UMaterialInterface* OverlayMaterial;
+	if (IsBurn) {
+		OverlayMaterial = LoadObject<UMaterialInterface>(nullptr, TEXT("/Game/Material/M_BurntMeat.M_BurntMeat"));
+	}
+	else {
+		OverlayMaterial = LoadObject<UMaterialInterface>(nullptr, TEXT("/Game/Material/M_CookedMeat.M_CookedMeat"));
+	}
+
+	if (!OverlayMaterial)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Brown overlay material not found!"));
+		return;
+	}
+
+	UStaticMeshComponent* StaticMeshComponent = Cast<UStaticMeshComponent>(FindComponentByClass(UStaticMeshComponent::StaticClass()));
+	if (!StaticMeshComponent) {
+		UE_LOG(LogTemp, Warning, TEXT("Static mesh component not found on ingredient"));
+		return;
+	}
+
+	if (OverlayMesh)
+	{
+		OverlayMesh->DestroyComponent(); // 안전하게 제거
+		OverlayMesh = nullptr;
+	}
+
+	// 새로운 StaticMeshComponent 생성
+	OverlayMesh = NewObject<UStaticMeshComponent>(this);
+
+	OverlayMesh->SetStaticMesh(StaticMeshComponent->GetStaticMesh()); // 기존 메시 복제
+	OverlayMesh->SetMaterial(0, OverlayMaterial);
+	OverlayMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+
+	// 기존 메시보다 약간 크게 설정해서 덮어씌우기
+	FVector NewScale = StaticMeshComponent->GetComponentScale() * 1.01f;
+	OverlayMesh->SetWorldScale3D(NewScale);
+
+
+	// 액터에 추가
+	OverlayMesh->AttachToComponent(StaticMeshComponent, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
+	OverlayMesh->RegisterComponent();
 }

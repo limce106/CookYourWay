@@ -194,12 +194,12 @@ void UCustomerDataManagerSystem::SetCustTastes()
 	}
 
 	// Å×½ºÆ®
-	for (int i = 0; i < CustomerNames.Num(); i++) {
+	/*for (int i = 0; i < CustomerNames.Num(); i++) {
 		TArray<int32> Taste = CustNameToTasteMap[CustomerNames[i]];
 		for (int j = 0; j < Taste.Num(); j++) {
 			UE_LOG(LogTemp, Warning, TEXT("%s: %s"), *CustomerNames[i], *IngredientManagerSystem->IngredientRows[Taste[j]].IngrName);
 		}
-	}
+	}*/
 	//
 }
 

@@ -15,7 +15,6 @@ class COOKYOURWAY_API AFryPan : public ACookingUtensil
 	GENERATED_BODY()
 	
 	class UParticleSystemComponent* ParticleSystemComponent;
-	UStaticMeshComponent* OverlayMesh;
 
 	float OverCookedTime = 3.0f;
 
@@ -41,6 +40,4 @@ public:
 
 	UFUNCTION()
 	void PlacedIngredientBurnt();
-	UFUNCTION()
-	void AddCookedMaterialOverlay(bool IsBurn);
 };

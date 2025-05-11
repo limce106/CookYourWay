@@ -72,7 +72,7 @@ void AFryPan::Fry()
 	BP_CookRateWidget->CookRate += GetCookIncreasement();
 
 	if (PlacedIngredient->CurCookRate == PlacedIngredient->MaxCookRate) {
-		AddCookedMaterialOverlay(false);
+		PlacedIngredient->AddBurntMaterialOverlay();
 	}
 	else if (PlacedIngredient->CurCookRate > PlacedIngredient->MaxCookRate) {
 		OverCookedTime--;
@@ -103,46 +103,8 @@ void AFryPan::FryPanInteraction()
 void AFryPan::PlacedIngredientBurnt()
 {
 	PlacedIngredient->IsBurn = true;
-	AddCookedMaterialOverlay(true);
+	PlacedIngredient->AddBurntMaterialOverlay();
 
 	UParticleSystem* FireParticle = LoadObject<UParticleSystem>(nullptr, TEXT("/Game/Effect/P_Fire.P_Fire"));
 	ParticleSystemComponent->SetTemplate(FireParticle);
-}
-
-void AFryPan::AddCookedMaterialOverlay(bool IsBurn)
-{
-	UMaterialInterface* OverlayMaterial;
-	if (IsBurn) {
-		OverlayMaterial = LoadObject<UMaterialInterface>(nullptr, TEXT("/Game/Material/M_BurntMeat.M_BurntMeat"));
-	}
-	else {
-		OverlayMaterial = LoadObject<UMaterialInterface>(nullptr, TEXT("/Game/Material/M_CookedMeat.M_CookedMeat"));
-	}
-
-	if (!OverlayMaterial)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("Brown overlay material not found!"));
-		return;
-	}
-
-	UStaticMeshComponent* StaticMeshComponent = Cast<UStaticMeshComponent>(PlacedIngredient->FindComponentByClass(UStaticMeshComponent::StaticClass()));
-
-	// 새로운 StaticMeshComponent 생성
-	if (OverlayMesh == nullptr) {
-		OverlayMesh = NewObject<UStaticMeshComponent>(this);
-	}
-
-	OverlayMesh->SetStaticMesh(StaticMeshComponent->GetStaticMesh()); // 기존 메시 복제
-	OverlayMesh->SetMaterial(0, OverlayMaterial);
-	OverlayMesh->SetWorldTransform(StaticMeshComponent->GetComponentTransform()); // 기존 메시와 동일한 위치
-
-	// 기존 메시보다 약간 크게 설정해서 덮어씌우기
-	FVector NewScale = StaticMeshComponent->GetComponentScale() * 1.01f;
-	OverlayMesh->SetWorldScale3D(NewScale);
-
-	OverlayMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-
-	// 액터에 추가
-	OverlayMesh->RegisterComponent();
-	OverlayMesh->AttachToComponent(StaticMeshComponent, FAttachmentTransformRules::KeepWorldTransform);
 }

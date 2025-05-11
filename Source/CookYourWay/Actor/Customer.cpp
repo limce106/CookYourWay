@@ -43,7 +43,6 @@ void ACustomer::SetSkeletalMesh()
 		GetMesh()->SetSkeletalMesh(CustSkeletalMesh);
 
 		// 애니메이션 블루프린트 클래스 적용
-		// 에디터에서만 적용되고 빌드 시 안 될 수 있으니 꼭 확인!!
 		FString AnimBPPath = (FString("/Game/Blueprint/AnimBP/").Append(CustName).Append("_AnimBP.").Append(CustName).Append("_AnimBP_C"));
 		UClass* AnimBPClass = LoadClass<UAnimInstance>(NULL, *AnimBPPath, NULL, LOAD_None, NULL);
 		if (AnimBPClass) {
@@ -363,7 +362,6 @@ void ACustomer::EatDessert()
 	AddDessertSatisfaction();
 	Eat(2.0f);
 
-	Satisfaction += 10;
 	PlayerBistroRatingData.IsEatDessert = true;
 
 	UE_LOG(LogTemp, Warning, TEXT("Dessert Bonus"));
@@ -419,16 +417,19 @@ FString ACustomer::GetComment()
 	int32 index = 0;
 
 	for (auto CustCommentData : VillageManager->RedefinedCustomerCommentTableRows) {
-		if (CommentType == 1 && CustCommentData.CustCode == CustName && CustCommentData.CustCommentType == CommentType) {
-			Satisfaction += 20;
-			VillageManager->IsCommentTalked[index] = true;
-			return CustCommentData.CustCommentString;
+		if (CustCommentData.CustCode == CustName && CustCommentData.CustCommentType == CommentType)
+		{
+			if (CommentType == 1) {
+				Satisfaction += 20;
+				VillageManager->IsCommentTalked[index] = true;
+				return CustCommentData.CustCommentString;
+			}
+			else if (CommentType == 2) {
+				VillageManager->IsCommentTalked[index] = true;
+				return CustCommentData.CustCommentString;
+			}
+			index++;
 		}
-		else if (CommentType == 2 && CustCommentData.CustCode == CustName && CustCommentData.CustCommentType == CommentType) {
-			VillageManager->IsCommentTalked[index] = true;
-			return CustCommentData.CustCommentString;
-		}
-		index++;
 	}
 
 	UE_LOG(LogTemp, Error, TEXT("Can't Get Comment!"));

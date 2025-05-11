@@ -21,7 +21,7 @@ class COOKYOURWAY_API AIngredient : public AActor
 	class UIngredientManagerSystem* IngredientManagerSystem;
 
 	// 스태틱 메시 설정 및 피봇 맞추기
-	void SetStaticMesh(FString IngrName, bool IsSliced);
+	void SetMesh(FString IngrName, bool IsSliced);
 	void SetScale();
 	
 public:	
@@ -36,8 +36,8 @@ public:
 	UPROPERTY(BlueprintReadOnly)
 	FIngrData CurIngrData;
 
+	UStaticMeshComponent* OverlayMesh;
 	// 고기 재료 탔는지
-	UPROPERTY()
 	bool IsBurn = false;
 	// 조리 정도
 	UPROPERTY(BlueprintReadOnly)
@@ -54,6 +54,7 @@ public:
 	bool IsCooked();
 	UFUNCTION()
 	void IngredientInteraction();
+	void AddBurntMaterialOverlay();
 };
 
 class IngredientSpawnFactory
