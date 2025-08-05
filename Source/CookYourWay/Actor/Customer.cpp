@@ -365,6 +365,7 @@ void ACustomer::EatDessert()
 	PlayerBistroRatingData.IsEatDessert = true;
 
 	UE_LOG(LogTemp, Warning, TEXT("Dessert Bonus"));
+
 }
 
 void ACustomer::Eat(float EatingTime)

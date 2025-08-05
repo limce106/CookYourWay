@@ -37,7 +37,14 @@ public:
 	void Fry();
 	UFUNCTION()
 	void FryPanInteraction();
-
 	UFUNCTION()
 	void PlacedIngredientBurnt();
+	//
+	UPROPERTY(EditAnywhere, Category = "Sound")
+	USoundBase* FrySound;
+	USoundBase* BurntSound;
+
+	UPROPERTY()
+	UAudioComponent* FryingAudioComponent;
+	UAudioComponent* BurntAudioComponent;
 };

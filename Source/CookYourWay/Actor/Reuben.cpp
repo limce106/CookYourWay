@@ -106,6 +106,8 @@ void AReuben::PutDownActor()
 	if (ActorCollision) {
 		if ((HeldActor->GetClass() == BP_Ingredient) || (HeldActor->GetClass() == BP_Sandwich)) {
 			ActorCollision->SetCollisionProfileName(TEXT("OnSomething"));
+			USoundBase* LoadedSound = LoadObject<USoundBase>(nullptr, TEXT("/Game/Assets/Sound/SoundAsset/SFX_PutIngredients"));
+			UGameplayStatics::PlaySoundAtLocation(this, LoadedSound, GetActorLocation());
 		}
 		else {
 			ActorCollision->SetCollisionProfileName(TEXT("BlockAll"));
@@ -157,6 +159,8 @@ bool AReuben::TryGiveSomething(ACustomer* Customer)
 
 	if (HeldActor->GetClass() == BP_Sandwich) {
 		GiveSandwich(Customer);
+		USoundBase* LoadedSound = LoadObject<USoundBase>(nullptr, TEXT("/Game/Assets/Sound/SoundAsset/SFX_PutIngredients"));
+		UGameplayStatics::PlaySoundAtLocation(this, LoadedSound, GetActorLocation());
 		return true;
 	}
 	else if (HeldActor->GetClass() == BP_Dessert) {
@@ -194,6 +198,8 @@ void AReuben::GiveDessert(ACustomer* Customer)
 {
 	ADiningTable* DiningTable = PlayerBistro->GetDiningTable(Customer->CurSeatNum);
 	DiningTable->PutFoodOn(this, HeldActor);
+	USoundBase* LoadedSound = LoadObject<USoundBase>(nullptr, TEXT("/Game/Assets/Sound/SoundAsset/SFX_PutIngredients"));
+	UGameplayStatics::PlaySoundAtLocation(this, LoadedSound, GetActorLocation());
 
 	Customer->EatDessert();
 }

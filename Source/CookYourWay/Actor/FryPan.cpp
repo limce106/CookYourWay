@@ -7,6 +7,7 @@
 #include "GameInstance/VillageManagerSystem.h"
 #include "Reuben.h"
 #include "Particles/ParticleSystemComponent.h"
+#include "Components/AudioComponent.h"
 
 void AFryPan::BeginPlay()
 {
@@ -16,13 +17,31 @@ void AFryPan::BeginPlay()
 	ParticleSystemComponent->SetRelativeLocation(FVector(0.0f, 0.0f, 150.0f));
 	ParticleSystemComponent->SetWorldScale3D(FVector(0.6f, 0.6f, 0.6f));
 	ParticleSystemComponent->bAutoActivate = false;
+
+	//Audio component
+	FryingAudioComponent = NewObject<UAudioComponent>(this);
+	if (FryingAudioComponent)
+	{
+		FryingAudioComponent->RegisterComponent();
+		FrySound = LoadObject<USoundBase>(nullptr, TEXT("/Game/Assets/Sound/SoundAsset/SFX_Sizzle"));
+		FryingAudioComponent->SetSound(FrySound);
+		FryingAudioComponent->bAutoActivate = false;
+	}
+	BurntAudioComponent = NewObject<UAudioComponent>(this);
+	if (BurntAudioComponent)
+	{
+		BurntAudioComponent->RegisterComponent();
+		BurntSound = LoadObject<USoundBase>(nullptr, TEXT("/Game/Assets/Sound/SoundAsset/SFX_Burnt"));
+		BurntAudioComponent->SetSound(BurntSound);
+		BurntAudioComponent->bAutoActivate = false;
+	}
 }
 
 float AFryPan::GetCookIncreasement()
 {
 	return (1.0f / 10.0f);
 	// Å×½ºÆ®
-	// return (1.0f / 3.0f);
+	//return (1.0f / 3.0f);
 	//
 }
 
@@ -46,7 +65,7 @@ bool AFryPan::DelayWithDeltaTime(float DelayTime, float DeltaSeconds)
 		return false;
 	}
 }
-
+ 
 void AFryPan::PutIngrOn(AIngredient* Ingr)
 {
 	Super::PutIngrOn(Ingr);
@@ -60,6 +79,13 @@ void AFryPan::PutIngrOn(AIngredient* Ingr)
 	UParticleSystem* SteamParticle = LoadObject<UParticleSystem>(nullptr, TEXT("/Game/Effect/P_Steam_Lit.P_Steam_Lit"));
 	ParticleSystemComponent->SetTemplate(SteamParticle);
 	ParticleSystemComponent->ActivateSystem();
+
+	//
+	if (FryingAudioComponent)
+	{
+		FryingAudioComponent->Play();
+	}
+
 }
 
 void AFryPan::Fry()
@@ -89,6 +115,8 @@ void AFryPan::FryPanInteraction()
 	bool InteractionSuccess = CommonCookingUtensilInteraction();
 	if (InteractionSuccess) {
 		ParticleSystemComponent->SetTemplate(nullptr);
+		FryingAudioComponent->FadeOut(0.3f, 0.0f);
+		BurntAudioComponent->FadeOut(0.3f, 0.0f); 
 		return;
 	}
 
@@ -107,4 +135,10 @@ void AFryPan::PlacedIngredientBurnt()
 
 	UParticleSystem* FireParticle = LoadObject<UParticleSystem>(nullptr, TEXT("/Game/Effect/P_Fire.P_Fire"));
 	ParticleSystemComponent->SetTemplate(FireParticle);
+
+	if (BurntAudioComponent)
+	{
+		BurntAudioComponent->Play();
+		FryingAudioComponent->SetVolumeMultiplier(0.6f);
+	}
 }

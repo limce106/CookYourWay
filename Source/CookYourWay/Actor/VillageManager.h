@@ -18,14 +18,14 @@ class COOKYOURWAY_API AVillageManager : public AActor
 	class APlayerBistro* PlayerBistro;
 
 	FTimerHandle LeftDayTimeHandler;
-	int32 LeftMinute = 5;
-	int32 LeftSecond = 0;
+	int32 LeftMinute = 0;
+	int32 LeftSecond = 30;
 
 	// 남은 하루 시간 계산하기
 	void DecreaseDayTime();
 
 	void Init();
-	// 하르 타이머
+	// 하루 타이머
 	void RunDayTimer();
 
 	void SpawnBistrosAndStore();

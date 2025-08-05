@@ -108,6 +108,8 @@ void ASandwich::SandwichInteraction()
 		ACookingUtensil* HoldingCookingUtensil = Cast<ACookingUtensil>(Reuben->HeldActor);
 		if (HoldingCookingUtensil->IsIngredientOn && HoldingCookingUtensil->PlacedIngredient->IsCooked()) {
 			AddIngredient(HoldingCookingUtensil->PlacedIngredient);
+			USoundBase* LoadedSound = LoadObject<USoundBase>(nullptr, TEXT("/Game/Assets/Sound/SoundAsset/SFX_Stack"));
+			UGameplayStatics::PlaySoundAtLocation(this, LoadedSound, GetActorLocation());
 		}
 	}
 	// 조리된 재료라면 접시/샌드위치 위로 올린다.
@@ -115,6 +117,8 @@ void ASandwich::SandwichInteraction()
 		AIngredient* HoldingIngr = Cast<AIngredient>(Reuben->HeldActor);
 		if (HoldingIngr->IsCooked()) {
 			AddIngredient(HoldingIngr);
+			USoundBase* LoadedSound = LoadObject<USoundBase>(nullptr, TEXT("/Game/Assets/Sound/SoundAsset/SFX_Stack"));
+			UGameplayStatics::PlaySoundAtLocation(this, LoadedSound, GetActorLocation());
 		}
 	}
 }

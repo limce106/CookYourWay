@@ -26,6 +26,10 @@
 		{
 			"Name": "DatasmithGLTFImporter",
 			"Enabled": true
+		},
+		{
+			"Name": "AudioModulation",
+			"Enabled": true
 		}
 	]
 }

@@ -47,4 +47,5 @@ public:
 	int32 DestroyedCompetitor = 0;
 	UPROPERTY()
 	FString PlayerBistroName = "매장 이름";
+	//변수 선언
 };

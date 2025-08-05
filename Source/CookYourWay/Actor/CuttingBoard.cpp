@@ -5,6 +5,7 @@
 #include "Ingredient.h"
 #include <Kismet/GameplayStatics.h>
 #include "Reuben.h"
+#include "Sound/SoundBase.h"
 
 void ACuttingBoard::BeginPlay()
 {
@@ -46,11 +47,14 @@ void ACuttingBoard::Chop()
 		PlacedIngredient->CurCookRate += GetCookIncreasement();
 		BP_CookRateWidget->CookRate += GetCookIncreasement();
 
+
 		if (IngrStaticMesh) {
 			IngrStaticMesh->SetWorldScale3D(IngrStaticMesh->GetComponentScale() - IngredientShrinkRate);
 			PlacedIngredient->SetPivotCenter();
 		}
 	}
+	USoundBase* MetaSoundAsset = LoadObject<USoundBase>(nullptr,TEXT("/Game/Assets/Sound/MSS/SFX_Chop"));	
+	UGameplayStatics::PlaySound2D(this, MetaSoundAsset);
 }
 
 void ACuttingBoard::CuttingBoardInteraction()

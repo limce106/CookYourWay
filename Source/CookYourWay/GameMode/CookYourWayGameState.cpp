@@ -11,6 +11,7 @@ void ACookYourWayGameState::BeginPlay()
 	VillageManagerSystem = UCookYourWayGameInstance::GetVillageManagerSystemStatic(this);
 	CustomerDataManagerSystem = UCookYourWayGameInstance::GetCustomerDataManagerSystemStatic(this);
 	IngredientManagerSystem = UCookYourWayGameInstance::GetIngredientManagerSystemStatic(this);
+	//초기화를 한번 해줘야 됨
 }
 
 ACookYourWayGameState::ACookYourWayGameState()
@@ -19,6 +20,7 @@ ACookYourWayGameState::ACookYourWayGameState()
 	UserIndex = 0;
 }
 
+//불러오기
 void ACookYourWayGameState::LoadCookYourWayData()
 {
 	UCookYourWaySaveGame* CookYourWaySaveGame = Cast<UCookYourWaySaveGame>(UGameplayStatics::LoadGameFromSlot(SaveSlotName, UserIndex));
@@ -41,7 +43,7 @@ void ACookYourWayGameState::LoadCookYourWayData()
 	VillageManagerSystem->DestroyedCompetitor = CookYourWaySaveGame->DestroyedCompetitor;
 	VillageManagerSystem->PlayerBistroName = CookYourWaySaveGame->PlayerBistroName;
 }
-
+//여기서 저장되는거임
 void ACookYourWayGameState::SaveCookYourWayData()
 {
 	UCookYourWaySaveGame* NewCookYourWayData = NewObject<UCookYourWaySaveGame>();

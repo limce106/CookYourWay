@@ -11,4 +11,5 @@ UCookYourWaySaveGame::UCookYourWaySaveGame()
 	PlayerBistroTotalCust = 0;
 	PlayerBistroRating = 0;
 	DestroyedCompetitor = 0;
+	//초기화 필요하면 하기
 }
