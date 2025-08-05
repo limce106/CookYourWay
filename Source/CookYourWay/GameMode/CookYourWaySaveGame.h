@@ -22,7 +22,7 @@ public:
 	UPROPERTY()
 	TArray<int32> HavingIngrNum;
 	UPROPERTY()
-	int32 Day = 0;
+	int32 Day = 1;
 	UPROPERTY()
 	int32 PlayerBistroAreaID = 16;
 	UPROPERTY()

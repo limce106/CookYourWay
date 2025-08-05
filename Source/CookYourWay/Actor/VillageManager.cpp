@@ -247,6 +247,7 @@ void AVillageManager::EndDay()
 
 	EndEatingCustomer();
 	VillageManagerSystem->ElapseStorePeriod();
+	VillageManagerSystem->Day += 1;
 
 	// 일요일 저녁이라면
 	if (VillageManagerSystem->IsSunday()) {

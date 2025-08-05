@@ -6,8 +6,10 @@
 #include <Actor/Store.h>
 #include <GameInstance/CookYourWayGameInstance.h>
 
-void ACookYourWayGameState::BeginPlay()
+void ACookYourWayGameState::PostInitializeComponents()
 {
+	Super::PostInitializeComponents();
+
 	VillageManagerSystem = UCookYourWayGameInstance::GetVillageManagerSystemStatic(this);
 	CustomerDataManagerSystem = UCookYourWayGameInstance::GetCustomerDataManagerSystemStatic(this);
 	IngredientManagerSystem = UCookYourWayGameInstance::GetIngredientManagerSystemStatic(this);
@@ -85,4 +87,6 @@ void ACookYourWayGameState::DeleteCookYourWayData()
 	if (CookYourWaySaveGame) {
 		UGameplayStatics::DeleteGameInSlot(SaveSlotName, UserIndex);
 	}
+
+	VillageManagerSystem->Day = 1;
 }
