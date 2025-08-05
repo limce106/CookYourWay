@@ -44,6 +44,12 @@ void UFridgeIngrWidget::NativeDestruct()
 
 void UFridgeIngrWidget::SetIngrUI()
 {
+	FString CurrentLevel = GetWorld()->GetMapName();
+	if (CurrentLevel.Contains("LV_Auction"))
+	{
+		Button_Ingredient->SetIsEnabled(false);
+	}
+
 	Image_Ingr->SetBrushFromTexture(CurIngrData.IngrIcon);
 	TextBlock_IngrName->SetText(FText::FromString(CurIngrData.IngrName));
 
