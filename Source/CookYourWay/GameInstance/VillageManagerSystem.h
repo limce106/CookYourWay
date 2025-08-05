@@ -176,7 +176,7 @@ public:
 	TArray<FStoreData> StoreDataArr;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
-	int32 Day = 0;
+	int32 Day = 1;
 
 	// 전체 자산
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)

@@ -17,6 +17,7 @@ UCLASS()
 class COOKYOURWAY_API ACookYourWayGameState : public AGameState
 {
 	GENERATED_BODY()
+	virtual void PostInitializeComponents() override;
 	ACookYourWayGameState();
 	class UVillageManagerSystem* VillageManagerSystem;
 	class UIngredientManagerSystem* IngredientManagerSystem;
@@ -36,7 +37,4 @@ public:
 	bool IsSaveDataExist();
 	UFUNCTION(BlueprintCallable)
 	void DeleteCookYourWayData();
-
-protected:
-	virtual void BeginPlay() override;
 };

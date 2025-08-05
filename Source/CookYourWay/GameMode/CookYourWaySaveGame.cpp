@@ -5,7 +5,7 @@
 
 UCookYourWaySaveGame::UCookYourWaySaveGame()
 {
-	Day = 0;
+	Day = 1;
 	PlayerBistroAreaID = 16;
 	TotalAsset = 0;
 	PlayerBistroTotalCust = 0;
