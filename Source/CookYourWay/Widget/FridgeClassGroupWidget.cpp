@@ -16,13 +16,26 @@ void UFridgeClassGroupWidget::NativePreConstruct()
 	UniformGridPanel_Ingr = (UUniformGridPanel*)GetWidgetFromName(TEXT("UniformGridPanel_Ingr"));
 }
 
+
 void UFridgeClassGroupWidget::NativeConstruct()
 {
 	Super::NativeConstruct();
 
 	IngredientManagerSystem = UGameplayStatics::GetGameInstance(GetWorld())->GetSubsystem<UIngredientManagerSystem>();
+}
+
+void UFridgeClassGroupWidget::InitAndCreate(FString InClass, FString InType)
+{
+	IngrClass = InClass;
+	IngrType = InType;
+
+	if (!IngredientManagerSystem)
+	{
+		IngredientManagerSystem = UGameplayStatics::GetGameInstance(GetWorld())->GetSubsystem<UIngredientManagerSystem>();
+	}
 
 	TextBlock_Class->SetText(FText::FromString(IngrClass));
+	CreateIngr();
 }
 
 void UFridgeClassGroupWidget::CreateIngr()
@@ -57,15 +70,16 @@ void UFridgeClassGroupWidget::AddIngrPanelChildren(TArray<FIngrData> IngrDataArr
 		}
 
 		UFridgeIngrWidget* FridgeIngr = CreateWidget<UFridgeIngrWidget>(GetWorld(), BP_FridgeIngr);
-		FridgeIngr->AddToViewport();
-		FridgeIngr->IngrTableIdx = IngrTableIdxs[i];
-		FridgeIngr->CurIngrData = IngredientManagerSystem->IngredientRows[FridgeIngr->IngrTableIdx];
-		FridgeIngr->SetIngrUI();
 
 		if (ConditionSatisfied != 0 && ConditionSatisfied % MaxColumn == 0) {
 			row++;
 		}
 		UniformGridPanel_Ingr->AddChildToUniformGrid(FridgeIngr, row, ConditionSatisfied % MaxColumn);
+
+		FridgeIngr->IngrTableIdx = IngrTableIdxs[i];
+		FridgeIngr->CurIngrData = IngredientManagerSystem->IngredientRows[FridgeIngr->IngrTableIdx];
+		FridgeIngr->SetIngrUI();
+
 		ConditionSatisfied++;
 	}
 }

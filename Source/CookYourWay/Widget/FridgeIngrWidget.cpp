@@ -15,6 +15,10 @@ void UFridgeIngrWidget::NativePreConstruct()
 {
 	Super::NativePreConstruct();
 
+	VillageManager = Cast<AVillageManager>(UGameplayStatics::GetActorOfClass(GetWorld(), AVillageManager::StaticClass()));
+	Reuben = Cast<AReuben>(UGameplayStatics::GetPlayerPawn(this, 0));
+	IngredientManagerSystem = UGameplayStatics::GetGameInstance(GetWorld())->GetSubsystem<UIngredientManagerSystem>();
+
 	Image_Ingr = (UImage*)GetWidgetFromName(TEXT("Image_Ingr"));
 	Button_Ingredient = (UButton*)GetWidgetFromName(TEXT("Button_Ingredient"));
 	TextBlock_IngrName = (UTextBlock*)GetWidgetFromName(TEXT("TextBlock_IngrName"));
@@ -24,10 +28,6 @@ void UFridgeIngrWidget::NativePreConstruct()
 void UFridgeIngrWidget::NativeConstruct()
 {
 	Super::NativeConstruct();
-
-	VillageManager = Cast<AVillageManager>(UGameplayStatics::GetActorOfClass(GetWorld(), AVillageManager::StaticClass()));
-	IngredientManagerSystem = UGameplayStatics::GetGameInstance(GetWorld())->GetSubsystem<UIngredientManagerSystem>();
-	Reuben = Cast<AReuben>(UGameplayStatics::GetPlayerPawn(this, 0));
 
 	Button_Ingredient->OnClicked.RemoveDynamic(this, &UFridgeIngrWidget::OnClick_ButtonIngredient);
 	Button_Ingredient->OnClicked.AddDynamic(this, &UFridgeIngrWidget::OnClick_ButtonIngredient);
@@ -44,6 +44,12 @@ void UFridgeIngrWidget::NativeDestruct()
 
 void UFridgeIngrWidget::SetIngrUI()
 {
+	FString CurrentLevel = GetWorld()->GetMapName();
+	if (CurrentLevel.Contains("LV_Auction"))
+	{
+		Button_Ingredient->SetIsEnabled(false);
+	}
+
 	Image_Ingr->SetBrushFromTexture(CurIngrData.IngrIcon);
 	TextBlock_IngrName->SetText(FText::FromString(CurIngrData.IngrName));
 

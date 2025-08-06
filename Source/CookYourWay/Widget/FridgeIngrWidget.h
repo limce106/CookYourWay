@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
 #include <GameInstance/IngredientManagerSystem.h>
+#include <GameInstance/FSubsystemHelper.h>
 #include "FridgeWidget.h"
 #include <Actor/Ingredient.h>
 #include <Actor/Sandwich.h>

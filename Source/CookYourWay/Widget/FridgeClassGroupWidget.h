@@ -35,6 +35,8 @@ public:
 	FString IngrType;
 	
 	UFUNCTION(BlueprintCallable)
+	void InitAndCreate(FString InClass, FString InType);
+	UFUNCTION(BlueprintCallable)
 	void CreateIngr();
 	UFUNCTION()
 	void AddIngrPanelChildren(TArray<FIngrData> IngrDataArr, TArray<int32> IngrTableIdxs, bool IsCheckClass);

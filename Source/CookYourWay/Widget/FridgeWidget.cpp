@@ -41,12 +41,11 @@ void UFridgeWidget::CreateBreadButtons()
 	ScrollBox_Ingredients->ClearChildren();
 
 	UFridgeClassGroupWidget* FridgeClassGroup = CreateWidget<UFridgeClassGroupWidget>(GetWorld(), BP_FridgeClassGroup);
-	FridgeClassGroup->AddToViewport();
-	FridgeClassGroup->IngrClass = IngredientManagerSystem->BreadRows[0].IngrClass;
-	FridgeClassGroup->IngrType = IngredientManagerSystem->BreadRows[0].IngrType;
-	FridgeClassGroup->CreateIngr();
+	FString IngrClass = IngredientManagerSystem->BreadRows[0].IngrClass;
+	FString IngrType = IngredientManagerSystem->BreadRows[0].IngrType;
 
 	ScrollBox_Ingredients->AddChild(FridgeClassGroup);
+	FridgeClassGroup->InitAndCreate(IngrClass, IngrType);
 }
 
 void UFridgeWidget::CreateFillingButtons()
@@ -56,12 +55,11 @@ void UFridgeWidget::CreateFillingButtons()
 
 	for (int i = 0; i < ClassName.Num(); i++) {
 		UFridgeClassGroupWidget* FridgeClassGroup = CreateWidget<UFridgeClassGroupWidget>(GetWorld(), BP_FridgeClassGroup);
-		FridgeClassGroup->AddToViewport();
-		FridgeClassGroup->IngrClass = ClassName[i];
-		FridgeClassGroup->IngrType = IngredientManagerSystem->FillingRows[i].IngrType;
-		FridgeClassGroup->CreateIngr();
+		FString IngrClass = ClassName[i];
+		FString IngrType = IngredientManagerSystem->FillingRows[i].IngrType;
 
 		ScrollBox_Ingredients->AddChild(FridgeClassGroup);
+		FridgeClassGroup->InitAndCreate(IngrClass, IngrType);
 	}
 }
 
@@ -72,12 +70,11 @@ void UFridgeWidget::CreateMeatButtons()
 
 	for (int i = 0; i < ClassName.Num(); i++) {
 		UFridgeClassGroupWidget* FridgeClassGroup = CreateWidget<UFridgeClassGroupWidget>(GetWorld(), BP_FridgeClassGroup);
-		FridgeClassGroup->AddToViewport();
-		FridgeClassGroup->IngrClass = ClassName[i];
-		FridgeClassGroup->IngrType = IngredientManagerSystem->MeatRows[i].IngrType;
-		FridgeClassGroup->CreateIngr();
+		FString IngrClass = ClassName[i];
+		FString IngrType = IngredientManagerSystem->MeatRows[i].IngrType;
 
 		ScrollBox_Ingredients->AddChild(FridgeClassGroup);
+		FridgeClassGroup->InitAndCreate(IngrClass, IngrType);
 	}
 }
 
@@ -88,12 +85,11 @@ void UFridgeWidget::CreateSauceButtons()
 
 	for (int i = 0; i < ClassName.Num(); i++) {
 		UFridgeClassGroupWidget* FridgeClassGroup = CreateWidget<UFridgeClassGroupWidget>(GetWorld(), BP_FridgeClassGroup);
-		FridgeClassGroup->AddToViewport();
-		FridgeClassGroup->IngrClass = ClassName[i];
-		FridgeClassGroup->IngrType = IngredientManagerSystem->SauceRows[i].IngrType;
-		FridgeClassGroup->CreateIngr();
+		FString IngrClass = ClassName[i];
+		FString IngrType = IngredientManagerSystem->SauceRows[i].IngrType;
 
 		ScrollBox_Ingredients->AddChild(FridgeClassGroup);
+		FridgeClassGroup->InitAndCreate(IngrClass, IngrType);
 	}
 }
 
@@ -103,10 +99,9 @@ void UFridgeWidget::CreateDessertButtons()
 	ScrollBox_Ingredients->ClearChildren();
 
 	UFridgeClassGroupWidget* FridgeClassGroup = CreateWidget<UFridgeClassGroupWidget>(GetWorld(), BP_FridgeClassGroup);
-	FridgeClassGroup->AddToViewport();
-	FridgeClassGroup->IngrClass = IngredientManagerSystem->DessertRows[0].IngrClass;
-	FridgeClassGroup->IngrType = IngredientManagerSystem->DessertRows[0].IngrType;
-	FridgeClassGroup->CreateIngr();
+	FString IngrClass = IngredientManagerSystem->DessertRows[0].IngrClass;
+	FString IngrType = IngredientManagerSystem->DessertRows[0].IngrType;
 
 	ScrollBox_Ingredients->AddChild(FridgeClassGroup);
+	FridgeClassGroup->InitAndCreate(IngrClass, IngrType);
 }
