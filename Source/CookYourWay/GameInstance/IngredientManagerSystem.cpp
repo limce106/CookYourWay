@@ -4,15 +4,13 @@
 #include "GameInstance/IngredientManagerSystem.h"
 #include <Kismet/KismetMathLibrary.h>
 
-UIngredientManagerSystem::UIngredientManagerSystem()
-{
-	FString IngredientTablePath = TEXT("/Game/Assets/Table/Ingredients.Ingredients");
-	static ConstructorHelpers::FObjectFinder<UDataTable> DT_INGREDIENTTABLE(*IngredientTablePath);
-	IngredientTable = DT_INGREDIENTTABLE.Object;
 
-	FString IngrClassTablePath = TEXT("/Game/Assets/Table/IngredientsClass.IngredientsClass");
-	static ConstructorHelpers::FObjectFinder<UDataTable> DT_INGREDIENTCLASSTABLE(*IngrClassTablePath);
-	IngrClassTable = DT_INGREDIENTCLASSTABLE.Object;
+void UIngredientManagerSystem::Initialize(FSubsystemCollectionBase& Collection)
+{
+	Super::Initialize(Collection);
+
+	IngredientTable = LoadObject<UDataTable>(nullptr, TEXT("/Game/Assets/Table/Ingredients.Ingredients"));
+	IngrClassTable = LoadObject<UDataTable>(nullptr, TEXT("/Game/Assets/Table/IngredientsClass.IngredientsClass"));
 
 	IngredientTable->GetAllRows<FIngrData>("Get All Rows Of IngrData", IngredientTableRows);
 	IngredientTableRowNames = IngredientTable->GetRowNames();

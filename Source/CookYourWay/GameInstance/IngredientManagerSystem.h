@@ -50,7 +50,7 @@ class COOKYOURWAY_API UIngredientManagerSystem : public UGameInstanceSubsystem
 {
 	GENERATED_BODY()
 
-	UIngredientManagerSystem();
+	void Initialize(FSubsystemCollectionBase& Collection) override;
 	
 public:
 	// ¿Á∑·∏Ì, ¿Œµ¶Ω∫ ∏ 
