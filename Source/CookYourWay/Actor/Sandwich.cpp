@@ -19,12 +19,8 @@ void ASandwich::BeginPlay()
 	Super::BeginPlay();
 	
 	IngredientManagerSystem = UGameplayStatics::GetGameInstance(GetWorld())->GetSubsystem<UIngredientManagerSystem>();
-}
-
-void ASandwich::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-
+	Reuben = Cast<AReuben>(UGameplayStatics::GetPlayerPawn(this, 0));
+	PreviewSandwich = Cast<APreviewSandwich>(UGameplayStatics::GetActorOfClass(GetWorld(), APreviewSandwich::StaticClass()));
 }
 
 void ASandwich::AddIngredient(AIngredient* Ingr)
@@ -54,6 +50,8 @@ void ASandwich::AddIngredient(AIngredient* Ingr)
 
 	Ingredients.Add(Ingr);
 	AddIngredientImg();
+
+	ShowPreviewSandwich();
 }
 
 void ASandwich::DestroySandwich()
@@ -98,10 +96,9 @@ bool ASandwich::IsMeatBurn()
 
 void ASandwich::SandwichInteraction()
 {
-	AReuben* Reuben = Cast<AReuben>(UGameplayStatics::GetPlayerPawn(this, 0));
-
 	if (!Reuben->IsHold) {
 		Reuben->HoldActor(this);
+		ShowPreviewSandwich();
 	}
 	// 조리도구 위에 조리 완료된 재료가 있다면 재료를 접시/샌드위치 위로 올린다.
 	else if (Reuben->GetHeldActorClass() ==  ACookingUtensil::StaticClass()) {
@@ -161,4 +158,20 @@ bool ASandwich::IsCompleteSandwich()
 	else {
 		return false;
 	}
+}
+
+void ASandwich::ShowPreviewSandwich()
+{
+	if (Reuben->HeldActor == this)
+	{
+		TArray<AActor*> IngredientActors;
+		for (AIngredient* I : Ingredients)
+		{
+			IngredientActors.Add(I);
+		}
+
+		PreviewSandwich->SetIngredients(IngredientActors);
+	}
+
+	SetPreviewVisibility();
 }

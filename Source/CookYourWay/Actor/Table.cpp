@@ -60,6 +60,12 @@ void ATable::PickUpActor(AActor* PickUpCharacter)
 		}
 		else {
 			Reuben->HoldActor(PlacedActor);
+			if (PlacedActor->GetClass()->IsChildOf(ASandwich::StaticClass()))
+			{
+				ASandwich* Sandwich = Cast<ASandwich>(PlacedActor);
+				Sandwich->ShowPreviewSandwich();
+			}
+
 			USoundBase* LoadedSound = LoadObject<USoundBase>(nullptr, TEXT("/Game/Assets/Sound/SoundAsset/SFX_Grab"));
 			UGameplayStatics::PlaySoundAtLocation(this, LoadedSound, GetActorLocation());
 		}
