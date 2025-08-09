@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "Ingredient.h"
+#include "PreviewSandwich.h"
 #include "Sandwich.generated.h"
 
 UCLASS()
@@ -14,7 +15,8 @@ class COOKYOURWAY_API ASandwich : public AActor
 
 	class UIngredientManagerSystem* IngredientManagerSystem;
 	USceneComponent* DefaultRootComponent;
-	
+	class AReuben* Reuben;
+	APreviewSandwich* PreviewSandwich;
 
 	// 현재 제일 위에 있는 재료의 위치
 	float LastIngrLocZ;
@@ -26,7 +28,6 @@ protected:
 	virtual void BeginPlay() override;
 
 public:	
-	virtual void Tick(float DeltaTime) override;
 	
 	UPROPERTY(BlueprintReadOnly)
 	TArray<AIngredient*> Ingredients;
@@ -51,9 +52,13 @@ public:
 	// 완성된 샌드위치인지(맨 처음과 마지막 재료가 빵인지)
 	UFUNCTION(BlueprintCallable)
 	bool IsCompleteSandwich();
+	
+	void ShowPreviewSandwich();
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void AddIngredientImg();
 	UFUNCTION(BlueprintImplementableEvent)
 	void SetIngrWidgetVisibility(ESlateVisibility Visibility);
+	UFUNCTION(BlueprintImplementableEvent)
+	void SetPreviewVisibility();
 };

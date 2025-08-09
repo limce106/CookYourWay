@@ -125,5 +125,8 @@ void UFridgeIngrWidget::MinusHavingIngrNum()
 {
 	IngredientManagerSystem->HavingIngrNum[IngrTableIdx]--;
 	FString HavingNum = FString::FromInt(IngredientManagerSystem->HavingIngrNum[IngrTableIdx]);
-	TextBlock_IngrNum->SetText(FText::FromString(HavingNum));
+
+	if (CurIngrData.IngrClass != "C") {
+		TextBlock_IngrNum->SetText(FText::FromString(HavingNum));
+	}
 }
