@@ -105,11 +105,15 @@ struct FCustomerBistroKey
 {
 	GENERATED_BODY()
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	FString CustomerName;
+	FCustomerBistroKey()
+		: CustomerName(TEXT("")), BistroAreaID(0)
+	{}
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	int32 BistroAreaID;
+	FString CustomerName = TEXT("");
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int32 BistroAreaID = 0;
 
 	bool operator==(const FCustomerBistroKey& Other) const {
 		return CustomerName == Other.CustomerName && BistroAreaID == Other.BistroAreaID;
