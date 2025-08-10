@@ -116,6 +116,7 @@ void UFridgeIngrWidget::PayCClassIngr()
 {
 	int32 IngrPrice = IngredientManagerSystem->GetIngrBinMinByIndex(IngrTableIdx);
 	Reuben->PlayerBistro->TodayNetIncome -= IngrPrice;
+
 	if (CurIngrData.IngrClass == "C") {
 		VillageManager->VillageManagerSystem->TotalAsset -= IngrPrice;
 	}
@@ -123,10 +124,10 @@ void UFridgeIngrWidget::PayCClassIngr()
 
 void UFridgeIngrWidget::MinusHavingIngrNum()
 {
+	if (CurIngrData.IngrClass == "C")
+		return;
+
 	IngredientManagerSystem->HavingIngrNum[IngrTableIdx]--;
 	FString HavingNum = FString::FromInt(IngredientManagerSystem->HavingIngrNum[IngrTableIdx]);
-
-	if (CurIngrData.IngrClass != "C") {
-		TextBlock_IngrNum->SetText(FText::FromString(HavingNum));
-	}
+	TextBlock_IngrNum->SetText(FText::FromString(HavingNum));
 }
