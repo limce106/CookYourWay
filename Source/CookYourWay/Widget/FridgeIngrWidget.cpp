@@ -15,6 +15,12 @@ void UFridgeIngrWidget::NativePreConstruct()
 {
 	Super::NativePreConstruct();
 
+}
+
+void UFridgeIngrWidget::NativeConstruct()
+{
+	Super::NativeConstruct();
+
 	VillageManager = Cast<AVillageManager>(UGameplayStatics::GetActorOfClass(GetWorld(), AVillageManager::StaticClass()));
 	Reuben = Cast<AReuben>(UGameplayStatics::GetPlayerPawn(this, 0));
 	IngredientManagerSystem = UGameplayStatics::GetGameInstance(GetWorld())->GetSubsystem<UIngredientManagerSystem>();
@@ -23,11 +29,6 @@ void UFridgeIngrWidget::NativePreConstruct()
 	Button_Ingredient = (UButton*)GetWidgetFromName(TEXT("Button_Ingredient"));
 	TextBlock_IngrName = (UTextBlock*)GetWidgetFromName(TEXT("TextBlock_IngrName"));
 	TextBlock_IngrNum = (UTextBlock*)GetWidgetFromName(TEXT("TextBlock_IngrNum"));
-}
-
-void UFridgeIngrWidget::NativeConstruct()
-{
-	Super::NativeConstruct();
 
 	Button_Ingredient->OnClicked.RemoveDynamic(this, &UFridgeIngrWidget::OnClick_ButtonIngredient);
 	Button_Ingredient->OnClicked.AddDynamic(this, &UFridgeIngrWidget::OnClick_ButtonIngredient);
