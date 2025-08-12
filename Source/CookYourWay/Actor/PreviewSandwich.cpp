@@ -52,15 +52,18 @@ void APreviewSandwich::SetIngredients(const TArray<AActor*>& SourceIngredients)
 
 		// 새로운 재료 스태틱 메시 생성
 		UStaticMeshComponent* NewMesh = NewObject<UStaticMeshComponent>(this);
-		NewMesh->RegisterComponent();
 		NewMesh->SetStaticMesh(SoureMesh->GetStaticMesh());
 		NewMesh->SetRelativeScale3D(SoureMesh->GetComponentScale());
+
 		NewMesh->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
 
 		// 그림자 끄기
 		NewMesh->SetCastShadow(false);
 		NewMesh->bCastDynamicShadow = false;
 		NewMesh->bCastStaticShadow = false;
+
+		// 월드에 컴포넌트 추가
+		NewMesh->RegisterComponent();
 
 		// 메시 피봇 중앙 맞추기
 		FVector MinBound, MaxBound;

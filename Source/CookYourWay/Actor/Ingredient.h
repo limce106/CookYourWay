@@ -64,6 +64,7 @@ public:
 	{
 		AIngredient* Ingredient = World->SpawnActor<AIngredient>(IngredientClass, Location, Rotation);
 		Ingredient->Init(IngrName, IsSliced);
+
 		return Ingredient;
 	}
 };
