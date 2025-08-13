@@ -63,7 +63,7 @@ void APlayerBistro::SitCust(ACustomer* Customer, int32 SeatIdx)
 	Customer->IsSit = true;
 	Customer->SetActorRotation(FRotator(0.0f, 90.0f, 0.0f));
 
-	USoundBase* LoadedSound = LoadObject<USoundBase>(nullptr, TEXT("/Game/Assets/Sound/SoundAsset/SFX_CustomerIn"));
+	USoundBase* LoadedSound = LoadObject<USoundBase>(nullptr, TEXT("/Game/Assets/Sound/SoundAsset/SFX_CustomerIn.SFX_CustomerIn"));
 	UGameplayStatics::PlaySoundAtLocation(this, LoadedSound, GetActorLocation());
 	IsSeated[SeatIdx] = true;
 	Customer->CurSeatNum = SeatIdx;

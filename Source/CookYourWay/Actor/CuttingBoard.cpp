@@ -53,7 +53,7 @@ void ACuttingBoard::Chop()
 			PlacedIngredient->SetPivotCenter();
 		}
 	}
-	USoundBase* MetaSoundAsset = LoadObject<USoundBase>(nullptr,TEXT("/Game/Assets/Sound/MSS/SFX_Chop"));	
+	USoundBase* MetaSoundAsset = LoadObject<USoundBase>(nullptr,TEXT("/Game/Assets/Sound/MSS/SFX_Chop.SFX_Chop"));	
 	UGameplayStatics::PlaySound2D(this, MetaSoundAsset);
 }
 

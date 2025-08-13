@@ -44,7 +44,7 @@ void ATable::PutActorOn(AActor* Actor)
 	FRotator PlacedActorRotation = Reuben->GetActorRotation();
 	PlacedActor->SetActorRotation(PlacedActorRotation);
 
-	USoundBase* LoadedSound = LoadObject<USoundBase>(nullptr, TEXT("/Game/Assets/Sound/SoundAsset/SFX_PutIngredients"));
+	USoundBase* LoadedSound = LoadObject<USoundBase>(nullptr, TEXT("/Game/Assets/Sound/SoundAsset/SFX_PutIngredients.SFX_PutIngredients"));
 	UGameplayStatics::PlaySoundAtLocation(this, LoadedSound, GetActorLocation());
 }
 
@@ -66,7 +66,7 @@ void ATable::PickUpActor(AActor* PickUpCharacter)
 				Sandwich->ShowPreviewSandwich();
 			}
 
-			USoundBase* LoadedSound = LoadObject<USoundBase>(nullptr, TEXT("/Game/Assets/Sound/SoundAsset/SFX_Grab"));
+			USoundBase* LoadedSound = LoadObject<USoundBase>(nullptr, TEXT("/Game/Assets/Sound/SoundAsset/SFX_Grab.SFX_Grab"));
 			UGameplayStatics::PlaySoundAtLocation(this, LoadedSound, GetActorLocation());
 		}
 	}
