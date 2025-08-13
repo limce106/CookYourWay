@@ -105,7 +105,7 @@ void ASandwich::SandwichInteraction()
 		ACookingUtensil* HoldingCookingUtensil = Cast<ACookingUtensil>(Reuben->HeldActor);
 		if (HoldingCookingUtensil->IsIngredientOn && HoldingCookingUtensil->PlacedIngredient->IsCooked()) {
 			AddIngredient(HoldingCookingUtensil->PlacedIngredient);
-			USoundBase* LoadedSound = LoadObject<USoundBase>(nullptr, TEXT("/Game/Assets/Sound/SoundAsset/SFX_Stack"));
+			USoundBase* LoadedSound = LoadObject<USoundBase>(nullptr, TEXT("/Game/Assets/Sound/SoundAsset/SFX_Stack.SFX_Stack"));
 			UGameplayStatics::PlaySoundAtLocation(this, LoadedSound, GetActorLocation());
 		}
 	}
@@ -114,7 +114,7 @@ void ASandwich::SandwichInteraction()
 		AIngredient* HoldingIngr = Cast<AIngredient>(Reuben->HeldActor);
 		if (HoldingIngr->IsCooked()) {
 			AddIngredient(HoldingIngr);
-			USoundBase* LoadedSound = LoadObject<USoundBase>(nullptr, TEXT("/Game/Assets/Sound/SoundAsset/SFX_Stack"));
+			USoundBase* LoadedSound = LoadObject<USoundBase>(nullptr, TEXT("/Game/Assets/Sound/SoundAsset/SFX_Stack.SFX_Stack"));
 			UGameplayStatics::PlaySoundAtLocation(this, LoadedSound, GetActorLocation());
 		}
 	}

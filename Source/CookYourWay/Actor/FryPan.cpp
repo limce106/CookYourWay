@@ -23,7 +23,7 @@ void AFryPan::BeginPlay()
 	if (FryingAudioComponent)
 	{
 		FryingAudioComponent->RegisterComponent();
-		FrySound = LoadObject<USoundBase>(nullptr, TEXT("/Game/Assets/Sound/SoundAsset/SFX_Sizzle"));
+		FrySound = LoadObject<USoundBase>(nullptr, TEXT("/Game/Assets/Sound/SoundAsset/SFX_Sizzle.SFX_Sizzle"));
 		FryingAudioComponent->SetSound(FrySound);
 		FryingAudioComponent->bAutoActivate = false;
 	}
@@ -31,7 +31,7 @@ void AFryPan::BeginPlay()
 	if (BurntAudioComponent)
 	{
 		BurntAudioComponent->RegisterComponent();
-		BurntSound = LoadObject<USoundBase>(nullptr, TEXT("/Game/Assets/Sound/SoundAsset/SFX_Burnt"));
+		BurntSound = LoadObject<USoundBase>(nullptr, TEXT("/Game/Assets/Sound/SoundAsset/SFX_Burnt.SFX_Burnt"));
 		BurntAudioComponent->SetSound(BurntSound);
 		BurntAudioComponent->bAutoActivate = false;
 	}

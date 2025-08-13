@@ -89,7 +89,7 @@ void AReubenController::FridgeInteraction()
 {
 	UFridgeWidget* FridgeWidget = CreateWidget<UFridgeWidget>(GetWorld(), BP_FridgeWidget);
 	FridgeWidget->AddToViewport();
-	USoundBase* LoadedSound = LoadObject<USoundBase>(nullptr, TEXT("/Game/Assets/Sound/SoundAsset/SFX_FridgeOpen"));
+	USoundBase* LoadedSound = LoadObject<USoundBase>(nullptr, TEXT("/Game/Assets/Sound/SoundAsset/SFX_FridgeOpen.SFX_FridgeOpen"));
 	UGameplayStatics::PlaySoundAtLocation(this, LoadedSound, Reuben->GetActorLocation());
 }
 
@@ -98,7 +98,7 @@ void AReubenController::PlatesInteraction()
 	if (!Reuben->IsHold) {
 		ASandwich* Sandwich = GetWorld()->SpawnActor<ASandwich>(BP_Sandwich, Reuben->GetActorLocation(), Reuben->GetActorRotation());
 		Reuben->HoldActor(Sandwich);
-		USoundBase* MetaSoundAsset = LoadObject<USoundBase>(nullptr, TEXT("/Game/Assets/Sound/MSS/SFX_Dish"));
+		USoundBase* MetaSoundAsset = LoadObject<USoundBase>(nullptr, TEXT("/Game/Assets/Sound/MSS/SFX_Dish.SFX_Dish"));
 		UGameplayStatics::PlaySoundAtLocation(this, MetaSoundAsset,Reuben->GetActorLocation());
 	}
 	else if (Reuben->IsHold && Reuben->GetHeldActorClass() == BP_Ingredient) {
@@ -120,12 +120,12 @@ void AReubenController::TrashBinInteraction()
 	if (Reuben->GetHeldActorClass() == BP_Sandwich) {
 		ASandwich* HeldSandwich = Cast<ASandwich>(Reuben->HeldActor);
 		HeldSandwich->DestroySandwich();
-		USoundBase* LoadedSound = LoadObject<USoundBase>(nullptr, TEXT("/Game/Assets/Sound/SoundAsset/SFX_Trash"));
+		USoundBase* LoadedSound = LoadObject<USoundBase>(nullptr, TEXT("/Game/Assets/Sound/SoundAsset/SFX_Trash.SFX_Trash"));
 		UGameplayStatics::PlaySound2D(this, LoadedSound);
 	}
 	else {
 		Reuben->HeldActor->Destroy();
-		USoundBase* LoadedSound = LoadObject<USoundBase>(nullptr, TEXT("/Game/Assets/Sound/SoundAsset/SFX_Trash"));
+		USoundBase* LoadedSound = LoadObject<USoundBase>(nullptr, TEXT("/Game/Assets/Sound/SoundAsset/SFX_Trash.SFX_Trash"));
 		UGameplayStatics::PlaySound2D(this, LoadedSound);
 	}
 	Reuben->IsHold = false;
