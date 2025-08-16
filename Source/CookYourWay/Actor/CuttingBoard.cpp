@@ -57,17 +57,21 @@ void ACuttingBoard::Chop()
 	UGameplayStatics::PlaySound2D(this, MetaSoundAsset);
 }
 
-void ACuttingBoard::CuttingBoardInteraction()
+void ACuttingBoard::Interact_Implementation()
 {
-	bool InteractionSuccess = CommonCookingUtensilInteraction();
-	if (InteractionSuccess) {
-		return;
-	}
+	Super::Interact_Implementation();
 
-	if (Reuben->IsHold && Reuben->GetHeldActorClass()->IsChildOf(AIngredient::StaticClass())) {
-		AIngredient* HoldingIngr = Cast<AIngredient>(Reuben->HeldActor);
-		if (HoldingIngr->CurIngrData.IngrType == "Filling" && !this->IsIngredientOn) {
-			PutIngrOn(HoldingIngr);
+	if (isInteractionSuccess)
+		return;
+
+	if (!IsIngredientOn && Reuben->IsHold)
+	{
+		if (AIngredient* Ingredient = Cast<AIngredient>(Reuben->HeldActor))
+		{
+			if (Ingredient->CurIngrData.IngrType == "Filling")
+			{
+				PutIngrOn(Ingredient);
+			}
 		}
 	}
 }

@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include <GameInstance/IngredientManagerSystem.h>
+#include "Interface/Interactable.h"
 #include "Ingredient.generated.h"
 
 UCLASS()
@@ -53,7 +54,6 @@ public:
 	UFUNCTION(BlueprintCallable)
 	bool IsCooked();
 	UFUNCTION()
-	void IngredientInteraction();
 	void AddBurntMaterialOverlay();
 };
 

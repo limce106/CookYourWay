@@ -82,32 +82,6 @@ bool AIngredient::IsCooked()
 		return false;
 }
 
-void AIngredient::IngredientInteraction()
-{
-	AReuben* Reuben = Cast<AReuben>(UGameplayStatics::GetPlayerPawn(this, 0));
-
-	// 조리도구에 올라가지 않은, 조리 되지 않은 재료
-	if (!Reuben->IsHold) {
-		if (!IsCooked()) {
-			Reuben->HoldActor(this);
-		}
-	}
-	// 조리된 재료라면 접시/샌드위치 위로 올린다.
-	else if (Reuben->GetHeldActorClass()->IsChildOf(ASandwich::StaticClass())) {
-		if (IsCooked()) {
-			ASandwich* HoldingSandwich = Cast<ASandwich>(Reuben->HeldActor);
-			HoldingSandwich->AddIngredient(this);
-		}
-	}
-	// 조리도구 위에 재료가 없다면 재료를 조리도구 위로 올린다.
-	else if (Reuben->GetHeldActorClass()->IsChildOf(ACookingUtensil::StaticClass())) {
-		ACookingUtensil* HoldingCookingUtensil = Cast<ACookingUtensil>(Reuben->HeldActor);
-		if (!HoldingCookingUtensil->IsIngredientOn) {
-			HoldingCookingUtensil->PutIngrOn(this);
-		}
-	}
-}
-
 void AIngredient::AddBurntMaterialOverlay()
 {
 	UMaterialInterface* OverlayMaterial;
@@ -146,7 +120,6 @@ void AIngredient::AddBurntMaterialOverlay()
 	// 기존 메시보다 약간 크게 설정해서 덮어씌우기
 	FVector NewScale = StaticMeshComponent->GetComponentScale() * 1.01f;
 	OverlayMesh->SetWorldScale3D(NewScale);
-
 
 	// 액터에 추가
 	OverlayMesh->AttachToComponent(StaticMeshComponent, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
