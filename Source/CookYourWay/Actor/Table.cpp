@@ -6,12 +6,6 @@
 #include "Reuben.h"
 #include "PartTimer.h"
 
-ATable::ATable()
-{
-	PrimaryActorTick.bCanEverTick = true;
-
-}
-
 void ATable::BeginPlay()
 {
 	Super::BeginPlay();
@@ -25,12 +19,21 @@ void ATable::Tick(float DeltaTime)
 
 }
 
-void ATable::PutActorOn(AActor* Actor)
+void ATable::Interact_Implementation()
 {
-	if (IsActorOn) {
-		return;
-	}
+	if (!Reuben->HeldActor && IsActorOn && PlacedActor->GetClass()->ImplementsInterface(UHoldable::StaticClass()))
+	{
+		IHoldable::Execute_OnPickUp(PlacedActor);
 
+		IsActorOn = false;
+		PlacedActor = nullptr;
+	}
+	else if (!IsActorOn && Reuben->HeldActor && Reuben->HeldActor->GetClass()->ImplementsInterface(UHoldable::StaticClass()))
+	{
+		IsActorOn = true;
+		PlacedActor = Reuben->HeldActor;
+
+<<<<<<< HEAD
 	Reuben->PutDownActor();
 	USoundBase* LoadedSound = LoadObject<USoundBase>(nullptr, TEXT("/Game/Assets/Sound/SoundAsset/SFX_Grab.SFX_Grab"));
 	UGameplayStatics::PlaySoundAtLocation(this, LoadedSound, GetActorLocation());
@@ -94,6 +97,9 @@ void ATable::TableInteraction()
 		if (!IsActorOn) {
 			PutActorOn(Reuben->HeldActor);
 		}
+=======
+		IHoldable::Execute_OnPutDown(Reuben->HeldActor, this);
+>>>>>>> main
 	}
 }
 
