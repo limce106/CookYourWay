@@ -20,7 +20,6 @@ class COOKYOURWAY_API UFridgeWidget : public UUserWidget
 {
 	GENERATED_BODY()
 
-	class UIngredientManagerSystem* IngredientManagerSystem;
 	const TArray<FString> ClassName = { "S", "A", "B", "C" };
 
 	void NativePreConstruct();
@@ -39,6 +38,8 @@ protected:
 	void CreateDessertButtons();
 	
 public:
+	class UIngredientManagerSystem* IngredientManagerSystem;
+
 	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
 	class UButton* Button_Bread;
 	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
