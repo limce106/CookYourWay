@@ -4,7 +4,6 @@
 #include "Widget/AuctionWidget.h"
 #include <Blueprint/WidgetLayoutLibrary.h>
 #include <Kismet/GameplayStatics.h>
-#include "FridgeWidget.h"
 
 void UAuctionWidget::NativeConstruct()
 {
@@ -15,11 +14,6 @@ void UAuctionWidget::NativeConstruct()
 	TextBlock_SellingPrice_Kor = (UTextBlock*)GetWidgetFromName(TEXT("TextBlock_SellingPrice_Kor"));
 	TextBlock_SellPrice = (UTextBlock*)GetWidgetFromName(TEXT("TextBlock_SellPrice"));
 	TextBlock_CurBidPrice = (UTextBlock*)GetWidgetFromName(TEXT("TextBlock_CurBidPrice"));
-	Button_CustomerBook = (UButton*)GetWidgetFromName(TEXT("Button_CustomerBook"));
-	Button_Fridge = (UButton*)GetWidgetFromName(TEXT("Button_Fridge"));
-
-	Button_CustomerBook->OnClicked.AddDynamic(this, &UAuctionWidget::CreateCustomerBook);
-	Button_Fridge->OnClicked.AddDynamic(this, &UAuctionWidget::CreateFridgeWidget);
 }
 
 FReply UAuctionWidget::NativeOnMouseMove(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent)
@@ -86,28 +80,6 @@ FReply UAuctionWidget::NativeOnMouseButtonDown(const FGeometry& InGeometry, cons
 	SetBidPriceTextPosByPercent();
 
 	return FReply::Handled();
-}
-
-void UAuctionWidget::CreateCustomerBook()
-{
-	UUserWidget* CustomerBook = CreateWidget<UUserWidget>(GetWorld(), BP_CustomerBook1);
-	if (CustomerBook)
-	{
-		CustomerBook->AddToViewport(1);
-		USoundBase* LoadedSound = LoadObject<USoundBase>(nullptr, TEXT("/Game/Assets/Sound/SoundAsset/UI_BookOpen"));
-		UGameplayStatics::PlaySound2D(this, LoadedSound);
-	}
-}
-
-void UAuctionWidget::CreateFridgeWidget()
-{
-	UFridgeWidget* FridgeWidget = CreateWidget<UFridgeWidget>(GetWorld(), BP_FridgeWidget);
-	if (FridgeWidget)
-	{
-		FridgeWidget->AddToViewport(1);
-		USoundBase* LoadedSound = LoadObject<USoundBase>(nullptr, TEXT("/Game/Assets/Sound/SoundAsset/SFX_FridgeOpen"));
-		UGameplayStatics::PlaySound2D(this, LoadedSound);
-	}
 }
 
 FVector2D UAuctionWidget::GetCurLocalMousePos(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent)

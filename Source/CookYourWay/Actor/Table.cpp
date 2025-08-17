@@ -33,73 +33,7 @@ void ATable::Interact_Implementation()
 		IsActorOn = true;
 		PlacedActor = Reuben->HeldActor;
 
-<<<<<<< HEAD
-	Reuben->PutDownActor();
-	USoundBase* LoadedSound = LoadObject<USoundBase>(nullptr, TEXT("/Game/Assets/Sound/SoundAsset/SFX_Grab.SFX_Grab"));
-	UGameplayStatics::PlaySoundAtLocation(this, LoadedSound, GetActorLocation());
-
-	FVector ActorLocation = GetActorLocation();
-	ActorLocation.Z += 103.0f;
-	Actor->SetActorLocation(ActorLocation);
-	Actor->SetActorRotation(GetActorRotation());
-
-	IsActorOn = true;
-	PlacedActor = Actor;
-
-	FRotator PlacedActorRotation = Reuben->GetActorRotation();
-	PlacedActor->SetActorRotation(PlacedActorRotation);
-
-}
-
-void ATable::PickUpActor(AActor* PickUpCharacter)
-{
-	if (!IsActorOn || PlacedActor == nullptr) {
-		return;
-	}
-
-	if (PickUpCharacter->GetClass()->IsChildOf(AReuben::StaticClass())) {
-		if (Reuben->IsHold) {
-			return;
-		}
-		else {
-			Reuben->HoldActor(PlacedActor);
-			USoundBase* LoadedSound = LoadObject<USoundBase>(nullptr, TEXT("/Game/Assets/Sound/SoundAsset/SFX_Put.SFX_Put"));
-			UGameplayStatics::PlaySoundAtLocation(this, LoadedSound, GetActorLocation());
-			if (PlacedActor->GetClass()->IsChildOf(ASandwich::StaticClass()))
-			{
-				ASandwich* Sandwich = Cast<ASandwich>(PlacedActor);
-				Sandwich->ShowPreviewSandwich();
-			}
-
-		}
-	}
-	else if (PickUpCharacter->GetClass()->IsChildOf(APartTimer::StaticClass())) {
-		APartTimer* PartTimer = Cast<APartTimer>(UGameplayStatics::GetActorOfClass(GetWorld(), APartTimer::StaticClass()));
-		PartTimer->HoldActor(PlacedActor);
-	}
-	else {
-		UE_LOG(LogTemp, Warning, TEXT("Can't Find Picking Up Character!"));
-	}
-
-	IsActorOn = false;
-	PlacedActor = NULL;
-}
-
-void ATable::TableInteraction()
-{
-	if (!Reuben->IsHold) {
-		if (IsActorOn) {
-			PickUpActor(Reuben);
-		}
-	}
-	// 테이블 위에 아무것도 없다면 접시/샌드위치 또는 조리도구 또는 재료를 테이블 위로 올린다.
-	else {
-		if (!IsActorOn) {
-			PutActorOn(Reuben->HeldActor);
-		}
-=======
 		IHoldable::Execute_OnPutDown(Reuben->HeldActor, this);
->>>>>>> main
 	}
 }
 

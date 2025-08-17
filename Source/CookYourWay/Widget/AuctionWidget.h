@@ -9,7 +9,6 @@
 #include "Components/CanvasPanel.h"
 #include "Components/Image.h"
 #include "Components/TextBlock.h"
-#include "Components/Button.h"
 #include "AuctionWidget.generated.h"
 
 UCLASS()
@@ -33,10 +32,6 @@ public:
 	class UTextBlock* TextBlock_SellPrice;
 	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
 	class UTextBlock* TextBlock_CurBidPrice;
-	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
-	class UButton* Button_CustomerBook;
-	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
-	class UButton* Button_Fridge;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	UUserWidget* BP_BidBar = nullptr;
@@ -55,16 +50,6 @@ public:
 	// 직전 플레이어 턴에서 입찰했는지 여부
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	bool IsPlayerBidThisTurn = false;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "UI")
-	TSubclassOf<UUserWidget> BP_CustomerBook1;
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "UI")
-	TSubclassOf<UUserWidget> BP_FridgeWidget;
-
-	UFUNCTION()
-	void CreateCustomerBook();
-	UFUNCTION()
-	void CreateFridgeWidget();
 
 	UFUNCTION()
 	FVector2D GetCurLocalMousePos(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent);
