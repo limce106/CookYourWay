@@ -6,12 +6,6 @@
 #include "Reuben.h"
 #include "PartTimer.h"
 
-ATable::ATable()
-{
-	PrimaryActorTick.bCanEverTick = true;
-
-}
-
 void ATable::BeginPlay()
 {
 	Super::BeginPlay();
@@ -25,75 +19,21 @@ void ATable::Tick(float DeltaTime)
 
 }
 
-void ATable::PutActorOn(AActor* Actor)
+void ATable::Interact_Implementation()
 {
-	if (IsActorOn) {
-		return;
+	if (!Reuben->HeldActor && IsActorOn && PlacedActor->GetClass()->ImplementsInterface(UHoldable::StaticClass()))
+	{
+		IHoldable::Execute_OnPickUp(PlacedActor);
+
+		IsActorOn = false;
+		PlacedActor = nullptr;
 	}
+	else if (!IsActorOn && Reuben->HeldActor && Reuben->HeldActor->GetClass()->ImplementsInterface(UHoldable::StaticClass()))
+	{
+		IsActorOn = true;
+		PlacedActor = Reuben->HeldActor;
 
-	Reuben->PutDownActor();
-
-	FVector ActorLocation = GetActorLocation();
-	ActorLocation.Z += 103.0f;
-	Actor->SetActorLocation(ActorLocation);
-	Actor->SetActorRotation(GetActorRotation());
-
-	IsActorOn = true;
-	PlacedActor = Actor;
-
-	FRotator PlacedActorRotation = Reuben->GetActorRotation();
-	PlacedActor->SetActorRotation(PlacedActorRotation);
-
-	USoundBase* LoadedSound = LoadObject<USoundBase>(nullptr, TEXT("/Game/Assets/Sound/SoundAsset/SFX_PutIngredients.SFX_PutIngredients"));
-	UGameplayStatics::PlaySoundAtLocation(this, LoadedSound, GetActorLocation());
-}
-
-void ATable::PickUpActor(AActor* PickUpCharacter)
-{
-	if (!IsActorOn || PlacedActor == nullptr) {
-		return;
-	}
-
-	if (PickUpCharacter->GetClass()->IsChildOf(AReuben::StaticClass())) {
-		if (Reuben->IsHold) {
-			return;
-		}
-		else {
-			Reuben->HoldActor(PlacedActor);
-			if (PlacedActor->GetClass()->IsChildOf(ASandwich::StaticClass()))
-			{
-				ASandwich* Sandwich = Cast<ASandwich>(PlacedActor);
-				Sandwich->ShowPreviewSandwich();
-			}
-
-			USoundBase* LoadedSound = LoadObject<USoundBase>(nullptr, TEXT("/Game/Assets/Sound/SoundAsset/SFX_Grab.SFX_Grab"));
-			UGameplayStatics::PlaySoundAtLocation(this, LoadedSound, GetActorLocation());
-		}
-	}
-	else if (PickUpCharacter->GetClass()->IsChildOf(APartTimer::StaticClass())) {
-		APartTimer* PartTimer = Cast<APartTimer>(UGameplayStatics::GetActorOfClass(GetWorld(), APartTimer::StaticClass()));
-		PartTimer->HoldActor(PlacedActor);
-	}
-	else {
-		UE_LOG(LogTemp, Warning, TEXT("Can't Find Picking Up Character!"));
-	}
-
-	IsActorOn = false;
-	PlacedActor = NULL;
-}
-
-void ATable::TableInteraction()
-{
-	if (!Reuben->IsHold) {
-		if (IsActorOn) {
-			PickUpActor(Reuben);
-		}
-	}
-	// 테이블 위에 아무것도 없다면 접시/샌드위치 또는 조리도구 또는 재료를 테이블 위로 올린다.
-	else {
-		if (!IsActorOn) {
-			PutActorOn(Reuben->HeldActor);
-		}
+		IHoldable::Execute_OnPutDown(Reuben->HeldActor, this);
 	}
 }
 

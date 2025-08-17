@@ -23,22 +23,13 @@ class COOKYOURWAY_API AReuben : public ACharacter
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<AIngredient> BP_Ingredient;
 	UPROPERTY(EditDefaultsOnly)
-	TSubclassOf<ACookingUtensil> BP_CuttingBoard;
-	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<ASandwich> BP_Sandwich;
-	UPROPERTY(EditDefaultsOnly)
-	TSubclassOf<AActor> BP_Dessert;
 
 	// 플레이어 움직이기
 	void MoveForward(float Value);
 	void MoveRight(float Value);
 	// 썰기
 	void Chop();
-
-	// 손님에게 샌드위치 주기
-	void GiveSandwich(ACustomer* Customer);
-	// 손님에게 디저트 주기
-	void GiveDessert(ACustomer* Customer);
 
 public:
 	AReuben();
@@ -77,8 +68,4 @@ public:
 	void PutDownActor();
 	UFUNCTION()
 	void SetHeldActorLoc();
-
-	// 손님에게 무언가 주기
-	UFUNCTION()
-	bool TryGiveSomething(ACustomer* Customer);
 };

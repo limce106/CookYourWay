@@ -36,9 +36,10 @@ public:
 	UFUNCTION()
 	void Fry();
 	UFUNCTION()
-	void FryPanInteraction();
-	UFUNCTION()
 	void PlacedIngredientBurnt();
+
+	virtual void Interact_Implementation() override;
+
 	//
 	UPROPERTY(EditAnywhere, Category = "Sound")
 	USoundBase* FrySound;

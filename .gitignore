@@ -73,13 +73,10 @@ Plugins/*/Intermediate/*
 # Cache files for the editor to use
 DerivedDataCache/*
 
-# Assets
-Content/PastaYourWay_Assets
-
 #Package
 Package/*
 
 # Custom
 /Assets
 /Content/Assets
-/Content/StarterContent
+/StarterContent/
