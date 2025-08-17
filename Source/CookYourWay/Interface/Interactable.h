@@ -8,19 +8,20 @@
 
 
 /**
- * 
+ *
  */
 UINTERFACE(MinimalAPI)
 class UInteractable : public UInterface
 {
-	//GENERATED_IINTERFACE_BODY()
+	GENERATED_BODY()
 };
 
 class IInteractable
 {
-	//GENERATED_IINTERFACE_BODY()
+	GENERATED_BODY()
 
 public:
-	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category="Interaction")
-	void Interact(class AReuben* Reuben);
+	// 실제 상호작용 수행
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Interaction")
+	void Interact();
 };
