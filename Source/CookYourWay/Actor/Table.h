@@ -4,18 +4,17 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "Interface/Interactable.h"
-#include "Interface/Holdable.h"
 #include "Table.generated.h"
 
 UCLASS()
-class COOKYOURWAY_API ATable : public AActor, public IInteractable
+class COOKYOURWAY_API ATable : public AActor
 {
 	GENERATED_BODY()
 
 	class AReuben* Reuben;
-
+	
 public:	
+	ATable();
 
 protected:
 	virtual void BeginPlay() override;
@@ -29,6 +28,11 @@ public:
 	// 테이블 위에 올라간 액터
 	UPROPERTY(BlueprintReadWrite)
 	AActor* PlacedActor;
-	
-	virtual void Interact_Implementation() override;
+
+	UFUNCTION(BlueprintCallable)
+	void PutActorOn(AActor* Actor);
+	UFUNCTION(BlueprintCallable)
+	void PickUpActor(AActor* PickUpCharacter);
+	UFUNCTION()
+	void TableInteraction();
 };

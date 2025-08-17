@@ -5,13 +5,11 @@
 #include <Kismet/GameplayStatics.h>
 #include "Reuben.h"
 #include "PartTimer.h"
-#include "Dessert.h"
 
 ADiningTable::ADiningTable()
 {
 	PrimaryActorTick.bCanEverTick = true;
 
-	Reuben = Cast<AReuben>(UGameplayStatics::GetPlayerPawn(this, 0));
 }
 
 void ADiningTable::BeginPlay()
@@ -26,66 +24,58 @@ void ADiningTable::Tick(float DeltaTime)
 
 }
 
+void ADiningTable::DiningTableInteraction()
+{
+	AReuben* Reuben = Cast<AReuben>(UGameplayStatics::GetPlayerPawn(this, 0));
+
+	if (SeatedCustomer) {
+		bool SucceessGive = Reuben->TryGiveSomething(SeatedCustomer);
+
+		if (!SucceessGive) {
+			SeatedCustomer->TrySetComment();
+		}
+	}
+}
+
+void ADiningTable::PutFoodOn(AActor* HoldingCharacter, AActor* Food)
+{
+	if (IsActorOn) {
+		return;
+	}
+
+	if (HoldingCharacter->GetClass()->IsChildOf(AReuben::StaticClass())) {
+		AReuben* Reuben = Cast<AReuben>(UGameplayStatics::GetPlayerPawn(this, 0));
+		Reuben->PutDownActor();
+	}
+	else if (HoldingCharacter->GetClass()->IsChildOf(APartTimer::StaticClass())) {
+		APartTimer* PartTimer = Cast<APartTimer>(UGameplayStatics::GetActorOfClass(GetWorld(), APartTimer::StaticClass()));
+		PartTimer->PutDownActor();
+	}
+	else {
+		UE_LOG(LogTemp, Warning, TEXT("Can't Find Holding Food Character!"));
+	}
+
+	FVector ActorLocation = GetActorLocation();
+	ActorLocation.Z += 53.0f;
+	Food->SetActorLocation(ActorLocation);
+	Food->SetActorRotation(GetActorRotation());
+
+	IsActorOn = true;
+	PlacedActor = Food;
+}
+
 void ADiningTable::DestroyFoodOnDiningTable()
 {
-	if (!IsActorOn)
-		return;
-
-	if (ASandwich* Sandwich = Cast<ASandwich>(PlacedActor))
-	{
-		Sandwich->DestroySandwich();
+	if (IsActorOn) {
+		if (PlacedActor && PlacedActor->GetClass()->IsChildOf(ASandwich::StaticClass())) {
+			ASandwich* Sandwich = Cast<ASandwich>(PlacedActor);
+			Sandwich->DestroySandwich();
+		}
+		else {
+			PlacedActor->Destroy();
+		}
+		IsActorOn = false;
+		PlacedActor = NULL;
 	}
-	else
-	{
-		PlacedActor->Destroy();
-	}
-
-	IsActorOn = false;
-	PlacedActor = nullptr;
 }
 
-void ADiningTable::Interact_Implementation()
-{
-	if (!SeatedCustomer) return;
-
-	if (!Reuben->IsHold)
-	{
-		SeatedCustomer->TrySetComment();
-		return;
-	}
-
-	if (ASandwich* Sandwich = Cast<ASandwich>(Reuben->HeldActor))
-	{
-		if (Sandwich->Ingredients.Num() == 0 || SeatedCustomer->IsEat)
-		{
-			SeatedCustomer->TrySetComment();
-			return;
-		}
-
-		Reuben->GivenSandwichNum++;
-		Sandwich->SetIngrWidgetVisibility(ESlateVisibility::Hidden);
-
-		IHoldable::Execute_OnPutDown(Sandwich, this);
-		SeatedCustomer->EatSandwich(Sandwich);
-
-		IsActorOn = true;
-		PlacedActor = Sandwich;
-	}
-	else if (ADessert* Dessert = Cast<ADessert>(Reuben->HeldActor))
-	{
-		if (!Dessert->IsCooked || !SeatedCustomer->CanGetDessert())
-		{
-			SeatedCustomer->TrySetComment();
-			return;
-		}
-
-		IHoldable::Execute_OnPutDown(Dessert, this);
-		SeatedCustomer->EatDessert();
-
-		IsActorOn = true;
-		PlacedActor = Dessert;
-	}
-
-	USoundBase* LoadedSound = LoadObject<USoundBase>(nullptr, TEXT("/Game/Assets/Sound/SoundAsset/SFX_PutIngredients.SFX_PutIngredients"));
-	UGameplayStatics::PlaySoundAtLocation(this, LoadedSound, GetActorLocation());
-}

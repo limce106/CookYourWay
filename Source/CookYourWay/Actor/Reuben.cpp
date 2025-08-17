@@ -86,8 +86,6 @@ UClass* AReuben::GetHeldActorClass()
 
 void AReuben::HoldActor(AActor* Actor)
 {
-	if (HeldActor) return;
-
 	UPrimitiveComponent* ActorCollision = Cast<UPrimitiveComponent>(Actor->FindComponentByClass(UShapeComponent::StaticClass()));
 	if (ActorCollision) {
 		ActorCollision->SetCollisionProfileName(TEXT("NoCollision"));
@@ -103,8 +101,6 @@ void AReuben::HoldActor(AActor* Actor)
 
 void AReuben::PutDownActor()
 {
-	if (!HeldActor) return;
-
 	UShapeComponent* ActorCollision = Cast<UShapeComponent>(HeldActor->FindComponentByClass(UShapeComponent::StaticClass()));
 	if (ActorCollision) {
 		if ((HeldActor->GetClass() == BP_Ingredient) || (HeldActor->GetClass() == BP_Sandwich)) {
@@ -144,10 +140,65 @@ void AReuben::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	InputComponent->BindAction("Chop", EInputEvent::IE_Pressed, this, &AReuben::Chop);
 }
 
+
 void AReuben::Chop()
 {
 	if (OverlappedActor->GetClass()->IsChildOf(ACuttingBoard::StaticClass())) {
 		ACuttingBoard* CuttingBoard = Cast<ACuttingBoard>(OverlappedActor);
 		CuttingBoard->Chop();
 	}
+}
+
+bool AReuben::TryGiveSomething(ACustomer* Customer)
+{
+	// 손에 아무것도 들고 있지 않으면
+	if (IsHold == false) {
+		return false;
+	}
+
+	if (HeldActor->GetClass() == BP_Sandwich) {
+		GiveSandwich(Customer);
+		USoundBase* LoadedSound = LoadObject<USoundBase>(nullptr, TEXT("/Game/Assets/Sound/SoundAsset/SFX_PutIngredients.SFX_PutIngredients"));
+		UGameplayStatics::PlaySoundAtLocation(this, LoadedSound, GetActorLocation());
+		return true;
+	}
+	else if (HeldActor->GetClass() == BP_Dessert) {
+		ADessert* Dessert = Cast<ADessert>(HeldActor);
+		if (Dessert->IsCooked && Customer->CanGetDessert()) {
+			GiveDessert(Customer);
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+	else {
+		return false;
+	}
+}
+
+void AReuben::GiveSandwich(ACustomer* Customer)
+{
+	GivenSandwichNum++;
+	ASandwich* Sandwich = Cast<ASandwich>(HeldActor);
+	// 샌드위치가 없는 빈 접시이거나 손님이 먹는 중이라면
+	if (Sandwich->Ingredients.Num() == 0 || Customer->IsEat) {
+		return;
+	}
+	Sandwich->SetIngrWidgetVisibility(ESlateVisibility::Hidden);
+
+	ADiningTable* DiningTable = PlayerBistro->GetDiningTable(Customer->CurSeatNum);
+	DiningTable->PutFoodOn(this, Sandwich);
+
+	Customer->EatSandwich(Sandwich);
+}
+
+void AReuben::GiveDessert(ACustomer* Customer)
+{
+	ADiningTable* DiningTable = PlayerBistro->GetDiningTable(Customer->CurSeatNum);
+	DiningTable->PutFoodOn(this, HeldActor);
+	USoundBase* LoadedSound = LoadObject<USoundBase>(nullptr, TEXT("/Game/Assets/Sound/SoundAsset/SFX_PutIngredients.SFX_PutIngredients"));
+	UGameplayStatics::PlaySoundAtLocation(this, LoadedSound, GetActorLocation());
+
+	Customer->EatDessert();
 }

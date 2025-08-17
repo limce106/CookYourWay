@@ -6,11 +6,10 @@
 #include "GameFramework/Actor.h"
 #include "Ingredient.h"
 #include "PreviewSandwich.h"
-#include "Interface/Holdable.h"
 #include "Sandwich.generated.h"
 
 UCLASS()
-class COOKYOURWAY_API ASandwich : public AActor, public IHoldable
+class COOKYOURWAY_API ASandwich : public AActor
 {
 	GENERATED_BODY()
 
@@ -21,9 +20,6 @@ class COOKYOURWAY_API ASandwich : public AActor, public IHoldable
 
 	// 현재 제일 위에 있는 재료의 위치
 	float LastIngrLocZ;
-
-	const float TableZOffset = 103.f;
-	const float DiningTableZOffset = 53.f;
 	
 public:	
 	ASandwich();
@@ -48,6 +44,8 @@ public:
 	UFUNCTION(BlueprintCallable)
 	bool IsMeatBurn();
 	UFUNCTION(BlueprintCallable)
+	void SandwichInteraction();
+	UFUNCTION(BlueprintCallable)
 	bool IsFirstIngrBread();
 	UFUNCTION(BlueprintCallable)
 	bool IsLastIngrBread();
@@ -63,7 +61,4 @@ public:
 	void SetIngrWidgetVisibility(ESlateVisibility Visibility);
 	UFUNCTION(BlueprintImplementableEvent)
 	void SetPreviewVisibility();
-
-	virtual void OnPutDown_Implementation(AActor* PlaceTarget) override;
-	virtual void OnPickUp_Implementation() override;
 };

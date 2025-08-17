@@ -94,6 +94,32 @@ bool ASandwich::IsMeatBurn()
 	return false;
 }
 
+void ASandwich::SandwichInteraction()
+{
+	if (!Reuben->IsHold) {
+		Reuben->HoldActor(this);
+		ShowPreviewSandwich();
+	}
+	// 조리도구 위에 조리 완료된 재료가 있다면 재료를 접시/샌드위치 위로 올린다.
+	else if (Reuben->GetHeldActorClass() ==  ACookingUtensil::StaticClass()) {
+		ACookingUtensil* HoldingCookingUtensil = Cast<ACookingUtensil>(Reuben->HeldActor);
+		if (HoldingCookingUtensil->IsIngredientOn && HoldingCookingUtensil->PlacedIngredient->IsCooked()) {
+			AddIngredient(HoldingCookingUtensil->PlacedIngredient);
+			USoundBase* LoadedSound = LoadObject<USoundBase>(nullptr, TEXT("/Game/Assets/Sound/SoundAsset/SFX_Stack.SFX_Stack"));
+			UGameplayStatics::PlaySoundAtLocation(this, LoadedSound, GetActorLocation());
+		}
+	}
+	// 조리된 재료라면 접시/샌드위치 위로 올린다.
+	else if (Reuben->GetHeldActorClass()->IsChildOf(AIngredient::StaticClass())) {
+		AIngredient* HoldingIngr = Cast<AIngredient>(Reuben->HeldActor);
+		if (HoldingIngr->IsCooked()) {
+			AddIngredient(HoldingIngr);
+			USoundBase* LoadedSound = LoadObject<USoundBase>(nullptr, TEXT("/Game/Assets/Sound/SoundAsset/SFX_Stack.SFX_Stack"));
+			UGameplayStatics::PlaySoundAtLocation(this, LoadedSound, GetActorLocation());
+		}
+	}
+}
+
 bool ASandwich::IsFirstIngrBread()
 {
 	if (Ingredients.Num() > 0) {
@@ -148,41 +174,4 @@ void ASandwich::ShowPreviewSandwich()
 	}
 
 	SetPreviewVisibility();
-}
-
-void ASandwich::OnPutDown_Implementation(AActor* PlaceTarget)
-{
-	Reuben->PutDownActor();
-
-	FVector Location;
-
-	if (ATable* Table = Cast<ATable>(PlaceTarget))
-	{
-		Location = Table->GetActorLocation();
-		Location.Z += TableZOffset;
-		SetActorLocation(Location);
-	}
-	else if (ADiningTable* DiningTable = Cast<ADiningTable>(PlaceTarget))
-	{
-		Location = DiningTable->GetActorLocation();
-		Location.Z += DiningTableZOffset;
-		SetActorLocation(Location);
-	}
-
-	FRotator Rotation = PlaceTarget->GetActorRotation();
-	SetActorRotation(Rotation);
-
-	USoundBase* LoadedSound = LoadObject<USoundBase>(nullptr, TEXT("/Game/Assets/Sound/SoundAsset/SFX_PutIngredients.SFX_PutIngredients"));
-	UGameplayStatics::PlaySoundAtLocation(this, LoadedSound, GetActorLocation());
-}
-
-void ASandwich::OnPickUp_Implementation()
-{
-	Reuben->HoldActor(this);
-
-	if(Ingredients.Num() > 0)
-		ShowPreviewSandwich();
-
-	USoundBase* LoadedSound = LoadObject<USoundBase>(nullptr, TEXT("/Game/Assets/Sound/SoundAsset/SFX_Grab.SFX_Grab"));
-	UGameplayStatics::PlaySoundAtLocation(this, LoadedSound, GetActorLocation());
 }

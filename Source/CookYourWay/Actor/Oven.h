@@ -5,7 +5,6 @@
 #include "CoreMinimal.h"
 #include "CookingUtensil.h"
 #include "Dessert.h"
-#include "Interface/Interactable.h"
 #include "Oven.generated.h"
 
 /**
@@ -38,6 +37,6 @@ public:
 	void Bake();
 	UFUNCTION()
 	bool IsCooked();
-
-	virtual void Interact_Implementation() override;
+	UFUNCTION()
+	void OvenInteraction();
 };

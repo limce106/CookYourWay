@@ -28,6 +28,27 @@ class COOKYOURWAY_API AReubenController : public APlayerController
 	AReubenController();
 
 	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<ATable> BP_Table;
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<ASandwich> BP_Sandwich;
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<AIngredient> BP_Ingredient;
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<AFryPan> BP_FryPan;
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<ACuttingBoard> BP_CuttingBoard;
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<AOven> BP_Oven;
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<ADiningTable> BP_DiningTable;
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<AActor> BP_Fridge;
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<AActor> BP_Plates;
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<AActor> BP_TrashBin;
+
+	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<UUserWidget> BP_FridgeWidget;
 
 protected:
@@ -37,4 +58,12 @@ protected:
 public:
 	UFUNCTION()
 	void Interaction();
+	UFUNCTION()
+	void CookInteraction();
+	UFUNCTION()
+	void FridgeInteraction();
+	UFUNCTION()
+	void PlatesInteraction();
+	UFUNCTION()
+	void TrashBinInteraction();
 };

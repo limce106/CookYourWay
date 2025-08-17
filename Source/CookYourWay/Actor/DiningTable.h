@@ -8,12 +8,11 @@
 #include "DiningTable.generated.h"
 
 UCLASS()
-class COOKYOURWAY_API ADiningTable : public AActor, public IInteractable
+class COOKYOURWAY_API ADiningTable : public AActor
 {
 	GENERATED_BODY()
 	
 	ADiningTable();
-	class AReuben* Reuben;
 
 protected:
 	virtual void BeginPlay() override;
@@ -31,13 +30,10 @@ public:
 	UPROPERTY(BlueprintReadWrite)
 	AActor* PlacedActor;
 
-	UPROPERTY(EditDefaultsOnly)
-	TSubclassOf<AActor> BP_Sandwich;
-	UPROPERTY(EditDefaultsOnly)
-	TSubclassOf<AActor> BP_Dessert;
-
+	UFUNCTION()
+	void DiningTableInteraction();
+	UFUNCTION()
+	void PutFoodOn(AActor* HoldingCharacter, AActor* Food);
 	UFUNCTION()
 	void DestroyFoodOnDiningTable();
-
-	virtual void Interact_Implementation() override;
 };

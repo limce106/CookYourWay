@@ -5,11 +5,10 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "Widget/CookRateWidget.h"
-#include "Interface/Interactable.h"
 #include "CookingUtensil.generated.h"
 
 UCLASS()
-class COOKYOURWAY_API ACookingUtensil : public AActor, public IInteractable
+class COOKYOURWAY_API ACookingUtensil : public AActor
 {
 	GENERATED_BODY()
 	
@@ -18,9 +17,9 @@ public:
 
 protected:
 	class AReuben* Reuben;
-	bool isInteractionSuccess = false;
 
 	virtual void BeginPlay() override;
+	bool CommonCookingUtensilInteraction();
 
 public:	
 
@@ -40,6 +39,6 @@ public:
 	virtual float GetCookIncreasement();
 	UFUNCTION()
 	virtual void PutIngrOn(AIngredient* Ingr);
-
-	virtual void Interact_Implementation() override;
+	UFUNCTION()
+	void PickUpIngr();
 };

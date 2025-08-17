@@ -12,7 +12,6 @@ class COOKYOURWAY_API APartTimer : public ACharacter
 {
 	GENERATED_BODY()
 
-	class AReuben* Reuben;
 	void SetHeldActorLoc();
 
 public:
