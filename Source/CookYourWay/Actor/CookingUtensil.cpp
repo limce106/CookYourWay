@@ -45,39 +45,26 @@ void ACookingUtensil::PutIngrOn(AIngredient* Ingr)
 	BP_CookRateWidget->SetVisibility(ESlateVisibility::Visible);
 }
 
-void ACookingUtensil::PickUpIngr()
+void ACookingUtensil::Interact_Implementation()
 {
-	if (!IsIngredientOn)
-		return;
+	isInteractionSuccess = false;
 
-	if (!Reuben->IsHold) {
-		Reuben->HoldActor(PlacedIngredient);
-	}
-	else if (Reuben->IsHold && Reuben->HeldActor->GetClass()->IsChildOf(ASandwich::StaticClass())) {
-		ASandwich* HoldingSandwich = Cast<ASandwich>(Reuben->HeldActor);
-		HoldingSandwich->AddIngredient(PlacedIngredient);
-	}
+	// 조리도구 위에 조리 완료된 재료가 있다면 재료를 샌드위치 위로 올린다.
+	if (IsIngredientOn && PlacedIngredient->IsCooked() && Reuben->IsHold)
+	{
+		if (ASandwich* Sandwich = Cast<ASandwich>(Reuben->HeldActor))
+		{
+			Sandwich->AddIngredient(PlacedIngredient);
 
-	IsIngredientOn = false;
-	PlacedIngredient = NULL;
+			IsIngredientOn = false;
+			PlacedIngredient = NULL;
 
-	BP_CookRateWidget->SetVisibility(ESlateVisibility::Hidden);
-}
+			BP_CookRateWidget->SetVisibility(ESlateVisibility::Hidden);
 
-bool ACookingUtensil::CommonCookingUtensilInteraction()
-{
-	if (!Reuben->IsHold) {
-		if (IsIngredientOn) {
-			PickUpIngr();
-			return true;
+			USoundBase* LoadedSound = LoadObject<USoundBase>(nullptr, TEXT("/Game/Assets/Sound/SoundAsset/SFX_Stack.SFX_Stack"));
+			UGameplayStatics::PlaySoundAtLocation(this, LoadedSound, GetActorLocation());
+
+			isInteractionSuccess = true;
 		}
 	}
-	else if (Reuben->GetHeldActorClass()->IsChildOf(ASandwich::StaticClass())) {
-		if (IsIngredientOn && PlacedIngredient->IsCooked()) {
-			PickUpIngr();
-		}
-		return true;
-	}
-	
-	return false;
 }

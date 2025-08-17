@@ -110,24 +110,6 @@ void AFryPan::Fry()
 	}
 }
 
-void AFryPan::FryPanInteraction()
-{
-	bool InteractionSuccess = CommonCookingUtensilInteraction();
-	if (InteractionSuccess) {
-		ParticleSystemComponent->SetTemplate(nullptr);
-		FryingAudioComponent->FadeOut(0.3f, 0.0f);
-		BurntAudioComponent->FadeOut(0.3f, 0.0f); 
-		return;
-	}
-
-	if (Reuben->IsHold && Reuben->GetHeldActorClass()->IsChildOf(AIngredient::StaticClass())) {
-		AIngredient* HoldingIngr = Cast<AIngredient>(Reuben->HeldActor);
-		if (HoldingIngr->CurIngrData.IngrType == "Meat" && !this->IsIngredientOn) {
-			PutIngrOn(HoldingIngr);
-		}
-	}
-}
-
 void AFryPan::PlacedIngredientBurnt()
 {
 	PlacedIngredient->IsBurn = true;
@@ -140,5 +122,30 @@ void AFryPan::PlacedIngredientBurnt()
 	{
 		BurntAudioComponent->Play();
 		FryingAudioComponent->SetVolumeMultiplier(0.6f);
+	}
+}
+
+void AFryPan::Interact_Implementation()
+{
+	Super::Interact_Implementation();
+
+	if (isInteractionSuccess)
+	{
+		ParticleSystemComponent->SetTemplate(nullptr);
+		FryingAudioComponent->FadeOut(0.3f, 0.0f);
+		BurntAudioComponent->FadeOut(0.3f, 0.0f);
+
+		return;
+	}
+
+	if (!IsIngredientOn && Reuben->IsHold)
+	{
+		if (AIngredient* Ingredient = Cast<AIngredient>(Reuben->HeldActor))
+		{
+			if (Ingredient->CurIngrData.IngrType == "Meat")
+			{
+				PutIngrOn(Ingredient);
+			}
+		}
 	}
 }

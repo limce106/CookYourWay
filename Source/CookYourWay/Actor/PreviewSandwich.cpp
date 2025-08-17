@@ -36,10 +36,12 @@ void APreviewSandwich::SetIngredients(const TArray<AActor*>& SourceIngredients)
 	float ZOffset = 0.0f;
 
 	// 기존 구성 제거
-	for (UStaticMeshComponent* Comp : PreviewComponents)
+	for (int i = PreviewComponents.Num() - 1; i >= 0; i--)
 	{
-		if (Comp)
-			Comp->DestroyComponent();
+		if (PreviewComponents[i] && !PreviewComponents[i]->IsPendingKill())
+		{
+			PreviewComponents[i]->DestroyComponent();
+		}
 	}
 	PreviewComponents.Empty();
 

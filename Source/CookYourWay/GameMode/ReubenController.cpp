@@ -4,6 +4,8 @@
 #include "GameMode/ReubenController.h"
 #include <Kismet/GameplayStatics.h>
 #include <Widget/FridgeWidget.h>
+#include "Interface/Interactable.h"
+#include "Interface/Holdable.h"
 
 AReubenController::AReubenController()
 {
@@ -34,100 +36,9 @@ void AReubenController::SetupInputComponent()
 
 void AReubenController::Interaction()
 {
-	CookInteraction();
-}
-
-void AReubenController::CookInteraction()
-{
 	Reuben->UpdateOverlappingActor();
+	AActor* Target = Reuben->OverlappedActor;
+	if (!Target) return;
 
-	if (!Reuben->OverlappedActor) {
-		return;
-	}
-
-	UClass* OverlappedActorClass = Reuben->OverlappedActor->GetClass();
-	if (OverlappedActorClass == BP_Table) {
-		ATable* Table = Cast<ATable>(Reuben->OverlappedActor);
-		Table->TableInteraction();
-	}
-	else if (OverlappedActorClass == BP_Sandwich) {
-		ASandwich* Sandwich = Cast<ASandwich>(Reuben->OverlappedActor);
-		Sandwich->SandwichInteraction();
-	}
-	else if (OverlappedActorClass == BP_Ingredient) {
-		AIngredient* Ingredient = Cast<AIngredient>(Reuben->OverlappedActor);
-		Ingredient->IngredientInteraction();
-	}
-	else if (OverlappedActorClass == BP_FryPan) {
-		AFryPan* FryPan = Cast<AFryPan>(Reuben->OverlappedActor);
-		FryPan->FryPanInteraction();
-	}
-	else if (OverlappedActorClass == BP_CuttingBoard) {
-		ACuttingBoard* CuttingBoard = Cast<ACuttingBoard>(Reuben->OverlappedActor);
-		CuttingBoard->CuttingBoardInteraction();
-	}
-	else if (OverlappedActorClass == BP_Oven) {
-		AOven* Oven = Cast<AOven>(Reuben->OverlappedActor);
-		Oven->OvenInteraction();
-	}
-	else if (OverlappedActorClass == BP_DiningTable) {
-		ADiningTable* DiningTable = Cast<ADiningTable>(Reuben->OverlappedActor);
-		DiningTable->DiningTableInteraction();
-	}
-	else if (OverlappedActorClass == BP_Fridge) {
-		FridgeInteraction();
-	}
-	else if (OverlappedActorClass == BP_Plates) {
-		PlatesInteraction();
-	}
-	else if (OverlappedActorClass == BP_TrashBin) {
-		TrashBinInteraction();
-	}
+	IInteractable::Execute_Interact(Target);
 }
-
-void AReubenController::FridgeInteraction()
-{
-	UFridgeWidget* FridgeWidget = CreateWidget<UFridgeWidget>(GetWorld(), BP_FridgeWidget);
-	FridgeWidget->AddToViewport();
-	USoundBase* LoadedSound = LoadObject<USoundBase>(nullptr, TEXT("/Game/Assets/Sound/SoundAsset/SFX_FridgeOpen.SFX_FridgeOpen"));
-	UGameplayStatics::PlaySoundAtLocation(this, LoadedSound, Reuben->GetActorLocation());
-}
-
-void AReubenController::PlatesInteraction()
-{
-	if (!Reuben->IsHold) {
-		ASandwich* Sandwich = GetWorld()->SpawnActor<ASandwich>(BP_Sandwich, Reuben->GetActorLocation(), Reuben->GetActorRotation());
-		Reuben->HoldActor(Sandwich);
-		USoundBase* MetaSoundAsset = LoadObject<USoundBase>(nullptr, TEXT("/Game/Assets/Sound/MSS/SFX_Dish.SFX_Dish"));
-		UGameplayStatics::PlaySoundAtLocation(this, MetaSoundAsset,Reuben->GetActorLocation());
-	}
-	else if (Reuben->IsHold && Reuben->GetHeldActorClass() == BP_Ingredient) {
-		AIngredient* Ingredient = Cast<AIngredient>(Reuben->HeldActor);
-		if (Ingredient->IsCooked()) {
-			ASandwich* Sandwich = GetWorld()->SpawnActor<ASandwich>(BP_Sandwich, Reuben->GetActorLocation(), Reuben->GetActorRotation());
-			Reuben->HoldActor(Sandwich);
-			Sandwich->AddIngredient(Ingredient);
-		}
-	}
-}
-
-void AReubenController::TrashBinInteraction()
-{
-	if (!Reuben->IsHold) {
-		return;
-	}
-
-	if (Reuben->GetHeldActorClass() == BP_Sandwich) {
-		ASandwich* HeldSandwich = Cast<ASandwich>(Reuben->HeldActor);
-		HeldSandwich->DestroySandwich();
-		USoundBase* LoadedSound = LoadObject<USoundBase>(nullptr, TEXT("/Game/Assets/Sound/SoundAsset/SFX_Trash.SFX_Trash"));
-		UGameplayStatics::PlaySound2D(this, LoadedSound);
-	}
-	else {
-		Reuben->HeldActor->Destroy();
-		USoundBase* LoadedSound = LoadObject<USoundBase>(nullptr, TEXT("/Game/Assets/Sound/SoundAsset/SFX_Trash.SFX_Trash"));
-		UGameplayStatics::PlaySound2D(this, LoadedSound);
-	}
-	Reuben->IsHold = false;
-}
-
