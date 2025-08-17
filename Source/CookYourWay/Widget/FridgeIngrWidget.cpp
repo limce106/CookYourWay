@@ -118,9 +118,12 @@ void UFridgeIngrWidget::PayCClassIngr()
 
 	if (CurIngrData.IngrClass == "C") {
 		VillageManager->VillageManagerSystem->TotalAsset -= IngrPrice;
+		USoundBase* LoadedSound = LoadObject<USoundBase>(nullptr, TEXT("/Game/Assets/Sound/SoundAsset/SFX_IngBuy.SFX_IngBuy"));
+		UGameplayStatics::PlaySound2D(this, LoadedSound);
 	}
 
 	MinusHavingIngrNum();
+	
 }
 
 void UFridgeIngrWidget::MinusHavingIngrNum()

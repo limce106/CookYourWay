@@ -221,6 +221,8 @@ void AVillageManager::EndEatingCustomer()
 
 		if (DiningTable->SeatedCustomer && DiningTable->SeatedCustomer->IsEat) {
 			PlayerBistro->TodayCust++;
+			USoundBase* LoadedSound = LoadObject<USoundBase>(nullptr, TEXT("/Game/Assets/Sound/SoundAsset/test.test"));
+			UGameplayStatics::PlaySoundAtLocation(this, LoadedSound, GetActorLocation());
 			VillageManagerSystem->PlayerBistroTotalCust++;
 		}
 	}

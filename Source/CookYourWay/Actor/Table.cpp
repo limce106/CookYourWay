@@ -32,6 +32,8 @@ void ATable::PutActorOn(AActor* Actor)
 	}
 
 	Reuben->PutDownActor();
+	USoundBase* LoadedSound = LoadObject<USoundBase>(nullptr, TEXT("/Game/Assets/Sound/SoundAsset/SFX_Grab.SFX_Grab"));
+	UGameplayStatics::PlaySoundAtLocation(this, LoadedSound, GetActorLocation());
 
 	FVector ActorLocation = GetActorLocation();
 	ActorLocation.Z += 103.0f;
@@ -44,8 +46,6 @@ void ATable::PutActorOn(AActor* Actor)
 	FRotator PlacedActorRotation = Reuben->GetActorRotation();
 	PlacedActor->SetActorRotation(PlacedActorRotation);
 
-	USoundBase* LoadedSound = LoadObject<USoundBase>(nullptr, TEXT("/Game/Assets/Sound/SoundAsset/SFX_PutIngredients.SFX_PutIngredients"));
-	UGameplayStatics::PlaySoundAtLocation(this, LoadedSound, GetActorLocation());
 }
 
 void ATable::PickUpActor(AActor* PickUpCharacter)
@@ -60,14 +60,14 @@ void ATable::PickUpActor(AActor* PickUpCharacter)
 		}
 		else {
 			Reuben->HoldActor(PlacedActor);
+			USoundBase* LoadedSound = LoadObject<USoundBase>(nullptr, TEXT("/Game/Assets/Sound/SoundAsset/SFX_Put.SFX_Put"));
+			UGameplayStatics::PlaySoundAtLocation(this, LoadedSound, GetActorLocation());
 			if (PlacedActor->GetClass()->IsChildOf(ASandwich::StaticClass()))
 			{
 				ASandwich* Sandwich = Cast<ASandwich>(PlacedActor);
 				Sandwich->ShowPreviewSandwich();
 			}
 
-			USoundBase* LoadedSound = LoadObject<USoundBase>(nullptr, TEXT("/Game/Assets/Sound/SoundAsset/SFX_Grab.SFX_Grab"));
-			UGameplayStatics::PlaySoundAtLocation(this, LoadedSound, GetActorLocation());
 		}
 	}
 	else if (PickUpCharacter->GetClass()->IsChildOf(APartTimer::StaticClass())) {
