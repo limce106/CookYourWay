@@ -5,17 +5,16 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "Interface/Interactable.h"
-#include "Interface/Holdable.h"
-#include "Table.generated.h"
+#include "TrashBin.generated.h"
 
 UCLASS()
-class COOKYOURWAY_API ATable : public AActor, public IInteractable
+class COOKYOURWAY_API ATrashBin : public AActor, public IInteractable
 {
 	GENERATED_BODY()
-
 	class AReuben* Reuben;
-
+	
 public:	
+	ATrashBin();
 
 protected:
 	virtual void BeginPlay() override;
@@ -23,12 +22,8 @@ protected:
 public:	
 	virtual void Tick(float DeltaTime) override;
 
-	// 테이블 위에 액터가 있는지
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	bool IsActorOn = false;
-	// 테이블 위에 올라간 액터
-	UPROPERTY(BlueprintReadWrite)
-	AActor* PlacedActor;
-	
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<AActor> BP_Sandwich;
+
 	virtual void Interact_Implementation() override;
 };

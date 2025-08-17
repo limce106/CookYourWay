@@ -20,6 +20,7 @@ void APartTimer::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	Reuben = Cast<AReuben>(UGameplayStatics::GetPlayerPawn(this, 0));
 }
 
 void APartTimer::Tick(float DeltaTime)
@@ -91,11 +92,11 @@ void APartTimer::GiveSandwich()
 {
 	if (!TargetDiningTable) {
 		UE_LOG(LogTemp, Error, TEXT("Invalid TargetDiningTable!"));
+		return;
 	}
 
 	ACustomer* SeatedCustomer = TargetDiningTable->SeatedCustomer;
 	ASandwich* Sandwich = Cast<ASandwich>(HeldActor);
-	APlayerBistro* PlayerBistro = Cast<APlayerBistro>(UGameplayStatics::GetActorOfClass(GetWorld(), BP_PlayerBistro));
 
 	// 샌드위치가 없는 빈 접시이거나 손님이 먹는 중이라면
  	if (Sandwich->Ingredients.Num() == 0 || SeatedCustomer->IsEat) {
@@ -103,7 +104,12 @@ void APartTimer::GiveSandwich()
 	}
 	Sandwich->SetIngrWidgetVisibility(ESlateVisibility::Hidden);
 
-	TargetDiningTable->PutFoodOn(this, Sandwich);
+	Reuben->GivenSandwichNum++;
+	PutDownActor();
+	Sandwich->Execute_OnPutDown(Sandwich, TargetDiningTable);
+
+	TargetDiningTable->IsActorOn = true;
+	TargetDiningTable->PlacedActor = Sandwich;
 
 	SeatedCustomer->EatSandwich(Sandwich);
 }

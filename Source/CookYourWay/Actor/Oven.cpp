@@ -60,11 +60,13 @@ bool AOven::IsCooked()
 	}
 }
 
-void AOven::OvenInteraction()
+void AOven::Interact_Implementation()
 {
-	if (Reuben->IsHold && Reuben->GetHeldActorClass()->IsChildOf(ADessert::StaticClass())) {
-		ADessert* HoldingDessert = Cast<ADessert>(Reuben->HeldActor);
-		PutDessertIn(HoldingDessert);
+	if (Reuben->IsHold) {
+		if (ADessert* Dessert = Cast<ADessert>(Reuben->HeldActor))
+		{
+			PutDessertIn(Dessert);
+		}
 	}
 	else if (!Reuben->IsHold && IsCooked()) {
 		ADessert* Dessert = GetWorld()->SpawnActor<ADessert>(BP_Dessert, Reuben->GetActorLocation(), Reuben->GetActorRotation());
