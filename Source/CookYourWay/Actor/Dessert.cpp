@@ -4,6 +4,7 @@
 #include "Actor/Dessert.h"
 #include "Reuben.h"
 #include <Kismet/GameplayStatics.h>
+#include "Particles/ParticleSystemComponent.h"
 
 ADessert::ADessert()
 {
@@ -16,12 +17,18 @@ void ADessert::BeginPlay()
 	Super::BeginPlay();
 	
 	Reuben = Cast<AReuben>(UGameplayStatics::GetPlayerPawn(this, 0));
+	ParticleSystemComponent = Cast<UParticleSystemComponent>(FindComponentByClass(UParticleSystemComponent::StaticClass()));
 }
 
 void ADessert::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+}
+
+void ADessert::ActivateBakedParticle()
+{
+	ParticleSystemComponent->ActivateSystem();
 }
 
 void ADessert::OnPutDown_Implementation(AActor* PlaceTarget)
