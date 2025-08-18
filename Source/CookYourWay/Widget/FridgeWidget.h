@@ -21,7 +21,7 @@ class COOKYOURWAY_API UFridgeWidget : public UUserWidget
 	GENERATED_BODY()
 
 	class UIngredientManagerSystem* IngredientManagerSystem;
-	const TArray<FString> ClassName = { "S", "A", "B", "C" };
+	const TArray<FString> ClassName = { "C", "S", "A", "B" };
 
 	void NativePreConstruct();
 	void NativeConstruct();

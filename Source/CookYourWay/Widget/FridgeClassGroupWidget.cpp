@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 
 #include "Widget/FridgeClassGroupWidget.h"
@@ -34,7 +34,11 @@ void UFridgeClassGroupWidget::InitAndCreate(FString InClass, FString InType)
 		IngredientManagerSystem = UGameplayStatics::GetGameInstance(GetWorld())->GetSubsystem<UIngredientManagerSystem>();
 	}
 
-	TextBlock_Class->SetText(FText::FromString(IngrClass));
+	if(IngrClass == "C")
+		TextBlock_Class->SetText(FText::FromString(TEXT("상시 구매 가능")));
+	else
+		TextBlock_Class->SetText(FText::FromString(IngrClass));
+
 	CreateIngr();
 }
 
