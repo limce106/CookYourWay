@@ -21,7 +21,7 @@ void ATable::Tick(float DeltaTime)
 
 void ATable::Interact_Implementation()
 {
-	if (!Reuben->HeldActor && IsActorOn && PlacedActor->GetClass()->ImplementsInterface(UHoldable::StaticClass()))
+	if (!Reuben->HeldActor && IsActorOn && PlacedActor && PlacedActor->GetClass()->ImplementsInterface(UHoldable::StaticClass()))
 	{
 		IHoldable::Execute_OnPickUp(PlacedActor);
 

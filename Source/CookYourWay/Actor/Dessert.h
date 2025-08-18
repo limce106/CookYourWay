@@ -13,7 +13,8 @@ class COOKYOURWAY_API ADessert : public AActor, public IHoldable
 	GENERATED_BODY()
 
 	class AReuben* Reuben;
-	
+	class UParticleSystemComponent* ParticleSystemComponent;
+
 public:	
 	ADessert();
 
@@ -28,6 +29,8 @@ public:
 
 	UPROPERTY()
 	bool IsCooked = false;
+
+	void ActivateBakedParticle();
 
 	virtual void OnPutDown_Implementation(AActor* PlaceTarget) override;
 	virtual void OnPickUp_Implementation() override;

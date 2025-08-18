@@ -70,6 +70,7 @@ void AOven::Interact_Implementation()
 	}
 	else if (!Reuben->IsHold && IsCooked()) {
 		ADessert* Dessert = GetWorld()->SpawnActor<ADessert>(BP_Dessert, Reuben->GetActorLocation(), Reuben->GetActorRotation());
+		Dessert->ActivateBakedParticle();
 		Dessert->IsCooked = true;
 
 		Reuben->HoldActor(Dessert);
