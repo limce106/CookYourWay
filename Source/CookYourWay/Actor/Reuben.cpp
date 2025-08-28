@@ -17,6 +17,10 @@ AReuben::AReuben()
 	bUseControllerRotationYaw = false;
 	// 이동할 때 이동 방향으로 회전
 	GetCharacterMovement()->bOrientRotationToMovement = true;
+
+	HoldingComponent = CreateDefaultSubobject<USceneComponent>(TEXT("HoldingComponent"));
+	HoldingComponent->SetupAttachment(GetRootComponent());
+	HoldingComponent->SetRelativeLocation(FVector(50.0f, 0.0f, 25.0f));
 }
 
 void AReuben::BeginPlay()
@@ -29,7 +33,7 @@ void AReuben::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	SetHeldActorLoc();
+	//SetHeldActorLoc();
 }
 
 void AReuben::MoveForward(float Value)
@@ -93,17 +97,22 @@ void AReuben::HoldActor(AActor* Actor)
 		ActorCollision->SetCollisionProfileName(TEXT("NoCollision"));
 	}
 
+	FAttachmentTransformRules AttachmentRules(EAttachmentRule::SnapToTarget, EAttachmentRule::SnapToTarget, EAttachmentRule::SnapToTarget, false);
+	Actor->AttachToComponent(HoldingComponent, AttachmentRules);
+
 	HeldActor = Actor;
 	IsHold = true;
 
-	FRotator HeldActorRotation = GetActorRotation();
+	/*FRotator HeldActorRotation = GetActorRotation();
 	HeldActorRotation.Yaw -= 180.0f;
-	HeldActor->SetActorRotation(HeldActorRotation);
+	HeldActor->SetActorRotation(HeldActorRotation);*/
 }
 
 void AReuben::PutDownActor()
 {
 	if (!HeldActor) return;
+
+	HeldActor->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
 
 	UShapeComponent* ActorCollision = Cast<UShapeComponent>(HeldActor->FindComponentByClass(UShapeComponent::StaticClass()));
 	if (ActorCollision) {
