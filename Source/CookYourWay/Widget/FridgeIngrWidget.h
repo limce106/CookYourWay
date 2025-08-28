@@ -26,7 +26,6 @@ class COOKYOURWAY_API UFridgeIngrWidget : public UUserWidget
 	
 	void NativePreConstruct();
 	void NativeConstruct();
-	void NativeDestruct();
 
 public:
 	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))

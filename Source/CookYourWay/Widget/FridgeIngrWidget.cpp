@@ -30,17 +30,7 @@ void UFridgeIngrWidget::NativeConstruct()
 	TextBlock_IngrName = (UTextBlock*)GetWidgetFromName(TEXT("TextBlock_IngrName"));
 	TextBlock_IngrNum = (UTextBlock*)GetWidgetFromName(TEXT("TextBlock_IngrNum"));
 
-	Button_Ingredient->OnClicked.RemoveDynamic(this, &UFridgeIngrWidget::OnClick_ButtonIngredient);
 	Button_Ingredient->OnClicked.AddDynamic(this, &UFridgeIngrWidget::OnClick_ButtonIngredient);
-}
-
-void UFridgeIngrWidget::NativeDestruct()
-{
-	Super::NativeDestruct();
-
-	if (Button_Ingredient) {
-		Button_Ingredient->OnClicked.RemoveDynamic(this, &UFridgeIngrWidget::OnClick_ButtonIngredient);
-	}
 }
 
 void UFridgeIngrWidget::SetIngrUI()
@@ -86,6 +76,9 @@ void UFridgeIngrWidget::OnClick_ButtonIngredient()
 			ADessert* Dessert = GetWorld()->SpawnActor<ADessert>(BP_Dessert, Reuben->GetActorLocation(), Reuben->GetActorRotation());
 			Reuben->HoldActor(Dessert);
 		}
+		else if (FridgeWidget->CurTabType == ETabType::BreadTab) {
+			FridgeWidget->PlayWarningAnim();
+		}
 		else {
 			AIngredient* ClickedIngredient = IngredientSpawnFactory::SpawnIngredient(GetWorld(), BP_IngredientClass, Reuben->GetActorLocation(), Reuben->GetActorRotation(), IngrEngName, false);
 			Reuben->HoldActor(ClickedIngredient);
@@ -93,7 +86,7 @@ void UFridgeIngrWidget::OnClick_ButtonIngredient()
 		PayCClassIngr();
 	}
 	else if (Reuben->IsHold && Reuben->HeldActor->GetClass() == BP_Sandwich) {
-		// 소스를 골랐다면
+		// 빵이나 소스를 골랐다면
 		if (FridgeWidget->CurTabType == ETabType::BreadTab || FridgeWidget->CurTabType == ETabType::SauceTab) {
 
 			AIngredient* ClickedIngredient = IngredientSpawnFactory::SpawnIngredient(GetWorld(), BP_IngredientClass, Reuben->GetActorLocation(), Reuben->GetActorRotation(), IngrEngName, false);
@@ -106,7 +99,7 @@ void UFridgeIngrWidget::OnClick_ButtonIngredient()
 		}
 		
 	}
-	else if (Reuben->IsHold && Reuben->HeldActor->GetClass() == BP_IngredientClass) {
+	else {
 		FridgeWidget->PlayWarningAnim();
 	}
 }
