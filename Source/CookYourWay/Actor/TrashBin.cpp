@@ -42,6 +42,8 @@ void ATrashBin::Interact_Implementation()
 		USoundBase* LoadedSound = LoadObject<USoundBase>(nullptr, TEXT("/Game/Assets/Sound/SoundAsset/SFX_Trash.SFX_Trash"));
 		UGameplayStatics::PlaySound2D(this, LoadedSound);
 	}
+
 	Reuben->IsHold = false;
+	Reuben->HeldActor = nullptr;
 }
 
