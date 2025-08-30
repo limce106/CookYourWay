@@ -38,13 +38,9 @@ void UNewsWidget::NativeTick(const FGeometry& Geometry, float DeltaSeconds)
 	Super::NativeTick(Geometry, DeltaSeconds);
 }
 
-FString UNewsWidget::RedefineNewsString(FString News)
+FString UNewsWidget::RedefineNewsString(FString News, FString& OutKeyWord, FString& OutKeyWordNum)
 {
 	FString Redefined = News;
-	FString tmp1;
-	FString tmp2;
-
-	bool IsSameNumInOneStr = false;
 	FString PreNumber = "-1";
 
 	for (int idx = 0; idx < Redefined.Len(); idx++) {
@@ -54,15 +50,16 @@ FString UNewsWidget::RedefineNewsString(FString News)
 			// 하나의 뉴스 스트링 안에서 번호가 이전에 나왔던 번호와 같은 번호이면 값이 동일하다.
 			if (CurNumber != PreNumber) {
 				PreNumber = CurNumber;
-				VillageManagerSystem->NewsKeyWord = GetKeyWordByNum(CurNumber);
-
-				SetNewsImg(CurNumber, VillageManagerSystem->NewsKeyWord);
+				// RedefineNewsString에서 키워드 종류 번호와 실제 키워드를 모두 반환합니다.
+				OutKeyWordNum = CurNumber;
+				OutKeyWord = GetKeyWordByNum(CurNumber);
+				VillageManagerSystem->NewsKeyWord = OutKeyWord;
 			}
 
-			tmp1 = Redefined.Mid(0, idx);
-			tmp2 = Redefined.Mid(idx + 3, Redefined.Len() - (idx + 3));
+			FString tmp1 = Redefined.Mid(0, idx);
+			FString tmp2 = Redefined.Mid(idx + 3, Redefined.Len() - (idx + 3));
 
-			Redefined = (tmp1.Append(VillageManagerSystem->NewsKeyWord)).Append(tmp2);
+			Redefined = (tmp1.Append(OutKeyWord)).Append(tmp2);
 		}
 	}
 
@@ -82,7 +79,7 @@ FString UNewsWidget::GetRandomOriginalNewsStr()
 		else {
 			ProbRange += VillageManagerSystem->NewsTableRows[i]->NewsProb;
 		}
-		
+
 		if (Probability > ProbRange) {
 			continue;
 		}
@@ -96,12 +93,15 @@ FString UNewsWidget::GetRandomOriginalNewsStr()
 	return OriginalNewsStr;
 }
 
-void UNewsWidget::SetNewsImg(FString Num, FString CurNewsKeyWord)
+void UNewsWidget::SetNewsImage(FString Num, const FString& CurNewsKeyWord)
 {
+	IsCustBlur = false;
+	UTexture2D* IconToSet = nullptr;
+
 	if (Num == "1") {
 		for (auto Row : CustomerDataManagerSystem->CustomerTableRows) {
 			if (Row->CustName == CurNewsKeyWord) {
-				Image_News->SetBrushFromTexture(Row->CustIcon);
+				IconToSet = Row->CustIcon;
 				break;
 			}
 		}
@@ -109,7 +109,7 @@ void UNewsWidget::SetNewsImg(FString Num, FString CurNewsKeyWord)
 	else if (Num == "2") {
 		for (auto Row : IngredientManagerSystem->IngredientTableRows) {
 			if (Row->IngrName == CurNewsKeyWord) {
-				Image_News->SetBrushFromTexture(Row->IngrIcon);
+				IconToSet = Row->IngrIcon;
 				break;
 			}
 		}
@@ -117,10 +117,23 @@ void UNewsWidget::SetNewsImg(FString Num, FString CurNewsKeyWord)
 	else if (Num == "4") {
 		for (auto Row : VillageManagerSystem->StoreTableRows) {
 			if (Row->StoreName == CurNewsKeyWord) {
-				Image_News->SetBrushFromTexture(Row->StoreIcon);
+				IconToSet = Row->StoreIcon;
 				break;
 			}
 		}
+	}
+	else if (Num == "5")
+	{
+		int32 RandomCustIdx = UKismetMathLibrary::RandomIntegerInRange(0, CustomerDataManagerSystem->CustomerNames.Num() - 1);
+		IconToSet = CustomerDataManagerSystem->CustomerTableRows[RandomCustIdx]->CustIcon;
+		IsCustBlur = true;
+
+		CustomerDataManagerSystem->SetCustTastes();
+	}
+
+	if (IconToSet)
+	{
+		Image_News->SetBrushFromTexture(IconToSet);
 	}
 }
 
@@ -135,18 +148,29 @@ FString UNewsWidget::GetSeasonNewsNextString()
 
 FString UNewsWidget::GetNewsString()
 {
-	FString RedefinedNews;
-	ContinueIngrSeasonDay = IsContinueIngrSeasonDay();
-
 	if (VillageManagerSystem->Day == 1)
 	{
-		RedefinedNews = TEXT("루벤의 샌드위치 가게에 오신 것을 환영합니다!\n매일 샌드위치그램으로 마을 소식을 보실 수 있습니다.");
+		return TEXT("루벤의 샌드위치 가게에 오신 것을 환영합니다!\n매일 샌드위치그램으로 마을 소식을 보실 수 있습니다.");
 	}
-	else if (ContinueIngrSeasonDay) {
-		RedefinedNews = RedefineNewsString(GetSeasonNewsNextString());
+
+	FString OriginalNewsStr;
+	ContinueIngrSeasonDay = IsContinueIngrSeasonDay();
+
+	if (ContinueIngrSeasonDay) {
+		OriginalNewsStr = GetSeasonNewsNextString();
 	}
 	else {
-		RedefinedNews = RedefineNewsString(GetRandomOriginalNewsStr());
+		OriginalNewsStr = GetRandomOriginalNewsStr();
+	}
+
+	FString KeyWord;
+	FString KeyWordNum;
+
+	FString RedefinedNews = RedefineNewsString(OriginalNewsStr, KeyWord, KeyWordNum);
+
+	if (KeyWordNum.Len() > 0)
+	{
+		SetNewsImage(KeyWordNum, KeyWord);
 	}
 
 	return RedefinedNews;
@@ -194,24 +218,22 @@ FString UNewsWidget::GetKeyWordByNum(FString Num)
 		}
 	}
 	else if (Num == "5") {
-		CustomerDataManagerSystem->SetCustTastes();
-
 		int32 RandomCustIdx = UKismetMathLibrary::RandomIntegerInRange(0, CustomerDataManagerSystem->CustomerNames.Num() - 1);
 		FString RandomCustName = CustomerDataManagerSystem->CustomerNames[RandomCustIdx];
 		TArray<int32> CustTasteArr = CustomerDataManagerSystem->CustNameToTasteMap[RandomCustName];
 
-		// 예외적으로 뉴스 이미지를 여기서 설정
-		UTexture2D* CustIcon = CustomerDataManagerSystem->CustomerTableRows[RandomCustIdx]->CustIcon;
-		Image_News->SetBrushFromTexture(CustIcon);
-		IsCustBlur = true;
-		
 		for (int i = 0; i < CustTasteArr.Num(); i++) {
 			KeyWordArr.Add(IngredientManagerSystem->IngredientRows[CustTasteArr[i]].IngrName);
 		}
 	}
 
-	int32 RandomIdx = UKismetMathLibrary::RandomIntegerInRange(0, KeyWordArr.Num() - 1);
-	return KeyWordArr[RandomIdx];
+	if (KeyWordArr.Num() > 0)
+	{
+		int32 RandomIdx = UKismetMathLibrary::RandomIntegerInRange(0, KeyWordArr.Num() - 1);
+		return KeyWordArr[RandomIdx];
+	}
+
+	return FString();
 }
 
 bool UNewsWidget::IsContinueIngrSeasonDay()

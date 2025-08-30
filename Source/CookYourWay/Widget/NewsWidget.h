@@ -23,10 +23,11 @@ class COOKYOURWAY_API UNewsWidget : public UUserWidget
 	virtual void NativeTick(const FGeometry& Geometry, float DeltaSeconds) override;
 
 	FString GetKeyWordByNum(FString Num);
-	FString RedefineNewsString(FString News);
+	FString RedefineNewsString(FString News, FString& OutKeyWord, FString& OutKeyWordNum);
 	FString GetRandomOriginalNewsStr();
+	FString GetSeasonNewsNextString();
 
-	void SetNewsImg(FString Num, FString CurNewsKeyWord);
+	void SetNewsImage(FString Num, const FString& CurNewsKeyWord);
 	
 public:
 	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
@@ -43,8 +44,6 @@ public:
 
 	UFUNCTION()
 	FString GetNewsString();
-	UFUNCTION()
-	FString GetSeasonNewsNextString();
 	UFUNCTION()
 	bool IsContinueIngrSeasonDay();
 	UFUNCTION()
