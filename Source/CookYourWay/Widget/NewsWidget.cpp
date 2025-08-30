@@ -24,8 +24,13 @@ void UNewsWidget::NativeConstruct()
 	Image_News = (UImage*)GetWidgetFromName(TEXT("Image_News"));
 	BackgroundBlur_CustBlur = (UBackgroundBlur*)GetWidgetFromName(TEXT("BackgroundBlur_CustBlur"));
 
-	FString News = GetRedefinedNewsString();
+	FString News = GetNewsString();
 	RichTextBlock_News->SetText(FText::FromString(News));
+
+	if (VillageManagerSystem->Day == 1)
+	{
+		Image_News->SetBrushFromTexture(SandwichIcon);
+	}
 }
 
 void UNewsWidget::NativeTick(const FGeometry& Geometry, float DeltaSeconds)
@@ -128,12 +133,16 @@ FString UNewsWidget::GetSeasonNewsNextString()
 	return OriginalNewsStr;
 }
 
-FString UNewsWidget::GetRedefinedNewsString()
+FString UNewsWidget::GetNewsString()
 {
 	FString RedefinedNews;
 	ContinueIngrSeasonDay = IsContinueIngrSeasonDay();
 
-	if (ContinueIngrSeasonDay) {
+	if (VillageManagerSystem->Day == 1)
+	{
+		RedefinedNews = TEXT("루벤의 샌드위치 가게에 오신 것을 환영합니다!\n매일 샌드위치그램으로 마을 소식을 보실 수 있습니다.");
+	}
+	else if (ContinueIngrSeasonDay) {
 		RedefinedNews = RedefineNewsString(GetSeasonNewsNextString());
 	}
 	else {
