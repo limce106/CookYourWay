@@ -27,7 +27,7 @@ class COOKYOURWAY_API UNewsWidget : public UUserWidget
 	FString GetRandomOriginalNewsStr();
 
 	void SetNewsImg(FString Num, FString CurNewsKeyWord);
-
+	
 public:
 	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
 	class URichTextBlock* RichTextBlock_News;
@@ -38,9 +38,11 @@ public:
 
 	UPROPERTY(BlueprintReadOnly)
 	bool IsCustBlur = false;
+	UPROPERTY(EditAnywhere)
+	UTexture2D* SandwichIcon;
 
 	UFUNCTION()
-	FString GetRedefinedNewsString();
+	FString GetNewsString();
 	UFUNCTION()
 	FString GetSeasonNewsNextString();
 	UFUNCTION()
