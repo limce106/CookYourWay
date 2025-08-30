@@ -86,6 +86,6 @@ void ADiningTable::Interact_Implementation()
 		PlacedActor = Dessert;
 	}
 
-	USoundBase* LoadedSound = LoadObject<USoundBase>(nullptr, TEXT("/Game/Assets/Sound/SoundAsset/SFX_PutIngredients.SFX_PutIngredients"));
+	USoundBase* LoadedSound = LoadObject<USoundBase>(nullptr, TEXT("/Game/Assets/Sound/SoundAsset/SFX_Put.SFX_Put"));
 	UGameplayStatics::PlaySoundAtLocation(this, LoadedSound, GetActorLocation());
 }

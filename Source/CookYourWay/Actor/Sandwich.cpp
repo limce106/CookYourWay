@@ -172,7 +172,7 @@ void ASandwich::OnPutDown_Implementation(AActor* PlaceTarget)
 	FRotator Rotation = PlaceTarget->GetActorRotation();
 	SetActorRotation(Rotation);
 
-	USoundBase* LoadedSound = LoadObject<USoundBase>(nullptr, TEXT("/Game/Assets/Sound/SoundAsset/SFX_PutIngredients.SFX_PutIngredients"));
+	USoundBase* LoadedSound = LoadObject<USoundBase>(nullptr, TEXT("/Game/Assets/Sound/SoundAsset/SFX_Put.SFX_Put"));
 	UGameplayStatics::PlaySoundAtLocation(this, LoadedSound, GetActorLocation());
 }
 
