@@ -71,7 +71,7 @@ void AFryPan::PutIngrOn(AIngredient* Ingr)
 	Super::PutIngrOn(Ingr);
 
 	FVector IngrLocation = GetActorLocation();
-	IngrLocation.Z += 140.0f;
+	IngrLocation.Z += 65.0f;
 	Ingr->SetActorLocation(IngrLocation);
 
 	IsFrying = true;
