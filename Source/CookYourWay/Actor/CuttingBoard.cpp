@@ -34,7 +34,7 @@ void ACuttingBoard::PutIngrOn(AIngredient* Ingr)
 	Super::PutIngrOn(Ingr);
 
 	FVector IngrLocation = GetActorLocation();
-	IngrLocation.Z += 100.0f;
+	IngrLocation.Z += 52.0f;
 	Ingr->SetActorLocation(IngrLocation);
 
 	SetIngredientShrinkRate();

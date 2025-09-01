@@ -22,7 +22,7 @@ class COOKYOURWAY_API ASandwich : public AActor, public IHoldable
 	// 현재 제일 위에 있는 재료의 위치
 	float LastIngrLocZ;
 
-	const float TableZOffset = 103.f;
+	const float TableZOffset = 42.f;
 	const float DiningTableZOffset = 53.f;
 	
 public:	
