@@ -23,7 +23,7 @@ class COOKYOURWAY_API ASandwich : public AActor, public IHoldable
 	float LastIngrLocZ;
 
 	const float TableZOffset = 42.f;
-	const float DiningTableZOffset = 53.f;
+	const float DiningTableZOffset = 49.f;
 	
 public:	
 	ASandwich();
