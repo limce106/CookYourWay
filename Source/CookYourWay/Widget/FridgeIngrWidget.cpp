@@ -89,7 +89,7 @@ void UFridgeIngrWidget::OnClick_ButtonIngredient()
 		// 빵이나 소스를 골랐다면
 		if (FridgeWidget->CurTabType == ETabType::BreadTab || FridgeWidget->CurTabType == ETabType::SauceTab) {
 
-			AIngredient* ClickedIngredient = IngredientSpawnFactory::SpawnIngredient(GetWorld(), BP_IngredientClass, Reuben->GetActorLocation(), Reuben->GetActorRotation(), IngrEngName, false);
+			AIngredient* ClickedIngredient = IngredientSpawnFactory::SpawnIngredient(GetWorld(), BP_IngredientClass, Reuben->GetActorLocation(), Reuben->GetActorRotation(), IngrEngName, true);
 			ASandwich* HoldingSandwich = Cast<ASandwich>(Reuben->HeldActor);
 			HoldingSandwich->AddIngredient(ClickedIngredient);
 			PayCClassIngr();

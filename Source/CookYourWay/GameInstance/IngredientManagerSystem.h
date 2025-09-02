@@ -12,10 +12,12 @@ struct FIngrData : public FTableRowBase {
 	GENERATED_BODY()
 
 public:
-	FIngrData() : IngrName("-1"), IngrClass("-1"), IngrType("-1"), IngrGroupCode(0) {}
+	FIngrData() : IngrName("-1"), IngrEngName("-1"), IngrClass("-1"), IngrType("-1"), IngrGroupCode(0) {}
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Data")
 	FString IngrName;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Data")
+	FString IngrEngName;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Data")
 	FString IngrClass;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Data")

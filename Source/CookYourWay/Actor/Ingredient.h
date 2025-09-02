@@ -21,8 +21,6 @@ class COOKYOURWAY_API AIngredient : public AActor
 
 	class UIngredientManagerSystem* IngredientManagerSystem;
 
-	// 스태틱 메시 설정 및 피봇 맞추기
-	void SetMesh(FString IngrName, bool IsSliced);
 	void SetScale();
 	
 public:	
@@ -48,6 +46,9 @@ public:
 	// 스폰 시 필수로 호출
 	UFUNCTION()
 	void Init(FString IngrName, bool IsSliced);
+	// 스태틱 메시 설정 및 피봇 맞추기
+	UFUNCTION()
+	void SetMesh(FString IngrName, bool IsSliced);
 	// 제각각인 재료들의 피봇을 맞추기 위한 함수
 	UFUNCTION()
 	void SetPivotCenter();
