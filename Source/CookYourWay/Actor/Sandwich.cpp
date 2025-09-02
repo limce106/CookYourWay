@@ -136,16 +136,13 @@ bool ASandwich::IsCompleteSandwich()
 
 void ASandwich::ShowPreviewSandwich()
 {
-	if (Reuben->HeldActor == this)
+	TArray<AActor*> IngredientActors;
+	for (AIngredient* I : Ingredients)
 	{
-		TArray<AActor*> IngredientActors;
-		for (AIngredient* I : Ingredients)
-		{
-			IngredientActors.Add(I);
-		}
-
-		PreviewSandwich->SetIngredients(IngredientActors);
+		IngredientActors.Add(I);
 	}
+
+	PreviewSandwich->SetIngredients(IngredientActors);
 
 	SetPreviewVisibility();
 }
