@@ -102,10 +102,6 @@ void AReuben::HoldActor(AActor* Actor)
 
 	HeldActor = Actor;
 	IsHold = true;
-
-	/*FRotator HeldActorRotation = GetActorRotation();
-	HeldActorRotation.Yaw -= 180.0f;
-	HeldActor->SetActorRotation(HeldActorRotation);*/
 }
 
 void AReuben::PutDownActor()
@@ -155,7 +151,7 @@ void AReuben::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 void AReuben::Chop()
 {
-	if (OverlappedActor->GetClass()->IsChildOf(ACuttingBoard::StaticClass())) {
+	if (OverlappedActor != NULL && OverlappedActor->GetClass()->IsChildOf(ACuttingBoard::StaticClass())) {
 		ACuttingBoard* CuttingBoard = Cast<ACuttingBoard>(OverlappedActor);
 		CuttingBoard->Chop();
 	}

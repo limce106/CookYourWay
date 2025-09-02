@@ -131,10 +131,10 @@ class COOKYOURWAY_API UVillageManagerSystem : public UGameInstanceSubsystem
 	UVillageManagerSystem();
 
 	TArray<FString> RandomComptName = { 
-		TEXT("예은이네 뻔뻔샌드"),
-		TEXT("샌디네 샌드위치"),
-		TEXT("서브웨이"),
-		TEXT("홍루이젠")
+		TEXT("맛있는 샌드위치"),
+		TEXT("대만식 샌드위치"),
+		TEXT("청경채 샌드위치"),
+		TEXT("지하철 샌드위치")
 	};
 
 	float TempDelayTime;

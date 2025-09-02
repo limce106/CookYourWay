@@ -10,7 +10,6 @@
 void ACuttingBoard::BeginPlay()
 {
 	Super::BeginPlay();
-
 }
 
 float ACuttingBoard::GetCookIncreasement()
@@ -46,10 +45,9 @@ void ACuttingBoard::Chop()
 		PlacedIngredient->CurCookRate += GetCookIncreasement();
 		BP_CookRateWidget->CookRate += GetCookIncreasement();
 
-
-		if (IngrStaticMesh) {
-			IngrStaticMesh->SetWorldScale3D(IngrStaticMesh->GetComponentScale() - IngredientShrinkRate);
-			PlacedIngredient->SetPivotCenter();
+		if (PlacedIngredient->IsCooked())
+		{
+			PlacedIngredient->SetMesh(PlacedIngredient->CurIngrData.IngrEngName, true);
 		}
 	}
 	USoundBase* MetaSoundAsset = LoadObject<USoundBase>(nullptr,TEXT("/Game/Assets/Sound/MSS/SFX_Chop.SFX_Chop"));	

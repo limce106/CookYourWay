@@ -80,7 +80,12 @@ void UFridgeIngrWidget::OnClick_ButtonIngredient()
 			FridgeWidget->PlayWarningAnim();
 		}
 		else {
-			AIngredient* ClickedIngredient = IngredientSpawnFactory::SpawnIngredient(GetWorld(), BP_IngredientClass, Reuben->GetActorLocation(), Reuben->GetActorRotation(), IngrEngName, false);
+			AIngredient* ClickedIngredient;
+			if (FridgeWidget->CurTabType == ETabType::FillingTab)
+				ClickedIngredient = IngredientSpawnFactory::SpawnIngredient(GetWorld(), BP_IngredientClass, Reuben->GetActorLocation(), Reuben->GetActorRotation(), IngrEngName, false);
+			else
+				ClickedIngredient = IngredientSpawnFactory::SpawnIngredient(GetWorld(), BP_IngredientClass, Reuben->GetActorLocation(), Reuben->GetActorRotation(), IngrEngName, true);
+
 			Reuben->HoldActor(ClickedIngredient);
 		}
 		PayCClassIngr();
@@ -89,7 +94,7 @@ void UFridgeIngrWidget::OnClick_ButtonIngredient()
 		// 빵이나 소스를 골랐다면
 		if (FridgeWidget->CurTabType == ETabType::BreadTab || FridgeWidget->CurTabType == ETabType::SauceTab) {
 
-			AIngredient* ClickedIngredient = IngredientSpawnFactory::SpawnIngredient(GetWorld(), BP_IngredientClass, Reuben->GetActorLocation(), Reuben->GetActorRotation(), IngrEngName, false);
+			AIngredient* ClickedIngredient = IngredientSpawnFactory::SpawnIngredient(GetWorld(), BP_IngredientClass, Reuben->GetActorLocation(), Reuben->GetActorRotation(), IngrEngName, true);
 			ASandwich* HoldingSandwich = Cast<ASandwich>(Reuben->HeldActor);
 			HoldingSandwich->AddIngredient(ClickedIngredient);
 			PayCClassIngr();
