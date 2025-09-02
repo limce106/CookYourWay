@@ -80,7 +80,12 @@ void UFridgeIngrWidget::OnClick_ButtonIngredient()
 			FridgeWidget->PlayWarningAnim();
 		}
 		else {
-			AIngredient* ClickedIngredient = IngredientSpawnFactory::SpawnIngredient(GetWorld(), BP_IngredientClass, Reuben->GetActorLocation(), Reuben->GetActorRotation(), IngrEngName, false);
+			AIngredient* ClickedIngredient;
+			if (FridgeWidget->CurTabType == ETabType::FillingTab)
+				ClickedIngredient = IngredientSpawnFactory::SpawnIngredient(GetWorld(), BP_IngredientClass, Reuben->GetActorLocation(), Reuben->GetActorRotation(), IngrEngName, false);
+			else
+				ClickedIngredient = IngredientSpawnFactory::SpawnIngredient(GetWorld(), BP_IngredientClass, Reuben->GetActorLocation(), Reuben->GetActorRotation(), IngrEngName, true);
+
 			Reuben->HoldActor(ClickedIngredient);
 		}
 		PayCClassIngr();

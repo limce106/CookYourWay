@@ -33,15 +33,5 @@ void ASink::Interact_Implementation()
 		USoundBase* MetaSoundAsset = LoadObject<USoundBase>(nullptr, TEXT("/Game/Assets/Sound/MSS/SFX_Dish.SFX_Dish"));
 		UGameplayStatics::PlaySoundAtLocation(this, MetaSoundAsset, Reuben->GetActorLocation());
 	}
-	else if (Reuben->IsHold) {
-		if (AIngredient* Ingredient = Cast<AIngredient>(Reuben->HeldActor))
-		{
-			if (!Ingredient->IsCooked()) return;
-
-			ASandwich* Sandwich = GetWorld()->SpawnActor<ASandwich>(BP_Sandwich, Reuben->GetActorLocation(), Reuben->GetActorRotation());
-			Reuben->HoldActor(Sandwich);
-			Sandwich->AddIngredient(Ingredient);
-		}
-	}
 }
 
