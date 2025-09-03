@@ -121,4 +121,7 @@ public:
 	// 랜덤 취향 배열 반환
 	UFUNCTION(BlueprintCallable)
 	TArray<int32> GenerateRandomTaste();
+
+	UFUNCTION(BlueprintCallable)
+	TArray<int32> GenerateOneRandomTaste();
 };
