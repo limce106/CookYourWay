@@ -149,3 +149,13 @@ TArray<int32> UIngredientManagerSystem::GenerateRandomTaste()
 
 	return Taste;
 }
+
+TArray<int32> UIngredientManagerSystem::GenerateOneRandomTaste()
+{
+	TArray<int32> Taste;
+
+	int Index = UKismetMathLibrary::RandomIntegerInRange(0, IngredientRows.Num() - 1);
+	Taste.Add(Index);
+
+	return Taste;
+}
