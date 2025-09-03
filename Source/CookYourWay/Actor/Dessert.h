@@ -18,8 +18,8 @@ class COOKYOURWAY_API ADessert : public AActor, public IHoldable
 public:	
 	ADessert();
 
-	const float TableZOffset = 103.f;
-	const float DiningTableZOffset = 103.f;
+	const float TableZOffset = 42.f;
+	const float DiningTableZOffset = 49.f;
 
 protected:
 	virtual void BeginPlay() override;
