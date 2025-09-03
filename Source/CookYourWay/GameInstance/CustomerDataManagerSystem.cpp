@@ -102,8 +102,12 @@ FString UCustomerDataManagerSystem::GetRandomCustName()
 
 void UCustomerDataManagerSystem::SetRandomCustTastes()
 {
-	for (int i = 0; i < CustomerNames.Num(); i++) {
+	/*for (int i = 0; i < CustomerNames.Num(); i++) {
 		CustNameToTasteMap.Add(CustomerNames[i], IngredientManagerSystem->GenerateRandomTaste());
+	}*/
+
+	for (int i = 0; i < CustomerNames.Num(); i++) {
+		CustNameToTasteMap.Add(CustomerNames[i], IngredientManagerSystem->GenerateOneRandomTaste());
 	}
 }
 
