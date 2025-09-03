@@ -21,7 +21,7 @@ class COOKYOURWAY_API AIngredient : public AActor
 
 	class UIngredientManagerSystem* IngredientManagerSystem;
 
-	void SetScale();
+	void SetScale(FVector Scale);
 	
 public:	
 	AIngredient();
