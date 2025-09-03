@@ -32,14 +32,9 @@ void AIngredient::Init(FString IngrName, bool IsSliced)
 	SetMesh(IngrName, IsSliced);
 }
 
-void AIngredient::SetScale()
+void AIngredient::SetScale(FVector Scale)
 {
-	if (CurIngrData.IngrType == "Filling") {
-		StaticMesh->SetWorldScale3D(FVector(3.0f, 3.0f, 3.0f));
-	}
-	else {
-		StaticMesh->SetWorldScale3D(FVector(1.5f, 1.5f, 1.5f));
-	}
+	StaticMesh->SetWorldScale3D(Scale);
 }
 
 void AIngredient::SetPivotCenter()
@@ -57,7 +52,7 @@ void AIngredient::SetMesh(FString IngrName, bool IsSliced)
 	UStaticMesh* IngredientMesh = IngredientManagerSystem->GetIngrModel(IngrName, IsSliced);
 	StaticMesh->SetStaticMesh(IngredientMesh);
 
-	SetScale();
+	SetScale(FVector(1.5f, 1.5f, 1.5f));
 	SetPivotCenter();
 }
 
