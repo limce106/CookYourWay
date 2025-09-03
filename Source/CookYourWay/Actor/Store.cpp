@@ -63,8 +63,9 @@ void AStore::SetSpawnCustDelayTime()
 		SpawnCustMax = NewsEffectComponent->IncreaseSpawnCustMax;
 	}
 	else {
-		SpawnCustMin = 5;
-		SpawnCustMax = 7;
+		// 기본 스폰 시간
+		SpawnCustMin = 15;
+		SpawnCustMax = 20;
 	}
 	SpawnDelayTime = SpawnCustMin;
 }
