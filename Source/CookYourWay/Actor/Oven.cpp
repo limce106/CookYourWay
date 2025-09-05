@@ -4,6 +4,8 @@
 #include "Actor/Oven.h"
 #include "Reuben.h"
 #include "Dessert.h"
+#include <Kismet/GameplayStatics.h>
+
 
 void AOven::BeginPlay()
 {
@@ -66,6 +68,8 @@ void AOven::Interact_Implementation()
 		if (ADessert* Dessert = Cast<ADessert>(Reuben->HeldActor))
 		{
 			PutDessertIn(Dessert);
+			USoundBase* LoadedSound = LoadObject<USoundBase>(nullptr, TEXT("/Game/Assets/Sound/SoundAsset/SFX_Oven.SFX_Oven"));
+			UGameplayStatics::PlaySoundAtLocation(this, LoadedSound, GetActorLocation());
 		}
 	}
 	else if (!Reuben->IsHold && IsCooked()) {
@@ -75,5 +79,7 @@ void AOven::Interact_Implementation()
 
 		Reuben->HoldActor(Dessert);
 		BP_CookRateWidget->SetVisibility(ESlateVisibility::Hidden);
+		USoundBase* LoadedSound = LoadObject<USoundBase>(nullptr, TEXT("/Game/Assets/Sound/SoundAsset/SFX_OvenDoor.SFX_OvenDoor"));
+		UGameplayStatics::PlaySound2D(this, LoadedSound);
 	}
 }

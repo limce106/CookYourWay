@@ -19,21 +19,21 @@ void AFryPan::BeginPlay()
 	ParticleSystemComponent->bAutoActivate = false;
 
 	//Audio component
-	FryingAudioComponent = NewObject<UAudioComponent>(this);
+	FryingAudioComponent = NewObject<UAudioComponent>(this, TEXT("FryingAudio"));
 	if (FryingAudioComponent)
 	{
+		FryingAudioComponent->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
 		FryingAudioComponent->RegisterComponent();
-		FrySound = LoadObject<USoundBase>(nullptr, TEXT("/Game/Assets/Sound/SoundAsset/SFX_Sizzle.SFX_Sizzle"));
-		FryingAudioComponent->SetSound(FrySound);
 		FryingAudioComponent->bAutoActivate = false;
+		if (FrySound) FryingAudioComponent->SetSound(FrySound);
 	}
-	BurntAudioComponent = NewObject<UAudioComponent>(this);
+	BurntAudioComponent = NewObject<UAudioComponent>(this, TEXT("BurntAudio"));
 	if (BurntAudioComponent)
 	{
+		BurntAudioComponent->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
 		BurntAudioComponent->RegisterComponent();
-		BurntSound = LoadObject<USoundBase>(nullptr, TEXT("/Game/Assets/Sound/SoundAsset/SFX_Burnt.SFX_Burnt"));
-		BurntAudioComponent->SetSound(BurntSound);
 		BurntAudioComponent->bAutoActivate = false;
+		if (BurntSound) BurntAudioComponent->SetSound(BurntSound);
 	}
 }
 
