@@ -43,6 +43,7 @@ public:
 	//
 	UPROPERTY(EditAnywhere, Category = "Sound")
 	USoundBase* FrySound;
+	UPROPERTY(EditAnywhere, Category = "Sound")
 	USoundBase* BurntSound;
 
 	UPROPERTY()
